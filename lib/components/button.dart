@@ -30,14 +30,27 @@ class Button extends StatelessWidget {
     this.hairline = false,
     this.disabled = false,
     // this.iconPrefix,
-    this.loadingText,
+    // this.loadingText,
     this.type = ButtonType.normal,
     this.size = ButtonSize.normal,
     this.loadingSize = 10.0,
     this.iconPosition = ButtonIconPosition.left,
     this.onPressed,
     this.child,
-  }) : super(key: key);
+  })  : assert(text != null),
+        assert(block != null),
+        assert(plain != null),
+        assert(round != null),
+        assert(square != null),
+        assert(loading != null),
+        assert(hairline != null),
+        assert(disabled != null),
+        assert(type != null && ButtonType.values.contains(type)),
+        assert(size != null && ButtonSize.values.contains(type)),
+        assert(loadingSize != null),
+        assert(
+            iconPosition != null && ButtonIconPosition.values.contains(type)),
+        super(key: key);
 
   final String text;
   final IconData icon;
@@ -52,7 +65,7 @@ class Button extends StatelessWidget {
 
   // TODO: 支持iconfont
   // final String iconPrefix;
-  final String loadingText;
+  // final String loadingText;
 
   final ButtonType type;
   final ButtonSize size;
@@ -132,20 +145,22 @@ class Button extends StatelessWidget {
           border: themeType["border"],
           borderRadius: radius,
         ),
-        padding: btnSize["padding"],
         height: btnSize["height"],
         child: InkWell(
           splashColor: Colors.transparent,
           highlightColor: ThemeVars.black.withOpacity(0.1),
           onTap: disabled ? null : onPressed,
-          child: Center(
-            child: renderContent(),
+          child: Padding(
+            padding: btnSize["padding"],
+            child: Center(
+              child: renderContent(),
+            ),
           ),
         ),
       ),
     );
 
-    if (isBtnEnable) {
+    if (!isBtnEnable) {
       _btn = Opacity(
         opacity: .5,
         child: _btn,
@@ -197,12 +212,12 @@ class Button extends StatelessWidget {
       ButtonSize.large: {
         "fontSize": ThemeVars.buttonDefaultFontSize,
         "height": ThemeVars.buttonLargeHeight,
-        "padding": EdgeInsets.symmetric(horizontal: 15.0),
+        "padding": const EdgeInsets.symmetric(horizontal: 15.0),
       },
       ButtonSize.normal: {
         "fontSize": ThemeVars.buttonNormalFontSize,
         "height": ThemeVars.buttonDefaultHeight,
-        "padding": EdgeInsets.symmetric(horizontal: 15.0),
+        "padding": const EdgeInsets.symmetric(horizontal: 15.0),
       },
       ButtonSize.small: {
         "fontSize": ThemeVars.buttonSmallFontSize,

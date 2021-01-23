@@ -123,15 +123,18 @@ class ButtonPage extends StatelessWidget {
                 Button(
                   loading: true,
                   type: ButtonType.success,
+                  onPressed: () {},
                 ),
                 Button(
                   loading: true,
                   type: ButtonType.primary,
+                  onPressed: () {},
                 ),
                 Button(
                   loading: true,
                   text: "加载中...",
                   type: ButtonType.primary,
+                  onPressed: () {},
                 ),
               ],
             ),
