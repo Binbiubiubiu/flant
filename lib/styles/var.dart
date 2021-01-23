@@ -1,21 +1,23 @@
+import 'package:flutter/material.dart';
+
 class ThemeVars {
   // Color Palette
-  static const black = 0x000000;
-  static const white = 0xffffff;
-  static const gray1 = 0xf7f8fa;
-  static const gray2 = 0xf2f3f5;
-  static const gray3 = 0xebedf0;
-  static const gray4 = 0xdcdee0;
-  static const gray5 = 0xc8c9cc;
-  static const gray6 = 0x969799;
-  static const gray7 = 0x646566;
-  static const gray8 = 0x323233;
-  static const red = 0xee0a24;
-  static const blue = 0x1989fa;
-  static const orange = 0xff976a;
-  static const orangeDark = 0xed6a0c;
-  static const orangeLight = 0xfffbe8;
-  static const green = 0x07c160;
+  static const black = Color(0xFF000000);
+  static const white = Color(0xFFFFFFFF);
+  static const gray1 = Color(0xFFF7F8Fa);
+  static const gray2 = Color(0xFFF2F3F5);
+  static const gray3 = Color(0xFFEBEDF0);
+  static const gray4 = Color(0xFFDCDEE0);
+  static const gray5 = Color(0xFFC8C9CC);
+  static const gray6 = Color(0xFF969799);
+  static const gray7 = Color(0xFF646566);
+  static const gray8 = Color(0xFF323233);
+  static const red = Color(0xFFEE0A24);
+  static const blue = Color(0xFF1989Fa);
+  static const orange = Color(0xFFFF976A);
+  static const orangeDark = Color(0xFFED6A0C);
+  static const orangeLight = Color(0xFFFFFBE8);
+  static const green = Color(0xFF07C160);
 
   // Gradient Colors
   // static const gradientRed= linear-gradient(to right, #ff6034, #ee0a24);
@@ -27,8 +29,8 @@ class ThemeVars {
   static const activeOpacity = 0.7;
   static const disabledOpacity = 0.5;
   static const backgroundColor = gray1;
-  static const backgroundColorLight = 0xfafafa;
-  static const textLinkColor = 0x576b95;
+  static const backgroundColorLight = Color(0xFFFAFAFA);
+  static const textLinkColor = Color(0xFF576b95);
 
   // Padding
   static const paddingBase = 4.0;

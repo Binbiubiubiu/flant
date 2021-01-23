@@ -1,6 +1,5 @@
 import 'package:flant/styles/var.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 
 enum ButtonType {
   normal,
@@ -20,29 +19,29 @@ enum ButtonIconPosition {
 class Button extends StatelessWidget {
   Button({
     Key key,
-    this.text,
+    this.text = "",
     this.icon,
     this.color,
-    this.block,
-    this.plain,
-    this.round,
-    this.square,
-    this.loading,
-    this.hairline,
-    this.disabled,
-    this.iconPrefix,
+    this.block = false,
+    this.plain = false,
+    this.round = false,
+    this.square = false,
+    this.loading = false,
+    this.hairline = false,
+    this.disabled = false,
+    // this.iconPrefix,
     this.loadingText,
     this.type = ButtonType.normal,
     this.size = ButtonSize.normal,
-    this.loadingSize = 20.0,
+    this.loadingSize = 10.0,
     this.iconPosition = ButtonIconPosition.left,
-    @required this.onPressed,
-    @required this.child,
+    this.onPressed,
+    this.child,
   }) : super(key: key);
 
   final String text;
-  final String icon;
-  final String color;
+  final IconData icon;
+  final Color color;
   final bool block;
   final bool plain;
   final bool round;
@@ -50,7 +49,9 @@ class Button extends StatelessWidget {
   final bool loading;
   final bool hairline;
   final bool disabled;
-  final String iconPrefix;
+
+  // TODO: 支持iconfont
+  // final String iconPrefix;
   final String loadingText;
 
   final ButtonType type;
@@ -61,55 +62,198 @@ class Button extends StatelessWidget {
   final VoidCallback onPressed;
   final Widget child;
 
+  Widget renderText() {
+    return child ?? Text(text);
+  }
+
+  Widget renderIcon() {
+    return loading
+        ? Icon(
+            Icons.run_circle,
+            color: themeType["color"],
+          )
+        : Icon(
+            icon,
+            color: themeType["color"],
+          );
+  }
+
+  Widget renderContent() {
+    var children = [
+      renderText(),
+    ];
+
+    var icon = this.loading || this.icon != null ? renderIcon() : null;
+
+    if (icon == null) {
+      return children[0];
+    }
+    switch (iconPosition) {
+      case ButtonIconPosition.left:
+        if (isHasText) {
+          children.insert(0, SizedBox(width: 4.0));
+        }
+        children.insert(0, icon);
+        break;
+      case ButtonIconPosition.right:
+        children.add(icon);
+        if (isHasText) {
+          children.add(SizedBox(width: 4.0));
+        }
+        break;
+      default:
+        break;
+    }
+    return Row(
+      children: children,
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
-    final Map<ButtonType, BoxDecoration> typeMap = {
-      ButtonType.normal: {
-        color: ThemeVars.buttonDefaultBackgroundColor,
-      },
-    };
+    final radius = this.square
+        ? BorderRadius.zero
+        : BorderRadius.circular(
+            this.round ? btnSize["height"] / 2.0 : ThemeVars.buttonBorderRadius,
+          );
 
-    final Widget result = Center(
-      widthFactor: 1.0,
-      heightFactor: 1.0,
-      child: DefaultTextStyle(
-        style: TextStyle(
-          fontSize: ThemeVars.buttonDefaultFontSize,
-          height: ThemeVars.buttonDefaultLineHeight,
+    Widget _btn = Material(
+      textStyle: TextStyle(
+        fontSize: btnSize["fontSize"],
+        // height: ThemeVars.buttonDefaultLineHeight /
+        //     ThemeVars.buttonDefaultFontSize,
+        color: themeType["color"],
+      ),
+      type: MaterialType.button,
+      color: (this.plain ? null : this.color) ?? themeType["backgroundColor"],
+      borderRadius: radius,
+      child: Ink(
+        decoration: BoxDecoration(
+          border: themeType["border"],
+          borderRadius: radius,
         ),
-        child: this.child,
+        padding: btnSize["padding"],
+        height: btnSize["height"],
+        child: InkWell(
+          splashColor: Colors.transparent,
+          highlightColor: ThemeVars.black.withOpacity(0.1),
+          onTap: disabled ? null : onPressed,
+          child: Center(
+            child: renderContent(),
+          ),
+        ),
       ),
     );
+
+    if (isBtnEnable) {
+      _btn = Opacity(
+        opacity: .5,
+        child: _btn,
+      );
+    }
+
+    if (size != ButtonSize.large && !this.block) {
+      _btn = Row(
+        mainAxisSize: MainAxisSize.min,
+        children: [_btn],
+      );
+    }
 
     return Semantics(
       container: true,
       button: true,
-      enabled: this.disabled,
-      child: Row(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          ClipRRect(
-            borderRadius: BorderRadius.all(
-              Radius.circular(ThemeVars.buttonBorderRadius),
-            ),
-            child: Material(
-              type: this.color == null
-                  ? MaterialType.transparency
-                  : MaterialType.button,
-              child: InkWell(
-                splashColor: Colors.transparent,
-                onTap: this.onPressed,
-                child: Container(
-                  decoration: BoxDecoration(),
-                  height: ThemeVars.buttonDefaultHeight,
-                  padding: EdgeInsets.symmetric(horizontal: 15.0),
-                  child: result,
-                ),
-              ),
-            ),
-          ),
-        ],
-      ),
+      enabled: isBtnEnable,
+      child: _btn,
     );
+  }
+
+  Map<String, dynamic> computedThemeType(
+    plain,
+    hairline, {
+    Color backgroundColor,
+    Color color,
+    Color borderColor,
+  }) {
+    if (this.color != null) {
+      borderColor = this.color;
+      color = Colors.white;
+    }
+    return {
+      "backgroundColor":
+          plain ? ThemeVars.buttonPlainBackgroundColor : backgroundColor,
+      "color": plain ? borderColor : color,
+      "border": Border.all(
+        width: hairline ? 0.5 : ThemeVars.buttonBorderWidth,
+        color: borderColor,
+      ),
+    };
+  }
+
+  get isBtnEnable => !this.disabled && this.onPressed != null;
+  get isHasText => this.text.isNotEmpty || this.child != null;
+
+  get btnSize {
+    return {
+      ButtonSize.large: {
+        "fontSize": ThemeVars.buttonDefaultFontSize,
+        "height": ThemeVars.buttonLargeHeight,
+        "padding": EdgeInsets.symmetric(horizontal: 15.0),
+      },
+      ButtonSize.normal: {
+        "fontSize": ThemeVars.buttonNormalFontSize,
+        "height": ThemeVars.buttonDefaultHeight,
+        "padding": EdgeInsets.symmetric(horizontal: 15.0),
+      },
+      ButtonSize.small: {
+        "fontSize": ThemeVars.buttonSmallFontSize,
+        "height": ThemeVars.buttonSmallHeight,
+        "padding": EdgeInsets.symmetric(horizontal: ThemeVars.paddingSm),
+      },
+      ButtonSize.mini: {
+        "fontSize": ThemeVars.buttonMiniFontSize,
+        "height": ThemeVars.buttonMiniHeight,
+        "padding": EdgeInsets.symmetric(horizontal: ThemeVars.paddingBase),
+      },
+    }[size];
+  }
+
+  get themeType {
+    return {
+      ButtonType.normal: computedThemeType(
+        this.plain,
+        this.hairline,
+        backgroundColor: ThemeVars.buttonDefaultBackgroundColor,
+        color: ThemeVars.buttonDefaultColor,
+        borderColor: ThemeVars.buttonDefaultBorderColor,
+      ),
+      ButtonType.primary: computedThemeType(
+        this.plain,
+        this.hairline,
+        backgroundColor: ThemeVars.buttonPrimaryBackgroundColor,
+        color: ThemeVars.buttonPrimaryColor,
+        borderColor: ThemeVars.buttonPrimaryBorderColor,
+      ),
+      ButtonType.success: computedThemeType(
+        this.plain,
+        this.hairline,
+        backgroundColor: ThemeVars.buttonSuccessBackgroundColor,
+        color: ThemeVars.buttonSuccessColor,
+        borderColor: ThemeVars.buttonSuccessBorderColor,
+      ),
+      ButtonType.danger: computedThemeType(
+        this.plain,
+        this.hairline,
+        backgroundColor: ThemeVars.buttonDangerBackgroundColor,
+        color: ThemeVars.buttonDangerColor,
+        borderColor: ThemeVars.buttonDangerBorderColor,
+      ),
+      ButtonType.warning: computedThemeType(
+        this.plain,
+        this.hairline,
+        backgroundColor: ThemeVars.buttonWarningBackgroundColor,
+        color: ThemeVars.buttonWarningColor,
+        borderColor: ThemeVars.buttonWarningBorderColor,
+      ),
+    }[type];
   }
 }
