@@ -1,9 +1,9 @@
 import 'package:exmaple/components/sub_title.dart';
-import 'package:exmaple/pages/button_page.dart';
+import 'package:exmaple/routes.dart';
+import 'package:exmaple/style.dart';
 import 'package:flutter/material.dart';
 
 import 'components/route_button.dart';
-import 'style.dart';
 
 void main() {
   runApp(MyApp());
@@ -13,25 +13,16 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Flutter Demo',
+      title: 'Flant Demo',
       theme: ThemeData(
         primarySwatch: Colors.blue,
         visualDensity: VisualDensity.adaptivePlatformDensity,
       ),
       home: MyHomePage(title: "Flant"),
-      routes: {
-        "/button": (context) => ButtonPage(),
-      },
+      routes: CompRouter.pathMap,
     );
   }
 }
-
-const basic = [
-  {
-    "title": "Button 按钮",
-    "route": "/button",
-  },
-];
 
 class MyHomePage extends StatefulWidget {
   MyHomePage({Key key, this.title}) : super(key: key);
@@ -46,38 +37,83 @@ class _MyHomePageState extends State<MyHomePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: Text(widget.title),
-      ),
-      body: Padding(
-        padding: PageTheme.padding,
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            SubTitle(text: "基础组件"),
-            ListView.separated(
-              shrinkWrap: true,
-              itemBuilder: (BuildContext context, int index) {
-                return RouteButton(
-                  text: basic[index]["title"],
-                  onPressed: () {
-                    Navigator.of(context).pushNamed(
-                      basic[index]["route"],
-                      arguments: {
-                        "title": basic[index]["title"],
-                      },
-                    );
-                  },
-                );
-              },
-              separatorBuilder: (BuildContext context, int index) {
-                return SizedBox(height: 20.0);
-              },
-              itemCount: basic.length,
+      body: SafeArea(
+        child: SingleChildScrollView(
+          child: Padding(
+            padding: PageTheme.padding,
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                buildTitle(),
+                buildSubTitle(),
+                ...renderList(CompRouter.routes),
+              ],
             ),
-          ],
+          ),
         ),
       ),
     );
+  }
+
+  Widget buildTitle() {
+    return Container(
+      padding: const EdgeInsets.only(left: 16.0, bottom: 16.0),
+      child: Row(
+        children: [
+          Image.network(
+            "https://img.yzcdn.cn/vant/logo.png",
+            width: 32.0,
+            height: 32.0,
+          ),
+          SizedBox(width: 16.0),
+          Text(
+            "Flant",
+            style: TextStyle(fontSize: 32.0),
+          )
+        ],
+      ),
+    );
+  }
+
+  Widget buildSubTitle() {
+    return Container(
+      margin: const EdgeInsets.only(bottom: 16.0),
+      padding: const EdgeInsets.only(left: 16.0),
+      child: Text(
+        "轻量、可靠的移动端 Flutter 组件库",
+        style: TextStyle(
+          color: PageTheme.subTextColor,
+        ),
+      ),
+    );
+  }
+
+  List<Widget> renderList(List<CompRoute> source) {
+    List<Widget> result = [];
+
+    source.forEach((group) {
+      result.add(SubTitle(text: group.name));
+
+      var children = group.children;
+      for (var i = 0; i < children.length; i++) {
+        var route = children.elementAt(i);
+        result.add(RouteButton(
+          text: route.name,
+          onPressed: () {
+            Navigator.of(context).pushNamed(
+              route.path,
+              arguments: {
+                "title": route.name,
+              },
+            );
+          },
+        ));
+        if (i != children.length - 1) {
+          result.add(SizedBox(height: 20.0));
+        }
+      }
+    });
+
+    return result;
   }
 }

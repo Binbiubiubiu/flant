@@ -1,3 +1,4 @@
+import 'package:exmaple/style.dart';
 import 'package:flutter/material.dart';
 
 class SubTitle extends StatelessWidget {
@@ -13,11 +14,11 @@ class SubTitle extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: EdgeInsets.symmetric(vertical: 20.0),
+      padding: EdgeInsets.only(top: 24.0, bottom: 8.0, left: 16.0),
       child: Text(
         this.text,
         style: TextStyle(
-          color: Color(0x455A6499),
+          color: PageTheme.subTextColor,
           fontSize: this.size,
           fontWeight: FontWeight.normal,
         ),

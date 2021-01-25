@@ -46,10 +46,10 @@ class Button extends StatelessWidget {
         assert(hairline != null),
         assert(disabled != null),
         assert(type != null && ButtonType.values.contains(type)),
-        assert(size != null && ButtonSize.values.contains(type)),
+        assert(size != null && ButtonSize.values.contains(size)),
         assert(loadingSize != null),
-        assert(
-            iconPosition != null && ButtonIconPosition.values.contains(type)),
+        assert(iconPosition != null &&
+            ButtonIconPosition.values.contains(iconPosition)),
         super(key: key);
 
   final String text;
