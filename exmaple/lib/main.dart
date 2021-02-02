@@ -101,7 +101,7 @@ class _MyHomePageState extends State<MyHomePage> {
       for (var i = 0; i < children.length; i++) {
         var route = children.elementAt(i);
         result.add(RouteButton(
-          text: route.name,
+          text: [route.name, route.title].join(" "),
           onPressed: () {
             Navigator.of(context).pushNamed(
               route.path,
