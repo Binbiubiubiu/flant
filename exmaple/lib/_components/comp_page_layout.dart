@@ -9,10 +9,7 @@ abstract class CompPageLayout extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: buildAppBar(context),
-      body: Container(
-        padding: PageTheme.padding,
-        child: buildPageContent(),
-      ),
+      body: buildPageContent(),
     );
   }
 
@@ -27,10 +24,14 @@ abstract class CompPageLayout extends StatelessWidget {
     dynamic content = renderPageContent();
     if (content is List) {
       return ListView(
+        padding: PageTheme.padding,
         children: content,
       );
     }
 
-    return content;
+    return Padding(
+      padding: PageTheme.padding,
+      child: content,
+    );
   }
 }
