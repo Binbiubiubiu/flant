@@ -15,6 +15,11 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       title: 'Flant Demo',
       theme: ThemeData(
+        primaryColor: Colors.white,
+        appBarTheme: AppBarTheme(
+          elevation: 0.0,
+        ),
+        backgroundColor: Color(0xFFF7F8FE),
         primarySwatch: Colors.blue,
         visualDensity: VisualDensity.adaptivePlatformDensity,
       ),
@@ -38,17 +43,14 @@ class _MyHomePageState extends State<MyHomePage> {
   Widget build(BuildContext context) {
     return Scaffold(
       body: SafeArea(
-        child: SingleChildScrollView(
-          child: Padding(
-            padding: PageTheme.padding,
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                buildTitle(),
-                buildSubTitle(),
-                ...renderList(CompRouter.routes),
-              ],
-            ),
+        child: Padding(
+          padding: PageTheme.padding,
+          child: ListView(
+            children: [
+              buildTitle(),
+              buildSubTitle(),
+              ...renderList(CompRouter.routes)
+            ],
           ),
         ),
       ),
@@ -57,7 +59,7 @@ class _MyHomePageState extends State<MyHomePage> {
 
   Widget buildTitle() {
     return Container(
-      padding: const EdgeInsets.only(left: 16.0, bottom: 16.0),
+      padding: const EdgeInsets.only(left: 16.0, top: 45.0, bottom: 16.0),
       child: Row(
         children: [
           Image.network(
