@@ -45,7 +45,7 @@ class ThemeVars {
   static const fontSizeSm = 12.0;
   static const fontSizeMd = 14.0;
   static const fontSizeLg = 16.0;
-  static const fontWeightBold = 500.0;
+  static const fontWeightBold = FontWeight.w500;
   static const lineHeightXs = 14.0;
   static const lineHeightSm = 18.0;
   static const lineHeightMd = 20.0;
@@ -117,16 +117,17 @@ class ThemeVars {
   // @address-list-edit-icon-size= 20px;
 
   // // Badge
-  // @badge-size= 16px;
-  // @badge-color= @white;
-  // @badge-padding= 0 3px;
-  // @badge-font-size= @font-size-sm;
-  // @badge-font-weight= @font-weight-bold;
-  // @badge-border-width= @border-width-base;
-  // @badge-background-color= @red;
-  // @badge-dot-color= @red;
-  // @badge-dot-size= 8px;
-  // @badge-font-family= -apple-system-font, Helvetica Neue, Arial, sans-serif;
+  static const badgeSize = 16.0;
+  static const badgeColor = Color(0xFFFFFFFF);
+  static const badgePadding =
+      EdgeInsets.symmetric(vertical: 0.0, horizontal: 3.0);
+  static const badgeFontSize = fontSizeSm;
+  static const badgeFontWeight = fontWeightBold;
+  static const badgeBorderWidth = borderWidthBase;
+  static const badgeBackgroundColor = red;
+  static const badgeDotColor = red;
+  static const badgeDotSize = 8.0;
+  // static const badgeFontFamily= -apple-system-font, Helvetica Neue, Arial, sans-serif;
 
   // // Button
   static const buttonMiniHeight = 24.0;

@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
 class RouteButton extends StatelessWidget {
-  RouteButton({
+  const RouteButton({
     Key key,
     this.text,
     @required this.onPressed,

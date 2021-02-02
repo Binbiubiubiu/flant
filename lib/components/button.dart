@@ -22,6 +22,7 @@ class Button extends StatelessWidget {
     this.text = "",
     this.icon,
     this.color,
+    this.gradient,
     this.block = false,
     this.plain = false,
     this.round = false,
@@ -55,6 +56,7 @@ class Button extends StatelessWidget {
   final String text;
   final IconData icon;
   final Color color;
+  final Gradient gradient;
   final bool block;
   final bool plain;
   final bool round;
@@ -104,14 +106,14 @@ class Button extends StatelessWidget {
     switch (iconPosition) {
       case ButtonIconPosition.left:
         if (isHasText) {
-          children.insert(0, SizedBox(width: 4.0));
+          children.insert(0, const SizedBox(width: 4.0));
         }
         children.insert(0, icon);
         break;
       case ButtonIconPosition.right:
         children.add(icon);
         if (isHasText) {
-          children.add(SizedBox(width: 4.0));
+          children.add(const SizedBox(width: 4.0));
         }
         break;
       default:
@@ -144,6 +146,7 @@ class Button extends StatelessWidget {
         decoration: BoxDecoration(
           border: themeType["border"],
           borderRadius: radius,
+          gradient: this.gradient,
         ),
         height: btnSize["height"],
         child: InkWell(
@@ -189,8 +192,8 @@ class Button extends StatelessWidget {
     Color color,
     Color borderColor,
   }) {
-    if (this.color != null) {
-      borderColor = this.color;
+    if (this.color != null || this.gradient != null) {
+      borderColor = this.gradient != null ? Colors.transparent : this.color;
       color = Colors.white;
     }
     return {

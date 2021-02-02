@@ -2,7 +2,7 @@ name: flant
 description: A new Flutter package project.
 version: 0.0.1
 author: Simon-bin
-homepage:
+homepage: https://github.com/Simon-Bin/flant
 
 environment:
   sdk: ">=2.7.0 <3.0.0"

@@ -1,9 +1,7 @@
-import 'package:exmaple/components/sub_title.dart';
-import 'package:exmaple/routes.dart';
-import 'package:exmaple/style.dart';
 import 'package:flutter/material.dart';
 
-import 'components/route_button.dart';
+import './_components/main.dart';
+import './_routes/main.dart';
 
 void main() {
   runApp(MyApp());
@@ -94,9 +92,12 @@ class _MyHomePageState extends State<MyHomePage> {
     List<Widget> result = [];
 
     source.forEach((group) {
-      result.add(SubTitle(text: group.name));
+      result.add(SubTitle(
+        text: group.name,
+        padding: const EdgeInsets.only(top: 24.0, bottom: 16.0, left: 18.0),
+      ));
 
-      var children = group.children;
+      var children = group.routes;
       for (var i = 0; i < children.length; i++) {
         var route = children.elementAt(i);
         result.add(RouteButton(
