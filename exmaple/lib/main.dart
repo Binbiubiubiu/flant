@@ -41,15 +41,13 @@ class _MyHomePageState extends State<MyHomePage> {
   Widget build(BuildContext context) {
     return Scaffold(
       body: SafeArea(
-        child: Padding(
+        child: ListView(
           padding: PageTheme.padding,
-          child: ListView(
-            children: [
-              buildTitle(),
-              buildSubTitle(),
-              ...renderList(CompRouter.routes)
-            ],
-          ),
+          children: [
+            buildTitle(),
+            buildSubTitle(),
+            ...renderList(CompRouter.routes)
+          ],
         ),
       ),
     );
