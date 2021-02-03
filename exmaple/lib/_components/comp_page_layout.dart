@@ -16,6 +16,7 @@ abstract class CompPageLayout extends StatelessWidget {
   buildAppBar(context) {
     dynamic query = ModalRoute.of(context).settings.arguments;
     return AppBar(
+      centerTitle: true,
       title: Text(query["title"]),
     );
   }

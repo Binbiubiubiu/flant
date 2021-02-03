@@ -150,6 +150,7 @@ class Button extends StatelessWidget {
         ),
         height: btnSize["height"],
         child: InkWell(
+          borderRadius: radius,
           splashColor: Colors.transparent,
           highlightColor: ThemeVars.black.withOpacity(0.1),
           onTap: disabled ? null : onPressed,
