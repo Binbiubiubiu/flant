@@ -10,18 +10,18 @@ double formatRate(double rate) => math.min(math.max(rate, 0), 100);
 class CirclePage extends CompPageLayout {
   @override
   Widget renderPageContent() {
-    return CircleExample();
+    return FlanCircleExample();
   }
 }
 
-class CircleExample extends StatefulWidget {
-  CircleExample({Key key}) : super(key: key);
+class FlanCircleExample extends StatefulWidget {
+  FlanCircleExample({Key key}) : super(key: key);
 
   @override
-  _CircleExampleState createState() => _CircleExampleState();
+  _FlanCircleExampleState createState() => _FlanCircleExampleState();
 }
 
-class _CircleExampleState extends State<CircleExample> {
+class _FlanCircleExampleState extends State<FlanCircleExample> {
   double rate = 70.0;
   double currentRate1 = 70;
   double currentRate2 = 70;
@@ -51,7 +51,7 @@ class _CircleExampleState extends State<CircleExample> {
           spacing: 20.0,
           runSpacing: 20.0,
           children: [
-            Circle(
+            FlanCircle(
               key: const ValueKey("基础用法"),
               currentRate: this.currentRate1,
               rate: this.rate,
@@ -72,7 +72,7 @@ class _CircleExampleState extends State<CircleExample> {
           spacing: 20.0,
           runSpacing: 20.0,
           children: [
-            Circle(
+            FlanCircle(
               key: const ValueKey("宽度定制"),
               currentRate: this.currentRate2,
               rate: this.rate,
@@ -80,13 +80,12 @@ class _CircleExampleState extends State<CircleExample> {
               strokeWidth: 6.0,
               text: "宽度定制",
               onChange: (val) {
-                print("onChange");
                 setState(() {
                   this.currentRate2 = val;
                 });
               },
             ),
-            Circle(
+            FlanCircle(
               key: const ValueKey("颜色定制"),
               currentRate: this.currentRate3,
               rate: this.rate,
@@ -100,7 +99,7 @@ class _CircleExampleState extends State<CircleExample> {
                 });
               },
             ),
-            Circle(
+            FlanCircle(
               key: const ValueKey("渐变色"),
               currentRate: this.currentRate4,
               rate: this.rate,
@@ -118,7 +117,7 @@ class _CircleExampleState extends State<CircleExample> {
                 });
               },
             ),
-            Circle(
+            FlanCircle(
               key: const ValueKey("逆时针"),
               currentRate: this.currentRate4,
               rate: this.rate,
@@ -132,7 +131,7 @@ class _CircleExampleState extends State<CircleExample> {
                 });
               },
             ),
-            Circle(
+            FlanCircle(
               key: const ValueKey("大小定制"),
               currentRate: this.currentRate4,
               rate: this.rate,
@@ -153,16 +152,16 @@ class _CircleExampleState extends State<CircleExample> {
           padding: const EdgeInsets.only(top: 30.0),
           child: Row(
             children: [
-              Button(
-                type: ButtonType.success,
-                size: ButtonSize.small,
+              FlanButton(
+                type: FlanButtonType.success,
+                size: FlanButtonSize.small,
                 text: "增加",
                 onPressed: this.add,
               ),
               SizedBox(width: 10.0),
-              Button(
-                type: ButtonType.danger,
-                size: ButtonSize.small,
+              FlanButton(
+                type: FlanButtonType.danger,
+                size: FlanButtonSize.small,
                 text: "减少",
                 onPressed: this.sub,
               ),

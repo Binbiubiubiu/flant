@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flant/components/show/badge.dart';
 import '../_components/main.dart';
 
-class BadgeChildBlock extends StatelessWidget {
-  const BadgeChildBlock({Key key}) : super(key: key);
+class FlanBadgeChildBlock extends StatelessWidget {
+  const FlanBadgeChildBlock({Key key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -29,21 +29,21 @@ class BadgePage extends CompPageLayout {
         spacing: 20.0,
         runSpacing: 20.0,
         children: [
-          const Badge(
+          const FlanBadge(
             content: "5",
-            child: BadgeChildBlock(),
+            child: FlanBadgeChildBlock(),
           ),
-          const Badge(
+          const FlanBadge(
             content: "10",
-            child: BadgeChildBlock(),
+            child: FlanBadgeChildBlock(),
           ),
-          const Badge(
+          const FlanBadge(
             content: "Hot",
-            child: BadgeChildBlock(),
+            child: FlanBadgeChildBlock(),
           ),
-          const Badge(
+          const FlanBadge(
             dot: true,
-            child: BadgeChildBlock(),
+            child: FlanBadgeChildBlock(),
           ),
         ],
       ),
@@ -54,20 +54,20 @@ class BadgePage extends CompPageLayout {
         spacing: 20.0,
         runSpacing: 20.0,
         children: [
-          const Badge(
+          const FlanBadge(
             content: "20",
             max: 9,
-            child: BadgeChildBlock(),
+            child: FlanBadgeChildBlock(),
           ),
-          const Badge(
+          const FlanBadge(
             content: "50",
             max: 20,
-            child: BadgeChildBlock(),
+            child: FlanBadgeChildBlock(),
           ),
-          const Badge(
+          const FlanBadge(
             content: "200",
             max: 99,
-            child: BadgeChildBlock(),
+            child: FlanBadgeChildBlock(),
           ),
         ],
       ),
@@ -78,20 +78,20 @@ class BadgePage extends CompPageLayout {
         spacing: 20.0,
         runSpacing: 20.0,
         children: [
-          const Badge(
+          const FlanBadge(
             content: "5",
             color: Color(0xff1989fa),
-            child: BadgeChildBlock(),
+            child: FlanBadgeChildBlock(),
           ),
-          const Badge(
+          const FlanBadge(
             content: "10",
             color: Color(0xff1989fa),
-            child: BadgeChildBlock(),
+            child: FlanBadgeChildBlock(),
           ),
-          const Badge(
+          const FlanBadge(
             dot: true,
             color: Color(0xff1989fa),
-            child: BadgeChildBlock(),
+            child: FlanBadgeChildBlock(),
           ),
         ],
       ),
@@ -102,17 +102,17 @@ class BadgePage extends CompPageLayout {
         spacing: 20.0,
         runSpacing: 20.0,
         children: [
-          const Badge(
+          const FlanBadge(
             contentSlot: const Icon(Icons.arrow_right),
-            child: BadgeChildBlock(),
+            child: FlanBadgeChildBlock(),
           ),
-          const Badge(
+          const FlanBadge(
             contentSlot: const Icon(Icons.leaderboard),
-            child: BadgeChildBlock(),
+            child: FlanBadgeChildBlock(),
           ),
-          const Badge(
+          const FlanBadge(
             contentSlot: const Icon(Icons.add),
-            child: BadgeChildBlock(),
+            child: FlanBadgeChildBlock(),
           ),
         ],
       ),
@@ -123,10 +123,10 @@ class BadgePage extends CompPageLayout {
         spacing: 20.0,
         runSpacing: 20.0,
         children: [
-          const Badge(
+          const FlanBadge(
             content: "20",
           ),
-          const Badge(
+          const FlanBadge(
             content: "200",
             max: 99,
           ),

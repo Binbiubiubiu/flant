@@ -1,4 +1,4 @@
-import 'package:flutter/material.dart' hide Divider;
+import 'package:flutter/material.dart';
 import 'package:flant/flant.dart';
 
 import '../_components/main.dart';
@@ -10,36 +10,36 @@ class DividerPage extends CompPageLayout {
       const SubTitle(
         text: "基础用法",
       ),
-      const Divider(),
+      const FlanDivider(),
       const SubTitle(
         text: "展示文本",
       ),
-      const Divider(
+      const FlanDivider(
         child: Text("文本"),
       ),
       const SubTitle(
         text: "内容位置",
       ),
-      const Divider(
-        contentPosition: DividerContentPosition.left,
+      const FlanDivider(
+        contentPosition: FlanDividerContentPosition.left,
         child: Text("文本"),
       ),
-      const Divider(
-        contentPosition: DividerContentPosition.right,
+      const FlanDivider(
+        contentPosition: FlanDividerContentPosition.right,
         child: Text("文本"),
       ),
       const SubTitle(
         text: "虚线",
       ),
-      const Divider(
+      const FlanDivider(
         dashed: true,
         child: Text("文本"),
       ),
       const SubTitle(
         text: "自定义样式",
       ),
-      Divider(
-        style: const DividerStyle(
+      FlanDivider(
+        style: const FlanDividerStyle(
           borderColor: Color(0xff1989fa),
           color: Color(0xff1989fa),
           padding: EdgeInsets.symmetric(vertical: 0.0, horizontal: 16.0),

@@ -1,7 +1,8 @@
-import 'package:flant/styles/var.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/foundation.dart';
+import 'package:flant/styles/var.dart';
 
-enum ButtonType {
+enum FlanButtonType {
   normal,
   primary,
   success,
@@ -9,20 +10,26 @@ enum ButtonType {
   danger,
 }
 
-enum ButtonSize { large, normal, small, mini }
+enum FlanButtonSize {
+  large,
+  normal,
+  small,
+  mini,
+}
 
-enum ButtonIconPosition {
+enum FlanButtonIconPosition {
   left,
   right,
 }
 
-class Button extends StatelessWidget {
-  Button({
+class FlanButton extends StatelessWidget {
+  FlanButton({
     Key key,
+    @required this.onPressed,
     this.text = "",
     this.icon,
     this.color,
-    this.gradient,
+    // this.gradient,
     this.block = false,
     this.plain = false,
     this.round = false,
@@ -32,11 +39,10 @@ class Button extends StatelessWidget {
     this.disabled = false,
     // this.iconPrefix,
     // this.loadingText,
-    this.type = ButtonType.normal,
-    this.size = ButtonSize.normal,
+    this.type = FlanButtonType.normal,
+    this.size = FlanButtonSize.normal,
     this.loadingSize = 10.0,
-    this.iconPosition = ButtonIconPosition.left,
-    this.onPressed,
+    this.iconPosition = FlanButtonIconPosition.left,
     this.child,
   })  : assert(text != null),
         assert(block != null),
@@ -46,17 +52,18 @@ class Button extends StatelessWidget {
         assert(loading != null),
         assert(hairline != null),
         assert(disabled != null),
-        assert(type != null && ButtonType.values.contains(type)),
-        assert(size != null && ButtonSize.values.contains(size)),
+        assert(type != null && FlanButtonType.values.contains(type)),
+        assert(size != null && FlanButtonSize.values.contains(size)),
         assert(loadingSize != null),
+        assert(onPressed != null),
         assert(iconPosition != null &&
-            ButtonIconPosition.values.contains(iconPosition)),
+            FlanButtonIconPosition.values.contains(iconPosition)),
         super(key: key);
 
   final String text;
   final IconData icon;
-  final Color color;
-  final Gradient gradient;
+  final dynamic color;
+  // final Gradient gradient;
   final bool block;
   final bool plain;
   final bool round;
@@ -69,10 +76,10 @@ class Button extends StatelessWidget {
   // final String iconPrefix;
   // final String loadingText;
 
-  final ButtonType type;
-  final ButtonSize size;
+  final FlanButtonType type;
+  final FlanButtonSize size;
   final double loadingSize;
-  final ButtonIconPosition iconPosition;
+  final FlanButtonIconPosition iconPosition;
 
   final VoidCallback onPressed;
   final Widget child;
@@ -85,34 +92,34 @@ class Button extends StatelessWidget {
     return loading
         ? Icon(
             Icons.run_circle,
-            color: themeType["color"],
+            color: this.themeType.color,
           )
         : Icon(
             icon,
-            color: themeType["color"],
+            color: this.themeType.color,
           );
   }
 
   Widget renderContent() {
     var children = [
-      renderText(),
+      this.renderText(),
     ];
 
-    var icon = this.loading || this.icon != null ? renderIcon() : null;
+    var icon = this.loading || this.icon != null ? this.renderIcon() : null;
 
     if (icon == null) {
       return children[0];
     }
     switch (iconPosition) {
-      case ButtonIconPosition.left:
-        if (isHasText) {
+      case FlanButtonIconPosition.left:
+        if (this.isHasText) {
           children.insert(0, const SizedBox(width: 4.0));
         }
         children.insert(0, icon);
         break;
-      case ButtonIconPosition.right:
+      case FlanButtonIconPosition.right:
         children.add(icon);
-        if (isHasText) {
+        if (this.isHasText) {
           children.add(const SizedBox(width: 4.0));
         }
         break;
@@ -129,49 +136,55 @@ class Button extends StatelessWidget {
     final radius = this.square
         ? BorderRadius.zero
         : BorderRadius.circular(
-            this.round ? btnSize["height"] / 2.0 : ThemeVars.buttonBorderRadius,
+            this.round ? btnSize.height / 2.0 : ThemeVars.buttonBorderRadius,
           );
 
+    final textStyle = TextStyle(
+      fontSize: this.btnSize.fontSize,
+      // height: ThemeVars.buttonDefaultLineHeight /
+      //     ThemeVars.buttonDefaultFontSize,
+      color: this.themeType.color,
+    );
+
+    final bgColor =
+        (this.plain ? null : (this.color is Gradient ? null : this.color)) ??
+            this.themeType.backgroundColor;
+
     Widget _btn = Material(
-      textStyle: TextStyle(
-        fontSize: btnSize["fontSize"],
-        // height: ThemeVars.buttonDefaultLineHeight /
-        //     ThemeVars.buttonDefaultFontSize,
-        color: themeType["color"],
-      ),
       type: MaterialType.button,
-      color: (this.plain ? null : this.color) ?? themeType["backgroundColor"],
+      textStyle: textStyle,
+      color: bgColor,
       borderRadius: radius,
       child: Ink(
         decoration: BoxDecoration(
-          border: themeType["border"],
+          border: this.themeType.border,
           borderRadius: radius,
-          gradient: this.gradient,
+          gradient: this.color is Gradient ? this.color : null,
         ),
-        height: btnSize["height"],
+        height: this.btnSize.height,
         child: InkWell(
           borderRadius: radius,
           splashColor: Colors.transparent,
           highlightColor: ThemeVars.black.withOpacity(0.1),
-          onTap: disabled ? null : onPressed,
+          onTap: this.disabled ? null : this.onPressed,
           child: Padding(
-            padding: btnSize["padding"],
+            padding: this.btnSize.padding,
             child: Center(
-              child: renderContent(),
+              child: this.renderContent(),
             ),
           ),
         ),
       ),
     );
 
-    if (!isBtnEnable) {
+    if (!this.isBtnEnable) {
       _btn = Opacity(
         opacity: .5,
         child: _btn,
       );
     }
 
-    if (size != ButtonSize.large && !this.block) {
+    if (this.size != FlanButtonSize.large && !this.block) {
       _btn = Row(
         mainAxisSize: MainAxisSize.min,
         children: [_btn],
@@ -181,92 +194,92 @@ class Button extends StatelessWidget {
     return Semantics(
       container: true,
       button: true,
-      enabled: isBtnEnable,
+      enabled: this.isBtnEnable,
       child: _btn,
     );
   }
 
-  Map<String, dynamic> computedThemeType(
+  _FlanButtonTheme computedThemeType(
     plain,
     hairline, {
     Color backgroundColor,
     Color color,
     Color borderColor,
   }) {
-    if (this.color != null || this.gradient != null) {
-      borderColor = this.gradient != null ? Colors.transparent : this.color;
+    if (this.color != null) {
+      borderColor = this.color is Gradient ? Colors.transparent : this.color;
       color = Colors.white;
     }
-    return {
-      "backgroundColor":
+    return _FlanButtonTheme(
+      backgroundColor:
           plain ? ThemeVars.buttonPlainBackgroundColor : backgroundColor,
-      "color": plain ? borderColor : color,
-      "border": Border.all(
+      color: plain ? borderColor : color,
+      border: Border.all(
         width: hairline ? 0.5 : ThemeVars.buttonBorderWidth,
         color: borderColor,
       ),
-    };
+    );
   }
 
-  get isBtnEnable => !this.disabled && this.onPressed != null;
-  get isHasText => this.text.isNotEmpty || this.child != null;
+  bool get isBtnEnable => !this.disabled && this.onPressed != null;
+  bool get isHasText => this.text.isNotEmpty || this.child != null;
 
-  get btnSize {
+  _FlanButtonSize get btnSize {
     return {
-      ButtonSize.large: {
-        "fontSize": ThemeVars.buttonDefaultFontSize,
-        "height": ThemeVars.buttonLargeHeight,
-        "padding": const EdgeInsets.symmetric(horizontal: 15.0),
-      },
-      ButtonSize.normal: {
-        "fontSize": ThemeVars.buttonNormalFontSize,
-        "height": ThemeVars.buttonDefaultHeight,
-        "padding": const EdgeInsets.symmetric(horizontal: 15.0),
-      },
-      ButtonSize.small: {
-        "fontSize": ThemeVars.buttonSmallFontSize,
-        "height": ThemeVars.buttonSmallHeight,
-        "padding": EdgeInsets.symmetric(horizontal: ThemeVars.paddingSm),
-      },
-      ButtonSize.mini: {
-        "fontSize": ThemeVars.buttonMiniFontSize,
-        "height": ThemeVars.buttonMiniHeight,
-        "padding": EdgeInsets.symmetric(horizontal: ThemeVars.paddingBase),
-      },
+      FlanButtonSize.large: _FlanButtonSize(
+        fontSize: ThemeVars.buttonDefaultFontSize,
+        height: ThemeVars.buttonLargeHeight,
+        padding: const EdgeInsets.symmetric(horizontal: 15.0),
+      ),
+      FlanButtonSize.normal: _FlanButtonSize(
+        fontSize: ThemeVars.buttonNormalFontSize,
+        height: ThemeVars.buttonDefaultHeight,
+        padding: const EdgeInsets.symmetric(horizontal: 15.0),
+      ),
+      FlanButtonSize.small: _FlanButtonSize(
+        fontSize: ThemeVars.buttonSmallFontSize,
+        height: ThemeVars.buttonSmallHeight,
+        padding: EdgeInsets.symmetric(horizontal: ThemeVars.paddingSm),
+      ),
+      FlanButtonSize.mini: _FlanButtonSize(
+        fontSize: ThemeVars.buttonMiniFontSize,
+        height: ThemeVars.buttonMiniHeight,
+        padding: EdgeInsets.symmetric(horizontal: ThemeVars.paddingBase),
+      ),
     }[size];
   }
 
-  get themeType {
+  _FlanButtonTheme get themeType {
     return {
-      ButtonType.normal: computedThemeType(
+      FlanButtonType.normal: computedThemeType(
         this.plain,
         this.hairline,
         backgroundColor: ThemeVars.buttonDefaultBackgroundColor,
         color: ThemeVars.buttonDefaultColor,
         borderColor: ThemeVars.buttonDefaultBorderColor,
       ),
-      ButtonType.primary: computedThemeType(
+      FlanButtonType.primary: computedThemeType(
         this.plain,
         this.hairline,
         backgroundColor: ThemeVars.buttonPrimaryBackgroundColor,
         color: ThemeVars.buttonPrimaryColor,
         borderColor: ThemeVars.buttonPrimaryBorderColor,
       ),
-      ButtonType.success: computedThemeType(
+      FlanButtonType.success: computedThemeType(
         this.plain,
         this.hairline,
         backgroundColor: ThemeVars.buttonSuccessBackgroundColor,
         color: ThemeVars.buttonSuccessColor,
         borderColor: ThemeVars.buttonSuccessBorderColor,
       ),
-      ButtonType.danger: computedThemeType(
+      FlanButtonType.danger: computedThemeType(
         this.plain,
         this.hairline,
         backgroundColor: ThemeVars.buttonDangerBackgroundColor,
         color: ThemeVars.buttonDangerColor,
         borderColor: ThemeVars.buttonDangerBorderColor,
       ),
-      ButtonType.warning: computedThemeType(
+      FlanButtonType.warning: computedThemeType(
         this.plain,
         this.hairline,
         backgroundColor: ThemeVars.buttonWarningBackgroundColor,
@@ -275,4 +288,59 @@ class Button extends StatelessWidget {
       ),
     }[type];
   }
+
+  @override
+  void debugFillProperties(DiagnosticPropertiesBuilder properties) {
+    properties.add(DiagnosticsProperty<String>("text", text, defaultValue: ""));
+    properties.add(DiagnosticsProperty<IconData>("icon", icon));
+    properties.add(DiagnosticsProperty<Color>("color", color));
+    properties
+        .add(DiagnosticsProperty<bool>("block", block, defaultValue: false));
+    properties
+        .add(DiagnosticsProperty<bool>("plain", plain, defaultValue: false));
+    properties
+        .add(DiagnosticsProperty<bool>("round", round, defaultValue: false));
+    properties
+        .add(DiagnosticsProperty<bool>("square", square, defaultValue: false));
+    properties.add(
+        DiagnosticsProperty<bool>("loading", loading, defaultValue: false));
+    properties.add(
+        DiagnosticsProperty<bool>("hairline", hairline, defaultValue: false));
+    properties.add(
+        DiagnosticsProperty<bool>("disabled", disabled, defaultValue: false));
+    properties.add(DiagnosticsProperty<FlanButtonType>("type", type,
+        defaultValue: FlanButtonType.normal));
+    properties.add(DiagnosticsProperty<FlanButtonSize>("size", size,
+        defaultValue: FlanButtonSize.normal));
+    properties.add(DiagnosticsProperty<double>("loadingSize", loadingSize,
+        defaultValue: 10.0));
+    properties.add(DiagnosticsProperty<FlanButtonIconPosition>(
+        "iconPosition", iconPosition,
+        defaultValue: FlanButtonIconPosition.left));
+    super.debugFillProperties(properties);
+  }
+}
+
+class _FlanButtonTheme {
+  _FlanButtonTheme({
+    this.color,
+    this.backgroundColor,
+    this.border,
+  }) : super();
+
+  final Color backgroundColor;
+  final Color color;
+  final Border border;
+}
+
+class _FlanButtonSize {
+  _FlanButtonSize({
+    this.fontSize,
+    this.height,
+    this.padding,
+  }) : super();
+
+  final double fontSize;
+  final double height;
+  final EdgeInsets padding;
 }

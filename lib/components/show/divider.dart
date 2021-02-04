@@ -1,17 +1,17 @@
 import 'dart:ui';
 
 import 'package:flutter/material.dart';
-
+import 'package:flutter/foundation.dart';
 import 'package:flant/styles/var.dart';
 
-enum DividerContentPosition {
+enum FlanDividerContentPosition {
   left,
   center,
   right,
 }
 
-class DividerStyle {
-  const DividerStyle({
+class FlanDividerStyle {
+  const FlanDividerStyle({
     this.color,
     this.borderColor,
     this.padding,
@@ -22,12 +22,12 @@ class DividerStyle {
   final EdgeInsets padding;
 }
 
-class Divider extends StatelessWidget {
-  const Divider({
+class FlanDivider extends StatelessWidget {
+  const FlanDivider({
     Key key,
     this.dashed = false,
     this.hairline = true,
-    this.contentPosition = DividerContentPosition.center,
+    this.contentPosition = FlanDividerContentPosition.center,
     this.child,
     this.style,
   })  : assert(hairline != null),
@@ -37,9 +37,9 @@ class Divider extends StatelessWidget {
 
   final bool dashed;
   final bool hairline;
-  final DividerContentPosition contentPosition;
+  final FlanDividerContentPosition contentPosition;
   final Widget child;
-  final DividerStyle style;
+  final FlanDividerStyle style;
 
   @override
   Widget build(BuildContext context) {
@@ -59,14 +59,14 @@ class Divider extends StatelessWidget {
               children: [
                 this.buildLine(
                   constraints,
-                  position: DividerContentPosition.left,
+                  position: FlanDividerContentPosition.left,
                 ),
                 buildContentSpace(),
                 child,
                 buildContentSpace(),
                 this.buildLine(
                   constraints,
-                  position: DividerContentPosition.right,
+                  position: FlanDividerContentPosition.right,
                 ),
               ].where((element) => element != null).toList(),
             );
@@ -84,7 +84,7 @@ class Divider extends StatelessWidget {
 
   Widget buildLine(
     BoxConstraints constraints, {
-    DividerContentPosition position,
+    FlanDividerContentPosition position,
   }) {
     final line = CustomPaint(
       painter: DividerPainter(
@@ -99,6 +99,18 @@ class Divider extends StatelessWidget {
     }
 
     return line;
+  }
+
+  @override
+  void debugFillProperties(DiagnosticPropertiesBuilder properties) {
+    properties
+        .add(DiagnosticsProperty<bool>("dashed", dashed, defaultValue: false));
+    properties.add(
+        DiagnosticsProperty<bool>("hairline", hairline, defaultValue: true));
+    properties.add(DiagnosticsProperty<FlanDividerContentPosition>(
+        "contentPosition", contentPosition));
+    properties.add(DiagnosticsProperty<FlanDividerStyle>("style", style));
+    super.debugFillProperties(properties);
   }
 }
 

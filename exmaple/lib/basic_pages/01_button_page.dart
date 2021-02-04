@@ -14,29 +14,29 @@ class ButtonPage extends CompPageLayout {
         spacing: 20.0,
         runSpacing: 20.0,
         children: [
-          Button(
+          FlanButton(
             text: "主要按钮",
-            type: ButtonType.success,
+            type: FlanButtonType.success,
             onPressed: () {},
           ),
-          Button(
+          FlanButton(
             text: "信息按钮",
-            type: ButtonType.primary,
+            type: FlanButtonType.primary,
             onPressed: () {},
           ),
-          Button(
+          FlanButton(
             text: "默认按钮",
-            type: ButtonType.normal,
+            type: FlanButtonType.normal,
             onPressed: () {},
           ),
-          Button(
+          FlanButton(
             text: "危险按钮",
-            type: ButtonType.danger,
+            type: FlanButtonType.danger,
             onPressed: () {},
           ),
-          Button(
+          FlanButton(
             text: "警告按钮",
-            type: ButtonType.warning,
+            type: FlanButtonType.warning,
             onPressed: () {},
           ),
         ],
@@ -48,16 +48,16 @@ class ButtonPage extends CompPageLayout {
         spacing: 20.0,
         runSpacing: 20.0,
         children: [
-          Button(
+          FlanButton(
             text: "朴素按钮",
             plain: true,
-            type: ButtonType.success,
+            type: FlanButtonType.success,
             onPressed: () {},
           ),
-          Button(
+          FlanButton(
             text: "朴素按钮",
             plain: true,
-            type: ButtonType.primary,
+            type: FlanButtonType.primary,
             onPressed: () {},
           ),
         ],
@@ -69,18 +69,18 @@ class ButtonPage extends CompPageLayout {
         spacing: 20.0,
         runSpacing: 20.0,
         children: [
-          Button(
+          FlanButton(
             text: "朴素按钮",
             plain: true,
             hairline: true,
-            type: ButtonType.success,
+            type: FlanButtonType.success,
             onPressed: () {},
           ),
-          Button(
+          FlanButton(
             text: "朴素按钮",
             plain: true,
             hairline: true,
-            type: ButtonType.primary,
+            type: FlanButtonType.primary,
             onPressed: () {},
           ),
         ],
@@ -92,15 +92,15 @@ class ButtonPage extends CompPageLayout {
         spacing: 20.0,
         runSpacing: 20.0,
         children: [
-          Button(
+          FlanButton(
             text: "禁用按钮",
             disabled: true,
-            type: ButtonType.success,
+            type: FlanButtonType.success,
           ),
-          Button(
+          FlanButton(
             text: "禁用按钮",
             disabled: true,
-            type: ButtonType.primary,
+            type: FlanButtonType.primary,
           ),
         ],
       ),
@@ -111,20 +111,20 @@ class ButtonPage extends CompPageLayout {
         spacing: 20.0,
         runSpacing: 20.0,
         children: [
-          Button(
+          FlanButton(
             loading: true,
-            type: ButtonType.success,
+            type: FlanButtonType.success,
             onPressed: () {},
           ),
-          Button(
+          FlanButton(
             loading: true,
-            type: ButtonType.primary,
+            type: FlanButtonType.primary,
             onPressed: () {},
           ),
-          Button(
+          FlanButton(
             loading: true,
             text: "加载中...",
-            type: ButtonType.primary,
+            type: FlanButtonType.primary,
             onPressed: () {},
           ),
         ],
@@ -136,23 +136,23 @@ class ButtonPage extends CompPageLayout {
         spacing: 20.0,
         runSpacing: 20.0,
         children: [
-          Button(
+          FlanButton(
             square: true,
             text: "方形按钮",
-            type: ButtonType.success,
+            type: FlanButtonType.success,
             onPressed: () {},
           ),
-          Button(
+          FlanButton(
             round: true,
             text: "圆形按钮",
-            type: ButtonType.primary,
+            type: FlanButtonType.primary,
             onPressed: () {},
           ),
-          Button(
+          FlanButton(
             round: true,
             plain: true,
             text: "圆形按钮",
-            type: ButtonType.primary,
+            type: FlanButtonType.primary,
             onPressed: () {},
           ),
         ],
@@ -164,22 +164,22 @@ class ButtonPage extends CompPageLayout {
         spacing: 20.0,
         runSpacing: 20.0,
         children: [
-          Button(
+          FlanButton(
             icon: Icons.add,
-            type: ButtonType.success,
+            type: FlanButtonType.success,
             onPressed: () {},
           ),
-          Button(
+          FlanButton(
             icon: Icons.add,
             text: "按钮",
-            type: ButtonType.success,
+            type: FlanButtonType.success,
             onPressed: () {},
           ),
-          Button(
+          FlanButton(
             icon: Icons.people,
             plain: true,
             text: "按钮",
-            type: ButtonType.primary,
+            type: FlanButtonType.primary,
             onPressed: () {},
           ),
         ],
@@ -191,28 +191,28 @@ class ButtonPage extends CompPageLayout {
         spacing: 20.0,
         runSpacing: 20.0,
         children: [
-          Button(
-            size: ButtonSize.large,
+          FlanButton(
+            size: FlanButtonSize.large,
             text: "大号按钮",
-            type: ButtonType.success,
+            type: FlanButtonType.success,
             onPressed: () {},
           ),
-          Button(
-            size: ButtonSize.normal,
+          FlanButton(
+            size: FlanButtonSize.normal,
             text: "普通按钮",
-            type: ButtonType.primary,
+            type: FlanButtonType.primary,
             onPressed: () {},
           ),
-          Button(
-            size: ButtonSize.small,
+          FlanButton(
+            size: FlanButtonSize.small,
             text: "小型按钮",
-            type: ButtonType.primary,
+            type: FlanButtonType.primary,
             onPressed: () {},
           ),
-          Button(
-            size: ButtonSize.mini,
+          FlanButton(
+            size: FlanButtonSize.mini,
             text: "迷你按钮",
-            type: ButtonType.primary,
+            type: FlanButtonType.primary,
             onPressed: () {},
           ),
         ],
@@ -224,10 +224,10 @@ class ButtonPage extends CompPageLayout {
         spacing: 20.0,
         runSpacing: 20.0,
         children: [
-          Button(
+          FlanButton(
             text: "块级元素",
             block: true,
-            type: ButtonType.success,
+            type: FlanButtonType.success,
             onPressed: () {},
           ),
         ],
@@ -239,14 +239,14 @@ class ButtonPage extends CompPageLayout {
         spacing: 20.0,
         runSpacing: 20.0,
         children: [
-          Button(
+          FlanButton(
             text: "URL跳转",
-            type: ButtonType.success,
+            type: FlanButtonType.success,
             onPressed: () {},
           ),
-          Button(
+          FlanButton(
             text: "路由跳转",
-            type: ButtonType.success,
+            type: FlanButtonType.success,
             onPressed: () {},
           ),
         ],
@@ -258,19 +258,19 @@ class ButtonPage extends CompPageLayout {
         spacing: 20.0,
         runSpacing: 20.0,
         children: [
-          Button(
+          FlanButton(
             color: Color(0xFF7232DD),
             text: "单色按钮",
             onPressed: () {},
           ),
-          Button(
+          FlanButton(
             color: Color(0xFFFF0000),
             text: "单色按钮",
             plain: true,
             onPressed: () {},
           ),
-          Button(
-            gradient: LinearGradient(
+          FlanButton(
+            color: LinearGradient(
               colors: [Colors.cyan, Colors.blue, Colors.blueAccent],
             ),
             text: "渐变色按钮",

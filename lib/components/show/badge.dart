@@ -1,5 +1,6 @@
-import 'package:flant/styles/var.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/foundation.dart';
+import 'package:flant/styles/var.dart';
 
 const badgeTextStyle = TextStyle(
   height: 1.2,
@@ -8,8 +9,8 @@ const badgeTextStyle = TextStyle(
   color: ThemeVars.badgeColor,
 );
 
-class Badge extends StatelessWidget {
-  const Badge({
+class FlanBadge extends StatelessWidget {
+  const FlanBadge({
     Key key,
     this.child,
     this.content,
@@ -139,5 +140,14 @@ class Badge extends StatelessWidget {
     }
 
     return null;
+  }
+
+  @override
+  void debugFillProperties(DiagnosticPropertiesBuilder properties) {
+    properties.add(DiagnosticsProperty<String>("content", content));
+    properties.add(DiagnosticsProperty<bool>("dot", dot, defaultValue: false));
+    properties.add(DiagnosticsProperty<int>("max", max));
+    properties.add(DiagnosticsProperty<Color>("color", color));
+    super.debugFillProperties(properties);
   }
 }

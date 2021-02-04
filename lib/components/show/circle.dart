@@ -1,6 +1,7 @@
 import 'dart:math' as math;
 import 'dart:ui';
 
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flant/styles/var.dart';
 
@@ -13,8 +14,8 @@ const circleTextStyle = TextStyle(
   color: ThemeVars.circleTextColor,
 );
 
-class Circle extends StatefulWidget {
-  Circle({
+class FlanCircle extends StatefulWidget {
+  FlanCircle({
     Key key,
     this.text,
     this.strokeLineCap = StrokeCap.round,
@@ -46,10 +47,72 @@ class Circle extends StatefulWidget {
   final ValueChanged onChange;
 
   @override
-  _CircleState createState() => _CircleState();
+  _FlanCircleState createState() => _FlanCircleState();
+
+  @override
+  void debugFillProperties(DiagnosticPropertiesBuilder properties) {
+    properties.add(DiagnosticsProperty<String>('text', text, defaultValue: ""));
+    properties.add(DiagnosticsProperty<StrokeCap>(
+      'strokeLineCap',
+      strokeLineCap,
+      defaultValue: StrokeCap.round,
+    ));
+    properties.add(DiagnosticsProperty<double>(
+      'currentRate',
+      currentRate,
+      defaultValue: 0.0,
+    ));
+    properties.add(DiagnosticsProperty<double>(
+      'speed',
+      speed,
+      defaultValue: 0.0,
+    ));
+    properties.add(DiagnosticsProperty<double>(
+      'size',
+      size,
+      defaultValue: 100.0,
+    ));
+    properties.add(DiagnosticsProperty<Color>(
+      'fill',
+      fill,
+      defaultValue: Colors.transparent,
+    ));
+
+    properties.add(DiagnosticsProperty<double>(
+      'rate',
+      rate,
+      defaultValue: 100.0,
+    ));
+
+    properties.add(DiagnosticsProperty<Color>(
+      'layerColor',
+      layerColor,
+      defaultValue: Colors.white,
+    ));
+
+    properties.add(DiagnosticsProperty<Color>(
+      'color',
+      color,
+      defaultValue: Colors.blue,
+    ));
+
+    properties.add(DiagnosticsProperty<double>(
+      'strokeWidth',
+      strokeWidth,
+      defaultValue: 4.0,
+    ));
+
+    properties.add(DiagnosticsProperty<bool>(
+      'clockwise',
+      clockwise,
+      defaultValue: true,
+    ));
+    super.debugFillProperties(properties);
+  }
 }
 
-class _CircleState extends State<Circle> with SingleTickerProviderStateMixin {
+class _FlanCircleState extends State<FlanCircle>
+    with SingleTickerProviderStateMixin {
   AnimationController _animationController;
 
   @override
@@ -59,9 +122,18 @@ class _CircleState extends State<Circle> with SingleTickerProviderStateMixin {
   }
 
   @override
-  void didUpdateWidget(covariant Circle oldWidget) {
+  void dispose() {
+    _animationController?.dispose();
+    _animationController = null;
+    super.dispose();
+  }
+
+  @override
+  void didUpdateWidget(covariant FlanCircle oldWidget) {
     if (this.widget.rate != oldWidget.rate) {
-      this.watchRate(this.widget.rate, oldWidget.rate);
+      WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
+        this.watchRate(this.widget.rate, oldWidget.rate);
+      });
     }
     super.didUpdateWidget(oldWidget);
   }
@@ -84,8 +156,13 @@ class _CircleState extends State<Circle> with SingleTickerProviderStateMixin {
     }
 
     if (this.widget.speed != null) {
+      if (_animationController != null) {
+        _animationController
+          ..stop()
+          ..reset();
+      }
+
       _animationController
-        ..value = 0
         ..duration = Duration(milliseconds: duration.round())
         ..addListener(animate)
         ..forward();
@@ -107,7 +184,7 @@ class _CircleState extends State<Circle> with SingleTickerProviderStateMixin {
               CustomPaint(
                 key: ValueKey("layer"),
                 size: Size.square(this.widget.size),
-                painter: CirclePainter(
+                painter: FlanDividerCirclePainter(
                   rate: 100.0,
                   color: this.widget.layerColor,
                   strokeWidth: this.widget.strokeWidth,
@@ -118,7 +195,7 @@ class _CircleState extends State<Circle> with SingleTickerProviderStateMixin {
               CustomPaint(
                 key: ValueKey("hover"),
                 size: Size.square(this.widget.size),
-                painter: CirclePainter(
+                painter: FlanDividerCirclePainter(
                   rate: this.widget.currentRate,
                   color: this.widget.color,
                   strokeWidth: this.widget.strokeWidth,
@@ -142,8 +219,8 @@ class _CircleState extends State<Circle> with SingleTickerProviderStateMixin {
   }
 }
 
-class CirclePainter extends CustomPainter {
-  CirclePainter({
+class FlanDividerCirclePainter extends CustomPainter {
+  FlanDividerCirclePainter({
     this.rate,
     this.color,
     this.fill,
