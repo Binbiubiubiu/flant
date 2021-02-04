@@ -1,4 +1,7 @@
 library flant;
 
-export 'components/button.dart';
-export 'components/badge.dart';
+// basic components
+export './components/base/button.dart';
+// show components
+export './components/show/badge.dart';
+export './components/show/circle.dart';

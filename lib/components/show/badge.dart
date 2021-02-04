@@ -58,10 +58,12 @@ class Badge extends StatelessWidget {
     if (!this.dot && hasContent) {
       if (this.contentSlot != null) {
         return IconTheme(
-            data: IconThemeData(
-              color: ThemeVars.badgeColor,
-            ),
-            child: this.contentSlot);
+          data: IconThemeData(
+            color: badgeTextStyle.color,
+            size: badgeTextStyle.fontSize * 1.6,
+          ),
+          child: this.contentSlot,
+        );
       }
 
       var text = this.content;
@@ -74,7 +76,6 @@ class Badge extends StatelessWidget {
 
       return Text(
         text,
-        style: badgeTextStyle,
         textAlign: TextAlign.center,
       );
     }
@@ -126,11 +127,14 @@ class Badge extends StatelessWidget {
 
   Widget buildBadge() {
     if (hasContent || this.dot) {
-      return Row(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          this.dot ? this.buildDotBadge() : this.buildContentBadge(),
-        ],
+      return DefaultTextStyle(
+        style: badgeTextStyle,
+        child: Row(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            this.dot ? this.buildDotBadge() : this.buildContentBadge(),
+          ],
+        ),
       );
     }
 

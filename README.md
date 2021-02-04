@@ -47,7 +47,7 @@
 ##### 展示组件
 
 - [x] Badge 徽标
-- [ ] Circle 环形进度条
+- [x] Circle 环形进度条
 - [ ] Collapse 折叠面板
 - [ ] CountDown 倒计时
 - [ ] Divider 分割线

@@ -9,7 +9,9 @@ abstract class CompPageLayout extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: buildAppBar(context),
-      body: buildPageContent(),
+      body: SafeArea(
+        child: buildPageContent(),
+      ),
     );
   }
 

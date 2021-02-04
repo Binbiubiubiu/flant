@@ -245,10 +245,10 @@ class ThemeVars {
   // @checkbox-disabled-background-color= @border-color;
 
   // // Circle
-  // @circle-text-color= @text-color;
-  // @circle-text-font-weight= @font-weight-bold;
-  // @circle-text-font-size= @font-size-md;
-  // @circle-text-line-height= @line-height-md;
+  static const circleTextColor = textColor;
+  static const circleTextFontWeight = fontWeightBold;
+  static const circleTextFontSize = fontSizeMd;
+  static const circleTextLineHeight = lineHeightMd;
 
   // // Collapse
   // @collapse-item-transition-duration= @animation-duration-base;

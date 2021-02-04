@@ -13,7 +13,7 @@ var showCompRoutes = [
     name: "Circle",
     title: "环形进度条",
     path: "/circle",
-    component: (context) => BadgePage(),
+    component: (context) => CirclePage(),
   ),
   CompRoute(
     name: "Collapse",

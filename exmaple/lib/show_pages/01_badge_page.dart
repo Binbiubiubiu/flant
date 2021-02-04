@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:flant/components/badge.dart';
-
+import 'package:flant/components/show/badge.dart';
 import '../_components/main.dart';
 
 class BadgeChildBlock extends StatelessWidget {
@@ -108,11 +107,11 @@ class BadgePage extends CompPageLayout {
             child: BadgeChildBlock(),
           ),
           const Badge(
-            contentSlot: const Icon(Icons.arrow_right),
+            contentSlot: const Icon(Icons.leaderboard),
             child: BadgeChildBlock(),
           ),
           const Badge(
-            contentSlot: const Icon(Icons.arrow_right),
+            contentSlot: const Icon(Icons.add),
             child: BadgeChildBlock(),
           ),
         ],
