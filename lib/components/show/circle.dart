@@ -123,7 +123,9 @@ class _FlanCircleState extends State<FlanCircle>
 
   @override
   void dispose() {
-    _animationController?.dispose();
+    _animationController
+      ..stop()
+      ..dispose();
     _animationController = null;
     super.dispose();
   }
