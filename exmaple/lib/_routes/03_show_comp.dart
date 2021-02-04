@@ -31,7 +31,7 @@ var showCompRoutes = [
     name: "Divider",
     title: "分割线",
     path: "/divider",
-    component: (context) => BadgePage(),
+    component: (context) => DividerPage(),
   ),
   CompRoute(
     name: "Empty",

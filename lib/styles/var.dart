@@ -335,14 +335,15 @@ class ThemeVars {
   // @dialog-confirm-button-text-color= @red;
 
   // // Divider
-  // @divider-margin= @padding-md 0;
-  // @divider-text-color= @gray-6;
-  // @divider-font-size= @font-size-md;
-  // @divider-line-height= 24px;
-  // @divider-border-color= @border-color;
-  // @divider-content-padding= @padding-md;
-  // @divider-content-left-width= 10%;
-  // @divider-content-right-width= 10%;
+  static const dividerMargin =
+      const EdgeInsets.symmetric(vertical: paddingMd, horizontal: 0);
+  static const dividerTextColor = gray6;
+  static const dividerFontSize = fontSizeMd;
+  static const dividerLineHeight = 24.0;
+  static const dividerBorderColor = borderColor;
+  static const dividerContentPadding = paddingMd;
+  static const dividerContentLeftWidth = "10%";
+  static const dividerContentRightWidth = "10%";
 
   // // DropdownMenu
   // @dropdown-menu-height= 48px;

@@ -50,7 +50,7 @@
 - [x] Circle 环形进度条
 - [ ] Collapse 折叠面板
 - [ ] CountDown 倒计时
-- [ ] Divider 分割线
+- [x] Divider 分割线
 - [ ] Empty 空状态
 - [ ] ImagePreview 图片预览
 - [ ] Lazyload 懒加载

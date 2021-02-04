@@ -90,10 +90,12 @@ class _MyHomePageState extends State<MyHomePage> {
     List<Widget> result = [];
 
     source.forEach((group) {
-      result.add(SubTitle(
-        text: group.title,
-        padding: const EdgeInsets.only(top: 24.0, bottom: 16.0, left: 18.0),
-      ));
+      result.add(
+        SubTitle(
+          text: group.title,
+          padding: const EdgeInsets.only(top: 24.0, bottom: 16.0, left: 18.0),
+        ),
+      );
 
       var children = group.routes;
       for (var i = 0; i < children.length; i++) {
