@@ -96,11 +96,13 @@ class ButtonPage extends CompPageLayout {
             text: "禁用按钮",
             disabled: true,
             type: FlanButtonType.success,
+            onPressed: () {},
           ),
           FlanButton(
             text: "禁用按钮",
             disabled: true,
             type: FlanButtonType.primary,
+            onPressed: () {},
           ),
         ],
       ),
