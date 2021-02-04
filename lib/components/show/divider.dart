@@ -98,7 +98,7 @@ class FlanDivider extends StatelessWidget {
       return Expanded(child: line);
     }
 
-    return line;
+    return SizedBox(width: constraints.maxWidth * 0.1, child: line);
   }
 
   @override
