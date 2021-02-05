@@ -6,7 +6,7 @@
 
 - [x] Button 按钮
 - [ ] Cell 单元格
-- [ ] Icon 图标
+- [x] Icon 图标
 - [ ] Image 图片
 - [ ] Layout 布局
 - [ ] Popup 弹出层
