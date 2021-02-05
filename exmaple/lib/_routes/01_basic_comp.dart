@@ -19,7 +19,7 @@ var basicCompRoutes = [
     name: "Icon",
     title: "图标",
     path: "/icon",
-    component: (context) => CellPage(),
+    component: (context) => IconPage(),
   ),
   CompRoute(
     name: "Image",

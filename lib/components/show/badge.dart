@@ -61,7 +61,7 @@ class FlanBadge extends StatelessWidget {
         return IconTheme(
           data: IconThemeData(
             color: badgeTextStyle.color,
-            size: badgeTextStyle.fontSize * 1.6,
+            size: badgeTextStyle.fontSize,
           ),
           child: this.contentSlot,
         );
@@ -111,6 +111,7 @@ class FlanBadge extends StatelessWidget {
       constraints: BoxConstraints(
         minWidth: ThemeVars.badgeSize,
       ),
+      alignment: Alignment.center,
       padding: ThemeVars.badgePadding,
       decoration: BoxDecoration(
         color: this.color ?? ThemeVars.badgeBackgroundColor,
@@ -128,8 +129,8 @@ class FlanBadge extends StatelessWidget {
 
   Widget buildBadge() {
     if (hasContent || this.dot) {
-      return DefaultTextStyle(
-        style: badgeTextStyle,
+      return Material(
+        textStyle: badgeTextStyle,
         child: Row(
           mainAxisSize: MainAxisSize.min,
           children: [

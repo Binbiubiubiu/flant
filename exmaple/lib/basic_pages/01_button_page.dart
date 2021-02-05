@@ -5,7 +5,7 @@ import '../_components/main.dart';
 
 class ButtonPage extends CompPageLayout {
   @override
-  List<Widget> renderPageContent() {
+  List<Widget> renderPageContent(BuildContext context) {
     return [
       SubTitle(
         text: "按钮类型",

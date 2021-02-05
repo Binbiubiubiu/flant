@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:flant/styles/icons.dart';
+import 'package:flant/components/base/icon.dart';
 import 'package:flant/components/show/badge.dart';
 import '../_components/main.dart';
 
@@ -20,7 +22,7 @@ class FlanBadgeChildBlock extends StatelessWidget {
 
 class BadgePage extends CompPageLayout {
   @override
-  renderPageContent() {
+  renderPageContent(BuildContext context) {
     return [
       const SubTitle(
         text: "基础用法",
@@ -103,15 +105,27 @@ class BadgePage extends CompPageLayout {
         runSpacing: 20.0,
         children: [
           const FlanBadge(
-            contentSlot: const Icon(Icons.arrow_right),
+            contentSlot: const FlanIcon(
+              name: FlanIcons.success,
+              size: 12.0,
+              height: 16.0,
+            ),
             child: FlanBadgeChildBlock(),
           ),
           const FlanBadge(
-            contentSlot: const Icon(Icons.leaderboard),
+            contentSlot: const FlanIcon(
+              name: FlanIcons.cross,
+              size: 12.0,
+              height: 16.0,
+            ),
             child: FlanBadgeChildBlock(),
           ),
           const FlanBadge(
-            contentSlot: const Icon(Icons.add),
+            contentSlot: const FlanIcon(
+              name: FlanIcons.down,
+              size: 12.0,
+              height: 16.0,
+            ),
             child: FlanBadgeChildBlock(),
           ),
         ],

@@ -5,7 +5,7 @@ import '../_components/main.dart';
 
 class DividerPage extends CompPageLayout {
   @override
-  renderPageContent() {
+  renderPageContent(BuildContext context) {
     return [
       const SubTitle(
         text: "基础用法",

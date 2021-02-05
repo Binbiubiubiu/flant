@@ -9,7 +9,7 @@ double formatRate(double rate) => math.min(math.max(rate, 0), 100);
 
 class CirclePage extends CompPageLayout {
   @override
-  Widget renderPageContent() {
+  Widget renderPageContent(BuildContext context) {
     return FlanCircleExample();
   }
 }

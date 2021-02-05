@@ -4,7 +4,7 @@ import '../_components/main.dart';
 
 class CellPage extends CompPageLayout {
   @override
-  renderPageContent() {
+  renderPageContent(BuildContext context) {
     return null;
   }
 }
