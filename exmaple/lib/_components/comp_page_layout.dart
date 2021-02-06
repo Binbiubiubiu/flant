@@ -1,7 +1,5 @@
 import 'package:flutter/material.dart';
 
-import '../_components/main.dart';
-
 abstract class CompPageLayout extends StatelessWidget {
   dynamic renderPageContent(BuildContext context);
 

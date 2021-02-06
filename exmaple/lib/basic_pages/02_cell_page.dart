@@ -1,7 +1,7 @@
-import 'package:exmaple/basic_pages/main.dart';
 import 'package:flutter/material.dart';
 import 'package:flant/flant.dart';
 import '../_components/main.dart';
+import './01_button_page.dart';
 
 class CellPage extends CompPageLayout {
   @override
