@@ -42,45 +42,17 @@ class _MyHomePageState extends State<MyHomePage> {
     return Scaffold(
       body: SafeArea(
         child: ListView(
-          padding: PageTheme.padding,
+          padding: const EdgeInsets.only(
+            top: 0.0,
+            left: 20.0,
+            right: 20.0,
+            bottom: 20.0,
+          ),
           children: [
-            buildTitle(),
-            buildSubTitle(),
+            const _FlantAppTitle(),
+            const _FlantAppSubTitle(),
             ...renderList(CompRouter.routes)
           ],
-        ),
-      ),
-    );
-  }
-
-  Widget buildTitle() {
-    return Container(
-      padding: const EdgeInsets.only(left: 16.0, top: 45.0, bottom: 16.0),
-      child: Row(
-        children: [
-          Image.network(
-            "https://img.yzcdn.cn/vant/logo.png",
-            width: 32.0,
-            height: 32.0,
-          ),
-          SizedBox(width: 16.0),
-          Text(
-            "Flant",
-            style: TextStyle(fontSize: 32.0),
-          )
-        ],
-      ),
-    );
-  }
-
-  Widget buildSubTitle() {
-    return Container(
-      margin: const EdgeInsets.only(bottom: 16.0),
-      padding: const EdgeInsets.only(left: 16.0),
-      child: Text(
-        "轻量、可靠的移动端 Flutter 组件库",
-        style: TextStyle(
-          color: PageTheme.subTextColor,
         ),
       ),
     );
@@ -118,5 +90,48 @@ class _MyHomePageState extends State<MyHomePage> {
     });
 
     return result;
+  }
+}
+
+class _FlantAppTitle extends StatelessWidget {
+  const _FlantAppTitle({Key key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      padding: const EdgeInsets.only(left: 16.0, top: 45.0, bottom: 16.0),
+      child: Row(
+        children: [
+          Image.network(
+            "https://img.yzcdn.cn/vant/logo.png",
+            width: 32.0,
+            height: 32.0,
+          ),
+          SizedBox(width: 16.0),
+          Text(
+            "Flant",
+            style: TextStyle(fontSize: 32.0),
+          )
+        ],
+      ),
+    );
+  }
+}
+
+class _FlantAppSubTitle extends StatelessWidget {
+  const _FlantAppSubTitle({Key key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      margin: const EdgeInsets.only(bottom: 16.0),
+      padding: const EdgeInsets.only(left: 16.0),
+      child: Text(
+        "轻量、可靠的移动端 Flutter 组件库",
+        style: TextStyle(
+          color: Color.fromRGBO(69, 90, 100, 0.6),
+        ),
+      ),
+    );
   }
 }

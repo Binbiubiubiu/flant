@@ -2,6 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flant/styles/var.dart';
 
+import './icon.dart';
+import '../../mixins/route_mixins.dart';
+
 enum FlanButtonType {
   normal,
   primary,
@@ -22,10 +25,10 @@ enum FlanButtonIconPosition {
   right,
 }
 
-class FlanButton extends StatelessWidget {
+class FlanButton extends RouteStatelessWidget {
   FlanButton({
     Key key,
-    @required this.onPressed,
+    this.onPressed,
     this.text = "",
     this.icon,
     this.color,
@@ -44,6 +47,8 @@ class FlanButton extends StatelessWidget {
     this.loadingSize = 10.0,
     this.iconPosition = FlanButtonIconPosition.left,
     this.child,
+    dynamic to,
+    bool replace = false,
   })  : assert(text != null),
         assert(block != null),
         assert(plain != null),
@@ -55,13 +60,12 @@ class FlanButton extends StatelessWidget {
         assert(type != null && FlanButtonType.values.contains(type)),
         assert(size != null && FlanButtonSize.values.contains(size)),
         assert(loadingSize != null),
-        assert(onPressed != null),
         assert(iconPosition != null &&
             FlanButtonIconPosition.values.contains(iconPosition)),
-        super(key: key);
+        super(key: key, to: to, replace: replace);
 
   final String text;
-  final IconData icon;
+  final dynamic icon;
   final dynamic color;
   // final Gradient gradient;
   final bool block;
@@ -89,15 +93,14 @@ class FlanButton extends StatelessWidget {
   }
 
   Widget renderIcon() {
-    return loading
-        ? Icon(
-            Icons.run_circle,
-            color: this.themeType.color,
-          )
-        : Icon(
-            icon,
-            color: this.themeType.color,
-          );
+    return LayoutBuilder(
+        builder: (BuildContext context, BoxConstraints constraints) {
+      final iSize = DefaultTextStyle.of(context).style.fontSize * 1.2;
+      return loading
+          ? FlanIcon(
+              name: Icons.run_circle, color: this.themeType.color, size: iSize)
+          : FlanIcon(name: icon, color: this.themeType.color, size: 18.0);
+    });
   }
 
   Widget renderContent() {
@@ -166,7 +169,14 @@ class FlanButton extends StatelessWidget {
           borderRadius: radius,
           splashColor: Colors.transparent,
           highlightColor: ThemeVars.black.withOpacity(0.1),
-          onTap: this.disabled ? null : this.onPressed,
+          onTap: this.disabled
+              ? null
+              : () {
+                  if (this.onPressed != null) {
+                    this.onPressed();
+                  }
+                  this.route(context);
+                },
           child: Padding(
             padding: this.btnSize.padding,
             child: Center(
@@ -177,7 +187,7 @@ class FlanButton extends StatelessWidget {
       ),
     );
 
-    if (!this.isBtnEnable) {
+    if (this.disabled) {
       _btn = Opacity(
         opacity: .5,
         child: _btn,
@@ -194,7 +204,7 @@ class FlanButton extends StatelessWidget {
     return Semantics(
       container: true,
       button: true,
-      enabled: this.isBtnEnable,
+      enabled: !this.disabled,
       child: _btn,
     );
   }
@@ -221,7 +231,7 @@ class FlanButton extends StatelessWidget {
     );
   }
 
-  bool get isBtnEnable => !this.disabled && this.onPressed != null;
+  // bool get isBtnEnable => !this.disabled && this.onPressed != null;
   bool get isHasText => this.text.isNotEmpty || this.child != null;
 
   _FlanButtonSize get btnSize {

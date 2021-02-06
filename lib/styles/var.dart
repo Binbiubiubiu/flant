@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 
 class ThemeVars {
   // Color Palette
+
   static const black = Color(0xFF000000);
   static const white = Color(0xFFFFFFFF);
   static const gray1 = Color(0xFFF7F8Fa);
@@ -57,10 +58,10 @@ class ThemeVars {
   //   sans-serif;
 
   // Animation
-  // @animation-duration-base= 0.3s;
-  // @animation-duration-fast= 0.2s;
-  // @animation-timing-function-enter= ease-out;
-  // @animation-timing-function-leave= ease-in;
+  static const animationDurationBase = const Duration(milliseconds: 300);
+  static const animationDurationFast = const Duration(milliseconds: 200);
+  static const animationTimingFunctionEnter = Curves.easeOut;
+  static const animationTimingFunctionLeave = Curves.easeIn;
 
   // Border
   static const borderColor = gray3;
@@ -205,46 +206,47 @@ class ThemeVars {
   // @card-price-integer-font-size= @font-size-lg;
   // @card-price-font-family= @price-integer-font-family;
 
-  // // Cell
-  // @cell-font-size= @font-size-md;
-  // @cell-line-height= 24px;
-  // @cell-vertical-padding= 10px;
-  // @cell-horizontal-padding= @padding-md;
-  // @cell-text-color= @text-color;
-  // @cell-background-color= @white;
-  // @cell-border-color= @border-color;
-  // @cell-active-color= @active-color;
-  // @cell-required-color= @red;
-  // @cell-label-color= @gray-6;
-  // @cell-label-font-size= @font-size-sm;
-  // @cell-label-line-height= @line-height-sm;
-  // @cell-label-margin-top= @padding-base;
-  // @cell-value-color= @gray-6;
-  // @cell-icon-size= 16px;
-  // @cell-right-icon-color= @gray-6;
-  // @cell-large-vertical-padding= @padding-sm;
-  // @cell-large-title-font-size= @font-size-lg;
-  // @cell-large-label-font-size= @font-size-md;
+  // Cell
+  static const cellFontSize = fontSizeMd;
+  static const cellLineHeight = 24.0;
+  static const cellVerticalPadding = 10.0;
+  static const cellHorizontalPadding = paddingMd;
+  static const cellTextColor = textColor;
+  static const cellBackgroundColor = white;
+  static const cellBorderColor = borderColor;
+  static const cellActiveColor = activeColor;
+  static const cellRequiredColor = red;
+  static const cellLabelColor = gray6;
+  static const cellLabelFontSize = fontSizeSm;
+  static const cellLabelLineHeight = lineHeightSm;
+  static const cellLabelMarginTop = paddingBase;
+  static const cellValueColor = gray6;
+  static const cellIconSize = 16.0;
+  static const cellRightIconColor = gray6;
+  static const cellLargeVerticalPadding = paddingSm;
+  static const cellLargeTitleFontSize = fontSizeLg;
+  static const cellLargeLabelFontSize = fontSizeMd;
 
-  // // CellGroup
-  // @cell-group-background-color= @white;
-  // @cell-group-title-color= @gray-6;
-  // @cell-group-title-padding= @padding-md @padding-md @padding-xs;
-  // @cell-group-title-font-size= @font-size-md;
-  // @cell-group-title-line-height= 16px;
+  // CellGroup
+  static const cellGroupBackgroundColor = white;
+  static const cellGroupTitleColor = gray6;
+  static const cellGroupTitlePadding = EdgeInsets.only(
+      top: paddingMd, left: paddingMd, right: paddingMd, bottom: paddingXs);
+  static const cellGroupTitleFontSize = fontSizeMd;
+  static const cellGroupTitleLineHeight = 16.0;
 
-  // // Checkbox
-  // @checkbox-size= 20px;
-  // @checkbox-border-color= @gray-5;
-  // @checkbox-transition-duration= @animation-duration-fast;
-  // @checkbox-label-margin= @padding-xs;
-  // @checkbox-label-color= @text-color;
-  // @checkbox-checked-icon-color= @blue;
-  // @checkbox-disabled-icon-color= @gray-5;
-  // @checkbox-disabled-label-color= @gray-5;
-  // @checkbox-disabled-background-color= @border-color;
+  // Checkbox
+  static const checkboxSize = 20.0;
+  static const checkboxborderColor = gray5;
+  static const checkboxTransitionDuration = animationDurationFast;
+  static const checkboxLabelMargin = paddingXs;
+  static const checkboxLabelColor = textColor;
+  static const checkboxCheckedIconColor = blue;
+  static const checkboxDisabledIconColor = gray5;
+  static const checkboxDisabledLabelColor = gray5;
+  static const checkboxDisabledBackgroundColor = borderColor;
 
-  // // Circle
+  // Circle
   static const circleTextColor = textColor;
   static const circleTextFontWeight = fontWeightBold;
   static const circleTextFontSize = fontSizeMd;

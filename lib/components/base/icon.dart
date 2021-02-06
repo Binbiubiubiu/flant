@@ -33,7 +33,7 @@ class FlanIcon extends StatelessWidget {
     return FlanBadge(
       dot: this.dot,
       content: this.badge,
-      child: Container(
+      child: SizedBox(
         height: this.height,
         child: this.name is IconData
             ? Icon(this.name, color: this.color, size: this.size ?? null)

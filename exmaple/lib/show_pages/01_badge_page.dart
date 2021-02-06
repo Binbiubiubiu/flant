@@ -24,125 +24,135 @@ class BadgePage extends CompPageLayout {
   @override
   renderPageContent(BuildContext context) {
     return [
-      const SubTitle(
-        text: "基础用法",
-      ),
-      Wrap(
-        spacing: 20.0,
-        runSpacing: 20.0,
+      DocBlock(
+        title: "基础用法",
         children: [
-          const FlanBadge(
-            content: "5",
-            child: FlanBadgeChildBlock(),
-          ),
-          const FlanBadge(
-            content: "10",
-            child: FlanBadgeChildBlock(),
-          ),
-          const FlanBadge(
-            content: "Hot",
-            child: FlanBadgeChildBlock(),
-          ),
-          const FlanBadge(
-            dot: true,
-            child: FlanBadgeChildBlock(),
+          Wrap(
+            spacing: 20.0,
+            runSpacing: 20.0,
+            children: [
+              const FlanBadge(
+                content: "5",
+                child: FlanBadgeChildBlock(),
+              ),
+              const FlanBadge(
+                content: "10",
+                child: FlanBadgeChildBlock(),
+              ),
+              const FlanBadge(
+                content: "Hot",
+                child: FlanBadgeChildBlock(),
+              ),
+              const FlanBadge(
+                dot: true,
+                child: FlanBadgeChildBlock(),
+              ),
+            ],
           ),
         ],
       ),
-      const SubTitle(
-        text: "最大值",
-      ),
-      Wrap(
-        spacing: 20.0,
-        runSpacing: 20.0,
+      DocBlock(
+        title: "最大值",
         children: [
-          const FlanBadge(
-            content: "20",
-            max: 9,
-            child: FlanBadgeChildBlock(),
-          ),
-          const FlanBadge(
-            content: "50",
-            max: 20,
-            child: FlanBadgeChildBlock(),
-          ),
-          const FlanBadge(
-            content: "200",
-            max: 99,
-            child: FlanBadgeChildBlock(),
+          Wrap(
+            spacing: 20.0,
+            runSpacing: 20.0,
+            children: [
+              const FlanBadge(
+                content: "20",
+                max: 9,
+                child: FlanBadgeChildBlock(),
+              ),
+              const FlanBadge(
+                content: "50",
+                max: 20,
+                child: FlanBadgeChildBlock(),
+              ),
+              const FlanBadge(
+                content: "200",
+                max: 99,
+                child: FlanBadgeChildBlock(),
+              ),
+            ],
           ),
         ],
       ),
-      const SubTitle(
-        text: "自定义颜色",
-      ),
-      Wrap(
-        spacing: 20.0,
-        runSpacing: 20.0,
+      DocBlock(
+        title: "自定义颜色",
         children: [
-          const FlanBadge(
-            content: "5",
-            color: Color(0xff1989fa),
-            child: FlanBadgeChildBlock(),
-          ),
-          const FlanBadge(
-            content: "10",
-            color: Color(0xff1989fa),
-            child: FlanBadgeChildBlock(),
-          ),
-          const FlanBadge(
-            dot: true,
-            color: Color(0xff1989fa),
-            child: FlanBadgeChildBlock(),
+          Wrap(
+            spacing: 20.0,
+            runSpacing: 20.0,
+            children: [
+              const FlanBadge(
+                content: "5",
+                color: Color(0xff1989fa),
+                child: FlanBadgeChildBlock(),
+              ),
+              const FlanBadge(
+                content: "10",
+                color: Color(0xff1989fa),
+                child: FlanBadgeChildBlock(),
+              ),
+              const FlanBadge(
+                dot: true,
+                color: Color(0xff1989fa),
+                child: FlanBadgeChildBlock(),
+              ),
+            ],
           ),
         ],
       ),
-      const SubTitle(
-        text: "自定义徽标内容",
-      ),
-      Wrap(
-        spacing: 20.0,
-        runSpacing: 20.0,
+      DocBlock(
+        title: "自定义徽标内容",
         children: [
-          const FlanBadge(
-            contentSlot: const FlanIcon(
-              name: FlanIcons.success,
-              size: 12.0,
-              height: 16.0,
-            ),
-            child: FlanBadgeChildBlock(),
-          ),
-          const FlanBadge(
-            contentSlot: const FlanIcon(
-              name: FlanIcons.cross,
-              size: 12.0,
-              height: 16.0,
-            ),
-            child: FlanBadgeChildBlock(),
-          ),
-          const FlanBadge(
-            contentSlot: const FlanIcon(
-              name: FlanIcons.down,
-              size: 12.0,
-              height: 16.0,
-            ),
-            child: FlanBadgeChildBlock(),
+          Wrap(
+            spacing: 20.0,
+            runSpacing: 20.0,
+            children: [
+              const FlanBadge(
+                contentSlot: const FlanIcon(
+                  name: FlanIcons.success,
+                  size: 12.0,
+                  height: 16.0,
+                ),
+                child: FlanBadgeChildBlock(),
+              ),
+              const FlanBadge(
+                contentSlot: const FlanIcon(
+                  name: FlanIcons.cross,
+                  size: 12.0,
+                  height: 16.0,
+                ),
+                child: FlanBadgeChildBlock(),
+              ),
+              const FlanBadge(
+                contentSlot: const FlanIcon(
+                  name: FlanIcons.down,
+                  size: 12.0,
+                  height: 16.0,
+                ),
+                child: FlanBadgeChildBlock(),
+              ),
+            ],
           ),
         ],
       ),
-      const SubTitle(
-        text: "独立展示",
-      ),
-      Wrap(
-        spacing: 20.0,
-        runSpacing: 20.0,
+      DocBlock(
+        title: "独立展示",
         children: [
-          const FlanBadge(
-            content: "20",
-          ),
-          const FlanBadge(
-            content: "200",
-            max: 99,
+          Wrap(
+            spacing: 20.0,
+            runSpacing: 20.0,
+            children: [
+              const FlanBadge(
+                content: "20",
+              ),
+              const FlanBadge(
+                content: "200",
+                max: 99,
+              ),
+            ],
           ),
         ],
       ),

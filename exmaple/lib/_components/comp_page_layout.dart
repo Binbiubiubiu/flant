@@ -16,7 +16,8 @@ abstract class CompPageLayout extends StatelessWidget {
   }
 
   buildAppBar(BuildContext context) {
-    dynamic query = ModalRoute.of(context).settings.arguments;
+    dynamic query =
+        ModalRoute.of(context).settings.arguments ?? {"title": "目标页面"};
     return AppBar(
       centerTitle: true,
       title: Text(query["title"]),
@@ -24,16 +25,20 @@ abstract class CompPageLayout extends StatelessWidget {
   }
 
   buildPageContent(BuildContext context) {
+    final pPagePadding = const EdgeInsets.only(
+      top: 0.0,
+      bottom: 20.0,
+    );
     dynamic content = renderPageContent(context);
     if (content is List) {
       return ListView(
-        padding: PageTheme.padding,
+        padding: pPagePadding,
         children: content,
       );
     }
 
     return Padding(
-      padding: PageTheme.padding,
+      padding: pPagePadding,
       child: content,
     );
   }
