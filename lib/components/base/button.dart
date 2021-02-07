@@ -32,7 +32,6 @@ class FlanButton extends RouteStatelessWidget {
     this.text = "",
     this.icon,
     this.color,
-    // this.gradient,
     this.block = false,
     this.plain = false,
     this.round = false,
@@ -40,8 +39,8 @@ class FlanButton extends RouteStatelessWidget {
     this.loading = false,
     this.hairline = false,
     this.disabled = false,
-    // this.iconPrefix,
-    // this.loadingText,
+    this.iconPrefix,
+    this.loadingText,
     this.type = FlanButtonType.normal,
     this.size = FlanButtonSize.normal,
     this.loadingSize = 10.0,
@@ -67,7 +66,6 @@ class FlanButton extends RouteStatelessWidget {
   final String text;
   final dynamic icon;
   final dynamic color;
-  // final Gradient gradient;
   final bool block;
   final bool plain;
   final bool round;
@@ -75,11 +73,8 @@ class FlanButton extends RouteStatelessWidget {
   final bool loading;
   final bool hairline;
   final bool disabled;
-
-  // TODO: 支持iconfont
-  // final String iconPrefix;
-  // final String loadingText;
-
+  final String iconPrefix;
+  final String loadingText;
   final FlanButtonType type;
   final FlanButtonSize size;
   final double loadingSize;
@@ -89,17 +84,40 @@ class FlanButton extends RouteStatelessWidget {
   final Widget child;
 
   Widget renderText() {
-    return child ?? Text(text);
+    if (this.loading && this.loadingText != null) {
+      return Text(this.loadingText);
+    }
+
+    if (this.child != null) {
+      return this.child;
+    }
+
+    return Text(this.text ?? "");
   }
 
   Widget renderIcon() {
     return LayoutBuilder(
         builder: (BuildContext context, BoxConstraints constraints) {
       final iSize = DefaultTextStyle.of(context).style.fontSize * 1.2;
-      return loading
-          ? FlanIcon(
-              name: Icons.run_circle, color: this.themeType.color, size: iSize)
-          : FlanIcon(name: icon, color: this.themeType.color, size: 18.0);
+
+      if (this.loading) {
+        return FlanIcon(
+          name: Icons.run_circle,
+          color: this.themeType.color,
+          size: iSize,
+        );
+      }
+
+      if (this.icon != null) {
+        return FlanIcon(
+          name: icon,
+          color: this.themeType.color,
+          size: 18.0,
+          classPrefix: this.iconPrefix,
+        );
+      }
+
+      return SizedBox();
     });
   }
 
@@ -108,20 +126,20 @@ class FlanButton extends RouteStatelessWidget {
       this.renderText(),
     ];
 
-    var icon = this.loading || this.icon != null ? this.renderIcon() : null;
+    var sideIcon = this.renderIcon();
 
-    if (icon == null) {
-      return children[0];
-    }
-    switch (iconPosition) {
+    // if (sideIcon == null) {
+    //   return children[0];
+    // }
+    switch (this.iconPosition) {
       case FlanButtonIconPosition.left:
         if (this.isHasText) {
           children.insert(0, const SizedBox(width: 4.0));
         }
-        children.insert(0, icon);
+        children.insert(0, sideIcon);
         break;
       case FlanButtonIconPosition.right:
-        children.add(icon);
+        children.add(sideIcon);
         if (this.isHasText) {
           children.add(const SizedBox(width: 4.0));
         }
@@ -130,6 +148,8 @@ class FlanButton extends RouteStatelessWidget {
         break;
     }
     return Row(
+      mainAxisAlignment: MainAxisAlignment.center,
+      crossAxisAlignment: CrossAxisAlignment.center,
       children: children,
     );
   }
@@ -179,9 +199,7 @@ class FlanButton extends RouteStatelessWidget {
                 },
           child: Padding(
             padding: this.btnSize.padding,
-            child: Center(
-              child: this.renderContent(),
-            ),
+            child: this.renderContent(),
           ),
         ),
       ),

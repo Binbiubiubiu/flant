@@ -430,14 +430,14 @@ class ThemeVars {
   // @index-bar-index-line-height= @line-height-xs;
   // @index-bar-index-active-color= @green;
 
-  // // Image
-  // @image-placeholder-text-color= @gray-6;
-  // @image-placeholder-font-size= @font-size-md;
-  // @image-placeholder-background-color= @background-color;
-  // @image-loading-icon-size= 32px;
-  // @image-loading-icon-color= @gray-4;
-  // @image-error-icon-size= 32px;
-  // @image-error-icon-color= @gray-4;
+  // Image
+  static const imagePlaceholderTextColor = gray6;
+  static const imagePlaceholderFontSize = fontSizeMd;
+  static const imagePlaceholderBackgroundColor = backgroundColor;
+  static const imageLoadingIconSize = 32.0;
+  static const imageLoadingIconColor = gray4;
+  static const imageErrorIconSize = 32.0;
+  static const imageErrorIconColor = gray4;
 
   // // ImagePreview
   // @image-preview-index-text-color= @white;

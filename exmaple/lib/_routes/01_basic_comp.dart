@@ -25,7 +25,7 @@ var basicCompRoutes = [
     name: "Image",
     title: "图片",
     path: "/image",
-    component: (context) => CellPage(),
+    component: (context) => ImagePage(),
   ),
   CompRoute(
     name: "Layout",

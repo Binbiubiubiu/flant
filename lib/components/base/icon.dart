@@ -7,14 +7,15 @@ import '../show/badge.dart';
 class FlanIcon extends StatelessWidget {
   const FlanIcon({
     Key key,
+    @required this.name,
     this.dot = false,
-    this.name,
     this.size,
     this.color,
     this.classPrefix,
     this.badge,
     this.height,
-  }) : super(key: key);
+  })  : assert(name != null),
+        super(key: key);
 
   final bool dot;
   final dynamic name;
