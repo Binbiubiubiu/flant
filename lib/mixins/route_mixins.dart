@@ -11,6 +11,10 @@ abstract class RouteStatelessWidget extends StatelessWidget {
   final bool replace;
 
   void route(BuildContext context) {
+    if (this.to == null) {
+      return;
+    }
+
     final navigator = Navigator.of(context);
 
     if (this.to is Route) {
