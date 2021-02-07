@@ -11,7 +11,7 @@
         },
         {
             "name": "exmaple",
-            "cwd": ".exmaple",
+            "cwd": "exmaple",
             "request": "launch",
             "type": "dart"
         }
