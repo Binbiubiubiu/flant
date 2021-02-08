@@ -170,13 +170,6 @@ class FlanButton extends RouteStatelessWidget {
       );
     }
 
-    if (this.size != FlanButtonSize.large && !this.block) {
-      _btn = Row(
-        mainAxisSize: MainAxisSize.min,
-        children: [_btn],
-      );
-    }
-
     return Semantics(
       container: true,
       button: true,
@@ -233,9 +226,6 @@ class FlanButton extends RouteStatelessWidget {
 
     var sideIcon = this._buildIcon();
 
-    if (sideIcon is SizedBox) {
-      return children[0];
-    }
     switch (this.iconPosition) {
       case FlanButtonIconPosition.left:
         if (this._isHasText) {
@@ -253,6 +243,9 @@ class FlanButton extends RouteStatelessWidget {
         break;
     }
     return Row(
+      mainAxisSize: this.size != FlanButtonSize.large && !this.block
+          ? MainAxisSize.min
+          : MainAxisSize.max,
       mainAxisAlignment: MainAxisAlignment.center,
       crossAxisAlignment: CrossAxisAlignment.center,
       children: children,

@@ -147,34 +147,30 @@ class FlanTag extends StatelessWidget {
 
   /// 构建标签
   Widget _buildTag() {
-    return Row(
-      mainAxisSize: MainAxisSize.min,
-      children: [
-        Material(
-          textStyle: TextStyle(
-            color: this._textColor,
-            fontSize: this._textSize,
-            // height: ThemeVars.tagLineHeight / ThemeVars.tagFontSize,
-          ),
-          shape: RoundedRectangleBorder(
-            side: this.plain
-                ? BorderSide(width: 1.0, color: this._textColor)
-                : BorderSide.none,
-            borderRadius: this._borderRadius,
-          ),
-          color: this._backgroundColor,
-          child: Padding(
-            padding: this._tagPadding,
-            child: Row(
-              // crossAxisAlignment: CrossAxisAlignment.center,
-              children: [
-                this.child,
-                this._buildCloseIcon(),
-              ].where((element) => element != null).toList(),
-            ),
-          ),
+    return Material(
+      textStyle: TextStyle(
+        color: this._textColor,
+        fontSize: this._textSize,
+        // height: ThemeVars.tagLineHeight / ThemeVars.tagFontSize,
+      ),
+      shape: RoundedRectangleBorder(
+        side: this.plain
+            ? BorderSide(width: 1.0, color: this._textColor)
+            : BorderSide.none,
+        borderRadius: this._borderRadius,
+      ),
+      color: this._backgroundColor,
+      child: Padding(
+        padding: this._tagPadding,
+        child: Row(
+          mainAxisSize: MainAxisSize.min,
+          // crossAxisAlignment: CrossAxisAlignment.center,
+          children: [
+            this.child,
+            this._buildCloseIcon(),
+          ].where((element) => element != null).toList(),
         ),
-      ],
+      ),
     );
   }
 
