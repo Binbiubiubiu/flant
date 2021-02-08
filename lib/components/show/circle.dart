@@ -3,9 +3,9 @@ import 'dart:ui';
 
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:flant/styles/var.dart';
+import '../../styles/var.dart';
 
-double formatRate(double rate) => math.min(math.max(rate, 0), 100);
+double _formatRate(double rate) => math.min(math.max(rate, 0), 100);
 
 const circleTextStyle = TextStyle(
   fontWeight: ThemeVars.circleTextFontWeight,
@@ -14,35 +14,73 @@ const circleTextStyle = TextStyle(
   color: ThemeVars.circleTextColor,
 );
 
+/// ### FlanCircle 环形进度条
+/// 圆环形的进度条组件，支持进度渐变动画。
 class FlanCircle extends StatefulWidget {
   FlanCircle({
     Key key,
-    this.text,
-    this.strokeLineCap = StrokeCap.round,
     this.currentRate = 0.0,
-    this.speed = 0.0,
-    this.size = 100.0,
-    this.fill = Colors.transparent,
     this.rate = 100.0,
-    this.layerColor = Colors.white,
+    this.size = 100.0,
     this.color = Colors.blue,
+    this.layerColor = Colors.white,
+    this.fill,
+    this.speed = 0.0,
+    this.text,
     this.strokeWidth = 4.0,
+    this.strokeLineCap = StrokeCap.round,
     this.clockwise = true,
-    this.child,
     this.onChange,
-  }) : super(key: key);
+    this.child,
+  })  : assert(
+            currentRate != null && currentRate >= 0.0 && currentRate <= 100.0),
+        assert(rate != null && rate >= 0.0 && rate <= 100.0),
+        assert(size != null && size >= 0.0),
+        assert(color != null),
+        assert(layerColor != null),
+        assert(speed != null && speed >= 0.0),
+        assert(strokeWidth != null && strokeWidth > 0.0),
+        assert(strokeLineCap != null && strokeLineCap is StrokeCap),
+        assert(clockwise != null),
+        super(key: key);
 
-  final String text;
-  final StrokeCap strokeLineCap;
+  // ****************** Props ******************
+  /// 当前进度
   final double currentRate;
-  final double speed;
-  final double size;
-  final Color fill;
+
+  /// 目标进度
   final double rate;
-  final Color layerColor;
+
+  /// 圆环直径
+  final double size;
+
+  /// 进度条颜色，传入对象格式可以定义渐变色
   final dynamic color;
+
+  /// final Color layerColor;
+  final Color layerColor;
+
+  ///填充颜色
+  final Color fill;
+
+  /// 动画速度（单位为 rate/s）
+  final double speed;
+
+  /// 文字
+  final String text;
+
+  /// 进度条宽度
   final double strokeWidth;
+
+  /// 进度条端点的形状，可选值为 `sqaure` `butt`
+  final StrokeCap strokeLineCap;
+
+  /// 是否顺时针增加
   final bool clockwise;
+
+  // ****************** Events ******************
+
+  // ****************** Slots ******************
   final Widget child;
   final ValueChanged onChange;
 
@@ -134,15 +172,16 @@ class _FlanCircleState extends State<FlanCircle>
   void didUpdateWidget(covariant FlanCircle oldWidget) {
     if (this.widget.rate != oldWidget.rate) {
       WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
-        this.watchRate(this.widget.rate, oldWidget.rate);
+        this._watchRate(this.widget.rate, oldWidget.rate);
       });
     }
     super.didUpdateWidget(oldWidget);
   }
 
-  watchRate(double rate, double oldRate) {
+  /// 监听进度条的进度变化
+  void _watchRate(double rate, double oldRate) {
     final startRate = this.widget.currentRate;
-    final endRate = formatRate(rate);
+    final endRate = _formatRate(rate);
     final duration = (((startRate - endRate) * 1000) / this.widget.speed).abs();
 
     void animate() {
@@ -150,7 +189,7 @@ class _FlanCircleState extends State<FlanCircle>
           lerpDouble(0, endRate - startRate, _animationController.value) +
               startRate;
 
-      this.widget.onChange(formatRate(rate).roundToDouble());
+      this.widget.onChange(_formatRate(rate).roundToDouble());
 
       if (endRate > startRate ? rate >= endRate : rate <= endRate) {
         this._animationController..removeListener(animate);
@@ -186,7 +225,7 @@ class _FlanCircleState extends State<FlanCircle>
               CustomPaint(
                 key: ValueKey("layer"),
                 size: Size.square(this.widget.size),
-                painter: FlanDividerCirclePainter(
+                painter: _FlanDividerCirclePainter(
                   rate: 100.0,
                   color: this.widget.layerColor,
                   strokeWidth: this.widget.strokeWidth,
@@ -197,7 +236,7 @@ class _FlanCircleState extends State<FlanCircle>
               CustomPaint(
                 key: ValueKey("hover"),
                 size: Size.square(this.widget.size),
-                painter: FlanDividerCirclePainter(
+                painter: _FlanDividerCirclePainter(
                   rate: this.widget.currentRate,
                   color: this.widget.color,
                   strokeWidth: this.widget.strokeWidth,
@@ -221,27 +260,45 @@ class _FlanCircleState extends State<FlanCircle>
   }
 }
 
-class FlanDividerCirclePainter extends CustomPainter {
-  FlanDividerCirclePainter({
+/// 环形进度条绘制工具类
+class _FlanDividerCirclePainter extends CustomPainter {
+  _FlanDividerCirclePainter({
     this.rate,
     this.color,
     this.fill,
     this.strokeWidth,
     this.clockwise = true,
     this.strokeLineCap = StrokeCap.round,
-  })  : _paint = Paint()
+  })  : assert(rate != null && rate >= 0.0 && rate <= 100.0),
+        assert(color != null),
+        assert(strokeWidth != null && strokeWidth > 0.0),
+        assert(clockwise != null),
+        assert(strokeLineCap != null && strokeLineCap is StrokeCap),
+        _paint = Paint()
           ..strokeWidth = strokeWidth
           ..strokeCap = strokeLineCap
           ..style = PaintingStyle.stroke,
         super();
 
+  /// 进度条的进度
   final double rate;
+
+  /// 进度条的颜色
   final dynamic color;
+
+  /// 进度条的粗细
   final double strokeWidth;
+
+  /// 进度条的背景色
   final Color fill;
+
+  /// 是否是顺时针
   final bool clockwise;
+
+  /// 进度条的边界样式
   final StrokeCap strokeLineCap;
 
+  /// 进度条的画笔
   final Paint _paint;
 
   @override
@@ -281,7 +338,11 @@ class FlanDividerCirclePainter extends CustomPainter {
   }
 
   @override
-  bool shouldRepaint(covariant CustomPainter oldDelegate) {
-    return this != oldDelegate;
-  }
+  bool shouldRepaint(_FlanDividerCirclePainter oldDelegate) =>
+      this.rate != oldDelegate.rate ||
+      this.color != oldDelegate.color ||
+      this.strokeWidth != oldDelegate.strokeWidth ||
+      this.fill != oldDelegate.fill ||
+      this.clockwise != oldDelegate.clockwise ||
+      this.strokeLineCap != oldDelegate.strokeLineCap;
 }

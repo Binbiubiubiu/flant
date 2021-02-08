@@ -1,31 +1,38 @@
 import "package:flutter/material.dart";
 import 'package:flutter/foundation.dart';
-import 'package:flant/styles/var.dart';
-
+import '../../styles/var.dart';
 import './cell.dart';
 
+/// ### FlanCellGroup 单元格组
 class FlanCellGroup extends StatelessWidget {
   const FlanCellGroup({
     Key key,
     this.title,
     this.border = false,
-    this.children = const [],
+    this.children,
     this.titleSlot,
-  }) : super(key: key);
+  })  : assert(border != null),
+        super(key: key);
 
+  // ****************** Props ******************
+  /// 分组标题
   final String title;
+
+  /// 是否显示外边框
   final bool border;
+
+  // ****************** Events ******************
+
+  // ****************** Slots ******************
+  /// 默认插槽
   final List<Widget> children;
 
-  // slot
-
+  /// 自定义分组标题
   final Widget titleSlot;
-
-  bool get hasTitle => this.title != null || this.titleSlot != null;
 
   @override
   Widget build(BuildContext context) {
-    final noBottonBorder = this.children.last is FlanCell;
+    final noBottonBorder = this.children?.last is FlanCell;
 
     Widget group = Container(
       decoration: BoxDecoration(
@@ -37,17 +44,19 @@ class FlanCellGroup extends StatelessWidget {
           top: BorderSide(width: 0.5, color: ThemeVars.cellBorderColor),
         ),
       ),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: this.children,
-      ),
+      child: this.children != null
+          ? Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: this.children,
+            )
+          : null,
     );
 
-    if (this.hasTitle) {
+    if (this._hasTitle) {
       group = Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          this.buildTitle(),
+          this._buildTitle(),
           group,
         ],
       );
@@ -61,7 +70,11 @@ class FlanCellGroup extends StatelessWidget {
     );
   }
 
-  Widget buildTitle() {
+  /// 是否有标题
+  bool get _hasTitle => this.title != null || this.titleSlot != null;
+
+  /// 构建标题
+  Widget _buildTitle() {
     return Padding(
       padding: ThemeVars.cellGroupTitlePadding,
       child: DefaultTextStyle(
@@ -74,5 +87,12 @@ class FlanCellGroup extends StatelessWidget {
         child: this.titleSlot ?? Text(this.title),
       ),
     );
+  }
+
+  @override
+  void debugFillProperties(DiagnosticPropertiesBuilder properties) {
+    properties.add(DiagnosticsProperty<String>("title", title));
+    properties.add(DiagnosticsProperty<bool>("border", border));
+    super.debugFillProperties(properties);
   }
 }

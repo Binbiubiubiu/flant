@@ -1,177 +1,134 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/foundation.dart';
-import 'package:flant/styles/var.dart';
-
+import '../../styles/var.dart';
 import './icon.dart';
 import '../../mixins/route_mixins.dart';
 
-enum FlanButtonType {
-  normal,
-  primary,
-  success,
-  warning,
-  danger,
-}
-
-enum FlanButtonSize {
-  large,
-  normal,
-  small,
-  mini,
-}
-
-enum FlanButtonIconPosition {
-  left,
-  right,
-}
-
+/// ### FlanButton 按钮
+/// 用于触发一个操作，如提交表单
 class FlanButton extends RouteStatelessWidget {
-  FlanButton({
+  const FlanButton({
     Key key,
-    this.onPressed,
-    this.text = "",
-    this.icon,
+    this.type = FlanButtonType.normal,
+    this.size = FlanButtonSize.normal,
+    this.text,
     this.color,
+    this.icon,
+    this.iconPrefix,
+    this.iconPosition = FlanButtonIconPosition.left,
     this.block = false,
     this.plain = false,
     this.round = false,
     this.square = false,
-    this.loading = false,
     this.hairline = false,
     this.disabled = false,
-    this.iconPrefix,
+    this.loading = false,
     this.loadingText,
-    this.type = FlanButtonType.normal,
-    this.size = FlanButtonSize.normal,
-    this.loadingSize = 10.0,
-    this.iconPosition = FlanButtonIconPosition.left,
+    this.loadingType,
+    this.loadingSize = 20.0,
+    this.onClick,
+    this.onTouchStart,
     this.child,
+    this.loadingSlot,
     dynamic to,
     bool replace = false,
-  })  : assert(text != null),
+  })  : assert(type != null && type is FlanButtonType),
+        assert(size != null && size is FlanButtonSize),
+        assert(iconPosition != null && iconPosition is FlanButtonIconPosition),
         assert(block != null),
         assert(plain != null),
         assert(round != null),
         assert(square != null),
-        assert(loading != null),
         assert(hairline != null),
         assert(disabled != null),
-        assert(type != null && FlanButtonType.values.contains(type)),
-        assert(size != null && FlanButtonSize.values.contains(size)),
-        assert(loadingSize != null),
-        assert(iconPosition != null &&
-            FlanButtonIconPosition.values.contains(iconPosition)),
+        assert(loading != null),
+        assert(loadingSize != null && loadingSize > 0.0),
         super(key: key, to: to, replace: replace);
 
-  final String text;
-  final dynamic icon;
-  final dynamic color;
-  final bool block;
-  final bool plain;
-  final bool round;
-  final bool square;
-  final bool loading;
-  final bool hairline;
-  final bool disabled;
-  final String iconPrefix;
-  final String loadingText;
+  // ****************** Props ******************
+  /// 类型，可选值为 `primary` `info` `warning` `danger`
   final FlanButtonType type;
+
+  // 尺寸，可选值为 `large` `small` `mini`
   final FlanButtonSize size;
-  final double loadingSize;
+
+  /// 按钮文字
+  final String text;
+
+  /// 按钮颜色，支持传入 linear-gradient 渐变色
+  final dynamic color;
+
+  /// 左侧图标名称或图片链接
+  final dynamic icon;
+
+  /// 图标类名前缀，同 Icon 组件的 class-prefix 属性
+  final String iconPrefix;
+
+  /// 图标展示位置，可选值为 `right`
   final FlanButtonIconPosition iconPosition;
 
-  final VoidCallback onPressed;
+  /// 是否为块级元素
+  final bool block;
+
+  /// 是否为朴素按钮
+  final bool plain;
+
+  /// 是否为圆形按钮
+  final bool round;
+
+  /// 是否为方形按钮
+  final bool square;
+
+  /// 是否使用 0.5px 边框
+  final bool hairline;
+
+  /// 是否禁用按钮
+  final bool disabled;
+
+  /// 是否显示为加载状态
+  final bool loading;
+
+  /// 加载状态提示文字
+  final String loadingText;
+
+  /// 加载图标类型，可选值为 `spinner`
+  final double loadingType;
+
+  /// 加载图标大小
+  final double loadingSize;
+
+  // ****************** Events ******************
+  /// 点击按钮，且按钮状态不为加载或禁用时触发
+  final GestureTapCallback onClick;
+
+  /// 开始触摸按钮时触发
+  final GestureTapDownCallback onTouchStart;
+
+  // ****************** Slots ******************
+  /// 按钮内容
   final Widget child;
 
-  Widget renderText() {
-    if (this.loading && this.loadingText != null) {
-      return Text(this.loadingText);
-    }
-
-    if (this.child != null) {
-      return this.child;
-    }
-
-    return Text(this.text ?? "");
-  }
-
-  Widget renderIcon() {
-    return LayoutBuilder(
-        builder: (BuildContext context, BoxConstraints constraints) {
-      final iSize = DefaultTextStyle.of(context).style.fontSize * 1.2;
-
-      if (this.loading) {
-        return FlanIcon(
-          name: Icons.run_circle,
-          color: this.themeType.color,
-          size: iSize,
-        );
-      }
-
-      if (this.icon != null) {
-        return FlanIcon(
-          name: icon,
-          color: this.themeType.color,
-          size: 18.0,
-          classPrefix: this.iconPrefix,
-        );
-      }
-
-      return SizedBox();
-    });
-  }
-
-  Widget renderContent() {
-    var children = [
-      this.renderText(),
-    ];
-
-    var sideIcon = this.renderIcon();
-
-    // if (sideIcon == null) {
-    //   return children[0];
-    // }
-    switch (this.iconPosition) {
-      case FlanButtonIconPosition.left:
-        if (this.isHasText) {
-          children.insert(0, const SizedBox(width: 4.0));
-        }
-        children.insert(0, sideIcon);
-        break;
-      case FlanButtonIconPosition.right:
-        children.add(sideIcon);
-        if (this.isHasText) {
-          children.add(const SizedBox(width: 4.0));
-        }
-        break;
-      default:
-        break;
-    }
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.center,
-      crossAxisAlignment: CrossAxisAlignment.center,
-      children: children,
-    );
-  }
+  /// 自定义加载图标
+  final Widget loadingSlot;
 
   @override
   Widget build(BuildContext context) {
     final radius = this.square
         ? BorderRadius.zero
         : BorderRadius.circular(
-            this.round ? btnSize.height / 2.0 : ThemeVars.buttonBorderRadius,
+            this.round ? _btnSize.height / 2.0 : ThemeVars.buttonBorderRadius,
           );
 
     final textStyle = TextStyle(
-      fontSize: this.btnSize.fontSize,
+      fontSize: this._btnSize.fontSize,
       // height: ThemeVars.buttonDefaultLineHeight /
       //     ThemeVars.buttonDefaultFontSize,
-      color: this.themeType.color,
+      color: this._themeType.color,
     );
 
     final bgColor =
         (this.plain ? null : (this.color is Gradient ? null : this.color)) ??
-            this.themeType.backgroundColor;
+            this._themeType.backgroundColor;
 
     Widget _btn = Material(
       type: MaterialType.button,
@@ -180,26 +137,27 @@ class FlanButton extends RouteStatelessWidget {
       borderRadius: radius,
       child: Ink(
         decoration: BoxDecoration(
-          border: this.themeType.border,
+          border: this._themeType.border,
           borderRadius: radius,
           gradient: this.color is Gradient ? this.color : null,
         ),
-        height: this.btnSize.height,
+        height: this._btnSize.height,
         child: InkWell(
           borderRadius: radius,
           splashColor: Colors.transparent,
           highlightColor: ThemeVars.black.withOpacity(0.1),
+          onTapDown: this.onTouchStart,
           onTap: this.disabled
               ? null
               : () {
-                  if (this.onPressed != null) {
-                    this.onPressed();
+                  if (this.onClick != null) {
+                    this.onClick();
                   }
                   this.route(context);
                 },
           child: Padding(
-            padding: this.btnSize.padding,
-            child: this.renderContent(),
+            padding: this._btnSize.padding,
+            child: this._buildContent(),
           ),
         ),
       ),
@@ -227,7 +185,82 @@ class FlanButton extends RouteStatelessWidget {
     );
   }
 
-  _FlanButtonTheme computedThemeType(
+  // 构建按钮文本
+  Widget _buildText() {
+    if (this.loading && this.loadingText != null) {
+      return Text(this.loadingText);
+    }
+
+    if (this.child != null) {
+      return this.child;
+    }
+
+    return Text(this.text ?? "");
+  }
+
+  /// 构建图标
+  Widget _buildIcon() {
+    return LayoutBuilder(
+        builder: (BuildContext context, BoxConstraints constraints) {
+      final iSize = DefaultTextStyle.of(context).style.fontSize * 1.2;
+
+      if (this.loading) {
+        return FlanIcon(
+          name: Icons.run_circle,
+          color: this._themeType.color,
+          size: iSize,
+        );
+      }
+
+      if (this.icon != null) {
+        return FlanIcon(
+          name: icon,
+          color: this._themeType.color,
+          size: 18.0,
+          classPrefix: this.iconPrefix,
+        );
+      }
+
+      return SizedBox();
+    });
+  }
+
+  /// 构建内容
+  Widget _buildContent() {
+    var children = [
+      this._buildText(),
+    ];
+
+    var sideIcon = this._buildIcon();
+
+    // if (sideIcon == null) {
+    //   return children[0];
+    // }
+    switch (this.iconPosition) {
+      case FlanButtonIconPosition.left:
+        if (this._isHasText) {
+          children.insert(0, const SizedBox(width: 4.0));
+        }
+        children.insert(0, sideIcon);
+        break;
+      case FlanButtonIconPosition.right:
+        children.add(sideIcon);
+        if (this._isHasText) {
+          children.add(const SizedBox(width: 4.0));
+        }
+        break;
+      default:
+        break;
+    }
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.center,
+      crossAxisAlignment: CrossAxisAlignment.center,
+      children: children,
+    );
+  }
+
+  /// 计算按钮样式
+  _FlanButtonTheme _computedThemeType(
     plain,
     hairline, {
     Color backgroundColor,
@@ -250,9 +283,12 @@ class FlanButton extends RouteStatelessWidget {
   }
 
   // bool get isBtnEnable => !this.disabled && this.onPressed != null;
-  bool get isHasText => this.text.isNotEmpty || this.child != null;
+  /// 按钮是否有内容
+  bool get _isHasText =>
+      (this.text != null && this.text.isNotEmpty) || this.child != null;
 
-  _FlanButtonSize get btnSize {
+  /// 按钮大小集合
+  _FlanButtonSize get _btnSize {
     return {
       FlanButtonSize.large: _FlanButtonSize(
         fontSize: ThemeVars.buttonDefaultFontSize,
@@ -277,37 +313,38 @@ class FlanButton extends RouteStatelessWidget {
     }[size];
   }
 
-  _FlanButtonTheme get themeType {
+  /// 按钮样式集合
+  _FlanButtonTheme get _themeType {
     return {
-      FlanButtonType.normal: computedThemeType(
+      FlanButtonType.normal: this._computedThemeType(
         this.plain,
         this.hairline,
         backgroundColor: ThemeVars.buttonDefaultBackgroundColor,
         color: ThemeVars.buttonDefaultColor,
         borderColor: ThemeVars.buttonDefaultBorderColor,
       ),
-      FlanButtonType.primary: computedThemeType(
+      FlanButtonType.primary: this._computedThemeType(
         this.plain,
         this.hairline,
         backgroundColor: ThemeVars.buttonPrimaryBackgroundColor,
         color: ThemeVars.buttonPrimaryColor,
         borderColor: ThemeVars.buttonPrimaryBorderColor,
       ),
-      FlanButtonType.success: computedThemeType(
+      FlanButtonType.success: this._computedThemeType(
         this.plain,
         this.hairline,
         backgroundColor: ThemeVars.buttonSuccessBackgroundColor,
         color: ThemeVars.buttonSuccessColor,
         borderColor: ThemeVars.buttonSuccessBorderColor,
       ),
-      FlanButtonType.danger: computedThemeType(
+      FlanButtonType.danger: this._computedThemeType(
         this.plain,
         this.hairline,
         backgroundColor: ThemeVars.buttonDangerBackgroundColor,
         color: ThemeVars.buttonDangerColor,
         borderColor: ThemeVars.buttonDangerBorderColor,
       ),
-      FlanButtonType.warning: computedThemeType(
+      FlanButtonType.warning: this._computedThemeType(
         this.plain,
         this.hairline,
         backgroundColor: ThemeVars.buttonWarningBackgroundColor,
@@ -349,6 +386,7 @@ class FlanButton extends RouteStatelessWidget {
   }
 }
 
+/// 按钮主题样式类
 class _FlanButtonTheme {
   _FlanButtonTheme({
     this.color,
@@ -361,6 +399,7 @@ class _FlanButtonTheme {
   final Border border;
 }
 
+/// 按钮大小样式类
 class _FlanButtonSize {
   _FlanButtonSize({
     this.fontSize,
@@ -371,4 +410,27 @@ class _FlanButtonSize {
   final double fontSize;
   final double height;
   final EdgeInsets padding;
+}
+
+/// 按钮类型
+enum FlanButtonType {
+  normal,
+  primary,
+  success,
+  warning,
+  danger,
+}
+
+/// 按钮大小
+enum FlanButtonSize {
+  large,
+  normal,
+  small,
+  mini,
+}
+
+/// 图标展示位置
+enum FlanButtonIconPosition {
+  left,
+  right,
 }

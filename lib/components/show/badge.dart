@@ -1,31 +1,42 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/foundation.dart';
-import 'package:flant/styles/var.dart';
+import '../../styles/var.dart';
 
-const badgeTextStyle = TextStyle(
-  height: 1.2,
-  fontSize: ThemeVars.badgeFontSize,
-  fontWeight: ThemeVars.badgeFontWeight,
-  color: ThemeVars.badgeColor,
-);
-
+/// ### FlanImage 图片
+/// 增强版的 img 标签，提供多种图片填充模式，支持图片懒加载、加载中提示、加载失败提示。
 class FlanBadge extends StatelessWidget {
   const FlanBadge({
     Key key,
-    this.child,
     this.content,
     this.dot = false,
     this.max,
     this.color,
+    this.child,
     this.contentSlot,
-  }) : super(key: key);
+  })  : assert(dot != null),
+        super(key: key);
 
-  final Widget child;
-  final Widget contentSlot;
+  // ****************** Props ******************
+  /// 徽标内容
   final String content;
-  final bool dot;
-  final int max;
+
+  /// 徽标背景颜色
   final Color color;
+
+  /// 徽标背景颜色
+  final bool dot;
+
+  /// 最大值，超过最大值会显示 `{max}+`，仅当 content 为数字时有效
+  final int max;
+
+  // ****************** Events ******************
+
+  // ****************** Slots ******************
+  /// 徽标包裹的子元素
+  final Widget child;
+
+  /// 自定义徽标内容
+  final Widget contentSlot;
 
   @override
   Widget build(BuildContext context) {
@@ -40,30 +51,38 @@ class FlanBadge extends StatelessWidget {
             right: 0.0,
             child: SizedOverflowBox(
               size: const Size(0.0, 0.0),
-              child: this.buildBadge(),
+              child: this._buildBadge(),
             ),
           ),
         ],
       );
     }
 
-    return this.buildBadge();
+    return this._buildBadge();
   }
 
-  bool get hasContent {
+  /// 是否有内容
+  bool get _hasContent {
     return this.contentSlot != null ||
         (this.content != null && this.content.isNotEmpty);
   }
 
-  Widget buildContent() {
-    if (!this.dot && hasContent) {
+  /// 构建内容
+  Widget _buildContent() {
+    if (!this.dot && this._hasContent) {
       if (this.contentSlot != null) {
-        return IconTheme(
-          data: IconThemeData(
-            color: badgeTextStyle.color,
-            size: badgeTextStyle.fontSize,
-          ),
-          child: this.contentSlot,
+        return LayoutBuilder(
+          builder: (BuildContext context, BoxConstraints constraints) {
+            final style = DefaultTextStyle.of(context).style;
+
+            return IconTheme(
+              data: IconThemeData(
+                color: style.color,
+                size: style.fontSize,
+              ),
+              child: this.contentSlot,
+            );
+          },
         );
       }
 
@@ -84,7 +103,8 @@ class FlanBadge extends StatelessWidget {
     return null;
   }
 
-  Widget buildDotBadge() {
+  /// 构建点样式徽标
+  Widget _buildDotBadge() {
     return Container(
       width: ThemeVars.badgeDotSize,
       height: ThemeVars.badgeDotSize,
@@ -102,11 +122,12 @@ class FlanBadge extends StatelessWidget {
           Radius.circular(ThemeVars.badgeDotSize),
         ),
       ),
-      child: this.buildContent(),
+      child: this._buildContent(),
     );
   }
 
-  Widget buildContentBadge() {
+  /// 构建内容
+  Widget _buildContentBadge() {
     return Container(
       constraints: BoxConstraints(
         minWidth: ThemeVars.badgeSize,
@@ -123,18 +144,24 @@ class FlanBadge extends StatelessWidget {
           Radius.circular(ThemeVars.borderRadiusMax),
         ),
       ),
-      child: this.buildContent(),
+      child: this._buildContent(),
     );
   }
 
-  Widget buildBadge() {
-    if (hasContent || this.dot) {
+  /// 构建徽标
+  Widget _buildBadge() {
+    if (this._hasContent || this.dot) {
       return Material(
-        textStyle: badgeTextStyle,
+        textStyle: TextStyle(
+          height: 1.2,
+          fontSize: ThemeVars.badgeFontSize,
+          fontWeight: ThemeVars.badgeFontWeight,
+          color: ThemeVars.badgeColor,
+        ),
         child: Row(
           mainAxisSize: MainAxisSize.min,
           children: [
-            this.dot ? this.buildDotBadge() : this.buildContentBadge(),
+            this.dot ? this._buildDotBadge() : this._buildContentBadge(),
           ],
         ),
       );
