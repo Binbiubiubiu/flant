@@ -223,16 +223,23 @@ class FlanImage extends StatelessWidget {
   void debugFillProperties(DiagnosticPropertiesBuilder properties) {
     properties.add(DiagnosticsProperty<String>("src", src));
     properties.add(DiagnosticsProperty<String>("alt", alt));
-    properties.add(DiagnosticsProperty<BoxFit>("fit", fit));
-    properties.add(DiagnosticsProperty<bool>("round", round));
+    properties.add(
+        DiagnosticsProperty<BoxFit>("fit", fit, defaultValue: BoxFit.fill));
+    properties
+        .add(DiagnosticsProperty<bool>("round", round, defaultValue: false));
     properties.add(DiagnosticsProperty<double>("width", width));
     properties.add(DiagnosticsProperty<double>("height", height));
     properties.add(DiagnosticsProperty<double>("radius", radius));
-    properties.add(DiagnosticsProperty<bool>("lazyLoad", lazyLoad));
-    properties.add(DiagnosticsProperty<bool>("showError", showError));
-    properties.add(DiagnosticsProperty<bool>("showLoading", showLoading));
-    properties.add(DiagnosticsProperty<dynamic>("errorIcon", errorIcon));
-    properties.add(DiagnosticsProperty<dynamic>("loadingIcon", loadingIcon));
+    properties.add(
+        DiagnosticsProperty<bool>("lazyLoad", lazyLoad, defaultValue: false));
+    properties.add(
+        DiagnosticsProperty<bool>("showError", showError, defaultValue: true));
+    properties.add(DiagnosticsProperty<bool>("showLoading", showLoading,
+        defaultValue: true));
+    properties.add(DiagnosticsProperty<dynamic>("errorIcon", errorIcon,
+        defaultValue: FlanIcons.photo_fail));
+    properties.add(DiagnosticsProperty<dynamic>("loadingIcon", loadingIcon,
+        defaultValue: FlanIcons.photo));
     super.debugFillProperties(properties);
   }
 }

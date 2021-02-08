@@ -32,4 +32,10 @@ class FlanCol extends StatelessWidget {
       child: null,
     );
   }
+
+  @override
+  void debugFillProperties(DiagnosticPropertiesBuilder properties) {
+    // TODO: implement debugFillProperties
+    super.debugFillProperties(properties);
+  }
 }

@@ -106,7 +106,8 @@ class FlanDivider extends StatelessWidget {
     properties.add(
         DiagnosticsProperty<bool>("hairline", hairline, defaultValue: true));
     properties.add(DiagnosticsProperty<FlanDividerContentPosition>(
-        "contentPosition", contentPosition));
+        "contentPosition", contentPosition,
+        defaultValue: FlanDividerContentPosition.center));
     properties.add(DiagnosticsProperty<FlanDividerStyle>("style", style));
     super.debugFillProperties(properties);
   }

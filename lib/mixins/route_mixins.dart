@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/foundation.dart';
 
 /// 带有路由功能组件的抽象类
 /// {@tool snippet}
@@ -32,7 +33,9 @@ abstract class RouteStatelessWidget extends StatelessWidget {
     this.to,
     this.replace = false,
     Key key,
-  }) : super(key: key);
+  })  : assert(to == null || (to != null && (to is Route || to is String))),
+        assert(replace != null),
+        super(key: key);
 
   /// 点击后跳转的目标路由对象，类型`Route`或`String`
   final dynamic to;
@@ -59,6 +62,14 @@ abstract class RouteStatelessWidget extends StatelessWidget {
       return;
     }
 
-    throw "the type of to should be Route or String";
+    throw "to 属性类型必须是 Route 或者 String";
+  }
+
+  @override
+  void debugFillProperties(DiagnosticPropertiesBuilder properties) {
+    properties.add(DiagnosticsProperty<dynamic>("to", to));
+    properties.add(
+        DiagnosticsProperty<bool>("replace", replace, defaultValue: false));
+    super.debugFillProperties(properties);
   }
 }

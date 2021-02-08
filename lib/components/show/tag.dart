@@ -1,7 +1,8 @@
-import 'package:flant/components/base/icon.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/foundation.dart';
 import '../../styles/var.dart';
+
+import '../base/icon.dart';
 
 /// ### FlanCircle 环形进度条
 /// 圆环形的进度条组件，支持进度渐变动画。
@@ -19,7 +20,14 @@ class FlanTag extends StatelessWidget {
     this.show = true,
     this.onClose,
     this.child,
-  }) : super(key: key);
+  })  : assert(type != null && type is FlanTagType),
+        assert(size != null && size is FlanTagSize),
+        assert(plain != null),
+        assert(round != null),
+        assert(mark != null),
+        assert(closeable != null),
+        assert(show != null),
+        super(key: key);
 
   // ****************** Props ******************
   /// 类型，可选值为 `normal` `primary` `success` `danger` `warning`
@@ -61,14 +69,18 @@ class FlanTag extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return AnimatedOpacity(
-      opacity: this.show ? 1.0 : 0.0,
-      duration: ThemeVars.animationDurationBase,
-      curve: this.show
-          ? ThemeVars.animationTimingFunctionLeave
-          : ThemeVars.animationTimingFunctionEnter,
-      child: this._buildTag(),
-    );
+    if (this.closeable) {
+      return AnimatedOpacity(
+        opacity: this.show ? 1.0 : 0.0,
+        duration: ThemeVars.animationDurationBase,
+        curve: this.show
+            ? ThemeVars.animationTimingFunctionLeave
+            : ThemeVars.animationTimingFunctionEnter,
+        child: this._buildTag(),
+      );
+    }
+
+    return this._buildTag();
   }
 
   /// 计算标签不同size的padding
@@ -186,6 +198,29 @@ class FlanTag extends StatelessWidget {
     }
 
     return null;
+  }
+
+  @override
+  void debugFillProperties(DiagnosticPropertiesBuilder properties) {
+    properties.add(DiagnosticsProperty<FlanTagType>("type", type,
+        defaultValue: FlanTagType.normal));
+    properties.add(DiagnosticsProperty<FlanTagSize>("size", size,
+        defaultValue: FlanTagSize.normal));
+    properties.add(DiagnosticsProperty<Color>("color", color));
+    properties
+        .add(DiagnosticsProperty<bool>("plain", plain, defaultValue: false));
+
+    properties
+        .add(DiagnosticsProperty<bool>("round", round, defaultValue: false));
+
+    properties
+        .add(DiagnosticsProperty<bool>("mark", mark, defaultValue: false));
+    properties.add(DiagnosticsProperty<Color>("textColor", textColor));
+    properties.add(
+        DiagnosticsProperty<bool>("closeable", closeable, defaultValue: false));
+    properties.add(DiagnosticsProperty<bool>("show", show, defaultValue: true));
+
+    super.debugFillProperties(properties);
   }
 }
 

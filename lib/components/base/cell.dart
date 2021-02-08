@@ -370,20 +370,28 @@ class FlanCell extends RouteStatelessWidget {
   void debugFillProperties(DiagnosticPropertiesBuilder properties) {
     properties.add(DiagnosticsProperty<String>("title", title));
     properties.add(DiagnosticsProperty<String>("value", value));
-    properties.add(DiagnosticsProperty<FlanCellSize>("size", size));
+    properties.add(DiagnosticsProperty<FlanCellSize>("size", size,
+        defaultValue: FlanCellSize.normal));
     properties.add(DiagnosticsProperty<dynamic>("icon", icon));
     properties.add(DiagnosticsProperty<String>("iconPrefix", iconPrefix));
-    properties.add(DiagnosticsProperty<bool>("border", border));
-    properties.add(DiagnosticsProperty<bool>("clickable", clickable));
-    properties.add(DiagnosticsProperty<bool>("isLink", isLink));
-    properties.add(DiagnosticsProperty<bool>("isRequired", isRequired));
-    properties.add(DiagnosticsProperty<bool>("center", center));
+    properties
+        .add(DiagnosticsProperty<bool>("border", border, defaultValue: true));
+    properties.add(
+        DiagnosticsProperty<bool>("clickable", clickable, defaultValue: false));
+    properties
+        .add(DiagnosticsProperty<bool>("isLink", isLink, defaultValue: false));
+    properties.add(DiagnosticsProperty<bool>("isRequired", isRequired,
+        defaultValue: false));
+    properties
+        .add(DiagnosticsProperty<bool>("center", center, defaultValue: false));
     properties.add(DiagnosticsProperty<FlanCellArrowDirection>(
-        "arrowDirection", arrowDirection));
+        "arrowDirection", arrowDirection,
+        defaultValue: FlanCellArrowDirection.right));
     properties.add(DiagnosticsProperty<TextStyle>("titleStyle", titleStyle));
     properties.add(DiagnosticsProperty<TextStyle>("valueStyle", valueStyle));
     properties.add(DiagnosticsProperty<TextStyle>("labelStyle", labelStyle));
-    properties.add(DiagnosticsProperty<FlanCellSize>("size", size));
+    properties.add(DiagnosticsProperty<FlanCellSize>("size", size,
+        defaultValue: FlanCellSize.normal));
     super.debugFillProperties(properties);
   }
 }

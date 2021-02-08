@@ -92,7 +92,8 @@ class FlanCellGroup extends StatelessWidget {
   @override
   void debugFillProperties(DiagnosticPropertiesBuilder properties) {
     properties.add(DiagnosticsProperty<String>("title", title));
-    properties.add(DiagnosticsProperty<bool>("border", border));
+    properties
+        .add(DiagnosticsProperty<bool>("border", border, defaultValue: false));
     super.debugFillProperties(properties);
   }
 }
