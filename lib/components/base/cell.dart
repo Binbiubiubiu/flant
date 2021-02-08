@@ -121,8 +121,9 @@ class FlanCell extends RouteStatelessWidget {
         horizontal: ThemeVars.cellHorizontalPadding,
       ),
       child: Row(
-        crossAxisAlignment:
-            this.center ? CrossAxisAlignment.center : CrossAxisAlignment.start,
+        crossAxisAlignment: this.center
+            ? CrossAxisAlignment.center
+            : CrossAxisAlignment.baseline,
         children: [
           this._buildLeftIcon(context),
           this._buildTitle(context),
@@ -236,7 +237,7 @@ class FlanCell extends RouteStatelessWidget {
       Widget title = this.titleSlot ?? Text(this.title);
       if (this.titleStyle != null) {
         title = DefaultTextStyle(
-          style: TextStyle(inherit: true).merge(this.titleStyle),
+          style: TextStyle().merge(this.titleStyle),
           child: title,
         );
       }
@@ -262,7 +263,6 @@ class FlanCell extends RouteStatelessWidget {
       );
 
       final lstyle = TextStyle(
-        inherit: true,
         color: ThemeVars.cellLabelColor,
         fontSize: this._sizeStyle.labelFontSize,
       );
@@ -282,11 +282,11 @@ class FlanCell extends RouteStatelessWidget {
     if (_hasValue) {
       final value = Expanded(
         child: Container(
+          alignment: Alignment.topRight,
           child: this.child ?? Text(this.value),
         ),
       );
       final vStyle = TextStyle(
-        inherit: true,
         color: !this._hasTitle ? ThemeVars.textColor : ThemeVars.cellValueColor,
       );
       if (this.valueStyle != null) {
@@ -294,7 +294,6 @@ class FlanCell extends RouteStatelessWidget {
       }
       return DefaultTextStyle(
         style: vStyle,
-        textAlign: !this._hasTitle ? TextAlign.left : TextAlign.right,
         child: value,
       );
     }

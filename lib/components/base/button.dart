@@ -233,9 +233,9 @@ class FlanButton extends RouteStatelessWidget {
 
     var sideIcon = this._buildIcon();
 
-    // if (sideIcon == null) {
-    //   return children[0];
-    // }
+    if (sideIcon is SizedBox) {
+      return children[0];
+    }
     switch (this.iconPosition) {
       case FlanButtonIconPosition.left:
         if (this._isHasText) {
@@ -260,9 +260,7 @@ class FlanButton extends RouteStatelessWidget {
   }
 
   /// 计算按钮样式
-  _FlanButtonTheme _computedThemeType(
-    plain,
-    hairline, {
+  _FlanButtonTheme _computedThemeType({
     Color backgroundColor,
     Color color,
     Color borderColor,
@@ -273,10 +271,10 @@ class FlanButton extends RouteStatelessWidget {
     }
     return _FlanButtonTheme(
       backgroundColor:
-          plain ? ThemeVars.buttonPlainBackgroundColor : backgroundColor,
-      color: plain ? borderColor : color,
+          this.plain ? ThemeVars.buttonPlainBackgroundColor : backgroundColor,
+      color: this.plain ? borderColor : color,
       border: Border.all(
-        width: hairline ? 0.5 : ThemeVars.buttonBorderWidth,
+        width: this.hairline ? 0.5 : ThemeVars.buttonBorderWidth,
         color: borderColor,
       ),
     );
@@ -289,69 +287,71 @@ class FlanButton extends RouteStatelessWidget {
 
   /// 按钮大小集合
   _FlanButtonSize get _btnSize {
-    return {
-      FlanButtonSize.large: _FlanButtonSize(
-        fontSize: ThemeVars.buttonDefaultFontSize,
-        height: ThemeVars.buttonLargeHeight,
-        padding: const EdgeInsets.symmetric(horizontal: 15.0),
-      ),
-      FlanButtonSize.normal: _FlanButtonSize(
-        fontSize: ThemeVars.buttonNormalFontSize,
-        height: ThemeVars.buttonDefaultHeight,
-        padding: const EdgeInsets.symmetric(horizontal: 15.0),
-      ),
-      FlanButtonSize.small: _FlanButtonSize(
-        fontSize: ThemeVars.buttonSmallFontSize,
-        height: ThemeVars.buttonSmallHeight,
-        padding: EdgeInsets.symmetric(horizontal: ThemeVars.paddingSm),
-      ),
-      FlanButtonSize.mini: _FlanButtonSize(
-        fontSize: ThemeVars.buttonMiniFontSize,
-        height: ThemeVars.buttonMiniHeight,
-        padding: EdgeInsets.symmetric(horizontal: ThemeVars.paddingBase),
-      ),
-    }[size];
+    switch (this.size) {
+      case FlanButtonSize.large:
+        return _FlanButtonSize(
+          fontSize: ThemeVars.buttonDefaultFontSize,
+          height: ThemeVars.buttonLargeHeight,
+          padding: const EdgeInsets.symmetric(horizontal: 15.0),
+        );
+
+      case FlanButtonSize.normal:
+        return _FlanButtonSize(
+          fontSize: ThemeVars.buttonNormalFontSize,
+          height: ThemeVars.buttonDefaultHeight,
+          padding: const EdgeInsets.symmetric(horizontal: 15.0),
+        );
+
+      case FlanButtonSize.small:
+        return _FlanButtonSize(
+          fontSize: ThemeVars.buttonSmallFontSize,
+          height: ThemeVars.buttonSmallHeight,
+          padding: EdgeInsets.symmetric(horizontal: ThemeVars.paddingSm),
+        );
+
+      case FlanButtonSize.mini:
+        return _FlanButtonSize(
+          fontSize: ThemeVars.buttonMiniFontSize,
+          height: ThemeVars.buttonMiniHeight,
+          padding: EdgeInsets.symmetric(horizontal: ThemeVars.paddingBase),
+        );
+    }
   }
 
   /// 按钮样式集合
   _FlanButtonTheme get _themeType {
-    return {
-      FlanButtonType.normal: this._computedThemeType(
-        this.plain,
-        this.hairline,
-        backgroundColor: ThemeVars.buttonDefaultBackgroundColor,
-        color: ThemeVars.buttonDefaultColor,
-        borderColor: ThemeVars.buttonDefaultBorderColor,
-      ),
-      FlanButtonType.primary: this._computedThemeType(
-        this.plain,
-        this.hairline,
-        backgroundColor: ThemeVars.buttonPrimaryBackgroundColor,
-        color: ThemeVars.buttonPrimaryColor,
-        borderColor: ThemeVars.buttonPrimaryBorderColor,
-      ),
-      FlanButtonType.success: this._computedThemeType(
-        this.plain,
-        this.hairline,
-        backgroundColor: ThemeVars.buttonSuccessBackgroundColor,
-        color: ThemeVars.buttonSuccessColor,
-        borderColor: ThemeVars.buttonSuccessBorderColor,
-      ),
-      FlanButtonType.danger: this._computedThemeType(
-        this.plain,
-        this.hairline,
-        backgroundColor: ThemeVars.buttonDangerBackgroundColor,
-        color: ThemeVars.buttonDangerColor,
-        borderColor: ThemeVars.buttonDangerBorderColor,
-      ),
-      FlanButtonType.warning: this._computedThemeType(
-        this.plain,
-        this.hairline,
-        backgroundColor: ThemeVars.buttonWarningBackgroundColor,
-        color: ThemeVars.buttonWarningColor,
-        borderColor: ThemeVars.buttonWarningBorderColor,
-      ),
-    }[type];
+    switch (this.type) {
+      case FlanButtonType.primary:
+        return this._computedThemeType(
+          backgroundColor: ThemeVars.buttonPrimaryBackgroundColor,
+          color: ThemeVars.buttonPrimaryColor,
+          borderColor: ThemeVars.buttonPrimaryBorderColor,
+        );
+      case FlanButtonType.success:
+        return this._computedThemeType(
+          backgroundColor: ThemeVars.buttonSuccessBackgroundColor,
+          color: ThemeVars.buttonSuccessColor,
+          borderColor: ThemeVars.buttonSuccessBorderColor,
+        );
+      case FlanButtonType.danger:
+        return this._computedThemeType(
+          backgroundColor: ThemeVars.buttonDangerBackgroundColor,
+          color: ThemeVars.buttonDangerColor,
+          borderColor: ThemeVars.buttonDangerBorderColor,
+        );
+      case FlanButtonType.warning:
+        return this._computedThemeType(
+          backgroundColor: ThemeVars.buttonWarningBackgroundColor,
+          color: ThemeVars.buttonWarningColor,
+          borderColor: ThemeVars.buttonWarningBorderColor,
+        );
+      case FlanButtonType.normal:
+        return this._computedThemeType(
+          backgroundColor: ThemeVars.buttonDefaultBackgroundColor,
+          color: ThemeVars.buttonDefaultColor,
+          borderColor: ThemeVars.buttonDefaultBorderColor,
+        );
+    }
   }
 
   @override

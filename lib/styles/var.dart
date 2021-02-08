@@ -789,40 +789,44 @@ class ThemeVars {
   // @tabs-bottom-bar-height= 3px;
   // @tabs-bottom-bar-color= @tabs-default-color;
 
-  // // Tag
-  // @tag-padding= 0 @padding-base;
-  // @tag-text-color= @white;
-  // @tag-font-size= @font-size-sm;
-  // @tag-border-radius= 2px;
-  // @tag-line-height= 16px;
-  // @tag-medium-padding= 2px 6px;
-  // @tag-large-padding= @padding-base @padding-xs;
-  // @tag-large-border-radius= @border-radius-md;
-  // @tag-large-font-size= @font-size-md;
-  // @tag-round-border-radius= @border-radius-max;
-  // @tag-danger-color= @red;
-  // @tag-primary-color= @blue;
-  // @tag-success-color= @green;
-  // @tag-warning-color= @orange;
-  // @tag-default-color= @gray-6;
-  // @tag-plain-background-color= @white;
+  // Tag
+  static const tagPadding =
+      const EdgeInsets.symmetric(vertical: 0, horizontal: paddingBase);
+  static const tagTextColor = white;
+  static const tagFontSize = fontSizeSm;
+  static const tagBorderRadius = 2.0;
+  static const tagLineHeight = 16.0;
+  static const tagMediumPadding =
+      const EdgeInsets.symmetric(vertical: 2.0, horizontal: 6.0);
+  static const tagLargePadding =
+      const EdgeInsets.symmetric(vertical: paddingBase, horizontal: paddingXs);
+  static const tagLargeBorderRadius = borderRadiusMd;
+  static const tagLargeFontSize = fontSizeMd;
+  static const tagRoundBorderRadius = borderRadiusMax;
+  static const tagDangerColor = red;
+  static const tagPrimaryColor = blue;
+  static const tagSuccessColor = green;
+  static const tagWarningColor = orange;
+  static const tagDefaultColor = gray6;
+  static const tagPlainBackgroundColor = white;
 
-  // // Toast
-  // @toast-max-width= 70%;
-  // @toast-font-size= @font-size-md;
-  // @toast-text-color= @white;
-  // @toast-loading-icon-color= @white;
-  // @toast-line-height= @line-height-md;
-  // @toast-border-radius= @border-radius-lg;
-  // @toast-background-color= fade(@black, 70%);
-  // @toast-icon-size= 36px;
-  // @toast-text-min-width= 96px;
-  // @toast-text-padding= @padding-xs @padding-sm;
-  // @toast-default-padding= @padding-md;
-  // @toast-default-width= 88px;
-  // @toast-default-min-height= 88px;
-  // @toast-position-top-distance= 20%;
-  // @toast-position-bottom-distance= 20%;
+  // Toast
+  static const toastMaxWidth = "70%";
+  static const toastFontSize = fontSizeMd;
+  static const toastTextColor = white;
+  static const toastLoadingIconColor = white;
+  static const toastLineHeight = lineHeightMd;
+  static const toastBorderRadius = borderRadiusLg;
+//  static const  toastBackgroundColor= fade(@black, 70%);
+  static const toastIconSize = 36.0;
+  static const toastTextMinWidth = 96.0;
+  static const toastTextPadding =
+      const EdgeInsets.symmetric(vertical: paddingXs, horizontal: paddingSm);
+  static const toastDefaultPadding = paddingMd;
+  static const toastDefaultWidth = 88.0;
+  static const toastDefaultMinHeight = 88.0;
+  static const toastPositionTopDistance = "20%";
+  static const toastPositionBottomDistance = "20%";
 
   // // TreeSelect
   // @tree-select-font-size= @font-size-md;

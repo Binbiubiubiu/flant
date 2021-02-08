@@ -5,14 +5,8 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import '../../styles/var.dart';
 
+/// 格式化百分比
 double _formatRate(double rate) => math.min(math.max(rate, 0), 100);
-
-const circleTextStyle = TextStyle(
-  fontWeight: ThemeVars.circleTextFontWeight,
-  fontSize: ThemeVars.circleTextFontSize,
-  height: ThemeVars.circleTextLineHeight / ThemeVars.circleTextFontSize,
-  color: ThemeVars.circleTextColor,
-);
 
 /// ### FlanCircle 环形进度条
 /// 圆环形的进度条组件，支持进度渐变动画。
@@ -215,7 +209,12 @@ class _FlanCircleState extends State<FlanCircle>
   @override
   Widget build(BuildContext context) {
     return Material(
-      textStyle: circleTextStyle,
+      textStyle: TextStyle(
+        fontWeight: ThemeVars.circleTextFontWeight,
+        fontSize: ThemeVars.circleTextFontSize,
+        height: ThemeVars.circleTextLineHeight / ThemeVars.circleTextFontSize,
+        color: ThemeVars.circleTextColor,
+      ),
       type: MaterialType.canvas,
       child: Row(
         mainAxisSize: MainAxisSize.min,

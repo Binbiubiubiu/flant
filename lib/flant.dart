@@ -1,6 +1,6 @@
 library flant;
 
-export './styles/icons.dart';
+// export './styles/icons.dart';
 
 // basic components
 export './components/base/button.dart';
@@ -14,3 +14,4 @@ export './components/base/col.dart';
 export './components/show/badge.dart';
 export './components/show/circle.dart';
 export './components/show/divider.dart';
+export './components/show/tag.dart';
