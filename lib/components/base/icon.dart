@@ -50,10 +50,6 @@ class FlanIcon extends StatelessWidget {
 
   // ****************** Slots ******************
 
-  // bool get isImage {
-  //   return this.name != null ? this.name.indexOf('/') != -1 : false;
-  // }
-
   @override
   Widget build(BuildContext context) {
     final badge = FlanBadge(

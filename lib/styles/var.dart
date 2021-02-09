@@ -572,15 +572,15 @@ class ThemeVars {
   // @popover-dark-background-color= #4a4a4a;
   // @popover-dark-action-disabled-text-color= @gray-6;
 
-  // // Popup
-  // @popup-background-color= @white;
-  // @popup-transition= transform @animation-duration-base;
-  // @popup-round-border-radius= 16px;
-  // @popup-close-icon-size= 22px;
-  // @popup-close-icon-color= @gray-5;
-  // @popup-close-icon-active-color= @gray-6;
-  // @popup-close-icon-margin= 16px;
-  // @popup-close-icon-z-index= 1;
+  // Popup
+  static const popupBackgroundColor = white;
+  static const popupTransition = "transform @animation-duration-base";
+  static const popupRoundBorderRadius = 16.0;
+  static const popupCloseIconSize = 22.0;
+  static const popupCloseIconColor = gray5;
+  static const popupCloseIconActiveColor = gray6;
+  static const popupCloseIconMargin = 16.0;
+  static const popupCloseIconZIndex = 1;
 
   // // Progress
   // @progress-height= 4px;

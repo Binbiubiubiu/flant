@@ -3,12 +3,13 @@ import 'package:flutter/material.dart';
 import 'package:flutter/foundation.dart';
 import '../../styles/var.dart';
 
+/// ### FlanRow 行布局
 class FlanRow extends StatefulWidget {
   const FlanRow({
     Key key,
     this.gutter = 0.0,
-    this.justify = MainAxisAlignment.start,
-    this.align = CrossAxisAlignment.start,
+    this.justify = WrapAlignment.start,
+    this.align = WrapAlignment.start,
     this.children,
   }) : super(key: key);
 
@@ -17,16 +18,16 @@ class FlanRow extends StatefulWidget {
   final double gutter;
 
   /// Flex 主轴对齐方式，可选值为 `start` `bottom` `center` `spaceAround` `spaceBetween` `spaceEvenly`
-  final MainAxisAlignment justify;
+  final WrapAlignment justify;
 
-  /// Flex 交叉轴对齐方式，可选值为 `start` `bottom` `center` `stretch` `baseline`
-  final CrossAxisAlignment align;
+  /// Flex 交叉轴对齐方式，可选值为 `start` `bottom` `center` `spaceAround` `spaceBetween` `spaceEvenly`
+  final WrapAlignment align;
 
   // ****************** Events ******************
 
   // ****************** Slots ******************
   // 内容
-  final List<FlanCol> children;
+  final List<Widget> children;
 
   @override
   _FlanRowState createState() => _FlanRowState();
@@ -47,13 +48,16 @@ class _FlanRowState extends State<FlanRow> {
       }
     });
     if (this.maxWidth != null) {
-      return FlanRowProvider(
-        spaces: this.spaces,
-        maxWidth: this.maxWidth,
-        child: Row(
-          mainAxisAlignment: this.widget.justify,
-          crossAxisAlignment: this.widget.align,
-          children: this.widget.children,
+      return SizedBox(
+        width: double.infinity,
+        child: FlanRowProvider(
+          spaces: this.spaces,
+          maxWidth: this.maxWidth,
+          child: Wrap(
+            alignment: this.widget.justify,
+            runAlignment: this.widget.align,
+            children: this.widget.children,
+          ),
         ),
       );
     }
@@ -67,7 +71,7 @@ class _FlanRowState extends State<FlanRow> {
     double totalSpan = 0;
     for (int i = 0; i < this.widget.children.length; i++) {
       final child = this.widget.children[i];
-      totalSpan += child.span;
+      totalSpan += (child is FlanCol ? child.span : 0.0);
 
       if (totalSpan > 24.0) {
         groups.add([i]);
@@ -111,10 +115,10 @@ class _FlanRowState extends State<FlanRow> {
   void debugFillProperties(DiagnosticPropertiesBuilder properties) {
     properties.add(DiagnosticsProperty<double>("gutter", widget.gutter,
         defaultValue: 0.0));
-    properties.add(DiagnosticsProperty<MainAxisAlignment>(
+    properties.add(DiagnosticsProperty<WrapAlignment>(
         "MainAxisAlignment", widget.justify,
         defaultValue: MainAxisAlignment.start));
-    properties.add(DiagnosticsProperty<CrossAxisAlignment>(
+    properties.add(DiagnosticsProperty<WrapAlignment>(
         "CrossAxisAlignment", widget.align,
         defaultValue: CrossAxisAlignment.start));
     super.debugFillProperties(properties);
@@ -131,7 +135,7 @@ class FlanRowProvider extends InheritedWidget {
 
   final List<RowSpace> spaces;
   final double maxWidth;
-  final Row child;
+  final Wrap child;
 
   //定义一个便捷方法，方便子树中的widget获取共享数据
   static FlanRowProvider of(BuildContext context) {

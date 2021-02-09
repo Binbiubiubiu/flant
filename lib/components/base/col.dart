@@ -1,14 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/foundation.dart';
-import './row.dart';
-import '../../styles/var.dart';
+import './row.dart' show FlanRowProvider;
 
+/// ### FlanCol 列布局
 class FlanCol extends StatelessWidget {
   const FlanCol({
     Key key,
     this.offset,
     this.span = 0.0,
-    this.child,
+    this.children,
   }) : super(key: key);
 
   // ****************** Props ******************
@@ -22,12 +22,12 @@ class FlanCol extends StatelessWidget {
 
   // ****************** Slots ******************
   // 内容
-  final Widget child;
+  final List<Widget> children;
 
   @override
   Widget build(BuildContext context) {
     final parent = FlanRowProvider.of(context);
-
+    print(parent.maxWidth);
     BoxConstraints colSpan;
     EdgeInsets colOffset;
     EdgeInsets colPadding = EdgeInsets.zero;
@@ -55,7 +55,9 @@ class FlanCol extends StatelessWidget {
       constraints: colSpan,
       margin: colOffset,
       padding: colPadding,
-      child: this.child,
+      child: Wrap(
+        children: this.children,
+      ),
     );
   }
 
