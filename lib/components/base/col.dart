@@ -1,14 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/foundation.dart';
+import './row.dart';
 import '../../styles/var.dart';
 
 class FlanCol extends StatelessWidget {
   const FlanCol({
     Key key,
     this.offset,
-    this.span,
-    this.onClick,
-    this.children,
+    this.span = 0.0,
+    this.child,
   }) : super(key: key);
 
   // ****************** Props ******************
@@ -19,23 +19,51 @@ class FlanCol extends StatelessWidget {
   final double span;
 
   // ****************** Events ******************
-  /// 点击单元格时触发
-  final GestureTapCallback onClick;
 
   // ****************** Slots ******************
   // 内容
-  final List<Widget> children;
+  final Widget child;
 
   @override
   Widget build(BuildContext context) {
+    final parent = FlanRowProvider.of(context);
+
+    BoxConstraints colSpan;
+    EdgeInsets colOffset;
+    EdgeInsets colPadding = EdgeInsets.zero;
+    if (parent != null) {
+      final spaces = parent.spaces;
+      final index = parent.child.children.indexOf(this);
+
+      colPadding = EdgeInsets.only(
+        left: spaces[index].left,
+        right: spaces[index].right,
+      );
+
+      if (this.span != null) {
+        colSpan = BoxConstraints.tightFor(
+          width: parent.maxWidth * (this.span / 24),
+        );
+      }
+
+      if (this.offset != null) {
+        colOffset = EdgeInsets.only(left: parent.maxWidth * (this.offset / 24));
+      }
+    }
+
     return Container(
-      child: null,
+      constraints: colSpan,
+      margin: colOffset,
+      padding: colPadding,
+      child: this.child,
     );
   }
 
   @override
   void debugFillProperties(DiagnosticPropertiesBuilder properties) {
-    // TODO: implement debugFillProperties
+    properties.add(DiagnosticsProperty<double>("offset", offset));
+    properties
+        .add(DiagnosticsProperty<double>("span", span, defaultValue: 0.0));
     super.debugFillProperties(properties);
   }
 }

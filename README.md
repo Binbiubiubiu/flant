@@ -8,7 +8,7 @@
 - [x] Cell 单元格
 - [x] Icon 图标
 - [x] Image 图片
-- [ ] Layout 布局
+- [x] Layout 布局
 - [ ] Popup 弹出层
 - [ ] Style 内置样式
 - [ ] Toast 轻提示

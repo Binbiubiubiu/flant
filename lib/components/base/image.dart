@@ -96,16 +96,12 @@ class FlanImage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    Widget image = Row(
+    Widget image = Column(
       mainAxisSize: MainAxisSize.min,
       children: [
-        Column(
-          children: [
-            this._buildImage(),
-            this.child,
-          ].where((element) => element != null).toList(),
-        )
-      ],
+        this._buildImage(),
+        this.child,
+      ].where((element) => element != null).toList(),
     );
 
     if (this.round) {

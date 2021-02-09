@@ -80,67 +80,6 @@ class FlanCircle extends StatefulWidget {
 
   @override
   _FlanCircleState createState() => _FlanCircleState();
-
-  @override
-  void debugFillProperties(DiagnosticPropertiesBuilder properties) {
-    properties.add(DiagnosticsProperty<String>('text', text, defaultValue: ""));
-    properties.add(DiagnosticsProperty<StrokeCap>(
-      'strokeLineCap',
-      strokeLineCap,
-      defaultValue: StrokeCap.round,
-    ));
-    properties.add(DiagnosticsProperty<double>(
-      'currentRate',
-      currentRate,
-      defaultValue: 0.0,
-    ));
-    properties.add(DiagnosticsProperty<double>(
-      'speed',
-      speed,
-      defaultValue: 0.0,
-    ));
-    properties.add(DiagnosticsProperty<double>(
-      'size',
-      size,
-      defaultValue: 100.0,
-    ));
-    properties.add(DiagnosticsProperty<Color>(
-      'fill',
-      fill,
-      defaultValue: Colors.transparent,
-    ));
-
-    properties.add(DiagnosticsProperty<double>(
-      'rate',
-      rate,
-      defaultValue: 100.0,
-    ));
-
-    properties.add(DiagnosticsProperty<Color>(
-      'layerColor',
-      layerColor,
-      defaultValue: Colors.white,
-    ));
-
-    properties.add(DiagnosticsProperty<Color>(
-      'color',
-      color,
-      defaultValue: Colors.blue,
-    ));
-
-    properties.add(DiagnosticsProperty<double>(
-      'strokeWidth',
-      strokeWidth,
-      defaultValue: 4.0,
-    ));
-
-    properties.add(DiagnosticsProperty<bool>(
-      'clockwise',
-      clockwise,
-      defaultValue: true,
-    ));
-    super.debugFillProperties(properties);
-  }
 }
 
 class _FlanCircleState extends State<FlanCircle>
@@ -256,6 +195,41 @@ class _FlanCircleState extends State<FlanCircle>
         ],
       ),
     );
+  }
+
+  @override
+  void debugFillProperties(DiagnosticPropertiesBuilder properties) {
+    properties.add(
+        DiagnosticsProperty<String>('text', widget.text, defaultValue: ""));
+    properties.add(DiagnosticsProperty<StrokeCap>(
+        'strokeLineCap', widget.strokeLineCap,
+        defaultValue: StrokeCap.round));
+    properties.add(DiagnosticsProperty<double>(
+        'currentRate', widget.currentRate,
+        defaultValue: 0.0));
+    properties.add(
+        DiagnosticsProperty<double>('speed', widget.speed, defaultValue: 0.0));
+    properties.add(
+        DiagnosticsProperty<double>('size', widget.size, defaultValue: 100.0));
+    properties.add(DiagnosticsProperty<Color>('fill', widget.fill,
+        defaultValue: Colors.transparent));
+
+    properties.add(
+        DiagnosticsProperty<double>('rate', widget.rate, defaultValue: 100.0));
+
+    properties.add(DiagnosticsProperty<Color>('layerColor', widget.layerColor,
+        defaultValue: Colors.white));
+
+    properties.add(DiagnosticsProperty<Color>('color', widget.color,
+        defaultValue: Colors.blue));
+
+    properties.add(DiagnosticsProperty<double>(
+        'strokeWidth', widget.strokeWidth,
+        defaultValue: 4.0));
+
+    properties.add(DiagnosticsProperty<bool>('clockwise', widget.clockwise,
+        defaultValue: true));
+    super.debugFillProperties(properties);
   }
 }
 

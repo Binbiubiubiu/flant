@@ -242,12 +242,19 @@ class FlanButton extends RouteStatelessWidget {
       default:
         break;
     }
-    return Row(
-      mainAxisSize: this.size != FlanButtonSize.large && !this.block
-          ? MainAxisSize.min
-          : MainAxisSize.max,
-      mainAxisAlignment: MainAxisAlignment.center,
-      crossAxisAlignment: CrossAxisAlignment.center,
+
+    if (this.size == FlanButtonSize.large || this.block) {
+      return Row(
+        mainAxisAlignment: MainAxisAlignment.center,
+        crossAxisAlignment: CrossAxisAlignment.center,
+        children: children,
+      );
+    }
+
+    return Wrap(
+      alignment: WrapAlignment.center,
+      runAlignment: WrapAlignment.center,
+      crossAxisAlignment: WrapCrossAlignment.center,
       children: children,
     );
   }

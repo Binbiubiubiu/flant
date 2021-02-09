@@ -162,9 +162,10 @@ class FlanTag extends StatelessWidget {
       color: this._backgroundColor,
       child: Padding(
         padding: this._tagPadding,
-        child: Row(
-          mainAxisSize: MainAxisSize.min,
-          // crossAxisAlignment: CrossAxisAlignment.center,
+        child: Wrap(
+          alignment: WrapAlignment.center,
+          runAlignment: WrapAlignment.center,
+          crossAxisAlignment: WrapCrossAlignment.center,
           children: [
             this.child,
             this._buildCloseIcon(),
