@@ -17,6 +17,7 @@ class FlanCircle extends StatefulWidget {
     this.rate = 100.0,
     this.size = 100.0,
     this.color = Colors.blue,
+    this.gradient,
     this.layerColor = Colors.white,
     this.fill,
     this.speed = 0.0,
@@ -48,8 +49,11 @@ class FlanCircle extends StatefulWidget {
   /// 圆环直径
   final double size;
 
+  /// 进度条颜色
+  final Color color;
+
   /// 进度条颜色，传入对象格式可以定义渐变色
-  final dynamic color;
+  final Gradient gradient;
 
   /// final Color layerColor;
   final Color layerColor;
@@ -177,6 +181,7 @@ class _FlanCircleState extends State<FlanCircle>
                 painter: _FlanDividerCirclePainter(
                   rate: this.widget.currentRate,
                   color: this.widget.color,
+                  gradient: this.widget.gradient,
                   strokeWidth: this.widget.strokeWidth,
                   strokeLineCap: this.widget.strokeLineCap,
                   clockwise: this.widget.clockwise,
@@ -223,6 +228,8 @@ class _FlanCircleState extends State<FlanCircle>
     properties.add(DiagnosticsProperty<Color>('color', widget.color,
         defaultValue: Colors.blue));
 
+    properties.add(DiagnosticsProperty<Gradient>('gradient', widget.gradient));
+
     properties.add(DiagnosticsProperty<double>(
         'strokeWidth', widget.strokeWidth,
         defaultValue: 4.0));
@@ -237,7 +244,8 @@ class _FlanCircleState extends State<FlanCircle>
 class _FlanDividerCirclePainter extends CustomPainter {
   _FlanDividerCirclePainter({
     this.rate,
-    this.color,
+    this.color = Colors.blue,
+    this.gradient,
     this.fill,
     this.strokeWidth,
     this.clockwise = true,
@@ -257,7 +265,10 @@ class _FlanDividerCirclePainter extends CustomPainter {
   final double rate;
 
   /// 进度条的颜色
-  final dynamic color;
+  final Color color;
+
+  /// 进度条的颜色(渐变色)
+  final Gradient gradient;
 
   /// 进度条的粗细
   final double strokeWidth;
@@ -296,9 +307,10 @@ class _FlanDividerCirclePainter extends CustomPainter {
       );
     }
     // draw line
-    if (this.color is Gradient) {
-      _paint.shader = this.color.createShader(rect);
-    } else {
+    if (this.gradient != null) {
+      _paint.shader = this.gradient.createShader(rect);
+    }
+    if (this.color != null) {
       _paint.color = this.color;
     }
     canvas.drawArc(

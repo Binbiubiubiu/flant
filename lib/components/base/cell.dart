@@ -131,9 +131,8 @@ class FlanCell extends RouteStatelessWidget {
         horizontal: ThemeVars.cellHorizontalPadding,
       ),
       child: Row(
-        crossAxisAlignment: this.center
-            ? CrossAxisAlignment.center
-            : CrossAxisAlignment.baseline,
+        crossAxisAlignment:
+            this.center ? CrossAxisAlignment.center : CrossAxisAlignment.start,
         children: [
           this._buildLeftIcon(context),
           this._buildTitle(context),
@@ -299,6 +298,8 @@ class FlanCell extends RouteStatelessWidget {
 
       final vStyle = TextStyle(
         color: !this._hasTitle ? ThemeVars.textColor : ThemeVars.cellValueColor,
+        height: ThemeVars.cellLineHeight /
+            DefaultTextStyle.of(context).style.fontSize,
       );
       if (this.valueStyle != null) {
         vStyle..merge(this.valueStyle);
