@@ -13,7 +13,9 @@ class FlanButton extends RouteStatelessWidget {
     this.size = FlanButtonSize.normal,
     this.text,
     this.color,
-    this.icon,
+    this.gradient,
+    this.iconData,
+    this.iconUrl,
     this.iconPrefix,
     this.iconPosition = FlanButtonIconPosition.left,
     this.block = false,
@@ -30,7 +32,8 @@ class FlanButton extends RouteStatelessWidget {
     this.onTouchStart,
     this.child,
     this.loadingSlot,
-    dynamic to,
+    String toName,
+    PageRoute toRoute,
     bool replace = false,
   })  : assert(type != null && type is FlanButtonType),
         assert(size != null && size is FlanButtonSize),
@@ -43,7 +46,12 @@ class FlanButton extends RouteStatelessWidget {
         assert(disabled != null),
         assert(loading != null),
         assert(loadingSize != null && loadingSize > 0.0),
-        super(key: key, to: to, replace: replace);
+        super(
+          key: key,
+          toName: toName,
+          toRoute: toRoute,
+          replace: replace,
+        );
 
   // ****************** Props ******************
   /// 类型，可选值为 `primary` `info` `warning` `danger`
@@ -55,11 +63,17 @@ class FlanButton extends RouteStatelessWidget {
   /// 按钮文字
   final String text;
 
-  /// 按钮颜色，支持传入 linear-gradient 渐变色
-  final dynamic color;
+  /// 按钮颜色，
+  final Color color;
 
-  /// 左侧图标名称或图片链接
-  final dynamic icon;
+  /// 按钮颜色(支持传入 linear-gradient 渐变色)
+  final Gradient gradient;
+
+  /// 左侧图标名称
+  final IconData iconData;
+
+  /// 左侧图片链接
+  final String iconUrl;
 
   /// 图标类名前缀，同 Icon 组件的 class-prefix 属性
   final String iconPrefix;
@@ -127,8 +141,7 @@ class FlanButton extends RouteStatelessWidget {
     );
 
     final bgColor =
-        (this.plain ? null : (this.color is Gradient ? null : this.color)) ??
-            this._themeType.backgroundColor;
+        (this.plain ? null : this.color) ?? this._themeType.backgroundColor;
 
     Widget _btn = Material(
       type: MaterialType.button,
@@ -139,7 +152,7 @@ class FlanButton extends RouteStatelessWidget {
         decoration: BoxDecoration(
           border: this._themeType.border,
           borderRadius: radius,
-          gradient: this.color is Gradient ? this.color : null,
+          gradient: this.gradient,
         ),
         height: this._btnSize.height,
         child: InkWell(
@@ -198,16 +211,17 @@ class FlanButton extends RouteStatelessWidget {
       final iSize = DefaultTextStyle.of(context).style.fontSize * 1.2;
 
       if (this.loading) {
-        return FlanIcon(
-          name: Icons.run_circle,
+        return FlanIcon.icon(
+          Icons.run_circle,
           color: this._themeType.color,
           size: iSize,
         );
       }
 
-      if (this.icon != null) {
+      if (this.iconData != null || this.iconUrl != null) {
         return FlanIcon(
-          name: icon,
+          iconData: this.iconData,
+          iconUrl: this.iconUrl,
           color: this._themeType.color,
           size: 18.0,
           classPrefix: this.iconPrefix,
@@ -266,7 +280,12 @@ class FlanButton extends RouteStatelessWidget {
     Color borderColor,
   }) {
     if (this.color != null) {
-      borderColor = this.color is Gradient ? Colors.transparent : this.color;
+      borderColor = this.color;
+      color = Colors.white;
+    }
+
+    if (this.gradient != null) {
+      borderColor = Colors.transparent;
       color = Colors.white;
     }
     return _FlanButtonTheme(
@@ -357,7 +376,8 @@ class FlanButton extends RouteStatelessWidget {
   @override
   void debugFillProperties(DiagnosticPropertiesBuilder properties) {
     properties.add(DiagnosticsProperty<String>("text", text, defaultValue: ""));
-    properties.add(DiagnosticsProperty<IconData>("icon", icon));
+    properties.add(DiagnosticsProperty<IconData>("iconData", iconData));
+    properties.add(DiagnosticsProperty<String>("iconUrl", iconUrl));
     properties.add(DiagnosticsProperty<Color>("color", color));
     properties
         .add(DiagnosticsProperty<bool>("block", block, defaultValue: false));

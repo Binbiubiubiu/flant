@@ -183,8 +183,8 @@ class FlanTag extends StatelessWidget {
           final tagStyle = DefaultTextStyle.of(context).style;
           return Padding(
             padding: const EdgeInsets.only(left: 2.0),
-            child: FlanIcon(
-              name: FlanIcons.cross,
+            child: FlanIcon.icon(
+              FlanIcons.cross,
               onClick: this.onClose,
               size: tagStyle.fontSize,
               color: tagStyle.color,

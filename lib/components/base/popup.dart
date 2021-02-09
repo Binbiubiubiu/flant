@@ -19,7 +19,8 @@ class FlanPopup extends StatelessWidget {
     this.closeOnPopstate = false,
     this.closeOnClickOverlay = true,
     this.closeable = false,
-    this.closeIcon = FlanIcons.cross,
+    this.closeIconData = FlanIcons.cross,
+    this.closeIconUrl,
     this.closeIconPosition = FlanPopupCloseIconPosition.topRight,
     this.transition,
     this.transitionAppear = false,
@@ -43,8 +44,6 @@ class FlanPopup extends StatelessWidget {
         assert(closeOnPopstate != null),
         assert(closeOnClickOverlay != null),
         assert(closeable != null),
-        assert(closeIcon != null &&
-            (closeIcon is String || closeIcon is IconData)),
         assert(closeIconPosition != null &&
             closeIconPosition is FlanPopupCloseIconPosition),
         assert(transitionAppear != null),
@@ -88,8 +87,11 @@ class FlanPopup extends StatelessWidget {
   /// 是否显示关闭图标
   final bool closeable;
 
-  /// 关闭图标名称或图片链接
-  final dynamic closeIcon;
+  /// 关闭图标名称
+  final IconData closeIconData;
+
+  /// 关闭图片链接
+  final String closeIconUrl;
 
   /// 关闭图标位置，可选值为 `topleft` `topRight` `bottomLeft` `bottomRight`
   final FlanPopupCloseIconPosition closeIconPosition;
@@ -164,8 +166,9 @@ class FlanPopup extends StatelessWidget {
         defaultValue: true));
     properties.add(
         DiagnosticsProperty<bool>("closeable", closeable, defaultValue: false));
-    properties.add(DiagnosticsProperty<dynamic>("closeIcon", closeIcon,
+    properties.add(DiagnosticsProperty<IconData>("closeIconData", closeIconData,
         defaultValue: FlanIcons.cross));
+    properties.add(DiagnosticsProperty<String>("closeIconUrl", closeIconUrl));
     properties.add(DiagnosticsProperty<FlanPopupCloseIconPosition>(
         "closeIconPosition", closeIconPosition,
         defaultValue: FlanPopupCloseIconPosition.topRight));

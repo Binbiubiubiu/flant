@@ -8,9 +8,10 @@ export '../../styles/icons.dart';
 /// ### FlanIcon 单元格
 /// 基于字体的图标集，可以通过 Icon 组件使用，也可以在其他组件中通过 `icon` 属性引用。
 class FlanIcon extends StatelessWidget {
-  const FlanIcon({
+  FlanIcon({
     Key key,
-    @required this.name,
+    IconData iconData,
+    String iconUrl,
     this.dot = false,
     this.size,
     this.color,
@@ -18,13 +19,47 @@ class FlanIcon extends StatelessWidget {
     this.badge,
     this.height,
     this.onClick,
-  })  : assert(name != null && (name is IconData || name is String)),
+  })  : assert(dot != null),
+        this.iconData = iconData,
+        this.iconUrl = iconUrl,
+        super(key: key);
+
+  FlanIcon.icon(
+    IconData name, {
+    Key key,
+    this.dot = false,
+    this.size,
+    this.color,
+    this.classPrefix,
+    this.badge,
+    this.height,
+    this.onClick,
+  })  : assert(name != null),
         assert(dot != null),
+        this.iconData = name,
+        super(key: key);
+
+  FlanIcon.url(
+    String src, {
+    Key key,
+    this.dot = false,
+    this.size,
+    this.color,
+    this.classPrefix,
+    this.badge,
+    this.height,
+    this.onClick,
+  })  : assert(src != null),
+        assert(dot != null),
+        this.iconUrl = src,
         super(key: key);
 
   // ****************** Props ******************
-  /// 图标名称或图片链接
-  final dynamic name;
+  /// 图标名称
+  IconData iconData;
+
+  /// 图片链接
+  String iconUrl;
 
   /// 是否显示图标右上角小红点
   final bool dot;
@@ -57,9 +92,7 @@ class FlanIcon extends StatelessWidget {
       content: this.badge,
       child: SizedBox(
         height: this.height,
-        child: this.name is IconData
-            ? Icon(this.name, color: this.color, size: this.size ?? null)
-            : this._buildImageIcon(context),
+        child: this._buildIcon(context),
       ),
     );
 
@@ -74,30 +107,42 @@ class FlanIcon extends StatelessWidget {
   }
 
   // 构建图片图标
-  Widget _buildImageIcon(BuildContext context) {
-    final isNetWork = RegExp("^https?:\/\/").hasMatch(this.name);
+  Widget _buildIcon(BuildContext context) {
+    if (this.iconData != null) {
+      return Icon(
+        this.iconData,
+        color: this.color,
+        size: this.size,
+      );
+    }
+
+    final isNetWork = RegExp("^https?:\/\/").hasMatch(this.iconUrl);
 
     final size = this.size ?? IconTheme.of(context).size;
-    return isNetWork
-        ? Image.network(
-            this.name,
-            color: this.color,
-            width: size,
-            height: size,
-            fit: BoxFit.contain,
-          )
-        : Image.asset(
-            this.name,
-            color: this.color,
-            width: size,
-            height: size,
-            fit: BoxFit.contain,
-          );
+
+    if (isNetWork) {
+      return Image.network(
+        this.iconUrl,
+        color: this.color,
+        width: size,
+        height: size,
+        fit: BoxFit.contain,
+      );
+    }
+
+    return Image.asset(
+      this.iconUrl,
+      color: this.color,
+      width: size,
+      height: size,
+      fit: BoxFit.contain,
+    );
   }
 
   @override
   void debugFillProperties(DiagnosticPropertiesBuilder properties) {
-    properties.add(DiagnosticsProperty<dynamic>("name", name));
+    properties.add(DiagnosticsProperty<IconData>("iconData", iconData));
+    properties.add(DiagnosticsProperty<String>("iconUrl", iconUrl));
     properties.add(DiagnosticsProperty<bool>("dot", dot));
     properties.add(DiagnosticsProperty<double>("size", size));
     properties.add(DiagnosticsProperty<Color>("color", color));

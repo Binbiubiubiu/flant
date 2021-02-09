@@ -19,8 +19,10 @@ class FlanImage extends StatelessWidget {
     this.lazyLoad = false,
     this.showError = true,
     this.showLoading = true,
-    this.errorIcon = FlanIcons.photo_fail,
-    this.loadingIcon = FlanIcons.photo,
+    this.errorIconData = FlanIcons.photo_fail,
+    this.errorIconUrl,
+    this.loadingIconData = FlanIcons.photo,
+    this.loadingIconUrl,
     this.onClick,
     this.onLoad,
     this.onError,
@@ -32,10 +34,6 @@ class FlanImage extends StatelessWidget {
         assert(lazyLoad != null),
         assert(showError != null),
         assert(showLoading != null),
-        assert(errorIcon != null &&
-            (errorIcon is IconData || errorIcon is String)),
-        assert(loadingIcon != null &&
-            (loadingIcon is IconData || loadingIcon is String)),
         super(key: key);
 
   // ****************** Props ******************
@@ -68,11 +66,17 @@ class FlanImage extends StatelessWidget {
   /// 是否展示图片加载失败提示
   final bool showLoading;
 
-  /// 失败时提示的图标名称或图片链接
-  final dynamic errorIcon;
+  /// 失败时提示的图标名称
+  final IconData errorIconData;
 
-  /// 加载时提示的图标名称或图片链接
-  final dynamic loadingIcon;
+  /// 失败时提示的图片链接
+  final String errorIconUrl;
+
+  /// 加载时提示的图标名称
+  final IconData loadingIconData;
+
+  /// 加载时提示的图片链接
+  final String loadingIconUrl;
 
   // ****************** Events ******************
   /// 点击图片时触发
@@ -138,7 +142,11 @@ class FlanImage extends StatelessWidget {
           height: this.height,
           color: ThemeVars.imagePlaceholderBackgroundColor,
           child: Center(
-            child: this.loadingSlot ?? FlanIcon(name: this.loadingIcon),
+            child: this.loadingSlot ??
+                FlanIcon(
+                  iconData: this.loadingIconData,
+                  iconUrl: this.loadingIconUrl,
+                ),
           ),
         ),
       ),
@@ -181,7 +189,11 @@ class FlanImage extends StatelessWidget {
           height: this.height,
           color: ThemeVars.imagePlaceholderBackgroundColor,
           child: Center(
-            child: this.errorSlot ?? FlanIcon(name: this.errorIcon),
+            child: this.errorSlot ??
+                FlanIcon(
+                  iconData: this.errorIconData,
+                  iconUrl: this.errorIconUrl,
+                ),
           ),
         ),
       ),
@@ -232,10 +244,14 @@ class FlanImage extends StatelessWidget {
         DiagnosticsProperty<bool>("showError", showError, defaultValue: true));
     properties.add(DiagnosticsProperty<bool>("showLoading", showLoading,
         defaultValue: true));
-    properties.add(DiagnosticsProperty<dynamic>("errorIcon", errorIcon,
+    properties.add(DiagnosticsProperty<IconData>("errorIconData", errorIconData,
         defaultValue: FlanIcons.photo_fail));
-    properties.add(DiagnosticsProperty<dynamic>("loadingIcon", loadingIcon,
+    properties.add(DiagnosticsProperty<String>("errorIconUrl", errorIconUrl));
+    properties.add(DiagnosticsProperty<IconData>(
+        "loadingIconData", loadingIconData,
         defaultValue: FlanIcons.photo));
+    properties
+        .add(DiagnosticsProperty<String>("loadingIconUrl", loadingIconUrl));
     super.debugFillProperties(properties);
   }
 }

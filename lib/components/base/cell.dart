@@ -14,7 +14,8 @@ class FlanCell extends RouteStatelessWidget {
     this.value,
     this.label,
     this.size = FlanCellSize.normal,
-    this.icon,
+    this.iconData,
+    this.iconUrl,
     this.iconPrefix,
     this.border = true,
     this.clickable = false,
@@ -32,7 +33,8 @@ class FlanCell extends RouteStatelessWidget {
     this.iconSlot,
     this.rightIconSlot,
     this.extraSlots,
-    dynamic to,
+    String toName,
+    PageRoute toRoute,
     bool replace = false,
   })  : assert(size != null && size is FlanCellSize),
         assert(border != null),
@@ -42,7 +44,12 @@ class FlanCell extends RouteStatelessWidget {
         assert(center != null),
         assert(
             arrowDirection != null && arrowDirection is FlanCellArrowDirection),
-        super(key: key, to: to, replace: replace);
+        super(
+          key: key,
+          toName: toName,
+          toRoute: toRoute,
+          replace: replace,
+        );
 
   // ****************** Props ******************
   /// 左侧标题
@@ -57,8 +64,11 @@ class FlanCell extends RouteStatelessWidget {
   /// 单元格大小，可选值为 `large`
   final FlanCellSize size;
 
-  /// 左侧图标名称或图片链接
-  final IconData icon;
+  /// 左侧图标名称
+  final IconData iconData;
+
+  /// 左侧图片链接
+  final String iconUrl;
 
   /// 图标类名前缀，同 Icon 组件的 class-prefix 属性
   final String iconPrefix;
@@ -313,13 +323,14 @@ class FlanCell extends RouteStatelessWidget {
       );
     }
 
-    if (this.icon != null) {
+    if (this.iconData != null || this.iconUrl != null) {
       return Padding(
         padding: EdgeInsets.only(right: ThemeVars.paddingBase),
         child: ConstrainedBox(
           constraints: BoxConstraints(minWidth: ThemeVars.cellFontSize * 1.0),
           child: FlanIcon(
-            name: this.icon,
+            iconData: this.iconData,
+            iconUrl: this.iconUrl,
             height: this._lineHeight * this._sizeStyle.titleFontSize,
             size: ThemeVars.cellIconSize,
             classPrefix: this.iconPrefix,
@@ -342,7 +353,7 @@ class FlanCell extends RouteStatelessWidget {
     }
 
     if (this.isLink) {
-      final iconName = {
+      final IconData iconName = {
         FlanCellArrowDirection.down: FlanIcons.arrow_down,
         FlanCellArrowDirection.up: FlanIcons.arrow_up,
         FlanCellArrowDirection.left: FlanIcons.arrow_left,
@@ -354,7 +365,7 @@ class FlanCell extends RouteStatelessWidget {
         child: ConstrainedBox(
           constraints: BoxConstraints(minWidth: ThemeVars.cellFontSize * 1.0),
           child: FlanIcon(
-            name: iconName,
+            iconData: iconName,
             color: ThemeVars.cellRightIconColor,
             height: ThemeVars.cellLineHeight,
             size: ThemeVars.cellIconSize,
@@ -373,7 +384,8 @@ class FlanCell extends RouteStatelessWidget {
     properties.add(DiagnosticsProperty<String>("value", value));
     properties.add(DiagnosticsProperty<FlanCellSize>("size", size,
         defaultValue: FlanCellSize.normal));
-    properties.add(DiagnosticsProperty<dynamic>("icon", icon));
+    properties.add(DiagnosticsProperty<IconData>("iconData", iconData));
+    properties.add(DiagnosticsProperty<String>("iconUrl", iconUrl));
     properties.add(DiagnosticsProperty<String>("iconPrefix", iconPrefix));
     properties
         .add(DiagnosticsProperty<bool>("border", border, defaultValue: true));

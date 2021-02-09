@@ -30,35 +30,40 @@ import 'package:flutter/foundation.dart';
 ///
 abstract class RouteStatelessWidget extends StatelessWidget {
   const RouteStatelessWidget({
-    this.to,
+    this.toRoute,
+    this.toName,
     this.replace = false,
     Key key,
-  })  : assert(to == null || (to != null && (to is Route || to is String))),
-        assert(replace != null),
+  })  : assert(replace != null),
         super(key: key);
 
-  /// 点击后跳转的目标路由对象，类型`Route`或`String`
-  final dynamic to;
+  /// 点击后跳转的目标路由对象
+  final PageRoute toRoute;
+
+  /// 点击后跳转的目标路由对象name
+  final String toName;
 
   /// 是否在跳转时替换当前页面历史
   final bool replace;
 
   void route(BuildContext context) {
-    if (this.to == null) {
+    if (this.toRoute == null || this.toName == null) {
       return;
     }
 
     final navigator = Navigator.of(context);
 
-    if (this.to is Route) {
-      this.replace ? navigator.pushReplacement(to) : navigator.push(to);
+    if (this.toRoute != null) {
+      this.replace
+          ? navigator.pushReplacement(this.toRoute)
+          : navigator.push(this.toRoute);
       return;
     }
 
-    if (this.to is String) {
+    if (this.toName != null) {
       this.replace
-          ? navigator.pushReplacementNamed(to)
-          : navigator.pushNamed(to);
+          ? navigator.pushReplacementNamed(this.toName)
+          : navigator.pushNamed(this.toName);
       return;
     }
 
@@ -67,7 +72,8 @@ abstract class RouteStatelessWidget extends StatelessWidget {
 
   @override
   void debugFillProperties(DiagnosticPropertiesBuilder properties) {
-    properties.add(DiagnosticsProperty<dynamic>("to", to));
+    properties.add(DiagnosticsProperty<String>("toName", toName));
+    properties.add(DiagnosticsProperty<PageRoute>("toRoute", toRoute));
     properties.add(
         DiagnosticsProperty<bool>("replace", replace, defaultValue: false));
     super.debugFillProperties(properties);
