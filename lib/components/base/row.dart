@@ -1,7 +1,6 @@
-import 'package:flant/components/base/col.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/foundation.dart';
-import '../../styles/var.dart';
+import './col.dart';
 
 /// ### FlanRow 行布局
 class FlanRow extends StatefulWidget {

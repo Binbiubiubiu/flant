@@ -27,7 +27,7 @@ class FlanCol extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final parent = FlanRowProvider.of(context);
-    print(parent.maxWidth);
+
     BoxConstraints colSpan;
     EdgeInsets colOffset;
     EdgeInsets colPadding = EdgeInsets.zero;

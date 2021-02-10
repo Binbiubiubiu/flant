@@ -1,10 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/foundation.dart';
 import './icon.dart' show FlanIcons;
+import '../../styles/var.dart';
 
 /// ### FlanPopup 列布局
 /// 弹出层容器，用于展示弹窗、信息提示等内容，支持多个弹出层叠加展示。
-class FlanPopup extends StatelessWidget {
+class FlanPopup extends StatefulWidget {
   const FlanPopup({
     Key key,
     this.show = false,
@@ -33,7 +34,7 @@ class FlanPopup extends StatelessWidget {
     this.onClose,
     this.onOpened,
     this.onClosed,
-    this.child,
+    @required this.child,
   })  : assert(show != null),
         assert(overlay != null),
         assert(position != null && position is FlanPopupPosition),
@@ -135,49 +136,205 @@ class FlanPopup extends StatelessWidget {
   final Widget child;
 
   @override
+  _FlanPopupState createState() => _FlanPopupState();
+}
+
+class _FlanPopupState extends State<FlanPopup> {
+  bool popupShow = false;
+  Widget result;
+
+  @override
+  void initState() {
+    super.initState();
+    if (this.widget.show) {
+      this.showPopup();
+    }
+  }
+
+  @override
+  void didUpdateWidget(covariant FlanPopup oldWidget) {
+    if (!oldWidget.show && this.widget.show) {
+      this.showPopup();
+    }
+    super.didUpdateWidget(oldWidget);
+  }
+
+  @override
   Widget build(BuildContext context) {
-    return Container(
-      child: this.child,
+    print("build");
+
+    return SizedBox();
+  }
+
+  Alignment get _popupAlign {
+    return {
+      FlanPopupPosition.center: Alignment.center,
+      FlanPopupPosition.bottom: Alignment.bottomLeft,
+      FlanPopupPosition.top: Alignment.topLeft,
+      FlanPopupPosition.left: Alignment.centerLeft,
+      FlanPopupPosition.right: Alignment.centerRight,
+    }[this.widget.position];
+  }
+
+  void showPopup() {
+    WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
+      showGeneralDialog(
+        context: this.context,
+        pageBuilder: (
+          BuildContext buildContext,
+          Animation<double> animation,
+          Animation<double> secondaryAnimation,
+        ) {
+          final Widget pageChild = this.widget.lazyRender
+              ? Builder(
+                  builder: (BuildContext context) => this._buildPopupContent())
+              : this._buildPopupContent();
+          Widget dialog = Builder(builder: (BuildContext context) {
+            return pageChild;
+          });
+          if (this.widget.safeAreaInsetBottom) {
+            dialog = SafeArea(child: dialog);
+          }
+          return dialog;
+        },
+        barrierDismissible: this.widget.closeOnClickOverlay,
+        barrierLabel:
+            MaterialLocalizations.of(context).modalBarrierDismissLabel,
+        barrierColor:
+            this.widget.overlayStyle?.color ?? ThemeVars.overlayBackgroundColor,
+        transitionDuration: ThemeVars.popupTransitionDuration,
+        transitionBuilder: this._buildMaterialDialogTransitions,
+        useRootNavigator: true,
+      ).then((value) => this.widget.onChange(false));
+    });
+  }
+
+  Widget _buildMaterialDialogTransitions(
+    BuildContext context,
+    Animation<double> animation,
+    Animation<double> secondaryAnimation,
+    Widget child,
+  ) {
+    final curve = CurvedAnimation(
+      parent: animation,
+      curve: this.widget.show
+          ? ThemeVars.animationTimingFunctionEnter
+          : ThemeVars.animationTimingFunctionLeave,
+    );
+
+    switch (this.widget.position) {
+      case FlanPopupPosition.top:
+        return SlideTransition(
+          position: Tween(
+            begin: Offset(0, -1),
+            end: Offset(0, 0),
+          ).animate(curve),
+          child: child,
+        );
+      case FlanPopupPosition.bottom:
+        return SlideTransition(
+          position: Tween(
+            begin: Offset(0, 1),
+            end: Offset(0, 0),
+          ).animate(curve),
+          child: child,
+        );
+      case FlanPopupPosition.right:
+        return SlideTransition(
+          position: Tween(
+            begin: Offset(1, 0),
+            end: Offset(0, 0),
+          ).animate(curve),
+          child: child,
+        );
+      case FlanPopupPosition.left:
+        return SlideTransition(
+          position: Tween(
+            begin: Offset(-1, 0),
+            end: Offset(0, 0),
+          ).animate(curve),
+          child: child,
+        );
+      case FlanPopupPosition.center:
+        FadeTransition(
+          opacity: curve,
+          child: child,
+        );
+    }
+
+    return FadeTransition(
+      opacity: curve,
+      child: child,
+    );
+  }
+
+  Widget _buildPopupContent() {
+    print(this._popupAlign);
+    return MediaQuery.removeViewInsets(
+      removeLeft: true,
+      removeTop: true,
+      removeRight: true,
+      removeBottom: true,
+      context: context,
+      child: Align(
+        alignment: this._popupAlign,
+        child: SizedBox(
+          width: this.widget.position == FlanPopupPosition.top ||
+                  this.widget.position == FlanPopupPosition.bottom
+              ? double.infinity
+              : null,
+          child: Material(
+            color: ThemeVars.popupBackgroundColor,
+            type: MaterialType.card,
+            child: this.widget.child,
+          ),
+        ),
+      ),
     );
   }
 
   @override
   void debugFillProperties(DiagnosticPropertiesBuilder properties) {
-    properties
-        .add(DiagnosticsProperty<bool>("show", show, defaultValue: false));
-    properties
-        .add(DiagnosticsProperty<bool>("overlay", overlay, defaultValue: true));
-    properties.add(DiagnosticsProperty<FlanPopupPosition>("position", position,
-        defaultValue: FlanPopupPosition.center));
-    properties
-        .add(DiagnosticsProperty<BoxDecoration>("overlayStyle", overlayStyle));
-    properties.add(DiagnosticsProperty<Duration>("duration", duration,
-        defaultValue: const Duration(milliseconds: 300)));
-    properties
-        .add(DiagnosticsProperty<bool>("round", round, defaultValue: false));
-    properties.add(DiagnosticsProperty<bool>("lockScroll", lockScroll,
-        defaultValue: true));
-    properties.add(DiagnosticsProperty<bool>("lazyRender", lazyRender,
-        defaultValue: true));
-    properties.add(DiagnosticsProperty<bool>("closeOnPopstate", closeOnPopstate,
-        defaultValue: false));
-    properties.add(DiagnosticsProperty<bool>(
-        "closeOnClickOverlay", closeOnClickOverlay,
-        defaultValue: true));
     properties.add(
-        DiagnosticsProperty<bool>("closeable", closeable, defaultValue: false));
-    properties.add(DiagnosticsProperty<IconData>("closeIconData", closeIconData,
-        defaultValue: FlanIcons.cross));
-    properties.add(DiagnosticsProperty<String>("closeIconUrl", closeIconUrl));
-    properties.add(DiagnosticsProperty<FlanPopupCloseIconPosition>(
-        "closeIconPosition", closeIconPosition,
-        defaultValue: FlanPopupCloseIconPosition.topRight));
-    properties.add(DiagnosticsProperty<String>("transition", transition));
+        DiagnosticsProperty<bool>("show", widget.show, defaultValue: false));
+    properties.add(DiagnosticsProperty<bool>("overlay", widget.overlay,
+        defaultValue: true));
+    properties.add(DiagnosticsProperty<FlanPopupPosition>(
+        "position", widget.position,
+        defaultValue: FlanPopupPosition.center));
+    properties.add(DiagnosticsProperty<BoxDecoration>(
+        "overlayStyle", widget.overlayStyle));
+    properties.add(DiagnosticsProperty<Duration>("duration", widget.duration,
+        defaultValue: const Duration(milliseconds: 300)));
+    properties.add(
+        DiagnosticsProperty<bool>("round", widget.round, defaultValue: false));
+    properties.add(DiagnosticsProperty<bool>("lockScroll", widget.lockScroll,
+        defaultValue: true));
+    properties.add(DiagnosticsProperty<bool>("lazyRender", widget.lazyRender,
+        defaultValue: true));
     properties.add(DiagnosticsProperty<bool>(
-        "transitionAppear", transitionAppear,
+        "closeOnPopstate", widget.closeOnPopstate,
         defaultValue: false));
     properties.add(DiagnosticsProperty<bool>(
-        "safeAreaInsetBottom", safeAreaInsetBottom,
+        "closeOnClickOverlay", widget.closeOnClickOverlay,
+        defaultValue: true));
+    properties.add(DiagnosticsProperty<bool>("closeable", widget.closeable,
+        defaultValue: false));
+    properties.add(DiagnosticsProperty<IconData>(
+        "closeIconData", widget.closeIconData,
+        defaultValue: FlanIcons.cross));
+    properties
+        .add(DiagnosticsProperty<String>("closeIconUrl", widget.closeIconUrl));
+    properties.add(DiagnosticsProperty<FlanPopupCloseIconPosition>(
+        "closeIconPosition", widget.closeIconPosition,
+        defaultValue: FlanPopupCloseIconPosition.topRight));
+    properties
+        .add(DiagnosticsProperty<String>("transition", widget.transition));
+    properties.add(DiagnosticsProperty<bool>(
+        "transitionAppear", widget.transitionAppear,
+        defaultValue: false));
+    properties.add(DiagnosticsProperty<bool>(
+        "safeAreaInsetBottom", widget.safeAreaInsetBottom,
         defaultValue: false));
     super.debugFillProperties(properties);
   }

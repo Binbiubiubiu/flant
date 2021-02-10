@@ -515,9 +515,9 @@ class ThemeVars {
   // @number-keyboard-cursor-animation-duration= 1s;
   // @number-keyboard-z-index= 100;
 
-  // // Overlay
-  // @overlay-z-index= 1;
-  // @overlay-background-color= rgba(0, 0, 0, 0.7);
+  // Overlay
+  static const overlayZIndex = 1;
+  static const overlayBackgroundColor = Color.fromRGBO(0, 0, 0, .7);
 
   // // Pagination
   // @pagination-height= 40px;
@@ -574,7 +574,7 @@ class ThemeVars {
 
   // Popup
   static const popupBackgroundColor = white;
-  static const popupTransition = "transform @animation-duration-base";
+  static const popupTransitionDuration = animationDurationBase;
   static const popupRoundBorderRadius = 16.0;
   static const popupCloseIconSize = 22.0;
   static const popupCloseIconColor = gray5;

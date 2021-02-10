@@ -8,58 +8,53 @@ export '../../styles/icons.dart';
 /// ### FlanIcon 单元格
 /// 基于字体的图标集，可以通过 Icon 组件使用，也可以在其他组件中通过 `icon` 属性引用。
 class FlanIcon extends StatelessWidget {
-  FlanIcon({
+  const FlanIcon({
     Key key,
-    IconData iconData,
-    String iconUrl,
+    this.iconData,
+    this.iconUrl,
     this.dot = false,
     this.size,
     this.color,
     this.classPrefix,
     this.badge,
-    this.height,
     this.onClick,
   })  : assert(dot != null),
-        this.iconData = iconData,
-        this.iconUrl = iconUrl,
         super(key: key);
 
-  FlanIcon.icon(
-    IconData name, {
+  const FlanIcon.icon(
+    this.iconData, {
     Key key,
     this.dot = false,
     this.size,
     this.color,
     this.classPrefix,
     this.badge,
-    this.height,
     this.onClick,
-  })  : assert(name != null),
+  })  : assert(iconData != null),
         assert(dot != null),
-        this.iconData = name,
+        this.iconUrl = null,
         super(key: key);
 
-  FlanIcon.url(
-    String src, {
+  const FlanIcon.url(
+    this.iconUrl, {
     Key key,
     this.dot = false,
     this.size,
     this.color,
     this.classPrefix,
     this.badge,
-    this.height,
     this.onClick,
-  })  : assert(src != null),
+  })  : assert(iconUrl != null),
         assert(dot != null),
-        this.iconUrl = src,
+        this.iconData = null,
         super(key: key);
 
   // ****************** Props ******************
   /// 图标名称
-  IconData iconData;
+  final IconData iconData;
 
   /// 图片链接
-  String iconUrl;
+  final String iconUrl;
 
   /// 是否显示图标右上角小红点
   final bool dot;
@@ -76,9 +71,6 @@ class FlanIcon extends StatelessWidget {
   /// 类名前缀，用于使用自定义图标
   final String classPrefix;
 
-  /// 图表行高
-  final double height;
-
   // ****************** Events ******************
   /// 点击图标时触发
   final GestureTapCallback onClick;
@@ -90,10 +82,7 @@ class FlanIcon extends StatelessWidget {
     final badge = FlanBadge(
       dot: this.dot,
       content: this.badge,
-      child: SizedBox(
-        height: this.height,
-        child: this._buildIcon(context),
-      ),
+      child: this._buildIcon(context),
     );
 
     if (this.onClick != null) {
@@ -148,7 +137,6 @@ class FlanIcon extends StatelessWidget {
     properties.add(DiagnosticsProperty<Color>("color", color));
     properties.add(DiagnosticsProperty<String>("classPrefix", classPrefix));
     properties.add(DiagnosticsProperty<String>("badge", badge));
-    properties.add(DiagnosticsProperty<double>("height", height));
     super.debugFillProperties(properties);
   }
 }

@@ -1,7 +1,8 @@
+import 'dart:io';
+
 import "package:flutter/material.dart";
 import 'package:flutter/foundation.dart';
 import '../../styles/var.dart';
-import '../../styles/icons.dart';
 import '../../mixins/route_mixins.dart';
 import './icon.dart';
 
@@ -115,10 +116,10 @@ class FlanCell extends RouteStatelessWidget {
   final Widget labelSlot;
 
   /// 自定义左侧图标
-  final Widget iconSlot;
+  final FlanIcon iconSlot;
 
   /// 自定义右侧按钮，默认为 `arrow`
-  final Widget rightIconSlot;
+  final FlanIcon rightIconSlot;
 
   /// 自定义单元格最右侧的额外内容
   final Widget extraSlots;
@@ -183,11 +184,7 @@ class FlanCell extends RouteStatelessWidget {
       button: this._isClickable,
       child: Material(
         type: this._isClickable ? MaterialType.button : MaterialType.canvas,
-        textStyle: TextStyle(
-          color: ThemeVars.cellTextColor,
-          fontSize: this._sizeStyle.titleFontSize,
-          height: this._lineHeight,
-        ),
+        textStyle: this._cellTextStyle,
         color: ThemeVars.cellBackgroundColor,
         child: Ink(
           decoration: this.border
@@ -218,11 +215,20 @@ class FlanCell extends RouteStatelessWidget {
   bool get _hasLabel =>
       this.labelSlot != null || (this.label != null && this.label.isNotEmpty);
 
-  /// 行高计算
-  double get _lineHeight => ThemeVars.cellLineHeight / ThemeVars.cellFontSize;
+  /// 默认字体样式
+  TextStyle get _cellTextStyle {
+    return TextStyle(
+      color: ThemeVars.cellTextColor,
+      fontSize: this._sizeStyle.titleFontSize,
+      height: ThemeVars.cellLineHeight / this._sizeStyle.titleFontSize,
+    );
+  }
 
   /// 是否可以点击
   bool get _isClickable => this.isLink || this.clickable;
+
+  double get _iconLineHeight =>
+      ThemeVars.cellLineHeight + (Platform.isAndroid ? 6.0 : 0.0);
 
   /// 单元格大小样式
   _FlanCellSizeStyle get _sizeStyle {
@@ -244,17 +250,19 @@ class FlanCell extends RouteStatelessWidget {
   Widget _buildTitle(BuildContext context) {
     if (this._hasTitle) {
       Widget title = this.titleSlot ?? Text(this.title);
+      TextStyle tStyle = _cellTextStyle;
+
       if (this.titleStyle != null) {
-        title = DefaultTextStyle(
-          style: TextStyle().merge(this.titleStyle),
-          child: title,
-        );
+        tStyle = tStyle.merge(this.titleStyle);
       }
       return Expanded(
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            title,
+            DefaultTextStyle(
+              style: tStyle,
+              child: title,
+            ),
             this._buildLabel(context),
           ].where((element) => element != null).toList(),
         ),
@@ -271,12 +279,13 @@ class FlanCell extends RouteStatelessWidget {
         child: this.labelSlot ?? Text(this.label),
       );
 
-      final lstyle = TextStyle(
+      TextStyle lstyle = _cellTextStyle.copyWith(
         color: ThemeVars.cellLabelColor,
         fontSize: this._sizeStyle.labelFontSize,
+        height: ThemeVars.cellLineHeight / this._sizeStyle.labelFontSize,
       );
       if (this.labelStyle != null) {
-        lstyle.merge(this.labelStyle);
+        lstyle = lstyle.merge(this.labelStyle);
       }
       return DefaultTextStyle(
         style: lstyle,
@@ -296,10 +305,8 @@ class FlanCell extends RouteStatelessWidget {
         ),
       );
 
-      final vStyle = TextStyle(
+      final vStyle = _cellTextStyle.copyWith(
         color: !this._hasTitle ? ThemeVars.textColor : ThemeVars.cellValueColor,
-        height: ThemeVars.cellLineHeight /
-            DefaultTextStyle.of(context).style.fontSize,
       );
       if (this.valueStyle != null) {
         vStyle..merge(this.valueStyle);
@@ -320,19 +327,24 @@ class FlanCell extends RouteStatelessWidget {
         data: IconThemeData(
           size: ThemeVars.cellIconSize,
         ),
-        child: this.iconSlot,
+        child: Container(
+          height: this._iconLineHeight,
+          alignment: Alignment.center,
+          child: this.iconSlot,
+        ),
       );
     }
 
     if (this.iconData != null || this.iconUrl != null) {
       return Padding(
         padding: EdgeInsets.only(right: ThemeVars.paddingBase),
-        child: ConstrainedBox(
-          constraints: BoxConstraints(minWidth: ThemeVars.cellFontSize * 1.0),
+        child: Container(
+          constraints: BoxConstraints(minWidth: ThemeVars.cellFontSize),
+          height: this._iconLineHeight,
+          alignment: Alignment.center,
           child: FlanIcon(
             iconData: this.iconData,
             iconUrl: this.iconUrl,
-            height: this._lineHeight * this._sizeStyle.titleFontSize,
             size: ThemeVars.cellIconSize,
             classPrefix: this.iconPrefix,
           ),
@@ -348,8 +360,13 @@ class FlanCell extends RouteStatelessWidget {
       return IconTheme(
         data: IconThemeData(
           size: ThemeVars.cellIconSize,
+          color: ThemeVars.cellRightIconColor,
         ),
-        child: this.rightIconSlot,
+        child: Container(
+          height: this._iconLineHeight,
+          alignment: Alignment.center,
+          child: this.rightIconSlot,
+        ),
       );
     }
 
@@ -363,12 +380,13 @@ class FlanCell extends RouteStatelessWidget {
 
       return Padding(
         padding: EdgeInsets.only(left: ThemeVars.paddingBase),
-        child: ConstrainedBox(
-          constraints: BoxConstraints(minWidth: ThemeVars.cellFontSize * 1.0),
+        child: Container(
+          height: this._iconLineHeight,
+          constraints: BoxConstraints(minWidth: ThemeVars.cellFontSize),
+          alignment: Alignment.center,
           child: FlanIcon(
             iconData: iconName,
             color: ThemeVars.cellRightIconColor,
-            height: ThemeVars.cellLineHeight,
             size: ThemeVars.cellIconSize,
             classPrefix: this.iconPrefix,
           ),
