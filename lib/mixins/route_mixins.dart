@@ -47,7 +47,7 @@ abstract class RouteStatelessWidget extends StatelessWidget {
   final bool replace;
 
   void route(BuildContext context) {
-    if (this.toRoute == null || this.toName == null) {
+    if (this.toRoute == null && this.toName == null) {
       return;
     }
 
