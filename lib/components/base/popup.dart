@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/foundation.dart';
-import './icon.dart' show FlanIcons;
+import 'package:flutter/semantics.dart';
+import './icon.dart' show FlanIcon, FlanIcons;
 import '../../styles/var.dart';
 
 /// ### FlanPopup 列布局
@@ -15,20 +16,21 @@ class FlanPopup extends StatefulWidget {
     this.overlayStyle,
     this.duration = const Duration(milliseconds: 300),
     this.round = false,
-    this.lockScroll = true,
-    this.lazyRender = true,
-    this.closeOnPopstate = false,
+    // this.lockScroll = true,
+    // this.lazyRender = true,
+    // this.closeOnPopstate = false,
     this.closeOnClickOverlay = true,
     this.closeable = false,
     this.closeIconData = FlanIcons.cross,
     this.closeIconUrl,
     this.closeIconPosition = FlanPopupCloseIconPosition.topRight,
-    this.transition,
+    this.transitionBuilder,
+    this.transitionAppearBuilder,
     this.transitionAppear = false,
     this.safeAreaInsetBottom = false,
     this.onChange,
     this.onClick,
-    this.onClickOverlay,
+    // this.onClickOverlay,
     this.onClickCloseIcon,
     this.onOpen,
     this.onClose,
@@ -40,9 +42,9 @@ class FlanPopup extends StatefulWidget {
         assert(position != null && position is FlanPopupPosition),
         assert(duration != null && duration is Duration),
         assert(round != null),
-        assert(lockScroll != null),
-        assert(lazyRender != null),
-        assert(closeOnPopstate != null),
+        // assert(lockScroll != null),
+        // assert(lazyRender != null),
+        // assert(closeOnPopstate != null),
         assert(closeOnClickOverlay != null),
         assert(closeable != null),
         assert(closeIconPosition != null &&
@@ -73,14 +75,14 @@ class FlanPopup extends StatefulWidget {
   /// 是否显示圆角
   final bool round;
 
-  /// 是否锁定背景滚动
-  final bool lockScroll;
+  // /// 是否锁定背景滚动
+  // final bool lockScroll;
 
-  /// 是否在显示弹层时才渲染节点
-  final bool lazyRender;
+  // /// 是否在显示弹层时才渲染节点
+  // final bool lazyRender;
 
-  /// 是否在页面回退时自动关闭
-  final bool closeOnPopstate;
+  // /// 是否在页面回退时自动关闭
+  // final bool closeOnPopstate;
 
   /// 是否在点击遮罩层后关闭
   final bool closeOnClickOverlay;
@@ -98,7 +100,10 @@ class FlanPopup extends StatefulWidget {
   final FlanPopupCloseIconPosition closeIconPosition;
 
   /// 动画类名，等价于 transtion 的name属性
-  final String transition;
+  final RouteTransitionsBuilder transitionBuilder;
+
+  /// 动画类名，等价于 transtion 的name属性
+  final RouteTransitionsBuilder transitionAppearBuilder;
 
   /// 是否在初始渲染时启用过渡动画
   final bool transitionAppear;
@@ -113,8 +118,8 @@ class FlanPopup extends StatefulWidget {
   /// 点击弹出层时触发
   final GestureTapCallback onClick;
 
-  /// 点击遮罩层时触发
-  final GestureTapCallback onClickOverlay;
+  // /// 点击遮罩层时触发
+  // final GestureTapCallback onClickOverlay;
 
   /// 点击关闭图标时触发
   final GestureTapCallback onClickCloseIcon;
@@ -140,29 +145,27 @@ class FlanPopup extends StatefulWidget {
 }
 
 class _FlanPopupState extends State<FlanPopup> {
-  bool popupShow = false;
-  Widget result;
+  bool opened = false;
+  bool isFirstOpen = true;
 
   @override
   void initState() {
     super.initState();
     if (this.widget.show) {
-      this.showPopup();
+      this.openPopup();
     }
   }
 
   @override
   void didUpdateWidget(covariant FlanPopup oldWidget) {
     if (!oldWidget.show && this.widget.show) {
-      this.showPopup();
+      this.openPopup();
     }
     super.didUpdateWidget(oldWidget);
   }
 
   @override
   Widget build(BuildContext context) {
-    print("build");
-
     return SizedBox();
   }
 
@@ -176,36 +179,86 @@ class _FlanPopupState extends State<FlanPopup> {
     }[this.widget.position];
   }
 
-  void showPopup() {
+  BorderRadius get _roundRadius {
+    const radius = Radius.circular(ThemeVars.popupRoundBorderRadius);
+    switch (this.widget.position) {
+      case FlanPopupPosition.top:
+        return BorderRadius.only(bottomLeft: radius, bottomRight: radius);
+      case FlanPopupPosition.bottom:
+        return BorderRadius.only(topLeft: radius, topRight: radius);
+      case FlanPopupPosition.right:
+        return BorderRadius.only(topLeft: radius, bottomLeft: radius);
+      case FlanPopupPosition.left:
+        return BorderRadius.only(topRight: radius, bottomRight: radius);
+      case FlanPopupPosition.center:
+        return BorderRadius.all(radius);
+    }
+
+    return null;
+  }
+
+  RouteTransitionsBuilder get _popupTransitionsBuilder {
+    if (this.widget.transitionAppear && this.isFirstOpen) {
+      return this.widget.transitionAppearBuilder;
+    }
+
+    return this.widget.transitionBuilder ??
+        this._buildMaterialDialogTransitions;
+  }
+
+  void closePopup() {
+    if (this.opened) {
+      this.opened = false;
+      if (this.widget.onClose != null) {
+        this.widget.onClose();
+      }
+      this.widget.onChange(false);
+    }
+  }
+
+  void openPopup() {
+    if (this.opened) {
+      return;
+    }
+    this.opened = true;
+
+    if (this.widget.onOpen != null) {
+      this.widget.onOpen();
+    }
+
     WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
-      showGeneralDialog(
-        context: this.context,
-        pageBuilder: (
-          BuildContext buildContext,
-          Animation<double> animation,
-          Animation<double> secondaryAnimation,
-        ) {
-          final Widget pageChild = this.widget.lazyRender
-              ? Builder(
-                  builder: (BuildContext context) => this._buildPopupContent())
-              : this._buildPopupContent();
-          Widget dialog = Builder(builder: (BuildContext context) {
-            return pageChild;
-          });
-          if (this.widget.safeAreaInsetBottom) {
-            dialog = SafeArea(child: dialog);
-          }
-          return dialog;
-        },
-        barrierDismissible: this.widget.closeOnClickOverlay,
-        barrierLabel:
-            MaterialLocalizations.of(context).modalBarrierDismissLabel,
-        barrierColor:
-            this.widget.overlayStyle?.color ?? ThemeVars.overlayBackgroundColor,
-        transitionDuration: ThemeVars.popupTransitionDuration,
-        transitionBuilder: this._buildMaterialDialogTransitions,
-        useRootNavigator: true,
-      ).then((value) => this.widget.onChange(false));
+      Navigator.of(context, rootNavigator: true)
+          .push(_FlanPopupRoute(
+            pageBuilder: (
+              BuildContext buildContext,
+              Animation<double> animation,
+              Animation<double> secondaryAnimation,
+            ) {
+              Widget dialog = this._buildPopupContent();
+              if (this.widget.safeAreaInsetBottom) {
+                dialog = SafeArea(child: dialog);
+              }
+              return dialog;
+            },
+            barrierDismissible: this.widget.closeOnClickOverlay,
+            barrierLabel:
+                MaterialLocalizations.of(context).modalBarrierDismissLabel,
+            barrierColor: this.widget.overlayStyle?.color ??
+                ThemeVars.overlayBackgroundColor,
+            transitionDuration:
+                this.widget.duration ?? ThemeVars.popupTransitionDuration,
+            transitionBuilder: this._popupTransitionsBuilder,
+            onTransitionRouteEnter: () {
+              if (this.isFirstOpen) {
+                this.isFirstOpen = false;
+              }
+              if (this.widget.onOpened != null) {
+                this.widget.onOpened();
+              }
+            },
+            onTransitionRouteLeave: this.widget.onClosed,
+          ))
+          .then((value) => this.closePopup());
     });
   }
 
@@ -269,7 +322,6 @@ class _FlanPopupState extends State<FlanPopup> {
   }
 
   Widget _buildPopupContent() {
-    print(this._popupAlign);
     return MediaQuery.removeViewInsets(
       removeLeft: true,
       removeTop: true,
@@ -283,13 +335,63 @@ class _FlanPopupState extends State<FlanPopup> {
                   this.widget.position == FlanPopupPosition.bottom
               ? double.infinity
               : null,
-          child: Material(
-            color: ThemeVars.popupBackgroundColor,
-            type: MaterialType.card,
-            child: this.widget.child,
+          child: GestureDetector(
+            onTap: this.widget.onClick,
+            child: Material(
+              borderRadius: this.widget.round ? this._roundRadius : null,
+              color: ThemeVars.popupBackgroundColor,
+              type: MaterialType.card,
+              child: Stack(
+                children: [
+                  this.widget.closeable ? this._buildCloseIcon() : null,
+                  this.widget.child,
+                ].where((element) => element != null).toList(),
+              ),
+            ),
           ),
         ),
       ),
+    );
+  }
+
+  Widget _buildCloseIcon() {
+    final icon = _FlanPopupCloseIcon(
+      closeIconData: this.widget.closeIconData,
+      closeIconUrl: this.widget.closeIconUrl,
+      onPress: this.widget.onClickCloseIcon,
+    );
+
+    switch (this.widget.closeIconPosition) {
+      case FlanPopupCloseIconPosition.topLeft:
+        return Positioned(
+          top: ThemeVars.popupCloseIconMargin,
+          left: ThemeVars.popupCloseIconMargin,
+          child: icon,
+        );
+      case FlanPopupCloseIconPosition.topRight:
+        return Positioned(
+          top: ThemeVars.popupCloseIconMargin,
+          right: ThemeVars.popupCloseIconMargin,
+          child: icon,
+        );
+      case FlanPopupCloseIconPosition.bottomLeft:
+        return Positioned(
+          bottom: ThemeVars.popupCloseIconMargin,
+          left: ThemeVars.popupCloseIconMargin,
+          child: icon,
+        );
+      case FlanPopupCloseIconPosition.bottomRight:
+        return Positioned(
+          bottom: ThemeVars.popupCloseIconMargin,
+          right: ThemeVars.popupCloseIconMargin,
+          child: icon,
+        );
+    }
+
+    return Positioned(
+      top: ThemeVars.popupCloseIconMargin,
+      right: ThemeVars.popupCloseIconMargin,
+      child: icon,
     );
   }
 
@@ -308,13 +410,13 @@ class _FlanPopupState extends State<FlanPopup> {
         defaultValue: const Duration(milliseconds: 300)));
     properties.add(
         DiagnosticsProperty<bool>("round", widget.round, defaultValue: false));
-    properties.add(DiagnosticsProperty<bool>("lockScroll", widget.lockScroll,
-        defaultValue: true));
-    properties.add(DiagnosticsProperty<bool>("lazyRender", widget.lazyRender,
-        defaultValue: true));
-    properties.add(DiagnosticsProperty<bool>(
-        "closeOnPopstate", widget.closeOnPopstate,
-        defaultValue: false));
+    // properties.add(DiagnosticsProperty<bool>("lockScroll", widget.lockScroll,
+    //     defaultValue: true));
+    // properties.add(DiagnosticsProperty<bool>("lazyRender", widget.lazyRender,
+    //     defaultValue: true));
+    // properties.add(DiagnosticsProperty<bool>(
+    //     "closeOnPopstate", widget.closeOnPopstate,
+    //     defaultValue: false));
     properties.add(DiagnosticsProperty<bool>(
         "closeOnClickOverlay", widget.closeOnClickOverlay,
         defaultValue: true));
@@ -328,8 +430,8 @@ class _FlanPopupState extends State<FlanPopup> {
     properties.add(DiagnosticsProperty<FlanPopupCloseIconPosition>(
         "closeIconPosition", widget.closeIconPosition,
         defaultValue: FlanPopupCloseIconPosition.topRight));
-    properties
-        .add(DiagnosticsProperty<String>("transition", widget.transition));
+    properties.add(DiagnosticsProperty<RouteTransitionsBuilder>(
+        "transition", widget.transitionBuilder));
     properties.add(DiagnosticsProperty<bool>(
         "transitionAppear", widget.transitionAppear,
         defaultValue: false));
@@ -337,6 +439,93 @@ class _FlanPopupState extends State<FlanPopup> {
         "safeAreaInsetBottom", widget.safeAreaInsetBottom,
         defaultValue: false));
     super.debugFillProperties(properties);
+  }
+}
+
+class _FlanPopupRoute<T> extends PopupRoute<T> {
+  _FlanPopupRoute({
+    @required RoutePageBuilder pageBuilder,
+    bool barrierDismissible = true,
+    String barrierLabel,
+    Color barrierColor = const Color(0x80000000),
+    Duration transitionDuration = const Duration(milliseconds: 200),
+    RouteTransitionsBuilder transitionBuilder,
+    RouteSettings settings,
+    this.appear = false,
+    this.onTransitionRouteEnter,
+    this.onTransitionRouteLeave,
+  })  : assert(barrierDismissible != null),
+        _pageBuilder = pageBuilder,
+        _barrierDismissible = barrierDismissible,
+        _barrierLabel = barrierLabel,
+        _barrierColor = barrierColor,
+        _transitionDuration = transitionDuration,
+        _transitionBuilder = transitionBuilder,
+        super(settings: settings);
+
+  final RoutePageBuilder _pageBuilder;
+
+  final bool appear;
+  final VoidCallback onTransitionRouteEnter;
+  final VoidCallback onTransitionRouteLeave;
+
+  void _onFlanPopupTransitionChange(AnimationStatus status) {
+    switch (status) {
+      case AnimationStatus.dismissed:
+        if (this.onTransitionRouteLeave != null) {
+          this.onTransitionRouteLeave();
+        }
+        break;
+      case AnimationStatus.forward:
+        break;
+      case AnimationStatus.reverse:
+        break;
+      case AnimationStatus.completed:
+        if (this.onTransitionRouteEnter != null) {
+          this.onTransitionRouteEnter();
+        }
+        break;
+    }
+  }
+
+  @override
+  void install() {
+    super.install();
+    this.animation.addStatusListener(this._onFlanPopupTransitionChange);
+  }
+
+  @override
+  bool get barrierDismissible => _barrierDismissible;
+  final bool _barrierDismissible;
+
+  @override
+  String get barrierLabel => _barrierLabel;
+  final String _barrierLabel;
+
+  @override
+  Color get barrierColor => _barrierColor;
+  final Color _barrierColor;
+
+  @override
+  Duration get transitionDuration => _transitionDuration;
+  final Duration _transitionDuration;
+
+  final RouteTransitionsBuilder _transitionBuilder;
+
+  @override
+  Widget buildPage(BuildContext context, Animation<double> animation,
+      Animation<double> secondaryAnimation) {
+    return Semantics(
+      child: _pageBuilder(context, animation, secondaryAnimation),
+      scopesRoute: true,
+      explicitChildNodes: true,
+    );
+  }
+
+  @override
+  Widget buildTransitions(BuildContext context, Animation<double> animation,
+      Animation<double> secondaryAnimation, Widget child) {
+    return _transitionBuilder(context, animation, secondaryAnimation, child);
   }
 }
 
@@ -355,4 +544,73 @@ enum FlanPopupCloseIconPosition {
   topRight,
   bottomLeft,
   bottomRight,
+}
+
+/// 弹窗关闭图标按钮
+class _FlanPopupCloseIcon extends StatefulWidget {
+  const _FlanPopupCloseIcon({
+    Key key,
+    this.closeIconData,
+    this.closeIconUrl,
+    this.onPress,
+  }) : super(key: key);
+
+  /// 图标属性
+  final IconData closeIconData;
+
+  /// 图标链接
+  final String closeIconUrl;
+
+  /// 图标点击事件
+  final VoidCallback onPress;
+
+  @override
+  __FlanPopupCloseIconState createState() => __FlanPopupCloseIconState();
+}
+
+class __FlanPopupCloseIconState extends State<_FlanPopupCloseIcon> {
+  bool active = false;
+
+  activeText() {
+    this.setState(() {
+      this.active = true;
+    });
+  }
+
+  disactiveText() {
+    this.setState(() {
+      this.active = false;
+    });
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Semantics(
+      button: true,
+      enabled: this.widget.onPress != null,
+      sortKey: const OrdinalSortKey(0.0),
+      child: InkResponse(
+        splashColor: Colors.transparent,
+        highlightColor: Colors.transparent,
+        onTap: () {
+          if (this.widget.onPress != null) {
+            this.widget.onPress();
+          }
+          Navigator.of(context).pop();
+          this.disactiveText();
+        },
+        onTapDown: (e) {
+          this.activeText();
+        },
+        onTapCancel: this.disactiveText,
+        child: FlanIcon(
+          iconData: this.widget.closeIconData,
+          iconUrl: this.widget.closeIconUrl,
+          color: this.active
+              ? ThemeVars.popupCloseIconActiveColor
+              : ThemeVars.popupCloseIconColor,
+        ),
+      ),
+    );
+  }
 }
