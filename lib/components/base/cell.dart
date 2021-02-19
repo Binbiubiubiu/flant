@@ -15,9 +15,9 @@ class FlanCell extends RouteStatelessWidget {
     this.value,
     this.label,
     this.size = FlanCellSize.normal,
-    this.iconData,
+    this.iconName,
     this.iconUrl,
-    this.iconPrefix,
+    this.iconPrefix = kFlanIconsFamily,
     this.border = true,
     this.clickable = false,
     this.isLink = false,
@@ -38,6 +38,7 @@ class FlanCell extends RouteStatelessWidget {
     PageRoute toRoute,
     bool replace = false,
   })  : assert(size != null && size is FlanCellSize),
+        assert(iconPrefix != null),
         assert(border != null),
         assert(clickable != null),
         assert(isLink != null),
@@ -66,7 +67,7 @@ class FlanCell extends RouteStatelessWidget {
   final FlanCellSize size;
 
   /// 左侧图标名称
-  final IconData iconData;
+  final int iconName;
 
   /// 左侧图片链接
   final String iconUrl;
@@ -335,7 +336,7 @@ class FlanCell extends RouteStatelessWidget {
       );
     }
 
-    if (this.iconData != null || this.iconUrl != null) {
+    if (this.iconName != null || this.iconUrl != null) {
       return Padding(
         padding: EdgeInsets.only(right: ThemeVars.paddingBase),
         child: Container(
@@ -343,7 +344,7 @@ class FlanCell extends RouteStatelessWidget {
           height: this._iconLineHeight,
           alignment: Alignment.center,
           child: FlanIcon(
-            iconData: this.iconData,
+            iconName: this.iconName,
             iconUrl: this.iconUrl,
             size: ThemeVars.cellIconSize,
             classPrefix: this.iconPrefix,
@@ -371,7 +372,7 @@ class FlanCell extends RouteStatelessWidget {
     }
 
     if (this.isLink) {
-      final IconData iconName = {
+      final int iconName = {
         FlanCellArrowDirection.down: FlanIcons.arrow_down,
         FlanCellArrowDirection.up: FlanIcons.arrow_up,
         FlanCellArrowDirection.left: FlanIcons.arrow_left,
@@ -385,7 +386,7 @@ class FlanCell extends RouteStatelessWidget {
           constraints: BoxConstraints(minWidth: ThemeVars.cellFontSize),
           alignment: Alignment.center,
           child: FlanIcon(
-            iconData: iconName,
+            iconName: iconName,
             color: ThemeVars.cellRightIconColor,
             size: ThemeVars.cellIconSize,
             classPrefix: this.iconPrefix,
@@ -403,7 +404,7 @@ class FlanCell extends RouteStatelessWidget {
     properties.add(DiagnosticsProperty<String>("value", value));
     properties.add(DiagnosticsProperty<FlanCellSize>("size", size,
         defaultValue: FlanCellSize.normal));
-    properties.add(DiagnosticsProperty<IconData>("iconData", iconData));
+    properties.add(DiagnosticsProperty<int>("iconName", iconName));
     properties.add(DiagnosticsProperty<String>("iconUrl", iconUrl));
     properties.add(DiagnosticsProperty<String>("iconPrefix", iconPrefix));
     properties

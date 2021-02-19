@@ -9,6 +9,8 @@ export './components/base/image.dart';
 export './components/base/row.dart';
 export './components/base/col.dart';
 export './components/base/popup.dart';
+export './components/base/style.dart';
+export './components/base/toast.dart';
 // show components
 export './components/show/badge.dart';
 export './components/show/circle.dart';

@@ -1,471 +1,469 @@
-import 'package:flutter/widgets.dart';
+const kFlanIconsFamily = "flanIcon";
 
 class FlanIcons {
-  static const _fontFamily = "flanIcon";
+  static const add_o = 0xF000;
 
-  static const add_o = IconData(0xF000, fontFamily: _fontFamily);
+  static const add_square = 0xF001;
 
-  static const add_square = IconData(0xF001, fontFamily: _fontFamily);
+  static const add = 0xF002;
 
-  static const add = IconData(0xF002, fontFamily: _fontFamily);
+  static const after_sale = 0xF003;
 
-  static const after_sale = IconData(0xF003, fontFamily: _fontFamily);
+  static const aim = 0xF004;
 
-  static const aim = IconData(0xF004, fontFamily: _fontFamily);
+  static const alipay = 0xF005;
 
-  static const alipay = IconData(0xF005, fontFamily: _fontFamily);
+  static const apps_o = 0xF006;
 
-  static const apps_o = IconData(0xF006, fontFamily: _fontFamily);
+  static const arrow_down = 0xF007;
 
-  static const arrow_down = IconData(0xF007, fontFamily: _fontFamily);
+  static const arrow_left = 0xF008;
 
-  static const arrow_left = IconData(0xF008, fontFamily: _fontFamily);
+  static const arrow_up = 0xF009;
 
-  static const arrow_up = IconData(0xF009, fontFamily: _fontFamily);
+  static const arrow = 0xF00A;
 
-  static const arrow = IconData(0xF00A, fontFamily: _fontFamily);
+  static const ascending = 0xF00B;
 
-  static const ascending = IconData(0xF00B, fontFamily: _fontFamily);
+  static const audio = 0xF00C;
 
-  static const audio = IconData(0xF00C, fontFamily: _fontFamily);
+  static const award_o = 0xF00D;
 
-  static const award_o = IconData(0xF00D, fontFamily: _fontFamily);
+  static const award = 0xF00E;
 
-  static const award = IconData(0xF00E, fontFamily: _fontFamily);
+  static const back_top = 0xF0E6;
 
-  static const back_top = IconData(0xF0E6, fontFamily: _fontFamily);
+  static const bag_o = 0xF00F;
 
-  static const bag_o = IconData(0xF00F, fontFamily: _fontFamily);
+  static const bag = 0xF010;
 
-  static const bag = IconData(0xF010, fontFamily: _fontFamily);
+  static const balance_list_o = 0xF011;
 
-  static const balance_list_o = IconData(0xF011, fontFamily: _fontFamily);
+  static const balance_list = 0xF012;
 
-  static const balance_list = IconData(0xF012, fontFamily: _fontFamily);
+  static const balance_o = 0xF013;
 
-  static const balance_o = IconData(0xF013, fontFamily: _fontFamily);
+  static const balance_pay = 0xF014;
 
-  static const balance_pay = IconData(0xF014, fontFamily: _fontFamily);
+  static const bar_chart_o = 0xF015;
 
-  static const bar_chart_o = IconData(0xF015, fontFamily: _fontFamily);
+  static const bars = 0xF016;
 
-  static const bars = IconData(0xF016, fontFamily: _fontFamily);
+  static const bell = 0xF017;
 
-  static const bell = IconData(0xF017, fontFamily: _fontFamily);
+  static const bill_o = 0xF018;
 
-  static const bill_o = IconData(0xF018, fontFamily: _fontFamily);
+  static const bill = 0xF019;
 
-  static const bill = IconData(0xF019, fontFamily: _fontFamily);
+  static const birthday_cake_o = 0xF01A;
 
-  static const birthday_cake_o = IconData(0xF01A, fontFamily: _fontFamily);
+  static const bookmark_o = 0xF01B;
 
-  static const bookmark_o = IconData(0xF01B, fontFamily: _fontFamily);
+  static const bookmark = 0xF01C;
 
-  static const bookmark = IconData(0xF01C, fontFamily: _fontFamily);
+  static const browsing_history_o = 0xF01D;
 
-  static const browsing_history_o = IconData(0xF01D, fontFamily: _fontFamily);
+  static const browsing_history = 0xF01E;
 
-  static const browsing_history = IconData(0xF01E, fontFamily: _fontFamily);
+  static const brush_o = 0xF01F;
 
-  static const brush_o = IconData(0xF01F, fontFamily: _fontFamily);
+  static const bulb_o = 0xF020;
 
-  static const bulb_o = IconData(0xF020, fontFamily: _fontFamily);
+  static const bullhorn_o = 0xF021;
 
-  static const bullhorn_o = IconData(0xF021, fontFamily: _fontFamily);
+  static const calendar_o = 0xF022;
 
-  static const calendar_o = IconData(0xF022, fontFamily: _fontFamily);
+  static const card = 0xF023;
 
-  static const card = IconData(0xF023, fontFamily: _fontFamily);
+  static const cart_circle_o = 0xF024;
 
-  static const cart_circle_o = IconData(0xF024, fontFamily: _fontFamily);
+  static const cart_circle = 0xF025;
 
-  static const cart_circle = IconData(0xF025, fontFamily: _fontFamily);
+  static const cart_o = 0xF026;
 
-  static const cart_o = IconData(0xF026, fontFamily: _fontFamily);
+  static const cart = 0xF027;
 
-  static const cart = IconData(0xF027, fontFamily: _fontFamily);
+  static const cash_back_record = 0xF028;
 
-  static const cash_back_record = IconData(0xF028, fontFamily: _fontFamily);
+  static const cash_on_deliver = 0xF029;
 
-  static const cash_on_deliver = IconData(0xF029, fontFamily: _fontFamily);
+  static const cashier_o = 0xF02A;
 
-  static const cashier_o = IconData(0xF02A, fontFamily: _fontFamily);
+  static const certificate = 0xF02B;
 
-  static const certificate = IconData(0xF02B, fontFamily: _fontFamily);
+  static const chart_trending_o = 0xF02C;
 
-  static const chart_trending_o = IconData(0xF02C, fontFamily: _fontFamily);
+  static const chat_o = 0xF02D;
 
-  static const chat_o = IconData(0xF02D, fontFamily: _fontFamily);
+  static const chat = 0xF02E;
 
-  static const chat = IconData(0xF02E, fontFamily: _fontFamily);
+  static const checked = 0xF02F;
 
-  static const checked = IconData(0xF02F, fontFamily: _fontFamily);
+  static const circle = 0xF030;
 
-  static const circle = IconData(0xF030, fontFamily: _fontFamily);
+  static const clear = 0xF031;
 
-  static const clear = IconData(0xF031, fontFamily: _fontFamily);
+  static const clock_o = 0xF032;
 
-  static const clock_o = IconData(0xF032, fontFamily: _fontFamily);
+  static const clock = 0xF033;
 
-  static const clock = IconData(0xF033, fontFamily: _fontFamily);
+  static const close = 0xF034;
 
-  static const close = IconData(0xF034, fontFamily: _fontFamily);
+  static const closed_eye = 0xF035;
 
-  static const closed_eye = IconData(0xF035, fontFamily: _fontFamily);
+  static const cluster_o = 0xF036;
 
-  static const cluster_o = IconData(0xF036, fontFamily: _fontFamily);
+  static const cluster = 0xF037;
 
-  static const cluster = IconData(0xF037, fontFamily: _fontFamily);
+  static const column = 0xF038;
 
-  static const column = IconData(0xF038, fontFamily: _fontFamily);
+  static const comment_circle_o = 0xF039;
 
-  static const comment_circle_o = IconData(0xF039, fontFamily: _fontFamily);
+  static const comment_circle = 0xF03A;
 
-  static const comment_circle = IconData(0xF03A, fontFamily: _fontFamily);
+  static const comment_o = 0xF03B;
 
-  static const comment_o = IconData(0xF03B, fontFamily: _fontFamily);
+  static const comment = 0xF03C;
 
-  static const comment = IconData(0xF03C, fontFamily: _fontFamily);
+  static const completed = 0xF03D;
 
-  static const completed = IconData(0xF03D, fontFamily: _fontFamily);
+  static const contact = 0xF03E;
 
-  static const contact = IconData(0xF03E, fontFamily: _fontFamily);
+  static const coupon_o = 0xF03F;
 
-  static const coupon_o = IconData(0xF03F, fontFamily: _fontFamily);
+  static const coupon = 0xF040;
 
-  static const coupon = IconData(0xF040, fontFamily: _fontFamily);
+  static const credit_pay = 0xF041;
 
-  static const credit_pay = IconData(0xF041, fontFamily: _fontFamily);
+  static const cross = 0xF042;
 
-  static const cross = IconData(0xF042, fontFamily: _fontFamily);
+  static const debit_pay = 0xF043;
 
-  static const debit_pay = IconData(0xF043, fontFamily: _fontFamily);
+  static const delete = 0xF044;
 
-  static const delete = IconData(0xF044, fontFamily: _fontFamily);
+  static const descending = 0xF045;
 
-  static const descending = IconData(0xF045, fontFamily: _fontFamily);
+  static const description = 0xF046;
 
-  static const description = IconData(0xF046, fontFamily: _fontFamily);
+  static const desktop_o = 0xF047;
 
-  static const desktop_o = IconData(0xF047, fontFamily: _fontFamily);
+  static const diamond_o = 0xF048;
 
-  static const diamond_o = IconData(0xF048, fontFamily: _fontFamily);
+  static const diamond = 0xF049;
 
-  static const diamond = IconData(0xF049, fontFamily: _fontFamily);
+  static const discount = 0xF04A;
 
-  static const discount = IconData(0xF04A, fontFamily: _fontFamily);
+  static const down = 0xF04B;
 
-  static const down = IconData(0xF04B, fontFamily: _fontFamily);
+  static const ecard_pay = 0xF04C;
 
-  static const ecard_pay = IconData(0xF04C, fontFamily: _fontFamily);
+  static const edit = 0xF04D;
 
-  static const edit = IconData(0xF04D, fontFamily: _fontFamily);
+  static const ellipsis = 0xF04E;
 
-  static const ellipsis = IconData(0xF04E, fontFamily: _fontFamily);
+  static const empty = 0xF04F;
 
-  static const empty = IconData(0xF04F, fontFamily: _fontFamily);
+  static const enlarge = 0xF0E4;
 
-  static const enlarge = IconData(0xF0E4, fontFamily: _fontFamily);
+  static const envelop_o = 0xF050;
 
-  static const envelop_o = IconData(0xF050, fontFamily: _fontFamily);
+  static const exchange = 0xF051;
 
-  static const exchange = IconData(0xF051, fontFamily: _fontFamily);
+  static const expand_o = 0xF052;
 
-  static const expand_o = IconData(0xF052, fontFamily: _fontFamily);
+  static const expand = 0xF053;
 
-  static const expand = IconData(0xF053, fontFamily: _fontFamily);
+  static const eye_o = 0xF054;
 
-  static const eye_o = IconData(0xF054, fontFamily: _fontFamily);
+  static const eye = 0xF055;
 
-  static const eye = IconData(0xF055, fontFamily: _fontFamily);
+  static const fail = 0xF056;
 
-  static const fail = IconData(0xF056, fontFamily: _fontFamily);
+  static const failure = 0xF057;
 
-  static const failure = IconData(0xF057, fontFamily: _fontFamily);
+  static const filter_o = 0xF058;
 
-  static const filter_o = IconData(0xF058, fontFamily: _fontFamily);
+  static const fire_o = 0xF059;
 
-  static const fire_o = IconData(0xF059, fontFamily: _fontFamily);
+  static const fire = 0xF05A;
 
-  static const fire = IconData(0xF05A, fontFamily: _fontFamily);
+  static const flag_o = 0xF05B;
 
-  static const flag_o = IconData(0xF05B, fontFamily: _fontFamily);
+  static const flower_o = 0xF05C;
 
-  static const flower_o = IconData(0xF05C, fontFamily: _fontFamily);
+  static const free_postage = 0xF05D;
 
-  static const free_postage = IconData(0xF05D, fontFamily: _fontFamily);
+  static const friends_o = 0xF05E;
 
-  static const friends_o = IconData(0xF05E, fontFamily: _fontFamily);
+  static const friends = 0xF05F;
 
-  static const friends = IconData(0xF05F, fontFamily: _fontFamily);
+  static const gem_o = 0xF060;
 
-  static const gem_o = IconData(0xF060, fontFamily: _fontFamily);
+  static const gem = 0xF061;
 
-  static const gem = IconData(0xF061, fontFamily: _fontFamily);
+  static const gift_card_o = 0xF062;
 
-  static const gift_card_o = IconData(0xF062, fontFamily: _fontFamily);
+  static const gift_card = 0xF063;
 
-  static const gift_card = IconData(0xF063, fontFamily: _fontFamily);
+  static const gift_o = 0xF064;
 
-  static const gift_o = IconData(0xF064, fontFamily: _fontFamily);
+  static const gift = 0xF065;
 
-  static const gift = IconData(0xF065, fontFamily: _fontFamily);
+  static const gold_coin_o = 0xF066;
 
-  static const gold_coin_o = IconData(0xF066, fontFamily: _fontFamily);
+  static const gold_coin = 0xF067;
 
-  static const gold_coin = IconData(0xF067, fontFamily: _fontFamily);
+  static const good_job_o = 0xF068;
 
-  static const good_job_o = IconData(0xF068, fontFamily: _fontFamily);
+  static const good_job = 0xF069;
 
-  static const good_job = IconData(0xF069, fontFamily: _fontFamily);
+  static const goods_collect_o = 0xF06A;
 
-  static const goods_collect_o = IconData(0xF06A, fontFamily: _fontFamily);
+  static const goods_collect = 0xF06B;
 
-  static const goods_collect = IconData(0xF06B, fontFamily: _fontFamily);
+  static const graphic = 0xF06C;
 
-  static const graphic = IconData(0xF06C, fontFamily: _fontFamily);
+  static const home_o = 0xF06D;
 
-  static const home_o = IconData(0xF06D, fontFamily: _fontFamily);
+  static const hot_o = 0xF06E;
 
-  static const hot_o = IconData(0xF06E, fontFamily: _fontFamily);
+  static const hot_sale_o = 0xF06F;
 
-  static const hot_sale_o = IconData(0xF06F, fontFamily: _fontFamily);
+  static const hot_sale = 0xF070;
 
-  static const hot_sale = IconData(0xF070, fontFamily: _fontFamily);
+  static const hot = 0xF071;
 
-  static const hot = IconData(0xF071, fontFamily: _fontFamily);
+  static const hotel_o = 0xF072;
 
-  static const hotel_o = IconData(0xF072, fontFamily: _fontFamily);
+  static const idcard = 0xF073;
 
-  static const idcard = IconData(0xF073, fontFamily: _fontFamily);
+  static const info_o = 0xF074;
 
-  static const info_o = IconData(0xF074, fontFamily: _fontFamily);
+  static const info = 0xF075;
 
-  static const info = IconData(0xF075, fontFamily: _fontFamily);
+  static const invition = 0xF076;
 
-  static const invition = IconData(0xF076, fontFamily: _fontFamily);
+  static const label_o = 0xF077;
 
-  static const label_o = IconData(0xF077, fontFamily: _fontFamily);
+  static const label = 0xF078;
 
-  static const label = IconData(0xF078, fontFamily: _fontFamily);
+  static const like_o = 0xF079;
 
-  static const like_o = IconData(0xF079, fontFamily: _fontFamily);
+  static const like = 0xF07A;
 
-  static const like = IconData(0xF07A, fontFamily: _fontFamily);
+  static const live = 0xF07B;
 
-  static const live = IconData(0xF07B, fontFamily: _fontFamily);
+  static const location_o = 0xF07C;
 
-  static const location_o = IconData(0xF07C, fontFamily: _fontFamily);
+  static const location = 0xF07D;
 
-  static const location = IconData(0xF07D, fontFamily: _fontFamily);
+  static const lock = 0xF07E;
 
-  static const lock = IconData(0xF07E, fontFamily: _fontFamily);
+  static const logistics = 0xF07F;
 
-  static const logistics = IconData(0xF07F, fontFamily: _fontFamily);
+  static const manager_o = 0xF080;
 
-  static const manager_o = IconData(0xF080, fontFamily: _fontFamily);
+  static const manager = 0xF081;
 
-  static const manager = IconData(0xF081, fontFamily: _fontFamily);
+  static const map_marked = 0xF082;
 
-  static const map_marked = IconData(0xF082, fontFamily: _fontFamily);
+  static const medal_o = 0xF083;
 
-  static const medal_o = IconData(0xF083, fontFamily: _fontFamily);
+  static const medal = 0xF084;
 
-  static const medal = IconData(0xF084, fontFamily: _fontFamily);
+  static const minus = 0xF0E8;
 
-  static const minus = IconData(0xF0E8, fontFamily: _fontFamily);
+  static const more_o = 0xF085;
 
-  static const more_o = IconData(0xF085, fontFamily: _fontFamily);
+  static const more = 0xF086;
 
-  static const more = IconData(0xF086, fontFamily: _fontFamily);
+  static const music_o = 0xF087;
 
-  static const music_o = IconData(0xF087, fontFamily: _fontFamily);
+  static const music = 0xF088;
 
-  static const music = IconData(0xF088, fontFamily: _fontFamily);
+  static const new_arrival_o = 0xF089;
 
-  static const new_arrival_o = IconData(0xF089, fontFamily: _fontFamily);
+  static const new_arrival = 0xF08A;
 
-  static const new_arrival = IconData(0xF08A, fontFamily: _fontFamily);
+  static const new_o = 0xF08B;
 
-  static const new_o = IconData(0xF08B, fontFamily: _fontFamily);
+  static const new_ = 0xF08C;
 
-  static const new_ = IconData(0xF08C, fontFamily: _fontFamily);
+  static const newspaper_o = 0xF08D;
 
-  static const newspaper_o = IconData(0xF08D, fontFamily: _fontFamily);
+  static const notes_o = 0xF08E;
 
-  static const notes_o = IconData(0xF08E, fontFamily: _fontFamily);
+  static const orders_o = 0xF08F;
 
-  static const orders_o = IconData(0xF08F, fontFamily: _fontFamily);
+  static const other_pay = 0xF090;
 
-  static const other_pay = IconData(0xF090, fontFamily: _fontFamily);
+  static const paid = 0xF091;
 
-  static const paid = IconData(0xF091, fontFamily: _fontFamily);
+  static const passed = 0xF092;
 
-  static const passed = IconData(0xF092, fontFamily: _fontFamily);
+  static const pause_circle_o = 0xF093;
 
-  static const pause_circle_o = IconData(0xF093, fontFamily: _fontFamily);
+  static const pause_circle = 0xF094;
 
-  static const pause_circle = IconData(0xF094, fontFamily: _fontFamily);
+  static const pause = 0xF095;
 
-  static const pause = IconData(0xF095, fontFamily: _fontFamily);
+  static const peer_pay = 0xF096;
 
-  static const peer_pay = IconData(0xF096, fontFamily: _fontFamily);
+  static const pending_payment = 0xF097;
 
-  static const pending_payment = IconData(0xF097, fontFamily: _fontFamily);
+  static const phone_circle_o = 0xF098;
 
-  static const phone_circle_o = IconData(0xF098, fontFamily: _fontFamily);
+  static const phone_circle = 0xF099;
 
-  static const phone_circle = IconData(0xF099, fontFamily: _fontFamily);
+  static const phone_o = 0xF09A;
 
-  static const phone_o = IconData(0xF09A, fontFamily: _fontFamily);
+  static const phone = 0xF09B;
 
-  static const phone = IconData(0xF09B, fontFamily: _fontFamily);
+  static const photo_fail = 0xF0E5;
 
-  static const photo_fail = IconData(0xF0E5, fontFamily: _fontFamily);
+  static const photo_o = 0xF09C;
 
-  static const photo_o = IconData(0xF09C, fontFamily: _fontFamily);
+  static const photo = 0xF09D;
 
-  static const photo = IconData(0xF09D, fontFamily: _fontFamily);
+  static const photograph = 0xF09E;
 
-  static const photograph = IconData(0xF09E, fontFamily: _fontFamily);
+  static const play_circle_o = 0xF09F;
 
-  static const play_circle_o = IconData(0xF09F, fontFamily: _fontFamily);
+  static const play_circle = 0xF0A0;
 
-  static const play_circle = IconData(0xF0A0, fontFamily: _fontFamily);
+  static const play = 0xF0A1;
 
-  static const play = IconData(0xF0A1, fontFamily: _fontFamily);
+  static const plus = 0xF0A2;
 
-  static const plus = IconData(0xF0A2, fontFamily: _fontFamily);
+  static const point_gift_o = 0xF0A3;
 
-  static const point_gift_o = IconData(0xF0A3, fontFamily: _fontFamily);
+  static const point_gift = 0xF0A4;
 
-  static const point_gift = IconData(0xF0A4, fontFamily: _fontFamily);
+  static const points = 0xF0A5;
 
-  static const points = IconData(0xF0A5, fontFamily: _fontFamily);
+  static const printer = 0xF0A6;
 
-  static const printer = IconData(0xF0A6, fontFamily: _fontFamily);
+  static const qr_invalid = 0xF0A7;
 
-  static const qr_invalid = IconData(0xF0A7, fontFamily: _fontFamily);
+  static const qr = 0xF0A8;
 
-  static const qr = IconData(0xF0A8, fontFamily: _fontFamily);
+  static const question_o = 0xF0A9;
 
-  static const question_o = IconData(0xF0A9, fontFamily: _fontFamily);
+  static const question = 0xF0AA;
 
-  static const question = IconData(0xF0AA, fontFamily: _fontFamily);
+  static const records = 0xF0AB;
 
-  static const records = IconData(0xF0AB, fontFamily: _fontFamily);
+  static const refund_o = 0xF0AC;
 
-  static const refund_o = IconData(0xF0AC, fontFamily: _fontFamily);
+  static const replay = 0xF0AD;
 
-  static const replay = IconData(0xF0AD, fontFamily: _fontFamily);
+  static const scan = 0xF0AE;
 
-  static const scan = IconData(0xF0AE, fontFamily: _fontFamily);
+  static const search = 0xF0AF;
 
-  static const search = IconData(0xF0AF, fontFamily: _fontFamily);
+  static const send_gift_o = 0xF0B0;
 
-  static const send_gift_o = IconData(0xF0B0, fontFamily: _fontFamily);
+  static const send_gift = 0xF0B1;
 
-  static const send_gift = IconData(0xF0B1, fontFamily: _fontFamily);
+  static const service_o = 0xF0B2;
 
-  static const service_o = IconData(0xF0B2, fontFamily: _fontFamily);
+  static const service = 0xF0B3;
 
-  static const service = IconData(0xF0B3, fontFamily: _fontFamily);
+  static const setting_o = 0xF0B4;
 
-  static const setting_o = IconData(0xF0B4, fontFamily: _fontFamily);
+  static const setting = 0xF0B5;
 
-  static const setting = IconData(0xF0B5, fontFamily: _fontFamily);
+  static const share_o = 0xF0E7;
 
-  static const share_o = IconData(0xF0E7, fontFamily: _fontFamily);
+  static const share = 0xF0B6;
 
-  static const share = IconData(0xF0B6, fontFamily: _fontFamily);
+  static const shop_collect_o = 0xF0B7;
 
-  static const shop_collect_o = IconData(0xF0B7, fontFamily: _fontFamily);
+  static const shop_collect = 0xF0B8;
 
-  static const shop_collect = IconData(0xF0B8, fontFamily: _fontFamily);
+  static const shop_o = 0xF0B9;
 
-  static const shop_o = IconData(0xF0B9, fontFamily: _fontFamily);
+  static const shop = 0xF0BA;
 
-  static const shop = IconData(0xF0BA, fontFamily: _fontFamily);
+  static const shopping_cart_o = 0xF0BB;
 
-  static const shopping_cart_o = IconData(0xF0BB, fontFamily: _fontFamily);
+  static const shopping_cart = 0xF0BC;
 
-  static const shopping_cart = IconData(0xF0BC, fontFamily: _fontFamily);
+  static const shrink = 0xF0BD;
 
-  static const shrink = IconData(0xF0BD, fontFamily: _fontFamily);
+  static const sign = 0xF0BE;
 
-  static const sign = IconData(0xF0BE, fontFamily: _fontFamily);
+  static const smile_comment_o = 0xF0BF;
 
-  static const smile_comment_o = IconData(0xF0BF, fontFamily: _fontFamily);
+  static const smile_comment = 0xF0C0;
 
-  static const smile_comment = IconData(0xF0C0, fontFamily: _fontFamily);
+  static const smile_o = 0xF0C1;
 
-  static const smile_o = IconData(0xF0C1, fontFamily: _fontFamily);
+  static const smile = 0xF0C2;
 
-  static const smile = IconData(0xF0C2, fontFamily: _fontFamily);
+  static const star_o = 0xF0C3;
 
-  static const star_o = IconData(0xF0C3, fontFamily: _fontFamily);
+  static const star = 0xF0C4;
 
-  static const star = IconData(0xF0C4, fontFamily: _fontFamily);
+  static const stop_circle_o = 0xF0C5;
 
-  static const stop_circle_o = IconData(0xF0C5, fontFamily: _fontFamily);
+  static const stop_circle = 0xF0C6;
 
-  static const stop_circle = IconData(0xF0C6, fontFamily: _fontFamily);
+  static const stop = 0xF0C7;
 
-  static const stop = IconData(0xF0C7, fontFamily: _fontFamily);
+  static const success = 0xF0C8;
 
-  static const success = IconData(0xF0C8, fontFamily: _fontFamily);
+  static const thumb_circle_o = 0xF0C9;
 
-  static const thumb_circle_o = IconData(0xF0C9, fontFamily: _fontFamily);
+  static const thumb_circle = 0xF0CA;
 
-  static const thumb_circle = IconData(0xF0CA, fontFamily: _fontFamily);
+  static const todo_list_o = 0xF0CB;
 
-  static const todo_list_o = IconData(0xF0CB, fontFamily: _fontFamily);
+  static const todo_list = 0xF0CC;
 
-  static const todo_list = IconData(0xF0CC, fontFamily: _fontFamily);
+  static const tosend = 0xF0CD;
 
-  static const tosend = IconData(0xF0CD, fontFamily: _fontFamily);
+  static const tv_o = 0xF0CE;
 
-  static const tv_o = IconData(0xF0CE, fontFamily: _fontFamily);
+  static const umbrella_circle = 0xF0CF;
 
-  static const umbrella_circle = IconData(0xF0CF, fontFamily: _fontFamily);
+  static const underway_o = 0xF0D0;
 
-  static const underway_o = IconData(0xF0D0, fontFamily: _fontFamily);
+  static const underway = 0xF0D1;
 
-  static const underway = IconData(0xF0D1, fontFamily: _fontFamily);
+  static const upgrade = 0xF0D2;
 
-  static const upgrade = IconData(0xF0D2, fontFamily: _fontFamily);
+  static const user_circle_o = 0xF0D3;
 
-  static const user_circle_o = IconData(0xF0D3, fontFamily: _fontFamily);
+  static const user_o = 0xF0D4;
 
-  static const user_o = IconData(0xF0D4, fontFamily: _fontFamily);
+  static const video_o = 0xF0D5;
 
-  static const video_o = IconData(0xF0D5, fontFamily: _fontFamily);
+  static const video = 0xF0D6;
 
-  static const video = IconData(0xF0D6, fontFamily: _fontFamily);
+  static const vip_card_o = 0xF0D7;
 
-  static const vip_card_o = IconData(0xF0D7, fontFamily: _fontFamily);
+  static const vip_card = 0xF0D8;
 
-  static const vip_card = IconData(0xF0D8, fontFamily: _fontFamily);
+  static const volume_o = 0xF0D9;
 
-  static const volume_o = IconData(0xF0D9, fontFamily: _fontFamily);
+  static const volume = 0xF0DA;
 
-  static const volume = IconData(0xF0DA, fontFamily: _fontFamily);
+  static const wap_home_o = 0xF0DB;
 
-  static const wap_home_o = IconData(0xF0DB, fontFamily: _fontFamily);
+  static const wap_home = 0xF0DC;
 
-  static const wap_home = IconData(0xF0DC, fontFamily: _fontFamily);
+  static const wap_nav = 0xF0DD;
 
-  static const wap_nav = IconData(0xF0DD, fontFamily: _fontFamily);
+  static const warn_o = 0xF0DE;
 
-  static const warn_o = IconData(0xF0DE, fontFamily: _fontFamily);
+  static const warning_o = 0xF0DF;
 
-  static const warning_o = IconData(0xF0DF, fontFamily: _fontFamily);
+  static const warning = 0xF0E0;
 
-  static const warning = IconData(0xF0E0, fontFamily: _fontFamily);
+  static const weapp_nav = 0xF0E1;
 
-  static const weapp_nav = IconData(0xF0E1, fontFamily: _fontFamily);
+  static const wechat = 0xF0E2;
 
-  static const wechat = IconData(0xF0E2, fontFamily: _fontFamily);
-
-  static const youzan_shield = IconData(0xF0E3, fontFamily: _fontFamily);
+  static const youzan_shield = 0xF0E3;
 }

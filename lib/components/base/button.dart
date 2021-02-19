@@ -14,9 +14,9 @@ class FlanButton extends RouteStatelessWidget {
     this.text,
     this.color,
     this.gradient,
-    this.iconData,
+    this.iconName,
     this.iconUrl,
-    this.iconPrefix,
+    this.iconPrefix = kFlanIconsFamily,
     this.iconPosition = FlanButtonIconPosition.left,
     this.block = false,
     this.plain = false,
@@ -37,6 +37,7 @@ class FlanButton extends RouteStatelessWidget {
     bool replace = false,
   })  : assert(type != null && type is FlanButtonType),
         assert(size != null && size is FlanButtonSize),
+        assert(iconPrefix != null),
         assert(iconPosition != null && iconPosition is FlanButtonIconPosition),
         assert(block != null),
         assert(plain != null),
@@ -70,7 +71,7 @@ class FlanButton extends RouteStatelessWidget {
   final Gradient gradient;
 
   /// 左侧图标名称
-  final IconData iconData;
+  final int iconName;
 
   /// 左侧图片链接
   final String iconUrl;
@@ -211,16 +212,16 @@ class FlanButton extends RouteStatelessWidget {
       final iSize = DefaultTextStyle.of(context).style.fontSize * 1.2;
 
       if (this.loading) {
-        return FlanIcon.icon(
-          Icons.run_circle,
+        return FlanIcon.name(
+          FlanIcons.circle,
           color: this._themeType.color,
           size: iSize,
         );
       }
 
-      if (this.iconData != null || this.iconUrl != null) {
+      if (this.iconName != null || this.iconUrl != null) {
         return FlanIcon(
-          iconData: this.iconData,
+          iconName: this.iconName,
           iconUrl: this.iconUrl,
           color: this._themeType.color,
           size: 18.0,
@@ -376,7 +377,7 @@ class FlanButton extends RouteStatelessWidget {
   @override
   void debugFillProperties(DiagnosticPropertiesBuilder properties) {
     properties.add(DiagnosticsProperty<String>("text", text, defaultValue: ""));
-    properties.add(DiagnosticsProperty<IconData>("iconData", iconData));
+    properties.add(DiagnosticsProperty<int>("iconName", iconName));
     properties.add(DiagnosticsProperty<String>("iconUrl", iconUrl));
     properties.add(DiagnosticsProperty<Color>("color", color));
     properties

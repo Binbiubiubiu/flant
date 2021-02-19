@@ -19,9 +19,9 @@ class FlanImage extends StatelessWidget {
     this.lazyLoad = false,
     this.showError = true,
     this.showLoading = true,
-    this.errorIconData = FlanIcons.photo_fail,
+    this.errorIconName = FlanIcons.photo_fail,
     this.errorIconUrl,
-    this.loadingIconData = FlanIcons.photo,
+    this.loadingIconName = FlanIcons.photo,
     this.loadingIconUrl,
     this.onClick,
     this.onLoad,
@@ -67,13 +67,13 @@ class FlanImage extends StatelessWidget {
   final bool showLoading;
 
   /// 失败时提示的图标名称
-  final IconData errorIconData;
+  final int errorIconName;
 
   /// 失败时提示的图片链接
   final String errorIconUrl;
 
   /// 加载时提示的图标名称
-  final IconData loadingIconData;
+  final int loadingIconName;
 
   /// 加载时提示的图片链接
   final String loadingIconUrl;
@@ -144,7 +144,7 @@ class FlanImage extends StatelessWidget {
           child: Center(
             child: this.loadingSlot ??
                 FlanIcon(
-                  iconData: this.loadingIconData,
+                  iconName: this.loadingIconName,
                   iconUrl: this.loadingIconUrl,
                 ),
           ),
@@ -191,7 +191,7 @@ class FlanImage extends StatelessWidget {
           child: Center(
             child: this.errorSlot ??
                 FlanIcon(
-                  iconData: this.errorIconData,
+                  iconName: this.errorIconName,
                   iconUrl: this.errorIconUrl,
                 ),
           ),
@@ -244,11 +244,10 @@ class FlanImage extends StatelessWidget {
         DiagnosticsProperty<bool>("showError", showError, defaultValue: true));
     properties.add(DiagnosticsProperty<bool>("showLoading", showLoading,
         defaultValue: true));
-    properties.add(DiagnosticsProperty<IconData>("errorIconData", errorIconData,
+    properties.add(DiagnosticsProperty<int>("errorIconName", errorIconName,
         defaultValue: FlanIcons.photo_fail));
     properties.add(DiagnosticsProperty<String>("errorIconUrl", errorIconUrl));
-    properties.add(DiagnosticsProperty<IconData>(
-        "loadingIconData", loadingIconData,
+    properties.add(DiagnosticsProperty<int>("loadingIconName", loadingIconName,
         defaultValue: FlanIcons.photo));
     properties
         .add(DiagnosticsProperty<String>("loadingIconUrl", loadingIconUrl));

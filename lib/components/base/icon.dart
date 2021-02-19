@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/foundation.dart';
 
 import '../show/badge.dart';
-
+import '../../styles/icons.dart';
 export '../../styles/icons.dart';
 
 /// ### FlanIcon 单元格
@@ -10,27 +10,27 @@ export '../../styles/icons.dart';
 class FlanIcon extends StatelessWidget {
   const FlanIcon({
     Key key,
-    this.iconData,
+    this.iconName,
     this.iconUrl,
     this.dot = false,
     this.size,
     this.color,
-    this.classPrefix,
+    this.classPrefix = kFlanIconsFamily,
     this.badge,
     this.onClick,
   })  : assert(dot != null),
         super(key: key);
 
-  const FlanIcon.icon(
-    this.iconData, {
+  const FlanIcon.name(
+    this.iconName, {
     Key key,
     this.dot = false,
     this.size,
     this.color,
-    this.classPrefix,
+    this.classPrefix = kFlanIconsFamily,
     this.badge,
     this.onClick,
-  })  : assert(iconData != null),
+  })  : assert(iconName != null),
         assert(dot != null),
         this.iconUrl = null,
         super(key: key);
@@ -41,17 +41,17 @@ class FlanIcon extends StatelessWidget {
     this.dot = false,
     this.size,
     this.color,
-    this.classPrefix,
+    this.classPrefix = kFlanIconsFamily,
     this.badge,
     this.onClick,
   })  : assert(iconUrl != null),
         assert(dot != null),
-        this.iconData = null,
+        this.iconName = null,
         super(key: key);
 
   // ****************** Props ******************
   /// 图标名称
-  final IconData iconData;
+  final int iconName;
 
   /// 图片链接
   final String iconUrl;
@@ -97,9 +97,9 @@ class FlanIcon extends StatelessWidget {
 
   // 构建图片图标
   Widget _buildIcon(BuildContext context) {
-    if (this.iconData != null) {
+    if (this.iconName != null) {
       return Icon(
-        this.iconData,
+        IconData(this.iconName, fontFamily: this.classPrefix),
         color: this.color,
         size: this.size,
       );
@@ -130,7 +130,7 @@ class FlanIcon extends StatelessWidget {
 
   @override
   void debugFillProperties(DiagnosticPropertiesBuilder properties) {
-    properties.add(DiagnosticsProperty<IconData>("iconData", iconData));
+    properties.add(DiagnosticsProperty<int>("iconName", iconName));
     properties.add(DiagnosticsProperty<String>("iconUrl", iconUrl));
     properties.add(DiagnosticsProperty<bool>("dot", dot));
     properties.add(DiagnosticsProperty<double>("size", size));

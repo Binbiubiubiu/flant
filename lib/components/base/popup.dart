@@ -21,7 +21,7 @@ class FlanPopup extends StatefulWidget {
     // this.closeOnPopstate = false,
     this.closeOnClickOverlay = true,
     this.closeable = false,
-    this.closeIconData = FlanIcons.cross,
+    this.closeIconName = FlanIcons.cross,
     this.closeIconUrl,
     this.closeIconPosition = FlanPopupCloseIconPosition.topRight,
     this.transitionBuilder,
@@ -91,7 +91,7 @@ class FlanPopup extends StatefulWidget {
   final bool closeable;
 
   /// 关闭图标名称
-  final IconData closeIconData;
+  final int closeIconName;
 
   /// 关闭图片链接
   final String closeIconUrl;
@@ -356,7 +356,7 @@ class _FlanPopupState extends State<FlanPopup> {
 
   Widget _buildCloseIcon() {
     final icon = _FlanPopupCloseIcon(
-      closeIconData: this.widget.closeIconData,
+      closeIconName: this.widget.closeIconName,
       closeIconUrl: this.widget.closeIconUrl,
       onPress: this.widget.onClickCloseIcon,
     );
@@ -422,8 +422,8 @@ class _FlanPopupState extends State<FlanPopup> {
         defaultValue: true));
     properties.add(DiagnosticsProperty<bool>("closeable", widget.closeable,
         defaultValue: false));
-    properties.add(DiagnosticsProperty<IconData>(
-        "closeIconData", widget.closeIconData,
+    properties.add(DiagnosticsProperty<int>(
+        "closeIconName", widget.closeIconName,
         defaultValue: FlanIcons.cross));
     properties
         .add(DiagnosticsProperty<String>("closeIconUrl", widget.closeIconUrl));
@@ -550,13 +550,13 @@ enum FlanPopupCloseIconPosition {
 class _FlanPopupCloseIcon extends StatefulWidget {
   const _FlanPopupCloseIcon({
     Key key,
-    this.closeIconData,
+    this.closeIconName,
     this.closeIconUrl,
     this.onPress,
   }) : super(key: key);
 
   /// 图标属性
-  final IconData closeIconData;
+  final int closeIconName;
 
   /// 图标链接
   final String closeIconUrl;
@@ -604,7 +604,7 @@ class __FlanPopupCloseIconState extends State<_FlanPopupCloseIcon> {
         },
         onTapCancel: this.disactiveText,
         child: FlanIcon(
-          iconData: this.widget.closeIconData,
+          iconName: this.widget.closeIconName,
           iconUrl: this.widget.closeIconUrl,
           color: this.active
               ? ThemeVars.popupCloseIconActiveColor
