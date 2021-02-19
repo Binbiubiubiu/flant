@@ -9,8 +9,8 @@
 - [x] Icon 图标
 - [x] Image 图片
 - [x] Layout 布局
-- [ ] Popup 弹出层
-- [ ] Style 内置样式
+- [x] Popup 弹出层
+- [x] Style 内置样式
 - [ ] Toast 轻提示
 
 ##### 表单组件
