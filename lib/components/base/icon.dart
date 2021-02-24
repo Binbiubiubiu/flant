@@ -97,10 +97,12 @@ class FlanIcon extends StatelessWidget {
 
   // 构建图片图标
   Widget _buildIcon(BuildContext context) {
+    final textStyle = DefaultTextStyle.of(context).style;
+
     if (this.iconName != null) {
       return Icon(
         IconData(this.iconName, fontFamily: this.classPrefix),
-        color: this.color,
+        color: this.color ?? textStyle.color,
         size: this.size,
       );
     }
@@ -112,7 +114,7 @@ class FlanIcon extends StatelessWidget {
     if (isNetWork) {
       return Image.network(
         this.iconUrl,
-        color: this.color,
+        color: this.color, //?? textStyle.color,
         width: size,
         height: size,
         fit: BoxFit.contain,
@@ -121,7 +123,7 @@ class FlanIcon extends StatelessWidget {
 
     return Image.asset(
       this.iconUrl,
-      color: this.color,
+      color: this.color, //?? textStyle.color,
       width: size,
       height: size,
       fit: BoxFit.contain,

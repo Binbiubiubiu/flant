@@ -83,7 +83,7 @@ Widget kFlanSlideRightTransitionBuilder(animation, child) {
 class FlanTransition extends StatefulWidget {
   FlanTransition({
     this.curveBuilder = kFlanCurveBuilder,
-    this.transitionBuilder,
+    @required this.transitionBuilder,
     this.child,
   })  : assert(curveBuilder != null),
         assert(transitionBuilder != null);
@@ -152,6 +152,7 @@ class _FlanTransitionState extends State<FlanTransition>
         ..dispose();
       this.animationController = null;
     }
+
     super.dispose();
   }
 

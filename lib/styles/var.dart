@@ -662,13 +662,13 @@ class ThemeVars {
   // @sidebar-selected-background-color= @white;
 
   // // Skeleton
-  // @skeleton-row-height= 16px;
-  // @skeleton-row-background-color= @active-color;
-  // @skeleton-row-margin-top= @padding-sm;
-  // @skeleton-title-width= 40%;
-  // @skeleton-avatar-size= 32px;
-  // @skeleton-avatar-background-color= @active-color;
-  // @skeleton-animation-duration= 1.2s;
+  static const skeletonRowHeight = 16.0;
+  static const skeletonRowBackgroundColor = activeColor;
+  static const skeletonRowMarginTop = paddingSm;
+  static const skeletonTitleWidth = .4;
+  static const skeletonAvatarSize = 32.0;
+  static const skeletonAvatarBackgroundColor = activeColor;
+  static const skeletonAnimationDuration = Duration(milliseconds: 2000);
 
   // // Slider
   // @slider-active-background-color= @blue;
@@ -811,22 +811,22 @@ class ThemeVars {
   static const tagPlainBackgroundColor = white;
 
   // Toast
-  static const toastMaxWidth = "70%";
+  static const toastMaxWidth = .7;
   static const toastFontSize = fontSizeMd;
   static const toastTextColor = white;
   static const toastLoadingIconColor = white;
   static const toastLineHeight = lineHeightMd;
   static const toastBorderRadius = borderRadiusLg;
-//  static const  toastBackgroundColor= fade(@black, 70%);
+  static final toastBackgroundColor = black.withOpacity(.7);
   static const toastIconSize = 36.0;
   static const toastTextMinWidth = 96.0;
   static const toastTextPadding =
       const EdgeInsets.symmetric(vertical: paddingXs, horizontal: paddingSm);
-  static const toastDefaultPadding = paddingMd;
+  static const toastDefaultPadding = const EdgeInsets.all(paddingMd);
   static const toastDefaultWidth = 88.0;
   static const toastDefaultMinHeight = 88.0;
-  static const toastPositionTopDistance = "20%";
-  static const toastPositionBottomDistance = "20%";
+  static const toastPositionTopDistance = .2;
+  static const toastPositionBottomDistance = .2;
 
   // // TreeSelect
   // @tree-select-font-size= @font-size-md;
