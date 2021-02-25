@@ -84,6 +84,7 @@ class FlanSkeleton extends StatelessWidget {
       child: Padding(
         padding: const EdgeInsets.symmetric(horizontal: ThemeVars.paddingMd),
         child: Row(
+          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             this._buildAvatar(context),
             Expanded(
@@ -108,7 +109,7 @@ class FlanSkeleton extends StatelessWidget {
         padding: const EdgeInsets.only(right: ThemeVars.paddingMd),
         child: CircleAvatar(
           backgroundColor: ThemeVars.skeletonAvatarBackgroundColor,
-          radius: this.avatarSize ?? ThemeVars.skeletonAvatarSize,
+          radius: (this.avatarSize ?? ThemeVars.skeletonAvatarSize) / 2,
         ),
       );
     }

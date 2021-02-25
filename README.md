@@ -11,7 +11,7 @@
 - [x] Layout 布局
 - [x] Popup 弹出层
 - [x] Style 内置样式
-- [ ] Toast 轻提示
+- [x] Toast 轻提示
 
 ##### 表单组件
 
@@ -58,7 +58,7 @@
 - [ ] NoticeBar 通知栏
 - [ ] Popover 气泡弹出框
 - [ ] Progress 进度条
-- [ ] Skeleton 骨架屏
+- [x] Skeleton 骨架屏
 - [ ] Steps 步骤条
 - [ ] Sticky 粘性布局
 - [ ] Swipe 轮播
