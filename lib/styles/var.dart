@@ -668,7 +668,7 @@ class ThemeVars {
   static const skeletonTitleWidth = .4;
   static const skeletonAvatarSize = 32.0;
   static const skeletonAvatarBackgroundColor = activeColor;
-  static const skeletonAnimationDuration = Duration(milliseconds: 2000);
+  static const skeletonAnimationDuration = Duration(milliseconds: 600);
 
   // // Slider
   // @slider-active-background-color= @blue;
