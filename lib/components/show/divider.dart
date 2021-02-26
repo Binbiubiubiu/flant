@@ -40,6 +40,7 @@ class FlanDivider extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Material(
+      color: Colors.transparent,
       textStyle: TextStyle(
         color: this.style?.color ?? ThemeVars.dividerTextColor,
         fontSize: ThemeVars.dividerFontSize,

@@ -7,7 +7,7 @@ const DEFAULT_LAST_ROW_WIDTH = 0.6;
 
 /// ### Skeleton 骨架屏
 class FlanSkeleton extends StatelessWidget {
-  const FlanSkeleton({
+  FlanSkeleton({
     Key key,
     this.row = 0,
     this.rowWidth = DEFAULT_ROW_WIDTH,
@@ -80,27 +80,33 @@ class FlanSkeleton extends StatelessWidget {
       return this.child;
     }
 
-    return _AnimatedOpacityBlock(
-      child: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: ThemeVars.paddingMd),
-        child: Row(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            this._buildAvatar(context),
-            Expanded(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  SizedBox(height: ThemeVars.paddingXs),
-                  this._buildTitle(context),
-                  ...this._buildRows(context),
-                ],
-              ),
+    final skeleton = Padding(
+      padding: const EdgeInsets.symmetric(horizontal: ThemeVars.paddingMd),
+      child: Row(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          this._buildAvatar(context),
+          Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                SizedBox(height: ThemeVars.paddingXs),
+                this._buildTitle(context),
+                ...this._buildRows(context),
+              ],
             ),
-          ],
-        ),
+          ),
+        ],
       ),
     );
+
+    if (this.animate) {
+      return _AnimatedOpacityBlock(
+        child: skeleton,
+      );
+    }
+
+    return skeleton;
   }
 
   _buildAvatar(BuildContext context) {
@@ -176,6 +182,31 @@ class FlanSkeleton extends StatelessWidget {
 
     return rows;
   }
+
+  @override
+  void debugFillProperties(DiagnosticPropertiesBuilder properties) {
+    properties.add(DiagnosticsProperty<int>("row", row, defaultValue: 0));
+    properties.add(
+        DiagnosticsProperty<double>("rowWidth", rowWidth, defaultValue: 1.0));
+    properties
+        .add(DiagnosticsProperty<bool>("title", title, defaultValue: false));
+    properties
+        .add(DiagnosticsProperty<bool>("avatar", avatar, defaultValue: false));
+    properties
+        .add(DiagnosticsProperty<bool>("loading", loading, defaultValue: true));
+    properties
+        .add(DiagnosticsProperty<bool>("animate", animate, defaultValue: true));
+    properties
+        .add(DiagnosticsProperty<bool>("round", round, defaultValue: true));
+    properties.add(DiagnosticsProperty<double>("titleWidth", titleWidth,
+        defaultValue: 0.4));
+    properties.add(DiagnosticsProperty<double>("avatarSize", avatarSize,
+        defaultValue: 32.0));
+    properties.add(DiagnosticsProperty<FlanSkeletonAvatarShape>(
+        "avatarShape", avatarShape,
+        defaultValue: FlanSkeletonAvatarShape.round));
+    super.debugFillProperties(properties);
+  }
 }
 
 class _AnimatedOpacityBlock extends StatefulWidget {
@@ -190,29 +221,42 @@ class _AnimatedOpacityBlock extends StatefulWidget {
   __AnimatedOpacityBlockState createState() => __AnimatedOpacityBlockState();
 }
 
-class __AnimatedOpacityBlockState extends State<_AnimatedOpacityBlock> {
-  bool show = true;
+class __AnimatedOpacityBlockState extends State<_AnimatedOpacityBlock>
+    with TickerProviderStateMixin {
+  AnimationController controller;
+  Animation<double> animation;
 
   @override
   void initState() {
+    this.controller = AnimationController(
+      duration: ThemeVars.skeletonAnimationDuration,
+      vsync: this,
+    );
+    this.animation = TweenSequence([
+      TweenSequenceItem(tween: Tween(begin: 1.0, end: 0.6), weight: 0.5),
+      TweenSequenceItem(tween: Tween(begin: 0.6, end: 1.0), weight: 0.5),
+    ]).animate(CurvedAnimation(
+      parent: this.controller,
+      curve: Curves.easeInOut,
+    ))
+      ..addListener(this._handleChange);
+    this.controller.repeat(reverse: true);
     super.initState();
-
-    Future.delayed(Duration(microseconds: 1)).then((value) {
-      setState(() {
-        show = false;
-      });
-    });
   }
 
   @override
+  void dispose() {
+    this.animation?.removeListener(this._handleChange);
+    this.controller?.dispose();
+    super.dispose();
+  }
+
+  _handleChange() => this.setState(() {});
+
+  @override
   Widget build(BuildContext context) {
-    return AnimatedOpacity(
-      onEnd: () {
-        setState(() => show = !show);
-      },
-      duration: ThemeVars.skeletonAnimationDuration,
-      curve: Curves.easeInOut,
-      opacity: show ? 1.0 : 0.6,
+    return Opacity(
+      opacity: this.animation.value,
       child: this.widget.child,
     );
   }

@@ -458,11 +458,12 @@ class ThemeVars {
   // @list-text-line-height= 50px;
 
   // // Loading
-  // @loading-text-color= @gray-6;
-  // @loading-text-font-size= @font-size-md;
-  // @loading-spinner-color= @gray-5;
-  // @loading-spinner-size= 30px;
-  // @loading-spinner-animation-duration= 0.8s;
+  static const loadingTextColor = gray6;
+  static const loadingTextFontSize = fontSizeMd;
+  static const loadingSpinnerColor = gray5;
+  static const loadingSpinnerSize = 30.0;
+  static const loadingSpinnerAnimationDuration =
+      const Duration(milliseconds: 800);
 
   // // NavBar
   // @nav-bar-height= 46px;
@@ -668,7 +669,7 @@ class ThemeVars {
   static const skeletonTitleWidth = .4;
   static const skeletonAvatarSize = 32.0;
   static const skeletonAvatarBackgroundColor = activeColor;
-  static const skeletonAnimationDuration = Duration(milliseconds: 600);
+  static const skeletonAnimationDuration = Duration(milliseconds: 1200);
 
   // // Slider
   // @slider-active-background-color= @blue;

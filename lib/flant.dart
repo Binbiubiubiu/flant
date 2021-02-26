@@ -17,3 +17,5 @@ export './components/show/circle.dart';
 export './components/show/divider.dart';
 export './components/show/skeleton.dart';
 export './components/show/tag.dart';
+// alert components
+export './components/alert/loading.dart';
