@@ -467,26 +467,28 @@ class ThemeVars {
   static const loadingSpinnerAnimationDuration =
       const Duration(milliseconds: 800);
 
-  // // NavBar
-  // @nav-bar-height= 46px;
-  // @nav-bar-background-color= @white;
-  // @nav-bar-arrow-size= 16px;
-  // @nav-bar-icon-color= @blue;
-  // @nav-bar-text-color= @blue;
-  // @nav-bar-title-font-size= @font-size-lg;
-  // @nav-bar-title-text-color= @text-color;
-  // @nav-bar-z-index= 1;
+  // NavBar
+  static const navBarHeight = 46.0;
+  static const navBarBackgroundColor = white;
+  static const navBarArrowSize = 16.0;
+  static const navBarIconColor = blue;
+  static const navBarTextColor = blue;
+  static const navBarTitleFontSize = fontSizeLg;
+  static const navBarTitleTextColor = textColor;
+  static const navBarZIndex = 1;
 
-  // // NoticeBar
-  // @notice-bar-height= 40px;
-  // @notice-bar-padding= 0 @padding-md;
-  // @notice-bar-wrapable-padding= @padding-xs @padding-md;
-  // @notice-bar-text-color= @orange-dark;
-  // @notice-bar-font-size= @font-size-md;
-  // @notice-bar-line-height= 24px;
-  // @notice-bar-background-color= @orange-light;
-  // @notice-bar-icon-size= 16px;
-  // @notice-bar-icon-min-width= 24px;
+  // NoticeBar
+  static const noticeBarHeight = 40.0;
+  static const noticeBarPadding =
+      const EdgeInsets.symmetric(vertical: 0, horizontal: paddingMd);
+  static const noticeBarWrapablePadding =
+      const EdgeInsets.symmetric(vertical: paddingXs, horizontal: paddingMd);
+  static const noticeBarTextColor = orangeDark;
+  static const noticeBarFontSize = fontSizeMd;
+  static const noticeBarLineHeight = 24.0;
+  static const noticeBarBackgroundColor = orangeLight;
+  static const noticeBarIconSize = 16.0;
+  static const noticeBarIconMinWidth = 24.0;
 
   // // Notify
   // @notify-text-color= @white;
@@ -596,21 +598,21 @@ class ThemeVars {
   static const progressPivotLineHeight = 1.6;
   static const progressPivotBackgroundColor = blue;
 
-  // // PullRefresh
-  // @pull-refresh-head-height= 50px;
-  // @pull-refresh-head-font-size= @font-size-md;
-  // @pull-refresh-head-text-color= @gray-6;
+  // PullRefresh
+  static const pullRefreshHeadHeight = 50.0;
+  static const pullRefreshHeadFontSize = fontSizeMd;
+  static const pullRefreshHeadTextColor = gray6;
 
-  // // Radio
-  // @radio-size= 20px;
-  // @radio-border-color= @gray-5;
-  // @radio-transition-duration= @animation-duration-fast;
-  // @radio-label-margin= @padding-xs;
-  // @radio-label-color= @text-color;
-  // @radio-checked-icon-color= @blue;
-  // @radio-disabled-icon-color= @gray-5;
-  // @radio-disabled-label-color= @gray-5;
-  // @radio-disabled-background-color= @border-color;
+  // Radio
+  static const radioSize = 20.0;
+  static const radioBorderColor = gray5;
+  static const radioTransitionDuration = animationDurationFast;
+  static const radioLabelMargin = paddingXs;
+  static const radioLabelColor = textColor;
+  static const radioCheckedIconColor = blue;
+  static const radioDisabledIconColor = gray5;
+  static const radioDisabledLabelColor = gray5;
+  static const radioDisabledBackgroundColor = borderColor;
 
   // // Rate
   // @rate-icon-size= 20px;
@@ -749,49 +751,53 @@ class ThemeVars {
   // @swipe-indicator-active-background-color= @blue;
   // @swipe-indicator-inactive-background-color= @border-color;
 
-  // // Switch
-  // @switch-size= 30px;
-  // @switch-width= 2em;
-  // @switch-height= 1em;
-  // @switch-node-size= 1em;
-  // @switch-node-background-color= @white;
-  // @switch-node-box-shadow= 0 3px 1px 0 rgba(0, 0, 0, 0.05),
-  //   0 2px 2px 0 rgba(0, 0, 0, 0.1), 0 3px 3px 0 rgba(0, 0, 0, 0.05);
-  // @switch-background-color= @white;
-  // @switch-on-background-color= @blue;
-  // @switch-transition-duration= @animation-duration-base;
-  // @switch-disabled-opacity= @disabled-opacity;
-  // @switch-border= @border-width-base solid rgba(0, 0, 0, 0.1);
+  // Switch
+  static const switchSize = 30.0;
+  static const switchWidth = 2.0;
+  static const switchHeight = 1.0;
+  static const switchNodeSize = 1.0;
+  static const switchNodeBackgroundColor = white;
+  static const switchNodeBoxShadow =
+      "0 3px 1px 0 rgba(0, 0, 0, 0.05),0 2px 2px 0 rgba(0, 0, 0, 0.1), 0 3px 3px 0 rgba(0, 0, 0, 0.05)";
+  static const switchBackgroundColor = white;
+  static const switchOnBackgroundColor = blue;
+  static const switchTransitionDuration = animationDurationBase;
+  static const switchDisabledOpacity = disabledOpacity;
+  static final switchBorder = BorderSide(
+    width: borderWidthBase,
+    style: BorderStyle.solid,
+    color: Color.fromRGBO(0, 0, 0, .1),
+  );
 
-  // // Tabbar
-  // @tabbar-height= 50px;
-  // @tabbar-z-index= 1;
-  // @tabbar-background-color= @white;
+  // Tabbar
+  static const tabbarHeight = 50.0;
+  static const tabbarZIndex = 1;
+  static const tabbarBackgroundColor = white;
 
-  // // TabbarItem
-  // @tabbar-item-font-size= @font-size-sm;
-  // @tabbar-item-text-color= @gray-7;
-  // @tabbar-item-active-color= @blue;
-  // @tabbar-item-active-background-color= @tabbar-background-color;
-  // @tabbar-item-line-height= 1;
-  // @tabbar-item-icon-size= 22px;
-  // @tabbar-item-margin-bottom= 4px;
+  // TabbarItem
+  static const tabbarItemFontSize = fontSizeSm;
+  static const tabbarItemTextColor = gray7;
+  static const tabbarItemActiveColor = blue;
+  static const tabbarItemActiveBackgroundColor = tabbarBackgroundColor;
+  static const tabbarItemLineHeight = 1;
+  static const tabbarItemIconSize = 22.0;
+  static const tabbarItemMarginBottom = 4.0;
 
-  // // Tab
-  // @tab-text-color= @gray-7;
-  // @tab-active-text-color= @text-color;
-  // @tab-disabled-text-color= @gray-5;
-  // @tab-font-size= @font-size-md;
-  // @tab-line-height= @line-height-md;
+  // Tab
+  static const tabTextColor = gray7;
+  static const tabActiveTextColor = textColor;
+  static const tabDisabledTextColor = gray5;
+  static const tabFontSize = fontSizeMd;
+  static const tabLineHeight = lineHeightMd;
 
-  // // Tabs
-  // @tabs-default-color= @red;
-  // @tabs-line-height= 44px;
-  // @tabs-card-height= 30px;
-  // @tabs-nav-background-color= @white;
-  // @tabs-bottom-bar-width= 40px;
-  // @tabs-bottom-bar-height= 3px;
-  // @tabs-bottom-bar-color= @tabs-default-color;
+  // Tabs
+  static const tabsDefaultColor = red;
+  static const tabsLineHeight = 44.0;
+  static const tabsCardHeight = 30.0;
+  static const tabsNavBackgroundColor = white;
+  static const tabsBottomBarWidth = 40.0;
+  static const tabsBottomBarHeight = 3.0;
+  static const tabsBottomBarColor = tabsDefaultColor;
 
   // Tag
   static const tagPadding =

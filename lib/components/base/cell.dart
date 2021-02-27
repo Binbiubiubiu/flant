@@ -117,21 +117,33 @@ class FlanCell extends RouteStatelessWidget {
   final Widget labelSlot;
 
   /// 自定义左侧图标
-  final FlanIcon iconSlot;
+  final Widget iconSlot;
 
   /// 自定义右侧按钮，默认为 `arrow`
-  final FlanIcon rightIconSlot;
+  final Widget rightIconSlot;
 
   /// 自定义单元格最右侧的额外内容
   final Widget extraSlots;
 
   @override
   Widget build(BuildContext context) {
-    Widget cell = Padding(
-      padding: EdgeInsets.symmetric(
-        vertical: this._sizeStyle.paddingVertical,
+    final borderDecoration = BoxDecoration(
+      border: Border(
+        bottom: BorderSide(
+          width: 0.5,
+          color: ThemeVars.cellBorderColor,
+        ),
+      ),
+    );
+
+    Widget cell = Container(
+      margin: EdgeInsets.symmetric(
         horizontal: ThemeVars.cellHorizontalPadding,
       ),
+      padding: EdgeInsets.symmetric(
+        vertical: this._sizeStyle.paddingVertical,
+      ),
+      decoration: this.border ? borderDecoration : null,
       child: Row(
         crossAxisAlignment:
             this.center ? CrossAxisAlignment.center : CrossAxisAlignment.start,
@@ -187,19 +199,7 @@ class FlanCell extends RouteStatelessWidget {
         type: this._isClickable ? MaterialType.button : MaterialType.canvas,
         textStyle: this._cellTextStyle,
         color: ThemeVars.cellBackgroundColor,
-        child: Ink(
-          decoration: this.border
-              ? BoxDecoration(
-                  border: Border(
-                    bottom: BorderSide(
-                      width: 0.5,
-                      color: ThemeVars.cellBorderColor,
-                    ),
-                  ),
-                )
-              : null,
-          child: cell,
-        ),
+        child: cell,
       ),
     );
   }
@@ -221,15 +221,14 @@ class FlanCell extends RouteStatelessWidget {
     return TextStyle(
       color: ThemeVars.cellTextColor,
       fontSize: this._sizeStyle.titleFontSize,
-      height: ThemeVars.cellLineHeight / this._sizeStyle.titleFontSize,
+      // height: ThemeVars.cellLineHeight / this._sizeStyle.titleFontSize,
     );
   }
 
   /// 是否可以点击
   bool get _isClickable => this.isLink || this.clickable;
 
-  double get _iconLineHeight =>
-      ThemeVars.cellLineHeight + (Platform.isAndroid ? 6.0 : 0.0);
+  double get _iconLineHeight => this._sizeStyle.titleFontSize * 1.4;
 
   /// 单元格大小样式
   _FlanCellSizeStyle get _sizeStyle {
@@ -283,7 +282,7 @@ class FlanCell extends RouteStatelessWidget {
       TextStyle lstyle = _cellTextStyle.copyWith(
         color: ThemeVars.cellLabelColor,
         fontSize: this._sizeStyle.labelFontSize,
-        height: ThemeVars.cellLineHeight / this._sizeStyle.labelFontSize,
+        // height: ThemeVars.cellLineHeight / this._sizeStyle.labelFontSize,
       );
       if (this.labelStyle != null) {
         lstyle = lstyle.merge(this.labelStyle);
@@ -329,7 +328,9 @@ class FlanCell extends RouteStatelessWidget {
           size: ThemeVars.cellIconSize,
         ),
         child: Container(
-          height: this._iconLineHeight,
+          constraints: BoxConstraints(
+            minHeight: this._iconLineHeight,
+          ),
           alignment: Alignment.center,
           child: this.iconSlot,
         ),
@@ -337,18 +338,18 @@ class FlanCell extends RouteStatelessWidget {
     }
 
     if (this.iconName != null || this.iconUrl != null) {
-      return Padding(
+      return Container(
+        constraints: BoxConstraints(
+          minWidth: ThemeVars.cellFontSize,
+          minHeight: this._iconLineHeight,
+        ),
         padding: EdgeInsets.only(right: ThemeVars.paddingBase),
-        child: Container(
-          constraints: BoxConstraints(minWidth: ThemeVars.cellFontSize),
-          height: this._iconLineHeight,
-          alignment: Alignment.center,
-          child: FlanIcon(
-            iconName: this.iconName,
-            iconUrl: this.iconUrl,
-            size: ThemeVars.cellIconSize,
-            classPrefix: this.iconPrefix,
-          ),
+        alignment: Alignment.center,
+        child: FlanIcon(
+          iconName: this.iconName,
+          iconUrl: this.iconUrl,
+          size: ThemeVars.cellIconSize,
+          classPrefix: this.iconPrefix,
         ),
       );
     }
@@ -364,7 +365,9 @@ class FlanCell extends RouteStatelessWidget {
           color: ThemeVars.cellRightIconColor,
         ),
         child: Container(
-          height: this._iconLineHeight,
+          constraints: BoxConstraints(
+            minHeight: this._iconLineHeight,
+          ),
           alignment: Alignment.center,
           child: this.rightIconSlot,
         ),
@@ -379,18 +382,19 @@ class FlanCell extends RouteStatelessWidget {
         FlanCellArrowDirection.right: FlanIcons.arrow,
       }[this.arrowDirection];
 
-      return Padding(
+      return Container(
+        constraints: BoxConstraints(
+          minWidth: ThemeVars.cellFontSize,
+          minHeight: this._iconLineHeight,
+        ),
         padding: EdgeInsets.only(left: ThemeVars.paddingBase),
-        child: Container(
-          height: this._iconLineHeight,
-          constraints: BoxConstraints(minWidth: ThemeVars.cellFontSize),
-          alignment: Alignment.center,
-          child: FlanIcon(
-            iconName: iconName,
-            color: ThemeVars.cellRightIconColor,
-            size: ThemeVars.cellIconSize,
-            classPrefix: this.iconPrefix,
-          ),
+        // height: this._iconLineHeight,
+        alignment: Alignment.center,
+        child: FlanIcon(
+          iconName: iconName,
+          color: ThemeVars.cellRightIconColor,
+          size: ThemeVars.cellIconSize,
+          classPrefix: this.iconPrefix,
         ),
       );
     }

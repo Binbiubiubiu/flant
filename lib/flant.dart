@@ -11,6 +11,8 @@ export './components/base/col.dart';
 export './components/base/popup.dart';
 export './components/base/style.dart';
 export './components/base/toast.dart';
+// form components
+export './components/form/switch.dart';
 // show components
 export './components/show/badge.dart';
 export './components/show/circle.dart';
