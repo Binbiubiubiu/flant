@@ -110,6 +110,7 @@ class _FlanSwitchState extends State<FlanSwitch> with TickerProviderStateMixin {
       decoration: BoxDecoration(
         color: ThemeVars.switchNodeBackgroundColor,
         shape: BoxShape.circle,
+        boxShadow: ThemeVars.switchNodeBoxShadow,
       ),
       child: this._buildLoading(context),
     );
@@ -172,8 +173,10 @@ class _FlanSwitchState extends State<FlanSwitch> with TickerProviderStateMixin {
 
   Widget _buildLoading(BuildContext context) {
     if (this.widget.loading) {
-      final color =
-          this.isChecked ? this.widget.activeColor : this.widget.inActiveColor;
+      final color = (this.isChecked
+              ? this.widget.activeColor
+              : this.widget.inActiveColor) ??
+          ThemeVars.switchOnBackgroundColor;
       return FractionallySizedBox(
         widthFactor: .5,
         // heightFactor: .5,

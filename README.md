@@ -29,7 +29,7 @@
 - [ ] Search 搜索
 - [ ] Slider 滑块
 - [ ] Stepper 步进器
-- [ ] Switch 开关
+- [x] Switch 开关
 - [ ] Uploader 文件上传
 
 ##### 反馈组件

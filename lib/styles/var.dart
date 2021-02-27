@@ -757,8 +757,26 @@ class ThemeVars {
   static const switchHeight = 1.0;
   static const switchNodeSize = 1.0;
   static const switchNodeBackgroundColor = white;
-  static const switchNodeBoxShadow =
-      "0 3px 1px 0 rgba(0, 0, 0, 0.05),0 2px 2px 0 rgba(0, 0, 0, 0.1), 0 3px 3px 0 rgba(0, 0, 0, 0.05)";
+  static final switchNodeBoxShadow = [
+    BoxShadow(
+      offset: Offset(0.0, 3.0),
+      blurRadius: 1.0,
+      spreadRadius: 0.0,
+      color: Color.fromRGBO(0, 0, 0, 0.05),
+    ),
+    BoxShadow(
+      offset: Offset(0.0, 2.0),
+      blurRadius: 2.0,
+      spreadRadius: 0.0,
+      color: Color.fromRGBO(0, 0, 0, 0.1),
+    ),
+    BoxShadow(
+      offset: Offset(0.0, 3.0),
+      blurRadius: 3.0,
+      spreadRadius: 0.0,
+      color: Color.fromRGBO(0, 0, 0, 0.05),
+    ),
+  ];
   static const switchBackgroundColor = white;
   static const switchOnBackgroundColor = blue;
   static const switchTransitionDuration = animationDurationBase;
