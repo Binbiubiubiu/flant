@@ -3,8 +3,8 @@ import 'package:flutter/foundation.dart';
 import 'dart:math' as math;
 import '../../styles/var.dart';
 
-/// ### FlanImage 图片
-/// 增强版的 img 标签，提供多种图片填充模式，支持图片懒加载、加载中提示、加载失败提示。
+/// ### FlanImage 加载
+/// 加载图标，用于表示加载中的过渡状态。
 class FlanLoading extends StatelessWidget {
   FlanLoading({
     Key key,
@@ -138,7 +138,7 @@ class __FlanLoadingCirclarState extends State<_FlanLoadingCirclar>
   void initState() {
     this.controller = AnimationController(
       value: 0.0,
-      duration: const Duration(milliseconds: 2000),
+      duration: const Duration(seconds: 2),
       vsync: this,
     );
 
@@ -250,8 +250,7 @@ class __FlanLoadingSpinnerState extends State<_FlanLoadingSpinner>
   void initState() {
     this.controller = AnimationController(
       value: 0.0,
-      duration:
-          Duration(seconds: 2), //ThemeVars.loadingSpinnerAnimationDuration,
+      duration: ThemeVars.loadingSpinnerAnimationDuration,
       vsync: this,
     );
 

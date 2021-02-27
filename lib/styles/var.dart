@@ -361,15 +361,17 @@ class ThemeVars {
   // @dropdown-menu-content-max-height= 80%;
   // @dropdown-item-z-index= 10;
 
-  // // Empty
-  // @empty-padding= @padding-xl 0;
-  // @empty-image-size= 160px;
-  // @empty-description-margin-top= @padding-md;
-  // @empty-description-padding= 0 60px;
-  // @empty-description-color= @gray-6;
-  // @empty-description-font-size= @font-size-md;
-  // @empty-description-line-height= @line-height-md;
-  // @empty-bottom-margin-top= 24px;
+  // Empty
+  static const emptyPadding =
+      const EdgeInsets.symmetric(vertical: paddingXl, horizontal: 0);
+  static const emptyImageSize = 160.0;
+  static const emptyDescriptionMarginTop = paddingMd;
+  static const emptyDescriptionPadding =
+      const EdgeInsets.symmetric(vertical: 0, horizontal: 60.0);
+  static const emptyDescriptionColor = gray6;
+  static const emptyDescriptionFontSize = fontSizeMd;
+  static const emptyDescriptionLineHeight = lineHeightMd;
+  static const emptyBottomMarginTop = 24.0;
 
   // // Field
   // @field-label-width= 6.2em;
