@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/foundation.dart';
 import '../../styles/var.dart';
 import './icon.dart';
+import '../alert/loading.dart';
 import '../../mixins/route_mixins.dart';
 
 /// ### FlanButton 按钮
@@ -26,7 +27,7 @@ class FlanButton extends RouteStatelessWidget {
     this.disabled = false,
     this.loading = false,
     this.loadingText,
-    this.loadingType,
+    this.loadingType = FlanLoadingType.circular,
     this.loadingSize = 20.0,
     this.onClick,
     this.onTouchStart,
@@ -107,7 +108,7 @@ class FlanButton extends RouteStatelessWidget {
   final String loadingText;
 
   /// 加载图标类型，可选值为 `spinner`
-  final double loadingType;
+  final FlanLoadingType loadingType;
 
   /// 加载图标大小
   final double loadingSize;
@@ -171,7 +172,7 @@ class FlanButton extends RouteStatelessWidget {
                 },
           child: Padding(
             padding: this._btnSize.padding,
-            child: this._buildContent(),
+            child: this._buildContent(context),
           ),
         ),
       ),
@@ -193,7 +194,7 @@ class FlanButton extends RouteStatelessWidget {
   }
 
   // 构建按钮文本
-  Widget _buildText() {
+  Widget _buildText(BuildContext context) {
     if (this.loading && this.loadingText != null) {
       return Text(this.loadingText);
     }
@@ -205,41 +206,47 @@ class FlanButton extends RouteStatelessWidget {
     return Text(this.text ?? "");
   }
 
+  /// loading 图标
+  Widget _buildLoadingIcon(BuildContext context) {
+    if (this.loadingSlot != null) {
+      return this.loadingSlot;
+    }
+
+    return FlanLoading(
+      size: this.loadingSize,
+      type: this.loadingType,
+      color: this._themeType.color,
+    );
+  }
+
   /// 构建图标
-  Widget _buildIcon() {
-    return LayoutBuilder(
-        builder: (BuildContext context, BoxConstraints constraints) {
-      final iSize = DefaultTextStyle.of(context).style.fontSize * 1.2;
+  Widget _buildIcon(BuildContext context) {
+    final iSize = DefaultTextStyle.of(context).style.fontSize * 1.2;
 
-      if (this.loading) {
-        return FlanIcon.name(
-          FlanIcons.circle,
-          color: this._themeType.color,
-          size: iSize,
-        );
-      }
+    if (this.loading) {
+      return this._buildLoadingIcon(context);
+    }
 
-      if (this.iconName != null || this.iconUrl != null) {
-        return FlanIcon(
-          iconName: this.iconName,
-          iconUrl: this.iconUrl,
-          color: this._themeType.color,
-          size: 18.0,
-          classPrefix: this.iconPrefix,
-        );
-      }
+    if (this.iconName != null || this.iconUrl != null) {
+      return FlanIcon(
+        iconName: this.iconName,
+        iconUrl: this.iconUrl,
+        color: this._themeType.color,
+        size: iSize,
+        classPrefix: this.iconPrefix,
+      );
+    }
 
-      return SizedBox();
-    });
+    return SizedBox.shrink();
   }
 
   /// 构建内容
-  Widget _buildContent() {
+  Widget _buildContent(BuildContext context) {
     var children = [
-      this._buildText(),
+      this._buildText(context),
     ];
 
-    var sideIcon = this._buildIcon();
+    var sideIcon = this._buildIcon(context);
 
     switch (this.iconPosition) {
       case FlanButtonIconPosition.left:

@@ -60,9 +60,9 @@ class FlanLoading extends StatelessWidget {
       return Wrap(
         direction: Axis.vertical,
         crossAxisAlignment: WrapCrossAlignment.center,
+        // runSpacing: ThemeVars.paddingXs,
         children: [
           icon,
-          SizedBox(height: ThemeVars.paddingXs),
           this.buildText(context),
         ],
       );
@@ -71,9 +71,9 @@ class FlanLoading extends StatelessWidget {
     return Wrap(
       direction: Axis.horizontal,
       crossAxisAlignment: WrapCrossAlignment.center,
+      // spacing: ThemeVars.paddingXs,
       children: [
         icon,
-        SizedBox(width: ThemeVars.paddingXs),
         this.buildText(context),
       ],
     );
@@ -81,12 +81,18 @@ class FlanLoading extends StatelessWidget {
 
   Widget buildText(BuildContext context) {
     if (this.child != null) {
-      return DefaultTextStyle(
-        style: TextStyle(
-          fontSize: this.textSize ?? ThemeVars.loadingTextFontSize,
-          color: this.textColor ?? this.color ?? ThemeVars.loadingTextColor,
+      return Padding(
+        padding: EdgeInsets.only(
+          left: this.vertical ? 0.0 : 8.0,
+          top: this.vertical ? 8.0 : 0.0,
         ),
-        child: this.child,
+        child: DefaultTextStyle(
+          style: TextStyle(
+            fontSize: this.textSize ?? ThemeVars.loadingTextFontSize,
+            color: this.textColor ?? this.color ?? ThemeVars.loadingTextColor,
+          ),
+          child: this.child,
+        ),
       );
     }
     return SizedBox.shrink();

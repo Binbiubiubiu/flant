@@ -1,7 +1,8 @@
-import 'package:flant/components/base/style.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/foundation.dart';
 import './icon.dart';
+import './style.dart';
+import '../alert/loading.dart';
 import '../../styles/var.dart';
 
 int tUuid = 0;
@@ -19,7 +20,7 @@ void showToast(
   bool forbidClick = false,
   bool closeOnClick = false,
   bool closeOnClickOverlay = false,
-  String loadingType = "circle",
+  FlanLoadingType loadingType = FlanLoadingType.circular,
   Duration duration = const Duration(seconds: 2),
   FlanTransitionBuilder transitionBuilder = kFlanFadeTransitionBuilder,
   VoidCallback onOpened,
@@ -66,7 +67,7 @@ class FlanToast extends StatelessWidget {
     this.forbidClick = false,
     this.closeOnClick = false,
     this.closeOnClickOverlay = false,
-    this.loadingType = "circle",
+    this.loadingType = FlanLoadingType.circular,
     this.duration = const Duration(seconds: 2),
     this.transitionBuilder = kFlanFadeTransitionBuilder,
     this.onOpened,
@@ -117,7 +118,7 @@ class FlanToast extends StatelessWidget {
   final bool closeOnClickOverlay;
 
   /// 加载图标类型, 可选值为 `spinner`
-  final String loadingType;
+  final FlanLoadingType loadingType;
 
   /// 展示时长值为 `Duration.zero` 时，toast 不会消失
   final Duration duration;
@@ -226,7 +227,13 @@ class FlanToast extends StatelessWidget {
     }
 
     if (this.type == FlanToastType.loading) {
-      return FlanIcon(iconName: Icons.ac_unit.codePoint);
+      return Padding(
+        padding: const EdgeInsets.all(ThemeVars.paddingBase),
+        child: FlanLoading(
+          type: this.loadingType,
+          color: ThemeVars.toastLoadingIconColor,
+        ),
+      );
     }
     return null;
   }
