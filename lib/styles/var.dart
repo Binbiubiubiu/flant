@@ -585,15 +585,16 @@ class ThemeVars {
   static const popupCloseIconMargin = 16.0;
   static const popupCloseIconZIndex = 1;
 
-  // // Progress
-  // @progress-height= 4px;
-  // @progress-color= @blue;
-  // @progress-background-color= @gray-3;
-  // @progress-pivot-padding= 0 5px;
-  // @progress-pivot-text-color= @white;
-  // @progress-pivot-font-size= @font-size-xs;
-  // @progress-pivot-line-height= 1.6;
-  // @progress-pivot-background-color= @blue;
+  // Progress
+  static const progressHeight = 4.0;
+  static const progressColor = blue;
+  static const progressBackgroundColor = gray3;
+  static const progressPivotPadding =
+      const EdgeInsets.symmetric(vertical: 0.0, horizontal: 5.0);
+  static const progressPivotTextColor = white;
+  static const progressPivotFontSize = fontSizeXs;
+  static const progressPivotLineHeight = 1.6;
+  static const progressPivotBackgroundColor = blue;
 
   // // PullRefresh
   // @pull-refresh-head-height= 50px;
