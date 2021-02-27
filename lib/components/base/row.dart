@@ -33,35 +33,24 @@ class FlanRow extends StatefulWidget {
 }
 
 class _FlanRowState extends State<FlanRow> {
-  double maxWidth;
-
   @override
   Widget build(BuildContext context) {
-    // TODO: 临时做法
-    WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
-      var currentWidth = context?.size?.width;
-      if (this.maxWidth != currentWidth) {
-        setState(() {
-          this.maxWidth = currentWidth;
-        });
-      }
-    });
-    if (this.maxWidth != null) {
-      return SizedBox(
-        width: double.infinity,
-        child: FlanRowProvider(
-          spaces: this.spaces,
-          maxWidth: this.maxWidth,
-          child: Wrap(
-            alignment: this.widget.justify,
-            runAlignment: this.widget.align,
-            children: this.widget.children,
-          ),
-        ),
-      );
-    }
-
-    return SizedBox();
+    return FractionallySizedBox(
+      widthFactor: 1.0,
+      child: LayoutBuilder(
+        builder: (context, constraints) {
+          return FlanRowProvider(
+            spaces: this.spaces,
+            maxWidth: constraints.maxWidth,
+            child: Wrap(
+              alignment: this.widget.justify,
+              runAlignment: this.widget.align,
+              children: this.widget.children,
+            ),
+          );
+        },
+      ),
+    );
   }
 
   /// 获取组信息
