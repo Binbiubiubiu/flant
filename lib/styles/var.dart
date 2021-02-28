@@ -21,8 +21,20 @@ class ThemeVars {
   static const green = Color(0xFF07C160);
 
   // Gradient Colors
-  // static const gradientRed= linear-gradient(to right, #ff6034, #ee0a24);
-  // static const @gradientOrange= linear-gradient(to right, #ffd01e, #ff8917);
+  static const gradientRed = const LinearGradient(
+      begin: Alignment.centerLeft,
+      end: Alignment.centerRight,
+      colors: [
+        Color(0xffff6034),
+        Color(0xffee0a24),
+      ]);
+  static const gradientOrange = const LinearGradient(
+      begin: Alignment.centerLeft,
+      end: Alignment.centerRight,
+      colors: [
+        Color(0xffffd01e),
+        Color(0xffff8917),
+      ]);
 
   // Component Colors
   static const textColor = gray8;
@@ -370,19 +382,25 @@ class ThemeVars {
   static const dividerContentLeftWidth = "10%";
   static const dividerContentRightWidth = "10%";
 
-  // // DropdownMenu
-  // @dropdown-menu-height= 48px;
-  // @dropdown-menu-background-color= @white;
-  // @dropdown-menu-box-shadow= 0 2px 12px fade(@gray-7, 12);
-  // @dropdown-menu-title-font-size= 15px;
-  // @dropdown-menu-title-text-color= @text-color;
-  // @dropdown-menu-title-active-text-color= @red;
-  // @dropdown-menu-title-disabled-text-color= @gray-6;
-  // @dropdown-menu-title-padding= 0 @padding-xs;
-  // @dropdown-menu-title-line-height= @line-height-lg;
-  // @dropdown-menu-option-active-color= @red;
-  // @dropdown-menu-content-max-height= 80%;
-  // @dropdown-item-z-index= 10;
+  // DropdownMenu
+  static const dropdownMenuHeight = 48.0;
+  static const dropdownMenuBackgroundColor = white;
+  static final dropdownMenuBoxShadow = [
+    BoxShadow(
+        offset: Offset(0.0, 2.0),
+        blurRadius: 12.0,
+        color: gray7.withOpacity(.12))
+  ];
+  static const dropdownMenuTitleFontSize = 15.0;
+  static const dropdownMenuTitleTextColor = textColor;
+  static const dropdownMenuTitleActiveTextColor = red;
+  static const dropdownMenuTitleDisabledTextColor = gray6;
+  static const dropdownMenuTitlePadding =
+      const EdgeInsets.symmetric(vertical: 0.0, horizontal: paddingXs);
+  static const dropdownMenuTitleLineHeight = lineHeightLg;
+  static const dropdownMenuOptionActiveColor = red;
+  static const dropdownMenuContentMaxHeight = '80%';
+  static const dropdownItemZIndex = 10;
 
   // Empty
   static const emptyPadding =
@@ -396,64 +414,66 @@ class ThemeVars {
   static const emptyDescriptionLineHeight = lineHeightMd;
   static const emptyBottomMarginTop = 24.0;
 
-  // // Field
-  // @field-label-width= 6.2em;
-  // @field-label-color= @gray-7;
-  // @field-label-margin-right= @padding-sm;
-  // @field-input-text-color= @text-color;
-  // @field-input-error-text-color= @red;
-  // @field-input-disabled-text-color= @gray-5;
-  // @field-placeholder-text-color= @gray-5;
-  // @field-icon-size= 16px;
-  // @field-clear-icon-size= 16px;
-  // @field-clear-icon-color= @gray-5;
-  // @field-right-icon-color= @gray-6;
-  // @field-error-message-color= @red;
-  // @field-error-message-text-color= 12px;
-  // @field-text-area-min-height= 60px;
-  // @field-word-limit-color= @gray-7;
-  // @field-word-limit-font-size= @font-size-sm;
-  // @field-word-limit-line-height= 16px;
-  // @field-disabled-text-color= @gray-5;
+  // Field
+  static const fieldLabelWidth = '6.2em';
+  static const fieldLabelColor = gray7;
+  static const fieldLabelMarginRight = paddingSm;
+  static const fieldInputTextColor = textColor;
+  static const fieldInputErrorTextColor = red;
+  static const fieldInputDisabledTextColor = gray5;
+  static const fieldPlaceholderTextColor = gray5;
+  static const fieldIconSize = 16.0;
+  static const fieldClearIconSize = 16.0;
+  static const fieldClearIconColor = gray5;
+  static const fieldRightIconColor = gray6;
+  static const fieldErrorMessageColor = red;
+  static const fieldErrorMessageTextColor = 12.0;
+  static const fieldTextAreaMinHeight = 60.0;
+  static const fieldWordLimitColor = gray7;
+  static const fieldWordLimitFontSize = fontSizeSm;
+  static const fieldWordLimitLineHeight = 16.0;
+  static const fieldDisabledTextColor = gray5;
 
-  // // GridItem
-  // @grid-item-content-padding= @padding-md @padding-xs;
-  // @grid-item-content-background-color= @white;
-  // @grid-item-content-active-color= @active-color;
-  // @grid-item-icon-size= 28px;
-  // @grid-item-text-color= @gray-7;
-  // @grid-item-text-font-size= @font-size-sm;
+  // GridItem
+  static const gridItemContentPadding =
+      const EdgeInsets.symmetric(vertical: paddingMd, horizontal: paddingXs);
+  static const gridItemContentBackgroundColor = white;
+  static const gridItemContentActiveColor = activeColor;
+  static const gridItemIconSize = 28.0;
+  static const gridItemTextColor = gray7;
+  static const gridItemTextFontSize = fontSizeSm;
 
-  // // ActionBar
-  // @action-bar-background-color= @white;
-  // @action-bar-height= 50px;
-  // @action-bar-icon-width= 48px;
-  // @action-bar-icon-height= 100%;
-  // @action-bar-icon-color= @text-color;
-  // @action-bar-icon-size= 18px;
-  // @action-bar-icon-font-size= @font-size-xs;
-  // @action-bar-icon-active-color= @active-color;
-  // @action-bar-icon-text-color= @gray-7;
-  // @action-bar-button-height= 40px;
-  // @action-bar-button-warning-color= @gradient-orange;
-  // @action-bar-button-danger-color= @gradient-red;
+  // ActionBar
+  static const actionBarBackgroundColor = white;
+  static const actionBarHeight = 50.0;
+  static const actionBarIconWidth = 48.0;
+  static const actionBarIconHeight = '100%';
+  static const actionBarIconColor = textColor;
+  static const actionBarIconSize = 18.0;
+  static const actionBarIconFontSize = fontSizeXs;
+  static const actionBarIconActiveColor = activeColor;
+  static const actionBarIconTextColor = gray7;
+  static const actionBarButtonHeight = 40.0;
+  static const actionBarButtonWarningColor = gradientOrange;
+  static const actionBarButtonDangerColor = gradientRed;
 
-  // // IndexAnchor
-  // @index-anchor-z-index= 1;
-  // @index-anchor-padding= 0 @padding-md;
-  // @index-anchor-text-color= @text-color;
-  // @index-anchor-font-weight= @font-weight-bold;
-  // @index-anchor-font-size= @font-size-md;
-  // @index-anchor-line-height= 32px;
-  // @index-anchor-background-color= transparent;
-  // @index-anchor-sticky-text-color= @green;
-  // @index-anchor-sticky-background-color= @white;
+  // IndexAnchor
+  static const indexAnchorZIndex = 1;
+  static const indexAnchorPadding =
+      const EdgeInsets.symmetric(vertical: 0.0, horizontal: paddingMd);
+  static const indexAnchorTextColor = textColor;
+  static const indexAnchorFontWeight = fontWeightBold;
+  static const indexAnchorFontSize = fontSizeMd;
+  static const indexAnchorLineHeight = 32.0;
+  static const indexAnchorBackgroundColor = Colors.transparent;
+  static const indexAnchorStickyTextColor = green;
+  static const indexAnchorStickyBackgroundColor = white;
 
-  // // IndexBar
-  // @index-bar-sidebar-z-index= 2;
-  // @index-bar-index-font-size= @font-size-xs;
-  // @index-bar-index-line-height= @line-height-xs;
-  // @index-bar-index-active-color= @green;
+  // IndexBar
+  static const indexBarSidebarZIndex = 2;
+  static const indexBarIndexFontSize = fontSizeXs;
+  static const indexBarIndexLineHeight = lineHeightXs;
+  static const indexBarIndexActiveColor = green;
 
   // Image
   static const imagePlaceholderTextColor = gray6;
@@ -464,25 +484,28 @@ class ThemeVars {
   static const imageErrorIconSize = 32.0;
   static const imageErrorIconColor = gray4;
 
-  // // ImagePreview
-  // @image-preview-index-text-color= @white;
-  // @image-preview-index-font-size= @font-size-md;
-  // @image-preview-index-line-height= @line-height-md;
-  // @image-preview-index-text-shadow= 0 1px 1px @gray-8;
-  // @image-preview-overlay-background-color= rgba(0, 0, 0, 0.9);
-  // @image-preview-close-icon-size= 22px;
-  // @image-preview-close-icon-color= @gray-5;
-  // @image-preview-close-icon-active-color= @gray-6;
-  // @image-preview-close-icon-margin= @padding-md;
-  // @image-preview-close-icon-z-index= 1;
+  // ImagePreview
+  static const imagePreviewIndexTextColor = white;
+  static const imagePreviewIndexFontSize = fontSizeMd;
+  static const imagePreviewIndexLineHeight = lineHeightMd;
+  static const imagePreviewIndexTextShadow = [
+    BoxShadow(offset: Offset(0.0, 1.0), blurRadius: 1.0, color: gray8)
+  ];
+  static const imagePreviewOverlayBackgroundColor =
+      Color.fromRGBO(0, 0, 0, 0.9);
+  static const imagePreviewCloseIconSize = 22.0;
+  static const imagePreviewCloseIconColor = gray5;
+  static const imagePreviewCloseIconActiveColor = gray6;
+  static const imagePreviewCloseIconMargin = paddingMd;
+  static const imagePreviewCloseIconZIndex = 1;
 
-  // // List
-  // @list-icon-margin-right= 5px;
-  // @list-text-color= @gray-6;
-  // @list-text-font-size= @font-size-md;
-  // @list-text-line-height= 50px;
+  // List
+  static const listIconMarginRight = 5.0;
+  static const listTextColor = gray6;
+  static const listTextFontSize = fontSizeMd;
+  static const listTextLineHeight = 50.0;
 
-  // // Loading
+  // Loading
   static const loadingTextColor = gray6;
   static const loadingTextFontSize = fontSizeMd;
   static const loadingSpinnerColor = gray5;
@@ -513,92 +536,97 @@ class ThemeVars {
   static const noticeBarIconSize = 16.0;
   static const noticeBarIconMinWidth = 24.0;
 
-  // // Notify
-  // @notify-text-color= @white;
-  // @notify-padding= @padding-xs @padding-md;
-  // @notify-font-size= @font-size-md;
-  // @notify-line-height= @line-height-md;
-  // @notify-primary-background-color= @blue;
-  // @notify-success-background-color= @green;
-  // @notify-danger-background-color= @red;
-  // @notify-warning-background-color= @orange;
+  // Notify
+  static const notifyTextColor = white;
+  static const notifyPadding =
+      const EdgeInsets.symmetric(vertical: paddingXs, horizontal: paddingMd);
+  static const notifyFontSize = fontSizeMd;
+  static const notifyLineHeight = lineHeightMd;
+  static const notifyPrimaryBackgroundColor = blue;
+  static const notifySuccessBackgroundColor = green;
+  static const notifyDangerBackgroundColor = red;
+  static const notifyWarningBackgroundColor = orange;
 
-  // // NumberKeyboard
-  // @number-keyboard-background-color= @gray-2;
-  // @number-keyboard-key-height= 48px;
-  // @number-keyboard-key-font-size= 28px;
-  // @number-keyboard-key-active-color= @gray-3;
-  // @number-keyboard-delete-font-size= @font-size-lg;
-  // @number-keyboard-title-color= @gray-7;
-  // @number-keyboard-title-height= 34px;
-  // @number-keyboard-title-font-size= @font-size-lg;
-  // @number-keyboard-close-padding= 0 @padding-md;
-  // @number-keyboard-close-color= @text-link-color;
-  // @number-keyboard-close-font-size= @font-size-md;
-  // @number-keyboard-button-text-color= @white;
-  // @number-keyboard-button-background-color= @blue;
-  // @number-keyboard-cursor-color= @text-color;
-  // @number-keyboard-cursor-width= 1px;
-  // @number-keyboard-cursor-height= 40%;
-  // @number-keyboard-cursor-animation-duration= 1s;
-  // @number-keyboard-z-index= 100;
+  // NumberKeyboard
+  static const numberKeyboardBackgroundColor = gray2;
+  static const numberKeyboardKeyHeight = 48.0;
+  static const numberKeyboardKeyFontSize = 28.0;
+  static const numberKeyboardKeyActiveColor = gray3;
+  static const numberKeyboardDeleteFontSize = fontSizeLg;
+  static const numberKeyboardTitleColor = gray7;
+  static const numberKeyboardTitleHeight = 34.0;
+  static const numberKeyboardTitleFontSize = fontSizeLg;
+  static const numberKeyboardClosePadding =
+      const EdgeInsets.symmetric(vertical: 0.0, horizontal: paddingMd);
+  static const numberKeyboardCloseColor = textLinkColor;
+  static const numberKeyboardCloseFontSize = fontSizeMd;
+  static const numberKeyboardButtonTextColor = white;
+  static const numberKeyboardButtonBackgroundColor = blue;
+  static const numberKeyboardCursorColor = textColor;
+  static const numberKeyboardCursorWidth = 1.0;
+  static const numberKeyboardCursorHeight = '40%';
+  static const numberKeyboardCursorAnimationDuration =
+      const Duration(seconds: 1);
+  static const numberKeyboardZIndex = 100;
 
   // Overlay
   static const overlayZIndex = 1;
   static const overlayBackgroundColor = Color.fromRGBO(0, 0, 0, .7);
 
-  // // Pagination
-  // @pagination-height= 40px;
-  // @pagination-font-size= @font-size-md;
-  // @pagination-item-width= 36px;
-  // @pagination-item-default-color= @blue;
-  // @pagination-item-disabled-color= @gray-7;
-  // @pagination-item-disabled-background-color= @background-color;
-  // @pagination-background-color= @white;
-  // @pagination-desc-color= @gray-7;
-  // @pagination-disabled-opacity= @disabled-opacity;
+  // Pagination
+  static const paginationHeight = 40.0;
+  static const paginationFontSize = fontSizeMd;
+  static const paginationItemWidth = 36.0;
+  static const paginationItemDefaultColor = blue;
+  static const paginationItemDisabledColor = gray7;
+  static const paginationItemDisabledBackgroundColor = backgroundColor;
+  static const paginationBackgroundColor = white;
+  static const paginationDescColor = gray7;
+  static const paginationDisabledOpacity = disabledOpacity;
 
-  // // PasswordInput
-  // @password-input-height= 50px;
-  // @password-input-margin= 0 @padding-md;
-  // @password-input-font-size= 20px;
-  // @password-input-border-radius= 6px;
-  // @password-input-background-color= @white;
-  // @password-input-info-color= @gray-6;
-  // @password-input-info-font-size= @font-size-md;
-  // @password-input-error-info-color= @red;
-  // @password-input-dot-size= 10px;
-  // @password-input-dot-color= @black;
+  // PasswordInput
+  static const passwordInputHeight = 50.0;
+  static const passwordInputMargin =
+      const EdgeInsets.symmetric(vertical: 0.0, horizontal: paddingMd);
+  static const passwordInputFontSize = 20.0;
+  static const passwordInputBorderRadius = 6.0;
+  static const passwordInputBackgroundColor = white;
+  static const passwordInputInfoColor = gray6;
+  static const passwordInputInfoFontSize = fontSizeMd;
+  static const passwordInputErrorInfoColor = red;
+  static const passwordInputDotSize = 10.0;
+  static const passwordInputDotColor = black;
 
-  // // Picker
-  // @picker-background-color= @white;
-  // @picker-toolbar-height= 44px;
-  // @picker-title-font-size= @font-size-lg;
-  // @picker-title-line-height= @line-height-md;
-  // @picker-action-padding= 0 @padding-md;
-  // @picker-action-font-size= @font-size-md;
-  // @picker-confirm-action-color= @text-link-color;
-  // @picker-cancel-action-color= @gray-6;
-  // @picker-option-font-size= @font-size-lg;
-  // @picker-option-text-color= @black;
-  // @picker-option-disabled-opacity= 0.3;
-  // @picker-loading-icon-color= @blue;
-  // @picker-loading-mask-color= rgba(255, 255, 255, 0.9);
+  // Picker
+  static const pickerBackgroundColor = white;
+  static const pickerToolbarHeight = 44.0;
+  static const pickerTitleFontSize = fontSizeLg;
+  static const pickerTitleLineHeight = lineHeightMd;
+  static const pickerActionPadding =
+      const EdgeInsets.symmetric(vertical: 0.0, horizontal: paddingMd);
+  static const pickerActionFontSize = fontSizeMd;
+  static const pickerConfirmActionColor = textLinkColor;
+  static const pickerCancelActionColor = gray6;
+  static const pickerOptionFontSize = fontSizeLg;
+  static const pickerOptionTextColor = black;
+  static const pickerOptionDisabledOpacity = 0.3;
+  static const pickerLoadingIconColor = blue;
+  static const pickerLoadingMaskColor = Color.fromRGBO(255, 255, 255, 0.9);
 
-  // // Popover
-  // @popover-arrow-size= 6px;
-  // @popover-border-radius= @border-radius-lg;
-  // @popover-action-width= 128px;
-  // @popover-action-height= 44px;
-  // @popover-action-font-size= @font-size-md;
-  // @popover-action-line-height= @line-height-md;
-  // @popover-action-icon-size= 20px;
-  // @popover-light-text-color= @text-color;
-  // @popover-light-background-color= @white;
-  // @popover-light-action-disabled-text-color= @gray-5;
-  // @popover-dark-text-color= @white;
-  // @popover-dark-background-color= #4a4a4a;
-  // @popover-dark-action-disabled-text-color= @gray-6;
+  // Popover
+  static const popoverArrowSize = 6.0;
+  static const popoverBorderRadius = borderRadiusLg;
+  static const popoverActionWidth = 128.0;
+  static const popoverActionHeight = 44.0;
+  static const popoverActionFontSize = fontSizeMd;
+  static const popoverActionLineHeight = lineHeightMd;
+  static const popoverActionIconSize = 20.0;
+  static const popoverLightTextColor = textColor;
+  static const popoverLightBackgroundColor = white;
+  static const popoverLightActionDisabledTextColor = gray5;
+  static const popoverDarkTextColor = white;
+  static const popoverDarkBackgroundColor = Color(0xff4a4a4a);
+  static const popoverDarkActionDisabledTextColor = gray6;
 
   // Popup
   static const popupBackgroundColor = white;
@@ -637,60 +665,65 @@ class ThemeVars {
   static const radioDisabledLabelColor = gray5;
   static const radioDisabledBackgroundColor = borderColor;
 
-  // // Rate
-  // @rate-icon-size= 20px;
-  // @rate-icon-gutter= @padding-base;
-  // @rate-icon-void-color= @gray-5;
-  // @rate-icon-full-color= @red;
-  // @rate-icon-disabled-color= @gray-5;
+  // Rate
+  static const rateIconSize = 20.0;
+  static const rateIconGutter = paddingBase;
+  static const rateIconVoidColor = gray5;
+  static const rateIconFullColor = red;
+  static const rateIconDisabledColor = gray5;
 
-  // // ShareSheet
-  // @share-sheet-header-padding= @padding-sm @padding-md @padding-base;
-  // @share-sheet-title-color= @text-color;
-  // @share-sheet-title-font-size= @font-size-md;
-  // @share-sheet-title-line-height= @line-height-md;
-  // @share-sheet-description-color= @gray-6;
-  // @share-sheet-description-font-size= @font-size-sm;
-  // @share-sheet-description-line-height= 16px;
-  // @share-sheet-icon-size= 48px;
-  // @share-sheet-option-name-color= @gray-7;
-  // @share-sheet-option-name-font-size= @font-size-sm;
-  // @share-sheet-option-description-color= @gray-5;
-  // @share-sheet-option-description-font-size= @font-size-sm;
-  // @share-sheet-cancel-button-font-size= @font-size-lg;
-  // @share-sheet-cancel-button-height= 48px;
-  // @share-sheet-cancel-button-background= @white;
+  // ShareSheet
+  static const shareSheetHeaderPadding = const EdgeInsets.only(
+      top: paddingSm, left: paddingMd, right: paddingMd, bottom: paddingBase);
+  static const shareSheetTitleColor = textColor;
+  static const shareSheetTitleFontSize = fontSizeMd;
+  static const shareSheetTitleLineHeight = lineHeightMd;
+  static const shareSheetDescriptionColor = gray6;
+  static const shareSheetDescriptionFontSize = fontSizeSm;
+  static const shareSheetDescriptionLineHeight = 16.0;
+  static const shareSheetIconSize = 48.0;
+  static const shareSheetOptionNameColor = gray7;
+  static const shareSheetOptionNameFontSize = fontSizeSm;
+  static const shareSheetOptionDescriptionColor = gray5;
+  static const shareSheetOptionDescriptionFontSize = fontSizeSm;
+  static const shareSheetCancelButtonFontSize = fontSizeLg;
+  static const shareSheetCancelButtonHeight = 48.0;
+  static const shareSheetCancelButtonBackground = white;
 
-  // // Search
-  // @search-padding= 10px @padding-sm;
-  // @search-background-color= @white;
-  // @search-content-background-color= @gray-1;
-  // @search-input-height= 34px;
-  // @search-label-padding= 0 5px;
-  // @search-label-color= @text-color;
-  // @search-label-font-size= @font-size-md;
-  // @search-left-icon-color= @gray-6;
-  // @search-action-padding= 0 @padding-xs;
-  // @search-action-text-color= @text-color;
-  // @search-action-font-size= @font-size-md;
+  // Search
+  static const searchPadding =
+      const EdgeInsets.symmetric(vertical: 10.0, horizontal: paddingSm);
+  static const searchBackgroundColor = white;
+  static const searchContentBackgroundColor = gray1;
+  static const searchInputHeight = 34.0;
+  static const searchLabelPadding =
+      const EdgeInsets.symmetric(vertical: 0.0, horizontal: 5.0);
+  static const searchLabelColor = textColor;
+  static const searchLabelFontSize = fontSizeMd;
+  static const searchLeftIconColor = gray6;
+  static const searchActionPadding =
+      const EdgeInsets.symmetric(vertical: 0.0, horizontal: paddingXs);
+  static const searchActionTextColor = textColor;
+  static const searchActionFontSize = fontSizeMd;
 
-  // // Sidebar
-  // @sidebar-width= 80px;
-  // @sidebar-font-size= @font-size-md;
-  // @sidebar-line-height= @line-height-md;
-  // @sidebar-text-color= @text-color;
-  // @sidebar-disabled-text-color= @gray-5;
-  // @sidebar-padding= 20px @padding-sm;
-  // @sidebar-active-color= @active-color;
-  // @sidebar-background-color= @background-color;
-  // @sidebar-selected-font-weight= @font-weight-bold;
-  // @sidebar-selected-text-color= @text-color;
-  // @sidebar-selected-border-width= 4px;
-  // @sidebar-selected-border-height= 16px;
-  // @sidebar-selected-border-color= @red;
-  // @sidebar-selected-background-color= @white;
+  // Sidebar
+  static const sidebarWidth = 80.0;
+  static const sidebarFontSize = fontSizeMd;
+  static const sidebarLineHeight = lineHeightMd;
+  static const sidebarTextColor = textColor;
+  static const sidebarDisabledTextColor = gray5;
+  static const sidebarPadding =
+      const EdgeInsets.symmetric(vertical: 20.0, horizontal: paddingSm);
+  static const sidebarActiveColor = activeColor;
+  static const sidebarBackgroundColor = backgroundColor;
+  static const sidebarSelectedFontWeight = fontWeightBold;
+  static const sidebarSelectedTextColor = textColor;
+  static const sidebarSelectedBorderWidth = 4.0;
+  static const sidebarSelectedBorderHeight = 16.0;
+  static const sidebarSelectedBorderColor = red;
+  static const sidebarSelectedBackgroundColor = white;
 
-  // // Skeleton
+  // Skeleton
   static const skeletonRowHeight = 16.0;
   static const skeletonRowBackgroundColor = activeColor;
   static const skeletonRowMarginTop = paddingSm;
@@ -699,80 +732,87 @@ class ThemeVars {
   static const skeletonAvatarBackgroundColor = activeColor;
   static const skeletonAnimationDuration = Duration(milliseconds: 1200);
 
-  // // Slider
-  // @slider-active-background-color= @blue;
-  // @slider-inactive-background-color= @gray-3;
-  // @slider-disabled-opacity= @disabled-opacity;
-  // @slider-bar-height= 2px;
-  // @slider-button-width= 24px;
-  // @slider-button-height= 24px;
-  // @slider-button-border-radius= 50%;
-  // @slider-button-background-color= @white;
-  // @slider-button-box-shadow= 0 1px 2px rgba(0, 0, 0, 0.5);
+  // Slider
+  static const sliderActiveBackgroundColor = blue;
+  static const sliderInactiveBackgroundColor = gray3;
+  static const sliderDisabledOpacity = disabledOpacity;
+  static const sliderBarHeight = 2.0;
+  static const sliderButtonWidth = 24.0;
+  static const sliderButtonHeight = 24.0;
+  static const sliderButtonBorderRadius = '50%';
+  static const sliderButtonBackgroundColor = white;
+  static const sliderButtonBoxShadow = [
+    BoxShadow(
+        offset: Offset(0, 1.0),
+        blurRadius: 2.0,
+        color: Color.fromRGBO(0, 0, 0, .5))
+  ];
 
-  // // Step
-  // @step-text-color= @gray-6;
-  // @step-active-color= @green;
-  // @step-process-text-color= @text-color;
-  // @step-font-size= @font-size-md;
-  // @step-line-color= @border-color;
-  // @step-finish-line-color= @green;
-  // @step-finish-text-color= @text-color;
-  // @step-icon-size= 12px;
-  // @step-circle-size= 5px;
-  // @step-circle-color= @gray-6;
-  // @step-horizontal-title-font-size= @font-size-sm;
+  // Step
+  static const stepTextColor = gray6;
+  static const stepActiveColor = green;
+  static const stepProcessTextColor = textColor;
+  static const stepFontSize = fontSizeMd;
+  static const stepLineColor = borderColor;
+  static const stepFinishLineColor = green;
+  static const stepFinishTextColor = textColor;
+  static const stepIconSize = 12.0;
+  static const stepCircleSize = 5.0;
+  static const stepCircleColor = gray6;
+  static const stepHorizontalTitleFontSize = fontSizeSm;
 
-  // // Steps
-  // @steps-background-color= @white;
+  // Steps
+  static const stepsBackgroundColor = white;
 
-  // // Sticky
-  // @sticky-z-index= 99;
+  // Sticky
+  static const stickyZIndex = 99;
 
-  // // Stepper
-  // @stepper-active-color= #e8e8e8;
-  // @stepper-background-color= @active-color;
-  // @stepper-button-icon-color= @text-color;
-  // @stepper-button-disabled-color= @background-color;
-  // @stepper-button-disabled-icon-color= @gray-5;
-  // @stepper-button-round-theme-color= @red;
-  // @stepper-input-width= 32px;
-  // @stepper-input-height= 28px;
-  // @stepper-input-font-size= @font-size-md;
-  // @stepper-input-line-height= normal;
-  // @stepper-input-text-color= @text-color;
-  // @stepper-input-disabled-text-color= @gray-5;
-  // @stepper-input-disabled-background-color= @active-color;
-  // @stepper-border-radius= @border-radius-md;
+  // Stepper
+  static const stepperActiveColor = Color(0xffe8e8e8);
+  static const stepperBackgroundColor = activeColor;
+  static const stepperButtonIconColor = textColor;
+  static const stepperButtonDisabledColor = backgroundColor;
+  static const stepperButtonDisabledIconColor = gray5;
+  static const stepperButtonRoundThemeColor = red;
+  static const stepperInputWidth = 32.0;
+  static const stepperInputHeight = 28.0;
+  static const stepperInputFontSize = fontSizeMd;
+  static const stepperInputLineHeight = 'normal';
+  static const stepperInputTextColor = textColor;
+  static const stepperInputDisabledTextColor = gray5;
+  static const stepperInputDisabledBackgroundColor = activeColor;
+  static const stepperBorderRadius = borderRadiusMd;
 
-  // // SubmitBar
-  // @submit-bar-height= 50px;
-  // @submit-bar-z-index= 100;
-  // @submit-bar-background-color= @white;
-  // @submit-bar-button-width= 110px;
-  // @submit-bar-price-color= @red;
-  // @submit-bar-price-font-size= @font-size-md;
-  // @submit-bar-currency-font-size= @font-size-md;
-  // @submit-bar-text-color= @text-color;
-  // @submit-bar-text-font-size= @font-size-md;
-  // @submit-bar-tip-padding= @padding-xs @padding-sm;
-  // @submit-bar-tip-font-size= @font-size-sm;
-  // @submit-bar-tip-line-height= 1.5;
-  // @submit-bar-tip-color= #f56723;
-  // @submit-bar-tip-background-color= #fff7cc;
-  // @submit-bar-tip-icon-size= 12px;
-  // @submit-bar-button-height= 40px;
-  // @submit-bar-padding= 0 @padding-md;
-  // @submit-bar-price-integer-font-size= 20px;
-  // @submit-bar-price-font-family= @price-integer-font-family;
+  // SubmitBar
+  static const submitBarHeight = 50.0;
+  static const submitBarZIndex = 100;
+  static const submitBarBackgroundColor = white;
+  static const submitBarButtonWidth = 110.0;
+  static const submitBarPriceColor = red;
+  static const submitBarPriceFontSize = fontSizeMd;
+  static const submitBarCurrencyFontSize = fontSizeMd;
+  static const submitBarTextColor = textColor;
+  static const submitBarTextFontSize = fontSizeMd;
+  static const submitBarTipPadding =
+      const EdgeInsets.symmetric(vertical: paddingXs, horizontal: paddingSm);
+  static const submitBarTipFontSize = fontSizeSm;
+  static const submitBarTipLineHeight = 1.5;
+  static const submitBarTipColor = Color(0xfff56723);
+  static const submitBarTipBackgroundColor = Color(0xfffff7cc);
+  static const submitBarTipIconSize = 12.0;
+  static const submitBarButtonHeight = 40.0;
+  static const submitBarPadding =
+      const EdgeInsets.symmetric(vertical: 0.0, horizontal: paddingMd);
+  static const submitBarPriceIntegerFontSize = 20.0;
+  static const submitBarPriceFontFamily = priceIntegerFontFamily;
 
-  // // Swipe
-  // @swipe-indicator-size= 6px;
-  // @swipe-indicator-margin= @padding-sm;
-  // @swipe-indicator-active-opacity= 1;
-  // @swipe-indicator-inactive-opacity= 0.3;
-  // @swipe-indicator-active-background-color= @blue;
-  // @swipe-indicator-inactive-background-color= @border-color;
+  // Swipe
+  static const swipeIndicatorSize = 6.0;
+  static const swipeIndicatorMargin = paddingSm;
+  static const swipeIndicatorActiveOpacity = 1;
+  static const swipeIndicatorInactiveOpacity = 0.3;
+  static const swipeIndicatorActiveBackgroundColor = blue;
+  static const swipeIndicatorInactiveBackgroundColor = borderColor;
 
   // Switch
   static const switchSize = 30.0;
@@ -879,39 +919,41 @@ class ThemeVars {
   static const toastPositionTopDistance = .2;
   static const toastPositionBottomDistance = .2;
 
-  // // TreeSelect
-  // @tree-select-font-size= @font-size-md;
-  // @tree-select-nav-background-color= @background-color;
-  // @tree-select-content-background-color= @white;
-  // @tree-select-nav-item-padding= 14px @padding-sm;
-  // @tree-select-item-height= 48px;
-  // @tree-select-item-active-color= @red;
-  // @tree-select-item-disabled-color= @gray-5;
-  // @tree-select-item-selected-size= 16px;
+  // TreeSelect
+  static const treeSelectFontSize = fontSizeMd;
+  static const treeSelectNavBackgroundColor = backgroundColor;
+  static const treeSelectContentBackgroundColor = white;
+  static const treeSelectNavItemPadding =
+      const EdgeInsets.symmetric(vertical: 14.0, horizontal: paddingSm);
+  static const treeSelectItemHeight = 48.0;
+  static const treeSelectItemActiveColor = red;
+  static const treeSelectItemDisabledColor = gray5;
+  static const treeSelectItemSelectedSize = 16.0;
 
-  // // Uploader
-  // @uploader-size= 80px;
-  // @uploader-icon-size= 24px;
-  // @uploader-icon-color= @gray-4;
-  // @uploader-text-color= @gray-6;
-  // @uploader-text-font-size= @font-size-sm;
-  // @uploader-upload-background-color= @gray-1;
-  // @uploader-upload-active-color= @active-color;
-  // @uploader-delete-color= @white;
-  // @uploader-delete-icon-size= 14px;
-  // @uploader-delete-background-color= rgba(0, 0, 0, 0.7);
-  // @uploader-file-background-color= @background-color;
-  // @uploader-file-icon-size= 20px;
-  // @uploader-file-icon-color= @gray-7;
-  // @uploader-file-name-padding= 0 @padding-base;
-  // @uploader-file-name-margin-top= @padding-xs;
-  // @uploader-file-name-font-size= @font-size-sm;
-  // @uploader-file-name-text-color= @gray-7;
-  // @uploader-mask-background-color= fade(@gray-8, 88%);
-  // @uploader-mask-icon-size= 22px;
-  // @uploader-mask-message-font-size= @font-size-sm;
-  // @uploader-mask-message-line-height= @line-height-xs;
-  // @uploader-loading-icon-size= 22px;
-  // @uploader-loading-icon-color= @white;
-  // @uploader-disabled-opacity= @disabled-opacity;
+  // Uploader
+  static const uploaderSize = 80.0;
+  static const uploaderIconSize = 24.0;
+  static const uploaderIconColor = gray4;
+  static const uploaderTextColor = gray6;
+  static const uploaderTextFontSize = fontSizeSm;
+  static const uploaderUploadBackgroundColor = gray1;
+  static const uploaderUploadActiveColor = activeColor;
+  static const uploaderDeleteColor = white;
+  static const uploaderDeleteIconSize = 14.0;
+  static const uploaderDeleteBackgroundColor = Color.fromRGBO(0, 0, 0, 0.7);
+  static const uploaderFileBackgroundColor = backgroundColor;
+  static const uploaderFileIconSize = 20.0;
+  static const uploaderFileIconColor = gray7;
+  static const uploaderFileNamePadding =
+      const EdgeInsets.symmetric(vertical: 0.0, horizontal: paddingBase);
+  static const uploaderFileNameMarginTop = paddingXs;
+  static const uploaderFileNameFontSize = fontSizeSm;
+  static const uploaderFileNameTextColor = gray7;
+  static final uploaderMaskBackgroundColor = gray8.withOpacity(.88);
+  static const uploaderMaskIconSize = 22.0;
+  static const uploaderMaskMessageFontSize = fontSizeSm;
+  static const uploaderMaskMessageLineHeight = lineHeightXs;
+  static const uploaderLoadingIconSize = 22.0;
+  static const uploaderLoadingIconColor = white;
+  static const uploaderDisabledOpacity = disabledOpacity;
 }
