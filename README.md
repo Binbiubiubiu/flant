@@ -55,7 +55,7 @@
 - [ ] ImagePreview 图片预览
 - [ ] Lazyload 懒加载
 - [ ] List 列表
-- [ ] NoticeBar 通知栏
+- [x] NoticeBar 通知栏
 - [ ] Popover 气泡弹出框
 - [x] Progress 进度条
 - [x] Skeleton 骨架屏
