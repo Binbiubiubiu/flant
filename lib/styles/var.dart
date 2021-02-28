@@ -51,11 +51,10 @@ class ThemeVars {
   static const lineHeightSm = 18.0;
   static const lineHeightMd = 20.0;
   static const lineHeightLg = 22.0;
-  // @base-font-family= -apple-system, BlinkMacSystemFont, 'Helvetica Neue',
-  //   Helvetica, Segoe UI, Arial, Roboto, 'PingFang SC', 'miui', 'Hiragino Sans GB',
-  //   'Microsoft Yahei', sans-serif;
-  // @price-integer-font-family= Avenir-Heavy, PingFang SC, Helvetica Neue, Arial,
-  //   sans-serif;
+  static const baseFontFamily =
+      "-apple-system, BlinkMacSystemFont, 'Helvetica Neue',Helvetica, Segoe UI, Arial, Roboto, 'PingFang SC', 'miui', 'Hiragino Sans GB','Microsoft Yahei', sans-serif";
+  static const priceIntegerFontFamily =
+      "Avenir-Heavy, PingFang SC, Helvetica Neue, Arial,sans-serif";
 
   // Animation
   static const animationDurationBase = const Duration(milliseconds: 300);
@@ -71,51 +70,55 @@ class ThemeVars {
   static const borderRadiusLg = 8.0;
   static const borderRadiusMax = 999.0;
 
-  // // ActionSheet
-  // @action-sheet-max-height= 80%;
-  // @action-sheet-header-height= 48px;
-  // @action-sheet-header-font-size= @font-size-lg;
-  // @action-sheet-description-color= @gray-6;
-  // @action-sheet-description-font-size= @font-size-md;
-  // @action-sheet-description-line-height= @line-height-md;
-  // @action-sheet-item-background= @white;
-  // @action-sheet-item-font-size= @font-size-lg;
-  // @action-sheet-item-line-height= @line-height-lg;
-  // @action-sheet-item-text-color= @text-color;
-  // @action-sheet-item-disabled-text-color= @gray-5;
-  // @action-sheet-subname-color= @gray-6;
-  // @action-sheet-subname-font-size= @font-size-sm;
-  // @action-sheet-subname-line-height= @line-height-sm;
-  // @action-sheet-close-icon-size= 22px;
-  // @action-sheet-close-icon-color= @gray-5;
-  // @action-sheet-close-icon-active-color= @gray-6;
-  // @action-sheet-close-icon-padding= 0 @padding-md;
-  // @action-sheet-cancel-text-color= @gray-7;
-  // @action-sheet-cancel-padding-top= @padding-xs;
-  // @action-sheet-cancel-padding-color= @background-color;
-  // @action-sheet-loading-icon-size= 22px;
+  // ActionSheet
+  static const actionSheetMaxHeight = '80%';
+  static const actionSheetHeaderHeight = 48.0;
+  static const actionSheetHeaderFontSize = fontSizeLg;
+  static const actionSheetDescriptionColor = gray6;
+  static const actionSheetDescriptionFontSize = fontSizeMd;
+  static const actionSheetDescriptionLineHeight = lineHeightMd;
+  static const actionSheetItemBackground = white;
+  static const actionSheetItemFontSize = fontSizeLg;
+  static const actionSheetItemLineHeight = lineHeightLg;
+  static const actionSheetItemTextColor = textColor;
+  static const actionSheetItemDisabledTextColor = gray5;
+  static const actionSheetSubnameColor = gray6;
+  static const actionSheetSubnameFontSize = fontSizeSm;
+  static const actionSheetSubnameLineHeight = lineHeightSm;
+  static const actionSheetCloseIconSize = 22.0;
+  static const actionSheetCloseIconColor = gray5;
+  static const actionSheetCloseIconActiveColor = gray6;
+  static const actionSheetCloseIconPadding =
+      const EdgeInsets.symmetric(vertical: 0.0, horizontal: paddingMd);
+  static const actionSheetCancelTextColor = gray7;
+  static const actionSheetCancelPaddingTop = paddingXs;
+  static const actionSheetCancelPaddingColor = backgroundColor;
+  static const actionSheetLoadingIconSize = 22.0;
 
-  // // AddressEdit
-  // @address-edit-padding= @padding-sm;
-  // @address-edit-buttons-padding= @padding-xl @padding-base;
-  // @address-edit-button-margin-bottom= @padding-sm;
-  // @address-edit-detail-finish-color= @blue;
-  // @address-edit-detail-finish-font-size= @font-size-sm;
+  // AddressEdit
+  static const addressEditPadding = paddingSm;
+  static const addressEditButtonsPadding =
+      const EdgeInsets.symmetric(vertical: paddingXl, horizontal: paddingBase);
+  static const addressEditButtonMarginBottom = paddingSm;
+  static const addressEditDetailFinishColor = blue;
+  static const addressEditDetailFinishFontSize = fontSizeSm;
 
-  // // AddressList
-  // @address-list-padding= @padding-sm @padding-sm 80px;
-  // @address-list-disabled-text-color= @gray-6;
-  // @address-list-disabled-text-padding= @padding-base * 5 0 @padding-md;
-  // @address-list-disabled-text-font-size= @font-size-md;
-  // @address-list-disabled-text-line-height= @line-height-md;
-  // @address-list-add-button-z-index= 999;
-  // @address-list-item-padding= @padding-sm;
-  // @address-list-item-text-color= @text-color;
-  // @address-list-item-disabled-text-color= @gray-5;
-  // @address-list-item-font-size= 13px;
-  // @address-list-item-line-height= @line-height-sm;
-  // @address-list-item-radio-icon-color= @red;
-  // @address-list-edit-icon-size= 20px;
+  // AddressList
+  static const addressListPadding = const EdgeInsets.only(
+      top: paddingSm, left: paddingSm, right: paddingSm, bottom: 80.0);
+  static const addressListDisabledTextColor = gray6;
+  static const addressListDisabledTextPadding = const EdgeInsets.only(
+      top: paddingBase * 5, left: 0, right: 0, bottom: paddingMd);
+  static const addressListDisabledTextFontSize = fontSizeMd;
+  static const addressListDisabledTextLineHeight = lineHeightMd;
+  static const addressListAddButtonZIndex = 999;
+  static const addressListItemPadding = paddingSm;
+  static const addressListItemTextColor = textColor;
+  static const addressListItemDisabledTextColor = gray5;
+  static const addressListItemFontSize = 13.0;
+  static const addressListItemLineHeight = lineHeightSm;
+  static const addressListItemRadioIconColor = red;
+  static const addressListEditIconSize = 20.0;
 
   // // Badge
   static const badgeSize = 16.0;
@@ -128,7 +131,8 @@ class ThemeVars {
   static const badgeBackgroundColor = red;
   static const badgeDotColor = red;
   static const badgeDotSize = 8.0;
-  // static const badgeFontFamily= -apple-system-font, Helvetica Neue, Arial, sans-serif;
+  static const badgeFontFamily =
+      "-apple-system-font, Helvetica Neue, Arial, sans-serif";
 
   // // Button
   static const buttonMiniHeight = 24.0;
@@ -161,50 +165,57 @@ class ThemeVars {
   static const buttonPlainBackgroundColor = white;
   static const buttonDisabledOpacity = disabledOpacity;
 
-  // // Calendar
-  // @calendar-background-color= @white;
-  // @calendar-popup-height= 80%;
-  // @calendar-header-box-shadow= 0 2px 10px rgba(125, 126, 128, 0.16);
-  // @calendar-header-title-height= 44px;
-  // @calendar-header-title-font-size= @font-size-lg;
-  // @calendar-header-subtitle-font-size= @font-size-md;
-  // @calendar-weekdays-height= 30px;
-  // @calendar-weekdays-font-size= @font-size-sm;
-  // @calendar-month-title-font-size= @font-size-md;
-  // @calendar-month-mark-color= fade(@gray-2, 80%);
-  // @calendar-month-mark-font-size= 160px;
-  // @calendar-day-height= 64px;
-  // @calendar-day-font-size= @font-size-lg;
-  // @calendar-range-edge-color= @white;
-  // @calendar-range-edge-background-color= @red;
-  // @calendar-range-middle-color= @red;
-  // @calendar-range-middle-background-opacity= 0.1;
-  // @calendar-selected-day-size= 54px;
-  // @calendar-selected-day-color= @white;
-  // @calendar-info-font-size= @font-size-xs;
-  // @calendar-info-line-height= @line-height-xs;
-  // @calendar-selected-day-background-color= @red;
-  // @calendar-day-disabled-color= @gray-5;
-  // @calendar-confirm-button-height= 36px;
-  // @calendar-confirm-button-margin= 7px 0;
+  // Calendar
+  static const calendarBackgroundColor = white;
+  static const calendarPopupHeight = '80%';
+  static const calendarHeaderBoxShadow = const [
+    BoxShadow(
+        offset: Offset(0.0, 2.0),
+        blurRadius: 10.0,
+        color: Color.fromRGBO(125, 126, 128, 0.16))
+  ];
+  static const calendarHeaderTitleHeight = 44.0;
+  static const calendarHeaderTitleFontSize = fontSizeLg;
+  static const calendarHeaderSubtitleFontSize = fontSizeMd;
+  static const calendarWeekdaysHeight = 30.0;
+  static const calendarWeekdaysFontSize = fontSizeSm;
+  static const calendarMonthTitleFontSize = fontSizeMd;
+  static const calendarMonthMarkColor = 'fade(gray2, 80%)';
+  static const calendarMonthMarkFontSize = 160.0;
+  static const calendarDayHeight = 64.0;
+  static const calendarDayFontSize = fontSizeLg;
+  static const calendarRangeEdgeColor = white;
+  static const calendarRangeEdgeBackgroundColor = red;
+  static const calendarRangeMiddleColor = red;
+  static const calendarRangeMiddleBackgroundOpacity = 0.1;
+  static const calendarSelectedDaySize = 54.0;
+  static const calendarSelectedDayColor = white;
+  static const calendarInfoFontSize = fontSizeXs;
+  static const calendarInfoLineHeight = lineHeightXs;
+  static const calendarSelectedDayBackgroundColor = red;
+  static const calendarDayDisabledColor = gray5;
+  static const calendarConfirmButtonHeight = 36.0;
+  static const calendarConfirmButtonMargin =
+      const EdgeInsets.symmetric(vertical: 7.0);
 
-  // // Card
-  // @card-padding= @padding-xs @padding-md;
-  // @card-font-size= @font-size-sm;
-  // @card-text-color= @text-color;
-  // @card-background-color= @background-color-light;
-  // @card-thumb-size= 88px;
-  // @card-thumb-border-radius= @border-radius-lg;
-  // @card-title-line-height= 16px;
-  // @card-desc-color= @gray-7;
-  // @card-desc-line-height= @line-height-md;
-  // @card-price-color= @gray-8;
-  // @card-origin-price-color= @gray-6;
-  // @card-num-color= @gray-6;
-  // @card-origin-price-font-size= @font-size-xs;
-  // @card-price-font-size= @font-size-sm;
-  // @card-price-integer-font-size= @font-size-lg;
-  // @card-price-font-family= @price-integer-font-family;
+  // Card
+  static const cardPadding =
+      const EdgeInsets.symmetric(vertical: paddingXs, horizontal: paddingMd);
+  static const cardFontSize = fontSizeSm;
+  static const cardTextColor = textColor;
+  static const cardBackgroundColor = backgroundColorLight;
+  static const cardThumbSize = 88.0;
+  static const cardThumbBorderRadius = borderRadiusLg;
+  static const cardTitleLineHeight = 16.0;
+  static const cardDescColor = gray7;
+  static const cardDescLineHeight = lineHeightMd;
+  static const cardPriceColor = gray8;
+  static const cardOriginPriceColor = gray6;
+  static const cardNumColor = gray6;
+  static const cardOriginPriceFontSize = fontSizeXs;
+  static const cardPriceFontSize = fontSizeSm;
+  static const cardPriceIntegerFontSize = fontSizeLg;
+  static const cardPriceFontFamily = priceIntegerFontFamily;
 
   // Cell
   static const cellFontSize = fontSizeMd;
@@ -252,89 +263,101 @@ class ThemeVars {
   static const circleTextFontSize = fontSizeMd;
   static const circleTextLineHeight = lineHeightMd;
 
-  // // Collapse
-  // @collapse-item-transition-duration= @animation-duration-base;
-  // @collapse-item-content-padding= @padding-sm @padding-md;
-  // @collapse-item-content-font-size= @font-size-md;
-  // @collapse-item-content-line-height= 1.5;
-  // @collapse-item-content-text-color= @gray-6;
-  // @collapse-item-content-background-color= @white;
-  // @collapse-item-title-disabled-color= @gray-5;
+  // Collapse
+  static const collapseItemTransitionDuration = animationDurationBase;
+  static const collapseItemContentPadding =
+      const EdgeInsets.symmetric(vertical: paddingSm, horizontal: paddingMd);
+  static const collapseItemContentFontSize = fontSizeMd;
+  static const collapseItemContentLineHeight = 1.5;
+  static const collapseItemContentTextColor = gray6;
+  static const collapseItemContentBackgroundColor = white;
+  static const collapseItemTitleDisabledColor = gray5;
 
-  // // ContactCard
-  // @contact-card-padding= @padding-md;
-  // @contact-card-add-icon-size= 40px;
-  // @contact-card-add-icon-color= @blue;
-  // @contact-card-value-line-height= @line-height-md;
+  // ContactCard
+  static const contactCardPadding = paddingMd;
+  static const contactCardAddIconSize = 40.0;
+  static const contactCardAddIconColor = blue;
+  static const contactCardValueLineHeight = lineHeightMd;
 
-  // // ContactEdit
-  // @contact-edit-padding= @padding-md;
-  // @contact-edit-fields-radius= @border-radius-md;
-  // @contact-edit-buttons-padding= @padding-xl 0;
-  // @contact-edit-button-margin-bottom= @padding-sm;
-  // @contact-edit-button-font-size= 16px;
-  // @contact-edit-field-label-width= 4.1em;
+  // ContactEdit
+  static const contactEditPadding = paddingMd;
+  static const contactEditFieldsRadius = borderRadiusMd;
+  static const contactEditButtonsPadding =
+      const EdgeInsets.symmetric(vertical: paddingXl, horizontal: 0);
+  static const contactEditButtonMarginBottom = paddingSm;
+  static const contactEditButtonFontSize = 16.0;
+  static const contactEditFieldLabelWidth = '4.1em';
 
-  // // ContactList
-  // @contact-list-edit-icon-size= 16px;
-  // @contact-list-add-button-z-index= 999;
-  // @contact-list-item-padding= @padding-md;
+  // ContactList
+  static const contactListEditIconSize = 16.0;
+  static const contactListAddButtonZIndex = 999;
+  static const contactListItemPadding = paddingMd;
 
-  // // CountDown
-  // @count-down-text-color= @text-color;
-  // @count-down-font-size= @font-size-md;
-  // @count-down-line-height= @line-height-md;
+  // CountDown
+  static const countDownTextColor = textColor;
+  static const countDownFontSize = fontSizeMd;
+  static const countDownLineHeight = lineHeightMd;
 
-  // // Coupon
-  // @coupon-margin= 0 @padding-sm @padding-sm;
-  // @coupon-content-height= 84px;
-  // @coupon-content-padding= 14px 0;
-  // @coupon-background-color= @white;
-  // @coupon-active-background-color= @active-color;
-  // @coupon-border-radius= @border-radius-lg;
-  // @coupon-box-shadow= 0 0 4px rgba(0, 0, 0, 0.1);
-  // @coupon-head-width= 96px;
-  // @coupon-amount-color= @red;
-  // @coupon-amount-font-size= 30px;
-  // @coupon-currency-font-size= 40%;
-  // @coupon-name-font-size= @font-size-md;
-  // @coupon-disabled-text-color= @gray-6;
-  // @coupon-description-padding= @padding-xs @padding-md;
-  // @coupon-description-border-color= @border-color;
+  // Coupon
+  static const couponMargin = const EdgeInsets.only(
+      top: 0.0, left: paddingSm, right: paddingSm, bottom: paddingSm);
+  static const couponContentHeight = 84.0;
+  static const couponContentPadding =
+      const EdgeInsets.symmetric(vertical: 14.0, horizontal: 0.0);
+  static const couponBackgroundColor = white;
+  static const couponActiveBackgroundColor = activeColor;
+  static const couponBorderRadius = borderRadiusLg;
+  static const couponBoxShadow = [
+    BoxShadow(
+        offset: Offset(0.0, 0.0),
+        blurRadius: 4.0,
+        color: Color.fromRGBO(0, 0, 0, 0.1))
+  ];
+  static const couponHeadWidth = 96.0;
+  static const couponAmountColor = red;
+  static const couponAmountFontSize = 30.0;
+  static const couponCurrencyFontSize = '40%';
+  static const couponNameFontSize = fontSizeMd;
+  static const couponDisabledTextColor = gray6;
+  static const couponDescriptionPadding =
+      const EdgeInsets.symmetric(vertical: paddingXs, horizontal: paddingMd);
+  static const couponDescriptionBorderColor = borderColor;
 
-  // // CouponCell
-  // @coupon-cell-selected-text-color= @text-color;
+  // CouponCell
+  static const couponCellSelectedTextColor = textColor;
 
-  // // CouponList
-  // @coupon-list-background-color= @background-color;
-  // @coupon-list-field-padding= 5px 0 5px @padding-md;
-  // @coupon-list-exchange-button-height= 32px;
-  // @coupon-list-close-button-height= 40px;
-  // @coupon-list-empty-image-size= 200px;
-  // @coupon-list-empty-tip-color= @gray-6;
-  // @coupon-list-empty-tip-font-size= @font-size-md;
-  // @coupon-list-empty-tip-line-height= @line-height-md;
+  // CouponList
+  static const couponListBackgroundColor = backgroundColor;
+  static const couponListFieldPadding =
+      const EdgeInsets.only(top: 5.0, right: 0.0, bottom: 5.0, left: paddingMd);
+  static const couponListExchangeButtonHeight = 32.0;
+  static const couponListCloseButtonHeight = 40.0;
+  static const couponListEmptyImageSize = 200.0;
+  static const couponListEmptyTipColor = gray6;
+  static const couponListEmptyTipFontSize = fontSizeMd;
+  static const couponListEmptyTipLineHeight = lineHeightMd;
 
-  // // Dialog
-  // @dialog-width= 320px;
-  // @dialog-small-screen-width= 90%;
-  // @dialog-font-size= @font-size-lg;
-  // @dialog-transition= @animation-duration-base;
-  // @dialog-border-radius= 16px;
-  // @dialog-background-color= @white;
-  // @dialog-header-font-weight= @font-weight-bold;
-  // @dialog-header-line-height= 24px;
-  // @dialog-header-padding-top= 26px;
-  // @dialog-header-isolated-padding= @padding-lg 0;
-  // @dialog-message-padding= @padding-lg;
-  // @dialog-message-font-size= @font-size-md;
-  // @dialog-message-line-height= @line-height-md;
-  // @dialog-message-max-height= 60vh;
-  // @dialog-has-title-message-text-color= @gray-7;
-  // @dialog-has-title-message-padding-top= @padding-xs;
-  // @dialog-button-height= 48px;
-  // @dialog-round-button-height= 36px;
-  // @dialog-confirm-button-text-color= @red;
+  // Dialog
+  static const dialogWidth = 320.0;
+  static const dialogSmallScreenWidth = '90%';
+  static const dialogFontSize = fontSizeLg;
+  static const dialogTransition = animationDurationBase;
+  static const dialogBorderRadius = 16.0;
+  static const dialogBackgroundColor = white;
+  static const dialogHeaderFontWeight = fontWeightBold;
+  static const dialogHeaderLineHeight = 24.0;
+  static const dialogHeaderPaddingTop = 26.0;
+  static const dialogHeaderIsolatedPadding =
+      const EdgeInsets.symmetric(vertical: paddingLg, horizontal: 0.0);
+  static const dialogMessagePadding = paddingLg;
+  static const dialogMessageFontSize = fontSizeMd;
+  static const dialogMessageLineHeight = lineHeightMd;
+  static const dialogMessageMaxHeight = '60vh';
+  static const dialogHasTitleMessageTextColor = gray7;
+  static const dialogHasTitleMessagePaddingTop = paddingXs;
+  static const dialogButtonHeight = 48.0;
+  static const dialogRoundButtonHeight = 36.0;
+  static const dialogConfirmButtonTextColor = red;
 
   // // Divider
   static const dividerMargin =

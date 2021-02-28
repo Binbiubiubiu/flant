@@ -5,28 +5,28 @@ import '../../styles/var.dart';
 
 /// ### FlanSwitch
 /// 用于在打开和关闭状态之间进行切换。
-class FlanSwitch extends StatefulWidget {
+class FlanSwitch<T extends dynamic> extends StatefulWidget {
   const FlanSwitch({
     Key key,
-    this.value = false,
+    T value,
     this.loading = false,
     this.disabled = false,
     this.size,
     this.activeColor,
     this.inActiveColor,
-    this.activeValue = true,
-    this.inActiveValue = false,
+    T activeValue,
+    T inActiveValue,
     this.onChange,
-  })  : assert(value != null),
-        assert(loading != null),
+  })  : assert(loading != null),
         assert(disabled != null),
-        assert(activeValue != null),
-        assert(inActiveValue != null),
+        value = value ?? false,
+        activeValue = activeValue ?? true,
+        inActiveValue = inActiveValue ?? false,
         super(key: key);
 
   // ****************** Props ******************
   /// 开关选中状态
-  final dynamic value;
+  final T value;
 
   /// 是否为加载状态
   final bool loading;
@@ -44,15 +44,15 @@ class FlanSwitch extends StatefulWidget {
   final Color inActiveColor;
 
   /// 打开时对应的值
-  final dynamic activeValue;
+  final T activeValue;
 
   /// 关闭时对应的值
-  final dynamic inActiveValue;
+  final T inActiveValue;
 
   // ****************** Events ******************
 
   /// 开关状态切换时触发
-  final ValueChanged<dynamic> onChange;
+  final ValueChanged<T> onChange;
 
   @override
   _FlanSwitchState createState() => _FlanSwitchState();

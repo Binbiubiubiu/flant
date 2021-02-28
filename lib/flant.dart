@@ -18,6 +18,7 @@ export './components/show/badge.dart';
 export './components/show/circle.dart';
 export './components/show/empty.dart';
 export './components/show/divider.dart';
+export './components/show/notice_bar.dart';
 export './components/show/progress.dart';
 export './components/show/skeleton.dart';
 export './components/show/tag.dart';
