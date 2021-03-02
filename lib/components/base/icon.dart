@@ -97,26 +97,25 @@ class FlanIcon extends StatelessWidget {
 
   // 构建图片图标
   Widget _buildIcon(BuildContext context) {
-    final textStyle = DefaultTextStyle.of(context).style;
+    final iconTheme = IconTheme.of(context);
+    final iconSize = this.size ?? iconTheme.size;
 
     if (this.iconName != null) {
       return Icon(
         IconData(this.iconName, fontFamily: this.classPrefix),
-        color: this.color ?? textStyle.color,
-        size: this.size,
+        color: this.color ?? iconTheme.color,
+        size: iconSize,
       );
     }
 
     final isNetWork = RegExp("^https?:\/\/").hasMatch(this.iconUrl);
 
-    final size = this.size ?? IconTheme.of(context).size;
-
     if (isNetWork) {
       return Image.network(
         this.iconUrl,
         color: this.color, //?? textStyle.color,
-        width: size,
-        height: size,
+        width: iconSize,
+        height: iconSize,
         fit: BoxFit.contain,
       );
     }
@@ -124,8 +123,8 @@ class FlanIcon extends StatelessWidget {
     return Image.asset(
       this.iconUrl,
       color: this.color, //?? textStyle.color,
-      width: size,
-      height: size,
+      width: iconSize,
+      height: iconSize,
       fit: BoxFit.contain,
     );
   }

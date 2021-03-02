@@ -22,6 +22,7 @@ class FlanCell extends RouteStatelessWidget {
     this.clickable = false,
     this.isLink = false,
     this.isRequired = false,
+    this.disabled = false,
     this.center = false,
     this.arrowDirection = FlanCellArrowDirection.right,
     this.titleStyle,
@@ -43,6 +44,7 @@ class FlanCell extends RouteStatelessWidget {
         assert(clickable != null),
         assert(isLink != null),
         assert(isRequired != null),
+        assert(disabled != null),
         assert(center != null),
         assert(
             arrowDirection != null && arrowDirection is FlanCellArrowDirection),
@@ -86,6 +88,9 @@ class FlanCell extends RouteStatelessWidget {
 
   /// 是否显示表单必填星号
   final bool isRequired;
+
+  /// 是否禁用
+  final bool disabled;
 
   /// 是否使内容垂直居中
   final bool center;
@@ -180,9 +185,13 @@ class FlanCell extends RouteStatelessWidget {
     if (this._isClickable) {
       cell = InkWell(
         splashColor: Colors.transparent,
-        highlightColor: ThemeVars.black.withOpacity(0.1),
-        enableFeedback: false,
+        highlightColor:
+            this.disabled ? Colors.white : ThemeVars.black.withOpacity(0.1),
+        // enableFeedback: false,
         onTap: () {
+          if (this.disabled) {
+            return;
+          }
           if (this.onClick != null) {
             this.onClick();
           }
@@ -255,12 +264,17 @@ class FlanCell extends RouteStatelessWidget {
       if (this.titleStyle != null) {
         tStyle = tStyle.merge(this.titleStyle);
       }
+
       return Expanded(
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             DefaultTextStyle(
-              style: tStyle,
+              style: tStyle.copyWith(
+                color: this.disabled
+                    ? ThemeVars.collapseItemTitleDisabledColor
+                    : null,
+              ),
               child: title,
             ),
             this._buildLabel(context),
@@ -280,7 +294,9 @@ class FlanCell extends RouteStatelessWidget {
       );
 
       TextStyle lstyle = _cellTextStyle.copyWith(
-        color: ThemeVars.cellLabelColor,
+        color: this.disabled
+            ? ThemeVars.collapseItemTitleDisabledColor
+            : ThemeVars.cellLabelColor,
         fontSize: this._sizeStyle.labelFontSize,
         // height: ThemeVars.cellLineHeight / this._sizeStyle.labelFontSize,
       );
@@ -306,7 +322,11 @@ class FlanCell extends RouteStatelessWidget {
       );
 
       final vStyle = _cellTextStyle.copyWith(
-        color: !this._hasTitle ? ThemeVars.textColor : ThemeVars.cellValueColor,
+        color: this.disabled
+            ? ThemeVars.collapseItemTitleDisabledColor
+            : !this._hasTitle
+                ? ThemeVars.textColor
+                : ThemeVars.cellValueColor,
       );
       if (this.valueStyle != null) {
         vStyle..merge(this.valueStyle);
@@ -325,12 +345,15 @@ class FlanCell extends RouteStatelessWidget {
     if (this.iconSlot != null) {
       return IconTheme(
         data: IconThemeData(
+          color:
+              this.disabled ? ThemeVars.collapseItemTitleDisabledColor : null,
           size: ThemeVars.cellIconSize,
         ),
         child: Container(
           constraints: BoxConstraints(
             minHeight: this._iconLineHeight,
           ),
+          padding: EdgeInsets.only(right: ThemeVars.paddingBase),
           alignment: Alignment.center,
           child: this.iconSlot,
         ),
@@ -349,6 +372,8 @@ class FlanCell extends RouteStatelessWidget {
           iconName: this.iconName,
           iconUrl: this.iconUrl,
           size: ThemeVars.cellIconSize,
+          color:
+              this.disabled ? ThemeVars.collapseItemTitleDisabledColor : null,
           classPrefix: this.iconPrefix,
         ),
       );
@@ -362,12 +387,15 @@ class FlanCell extends RouteStatelessWidget {
       return IconTheme(
         data: IconThemeData(
           size: ThemeVars.cellIconSize,
-          color: ThemeVars.cellRightIconColor,
+          color: this.disabled
+              ? ThemeVars.collapseItemTitleDisabledColor
+              : ThemeVars.cellRightIconColor,
         ),
         child: Container(
           constraints: BoxConstraints(
             minHeight: this._iconLineHeight,
           ),
+          padding: EdgeInsets.only(left: ThemeVars.paddingBase),
           alignment: Alignment.center,
           child: this.rightIconSlot,
         ),
@@ -392,8 +420,10 @@ class FlanCell extends RouteStatelessWidget {
         alignment: Alignment.center,
         child: FlanIcon(
           iconName: iconName,
-          color: ThemeVars.cellRightIconColor,
           size: ThemeVars.cellIconSize,
+          color: this.disabled
+              ? ThemeVars.collapseItemTitleDisabledColor
+              : ThemeVars.cellRightIconColor,
           classPrefix: this.iconPrefix,
         ),
       );
@@ -419,6 +449,8 @@ class FlanCell extends RouteStatelessWidget {
         .add(DiagnosticsProperty<bool>("isLink", isLink, defaultValue: false));
     properties.add(DiagnosticsProperty<bool>("isRequired", isRequired,
         defaultValue: false));
+    properties.add(
+        DiagnosticsProperty<bool>("disabled", disabled, defaultValue: false));
     properties
         .add(DiagnosticsProperty<bool>("center", center, defaultValue: false));
     properties.add(DiagnosticsProperty<FlanCellArrowDirection>(

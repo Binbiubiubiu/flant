@@ -12,10 +12,14 @@ export './components/base/popup.dart';
 export './components/base/style.dart';
 export './components/base/toast.dart';
 // form components
+export './components/form/search.dart';
+export './components/form/field.dart';
 export './components/form/switch.dart';
 // show components
 export './components/show/badge.dart';
 export './components/show/circle.dart';
+export './components/show/collapse.dart';
+export './components/show/collapse_item.dart';
 export './components/show/empty.dart';
 export './components/show/divider.dart';
 export './components/show/notice_bar.dart';
