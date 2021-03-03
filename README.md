@@ -48,7 +48,7 @@
 
 - [x] Badge 徽标
 - [x] Circle 环形进度条
-- [ ] Collapse 折叠面板
+- [x] Collapse 折叠面板
 - [ ] CountDown 倒计时
 - [x] Divider 分割线
 - [x] Empty 空状态

@@ -128,7 +128,6 @@ class FlanCollapseItem extends StatefulWidget {
 
 class _FlanCollapseItemState extends State<FlanCollapseItem>
     with TickerProviderStateMixin {
-  bool expanded;
   AnimationController collapseAnimationController;
   Animation collapseIconAnimation;
   Animation collapseWrapperAnimation;
@@ -156,10 +155,7 @@ class _FlanCollapseItemState extends State<FlanCollapseItem>
       this.collapseWrapperAnimation =
           Tween(begin: 0.0, end: height).animate(collapseWrapperAnimation);
 
-      this.setState(() {
-        this.expanded = parent.isExpanded(currentName);
-        this.collapseAnimationController.value = this.expanded ? 1.0 : 0.0;
-      });
+      this.collapseAnimationController.value = this.expanded ? 1.0 : 0.0;
     });
 
     super.initState();
@@ -169,7 +165,6 @@ class _FlanCollapseItemState extends State<FlanCollapseItem>
   void didUpdateWidget(FlanCollapseItem oldWidget) {
     super.didUpdateWidget(oldWidget);
 
-    this.expanded = parent.isExpanded(currentName);
     if (this.expanded) {
       this.collapseAnimationController.forward();
     } else {
@@ -204,8 +199,6 @@ class _FlanCollapseItemState extends State<FlanCollapseItem>
               this.widget.rightIconSlot ?? FlanIcon.name(FlanIcons.arrow_down),
         ), // this.widget.rightIconSlot,
         onClick: () {
-          this.expanded = parent.isExpanded(currentName);
-
           if (this.expanded) {
             this.collapseAnimationController.reverse();
           } else {
@@ -217,7 +210,8 @@ class _FlanCollapseItemState extends State<FlanCollapseItem>
         iconSlot: this.widget.iconSlot,
         titleSlot: this.widget.titleSlot,
         child: this.widget.valueSlot,
-        border: this.widget.border,
+        border:
+            this.expanded ? (this.widget.border) : false, //this.widget.border,
         title: this.widget.title,
         value: this.widget.value,
         label: this.widget.label,
@@ -291,6 +285,8 @@ class _FlanCollapseItemState extends State<FlanCollapseItem>
   int get index => parent.child.children.indexOf(this.widget);
 
   String get currentName => widget.name ?? "$index";
+
+  bool get expanded => parent.isExpanded(currentName);
 
   @override
   void debugFillProperties(DiagnosticPropertiesBuilder properties) {
