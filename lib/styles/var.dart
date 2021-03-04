@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 class ThemeVars {
+  ThemeVars._();
   // Color Palette
 
   static const black = Color(0xFF000000);
@@ -860,7 +861,7 @@ class ThemeVars {
   static const tabbarItemTextColor = gray7;
   static const tabbarItemActiveColor = blue;
   static const tabbarItemActiveBackgroundColor = tabbarBackgroundColor;
-  static const tabbarItemLineHeight = 1;
+  static const tabbarItemLineHeight = 1.0;
   static const tabbarItemIconSize = 22.0;
   static const tabbarItemMarginBottom = 4.0;
 

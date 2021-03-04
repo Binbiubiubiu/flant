@@ -34,8 +34,7 @@ abstract class RouteStatelessWidget extends StatelessWidget {
     this.toName,
     this.replace = false,
     Key key,
-  })  : assert(replace != null),
-        super(key: key);
+  }) : super(key: key);
 
   /// 点击后跳转的目标路由对象
   final PageRoute toRoute;

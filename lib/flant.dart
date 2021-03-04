@@ -28,3 +28,6 @@ export './components/show/skeleton.dart';
 export './components/show/tag.dart';
 // alert components
 export './components/alert/loading.dart';
+// navigator components
+export './components/navigator/tabbar.dart';
+export './components/navigator/tabbar_item.dart';
