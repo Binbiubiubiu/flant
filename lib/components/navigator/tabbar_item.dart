@@ -12,32 +12,27 @@ typedef FlanTabbarItemSlotBuilder = Widget Function(
 
 class FlanTabbarItem<T extends dynamic> extends StatelessWidget {
   const FlanTabbarItem({
-    Key key,
+    Key? key,
     this.name,
     this.iconName,
     this.iconUrl,
     this.iconPrefix = kFlanIconsFamily,
     this.dot = false,
     this.badge,
-    this.url,
     this.textBuilder,
     this.iconBuilder,
     this.onClick,
-    String toName,
-    bool replace,
-  })  : assert(iconPrefix != null),
-        assert(dot != null),
-        super(key: key);
+  }) : super(key: key);
 
   // ****************** Props ******************
   /// 标签名称，作为匹配的标识符
-  final T name;
+  final T? name;
 
   /// 图标名称
-  final int iconName;
+  final int? iconName;
 
   /// 图片链接
-  final String iconUrl;
+  final String? iconUrl;
 
   /// 图标类名前缀
   final String iconPrefix;
@@ -46,22 +41,19 @@ class FlanTabbarItem<T extends dynamic> extends StatelessWidget {
   final bool dot;
 
   /// 图标右上角徽标的内容
-  final String badge;
-
-  /// 点击后跳转的链接地址
-  final String url;
+  final String? badge;
 
   // ****************** Events ******************
 
-  final VoidCallback onClick;
+  final VoidCallback? onClick;
 
   // ****************** Slots ******************
 
   /// 默认内容
-  final FlanTabbarItemSlotBuilder textBuilder;
+  final FlanTabbarItemSlotBuilder? textBuilder;
 
   /// 自定义图标
-  final FlanTabbarItemSlotBuilder iconBuilder;
+  final FlanTabbarItemSlotBuilder? iconBuilder;
 
   @override
   Widget build(BuildContext context) {
@@ -79,8 +71,8 @@ class FlanTabbarItem<T extends dynamic> extends StatelessWidget {
         ? (parent.activeColor ?? ThemeVars.tabbarItemActiveColor)
         : (parent.inactiveColor ?? ThemeVars.tabbarItemTextColor);
 
-    Widget customIcon =
-        (this.iconBuilder != null ? this.iconBuilder(context, active) : null);
+    Widget? customIcon =
+        (this.iconBuilder != null ? this.iconBuilder!(context, active) : null);
     if (customIcon != null && !(customIcon is FlanIcons)) {
       customIcon = SizedBox(height: 20.0, child: customIcon);
     }
@@ -102,7 +94,7 @@ class FlanTabbarItem<T extends dynamic> extends StatelessWidget {
       onTap: () {
         parent.setActive(name ?? index);
         if (this.onClick != null) {
-          this.onClick();
+          this.onClick!();
         }
       },
       child: Material(
@@ -127,7 +119,7 @@ class FlanTabbarItem<T extends dynamic> extends StatelessWidget {
               ),
               SizedBox(height: ThemeVars.tabbarItemMarginBottom),
               this.textBuilder != null
-                  ? this.textBuilder(context, active)
+                  ? this.textBuilder!(context, active)
                   : SizedBox.shrink(),
             ],
           ),

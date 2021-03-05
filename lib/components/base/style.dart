@@ -83,10 +83,9 @@ Widget kFlanSlideRightTransitionBuilder(animation, child) {
 class FlanTransition extends StatefulWidget {
   FlanTransition({
     this.curveBuilder = kFlanCurveBuilder,
-    @required this.transitionBuilder,
-    this.child,
-  })  : assert(curveBuilder != null),
-        assert(transitionBuilder != null);
+    required this.transitionBuilder,
+    required this.child,
+  });
 
   /// 动画曲线构造器
   final FlanCurveBuilder curveBuilder;
@@ -98,24 +97,27 @@ class FlanTransition extends StatefulWidget {
   final Visibility child;
 
   /// 过渡动画`Fade`
-  factory FlanTransition.fade({Visibility child}) => FlanTransition(
+  factory FlanTransition.fade({required Visibility child}) => FlanTransition(
       transitionBuilder: kFlanFadeTransitionBuilder, child: child);
 
   /// 过渡动画`Slide Down`
-  factory FlanTransition.slideDown({Visibility child}) => FlanTransition(
-      transitionBuilder: kFlanSlideDownTransitionBuilder, child: child);
+  factory FlanTransition.slideDown({required Visibility child}) =>
+      FlanTransition(
+          transitionBuilder: kFlanSlideDownTransitionBuilder, child: child);
 
   /// 过渡动画`Slide Up`
-  factory FlanTransition.slideUp({Visibility child}) => FlanTransition(
+  factory FlanTransition.slideUp({required Visibility child}) => FlanTransition(
       transitionBuilder: kFlanSlideUpTransitionBuilder, child: child);
 
   /// 过渡动画`Slide Left`
-  factory FlanTransition.slideLeft({Visibility child}) => FlanTransition(
-      transitionBuilder: kFlanSlideLeftTransitionBuilder, child: child);
+  factory FlanTransition.slideLeft({required Visibility child}) =>
+      FlanTransition(
+          transitionBuilder: kFlanSlideLeftTransitionBuilder, child: child);
 
   /// 过渡动画`Slide Right`
-  factory FlanTransition.slideRight({Visibility child}) => FlanTransition(
-      transitionBuilder: kFlanSlideRightTransitionBuilder, child: child);
+  factory FlanTransition.slideRight({required Visibility child}) =>
+      FlanTransition(
+          transitionBuilder: kFlanSlideRightTransitionBuilder, child: child);
 
   @override
   _FlanTransitionState createState() => _FlanTransitionState();
@@ -123,8 +125,8 @@ class FlanTransition extends StatefulWidget {
 
 class _FlanTransitionState extends State<FlanTransition>
     with SingleTickerProviderStateMixin {
-  AnimationController animationController;
-  Visibility content;
+  late AnimationController animationController;
+  late Visibility content;
 
   bool get show {
     return this.widget.child.visible;
@@ -146,12 +148,9 @@ class _FlanTransitionState extends State<FlanTransition>
 
   @override
   void dispose() {
-    if (this.animationController != null) {
-      this.animationController
-        ..removeStatusListener(this._transitionLeaveEnd)
-        ..dispose();
-      this.animationController = null;
-    }
+    this.animationController
+      ..removeStatusListener(this._transitionLeaveEnd)
+      ..dispose();
 
     super.dispose();
   }

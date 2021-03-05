@@ -11,7 +11,7 @@ import './collapse.dart';
 /// ### FlanCollapseItem 折叠面板
 class FlanCollapseItem extends StatefulWidget {
   const FlanCollapseItem({
-    Key key,
+    Key? key,
     this.title,
     this.value,
     this.label,
@@ -35,37 +35,27 @@ class FlanCollapseItem extends StatefulWidget {
     this.iconSlot,
     this.titleSlot,
     this.rightIconSlot,
-  })  : assert(size != null && size is FlanCellSize),
-        assert(iconPrefix != null),
-        assert(border != null),
-        assert(clickable != null),
-        assert(isLink != null),
-        assert(isRequired != null),
-        assert(center != null),
-        assert(
-            arrowDirection != null && arrowDirection is FlanCellArrowDirection),
-        assert(disabled != null),
-        super(key: key);
+  }) : super(key: key);
 
   // ****************** Props ******************
 
   /// 左侧标题
-  final String title;
+  final String? title;
 
   /// 右侧内容
-  final String value;
+  final String? value;
 
   /// 标题下方的描述信息
-  final String label;
+  final String? label;
 
   /// 单元格大小，可选值为 `large`
   final FlanCellSize size;
 
   /// 左侧图标名称
-  final int iconName;
+  final int? iconName;
 
   /// 左侧图片链接
-  final String iconUrl;
+  final String? iconUrl;
 
   /// 图标类名前缀，同 Icon 组件的 class-prefix 属性
   final String iconPrefix;
@@ -89,16 +79,16 @@ class FlanCollapseItem extends StatefulWidget {
   final FlanCellArrowDirection arrowDirection;
 
   /// 左侧标题额外样式
-  final TextStyle titleStyle;
+  final TextStyle? titleStyle;
 
   /// 右侧内容额外类名
-  final TextStyle valueStyle;
+  final TextStyle? valueStyle;
 
   /// 描述信息额外类名
-  final TextStyle labelStyle;
+  final TextStyle? labelStyle;
 
   /// 唯一标识符，默认为索引值
-  final String name;
+  final String? name;
 
   /// 是否禁用面板
   final bool disabled;
@@ -108,19 +98,19 @@ class FlanCollapseItem extends StatefulWidget {
   // ****************** Slots ******************
 
   /// 面板内容
-  final Widget child;
+  final Widget? child;
 
   /// 自定义显示内容
-  final Widget valueSlot;
+  final Widget? valueSlot;
 
   /// 自定义 `icon`
-  final Widget iconSlot;
+  final Widget? iconSlot;
 
   /// 自定义 `title`
-  final Widget titleSlot;
+  final Widget? titleSlot;
 
   /// 自定义右侧按钮，默认是 `arrow`
-  final Widget rightIconSlot;
+  final Widget? rightIconSlot;
 
   @override
   _FlanCollapseItemState createState() => _FlanCollapseItemState();
@@ -128,9 +118,9 @@ class FlanCollapseItem extends StatefulWidget {
 
 class _FlanCollapseItemState extends State<FlanCollapseItem>
     with TickerProviderStateMixin {
-  AnimationController collapseAnimationController;
-  Animation collapseIconAnimation;
-  Animation collapseWrapperAnimation;
+  late AnimationController collapseAnimationController;
+  late Animation<double> collapseIconAnimation;
+  late Animation<double> collapseWrapperAnimation;
 
   GlobalKey wrapKey = GlobalKey();
 
@@ -150,8 +140,8 @@ class _FlanCollapseItemState extends State<FlanCollapseItem>
       parent: this.collapseAnimationController,
       curve: Curves.easeInOut,
     );
-    WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
-      final height = wrapKey.currentContext.size.height;
+    WidgetsBinding.instance?.addPostFrameCallback((timeStamp) {
+      final height = wrapKey.currentContext?.size?.height;
       this.collapseWrapperAnimation =
           Tween(begin: 0.0, end: height).animate(collapseWrapperAnimation);
 
@@ -249,7 +239,7 @@ class _FlanCollapseItemState extends State<FlanCollapseItem>
                 fontSize: ThemeVars.collapseItemContentFontSize,
                 height: ThemeVars.collapseItemContentLineHeight,
               ),
-              child: this.widget.child,
+              child: this.widget.child ?? SizedBox.shrink(),
             ),
           ),
         ),
@@ -329,7 +319,7 @@ class _FlanCollapseItemState extends State<FlanCollapseItem>
 }
 
 class _FlanCollapseContent extends StatefulWidget {
-  _FlanCollapseContent({Key key}) : super(key: key);
+  _FlanCollapseContent({Key? key}) : super(key: key);
 
   @override
   __FlanCollapseContentState createState() => __FlanCollapseContentState();

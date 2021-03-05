@@ -9,7 +9,7 @@ import '../../mixins/route_mixins.dart';
 /// 用于触发一个操作，如提交表单
 class FlanButton extends RouteStatelessWidget {
   const FlanButton({
-    Key key,
+    Key? key,
     this.type = FlanButtonType.normal,
     this.size = FlanButtonSize.normal,
     this.text,
@@ -33,21 +33,10 @@ class FlanButton extends RouteStatelessWidget {
     this.onTouchStart,
     this.child,
     this.loadingSlot,
-    String toName,
-    PageRoute toRoute,
+    String? toName,
+    PageRoute? toRoute,
     bool replace = false,
-  })  : assert(type != null && type is FlanButtonType),
-        assert(size != null && size is FlanButtonSize),
-        assert(iconPrefix != null),
-        assert(iconPosition != null && iconPosition is FlanButtonIconPosition),
-        assert(block != null),
-        assert(plain != null),
-        assert(round != null),
-        assert(square != null),
-        assert(hairline != null),
-        assert(disabled != null),
-        assert(loading != null),
-        assert(loadingSize != null && loadingSize > 0.0),
+  })  : assert(loadingSize > 0.0),
         super(
           key: key,
           toName: toName,
@@ -63,19 +52,19 @@ class FlanButton extends RouteStatelessWidget {
   final FlanButtonSize size;
 
   /// 按钮文字
-  final String text;
+  final String? text;
 
   /// 按钮颜色，
-  final Color color;
+  final Color? color;
 
   /// 按钮颜色(支持传入 linear-gradient 渐变色)
-  final Gradient gradient;
+  final Gradient? gradient;
 
   /// 左侧图标名称
-  final int iconName;
+  final int? iconName;
 
   /// 左侧图片链接
-  final String iconUrl;
+  final String? iconUrl;
 
   /// 图标类名前缀，同 Icon 组件的 class-prefix 属性
   final String iconPrefix;
@@ -105,7 +94,7 @@ class FlanButton extends RouteStatelessWidget {
   final bool loading;
 
   /// 加载状态提示文字
-  final String loadingText;
+  final String? loadingText;
 
   /// 加载图标类型，可选值为 `spinner`
   final FlanLoadingType loadingType;
@@ -115,17 +104,17 @@ class FlanButton extends RouteStatelessWidget {
 
   // ****************** Events ******************
   /// 点击按钮，且按钮状态不为加载或禁用时触发
-  final GestureTapCallback onClick;
+  final GestureTapCallback? onClick;
 
   /// 开始触摸按钮时触发
-  final GestureTapDownCallback onTouchStart;
+  final GestureTapDownCallback? onTouchStart;
 
   // ****************** Slots ******************
   /// 按钮内容
-  final Widget child;
+  final Widget? child;
 
   /// 自定义加载图标
-  final Widget loadingSlot;
+  final Widget? loadingSlot;
 
   @override
   Widget build(BuildContext context) {
@@ -166,7 +155,7 @@ class FlanButton extends RouteStatelessWidget {
               ? null
               : () {
                   if (this.onClick != null) {
-                    this.onClick();
+                    this.onClick!();
                   }
                   this.route(context);
                 },
@@ -196,32 +185,25 @@ class FlanButton extends RouteStatelessWidget {
   // 构建按钮文本
   Widget _buildText(BuildContext context) {
     if (this.loading && this.loadingText != null) {
-      return Text(this.loadingText);
+      return Text(this.loadingText!);
     }
 
-    if (this.child != null) {
-      return this.child;
-    }
-
-    return Text(this.text ?? "");
+    return this.child ?? Text(this.text ?? "");
   }
 
   /// loading 图标
   Widget _buildLoadingIcon(BuildContext context) {
-    if (this.loadingSlot != null) {
-      return this.loadingSlot;
-    }
-
-    return FlanLoading(
-      size: this.loadingSize,
-      type: this.loadingType,
-      color: this._themeType.color,
-    );
+    return this.loadingSlot ??
+        FlanLoading(
+          size: this.loadingSize,
+          type: this.loadingType,
+          color: this._themeType.color,
+        );
   }
 
   /// 构建图标
   Widget _buildIcon(BuildContext context) {
-    final iSize = DefaultTextStyle.of(context).style.fontSize * 1.2;
+    final iSize = DefaultTextStyle.of(context).style.fontSize! * 1.2;
 
     if (this.loading) {
       return this._buildLoadingIcon(context);
@@ -283,12 +265,12 @@ class FlanButton extends RouteStatelessWidget {
 
   /// 计算按钮样式
   _FlanButtonTheme _computedThemeType({
-    Color backgroundColor,
-    Color color,
-    Color borderColor,
+    required Color backgroundColor,
+    required Color color,
+    required Color borderColor,
   }) {
     if (this.color != null) {
-      borderColor = this.color;
+      borderColor = this.color!;
       color = Colors.white;
     }
 
@@ -310,7 +292,7 @@ class FlanButton extends RouteStatelessWidget {
   // bool get isBtnEnable => !this.disabled && this.onPressed != null;
   /// 按钮是否有内容
   bool get _isHasText =>
-      (this.text != null && this.text.isNotEmpty) || this.child != null;
+      (this.text != null && this.text!.isNotEmpty) || this.child != null;
 
   /// 按钮大小集合
   _FlanButtonSize get _btnSize {
@@ -417,9 +399,9 @@ class FlanButton extends RouteStatelessWidget {
 /// 按钮主题样式类
 class _FlanButtonTheme {
   _FlanButtonTheme({
-    this.color,
-    this.backgroundColor,
-    this.border,
+    required this.color,
+    required this.backgroundColor,
+    required this.border,
   }) : super();
 
   final Color backgroundColor;
@@ -430,9 +412,9 @@ class _FlanButtonTheme {
 /// 按钮大小样式类
 class _FlanButtonSize {
   _FlanButtonSize({
-    this.fontSize,
-    this.height,
-    this.padding,
+    required this.fontSize,
+    required this.height,
+    required this.padding,
   }) : super();
 
   final double fontSize;

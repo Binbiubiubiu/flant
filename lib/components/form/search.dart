@@ -9,11 +9,11 @@ import './field.dart';
 /// 用于搜索场景的输入框组件。
 class FlanSearch extends StatelessWidget {
   const FlanSearch({
-    Key key,
+    Key? key,
     this.label,
     this.rightIconName,
     this.rightIconUrl,
-    this.value,
+    required this.value,
     this.actionText,
     this.background,
     this.maxLength,
@@ -27,7 +27,7 @@ class FlanSearch extends StatelessWidget {
     this.clearable = true,
     this.leftIconName = FlanIcons.search,
     this.leftIconUrl,
-    this.onChange,
+    required this.onChange,
     this.onSearch,
     this.onInput,
     this.onFocus,
@@ -39,42 +39,36 @@ class FlanSearch extends StatelessWidget {
     this.labelSlot,
     this.leftIconSlot,
     this.rightIconSlot,
-  })  : assert(showAction != null),
-        assert(autofocus != null),
-        assert(disabled != null),
-        assert(shape != null && shape is FlanSearchShape),
-        assert(clearable != null),
-        assert(leftIconName != null),
-        super(key: key);
+  }) : super(key: key);
 
   // ****************** Props ******************
 
   /// 关闭时对应的值
-  final String label;
+  final String? label;
 
-  final int rightIconName;
+  final int? rightIconName;
 
-  final String rightIconUrl;
+  final String? rightIconUrl;
 
   final String value;
 
   /// 取消按钮文字
-  final String actionText;
+  final String? actionText;
 
   /// 搜索框外部背景色
-  final Color background;
+  final Color? background;
 
   /// 输入的最大字符数
-  final int maxLength;
+  final int? maxLength;
 
   /// 占位提示文字
-  final String placeholder;
+  final String? placeholder;
 
   /// 是否在搜索框右侧显示取消按钮
   final bool showAction;
 
   /// 显示清除图标的时机，`always` 表示输入框不为空时展示，`focus` 表示输入框聚焦且不为空时展示
-  final FlanFieldClearTrigger clearTrigger;
+  final FlanFieldClearTrigger? clearTrigger;
 
   /// 搜索框形状，可选值为 `round` `square`
   final FlanSearchShape shape;
@@ -91,38 +85,38 @@ class FlanSearch extends StatelessWidget {
   /// 是否自动聚焦
   final bool autofocus;
 
-  final int leftIconName;
+  final int? leftIconName;
 
-  final String leftIconUrl;
+  final String? leftIconUrl;
 
   // ****************** Events ******************
 
   /// 开关状态切换时触发
   final ValueChanged<String> onChange;
 
-  final ValueChanged<String> onSearch;
+  final ValueChanged<String>? onSearch;
 
-  final ValueChanged<String> onInput;
+  final ValueChanged<String>? onInput;
 
-  final VoidCallback onFocus;
+  final VoidCallback? onFocus;
 
-  final VoidCallback onBlur;
+  final VoidCallback? onBlur;
 
-  final VoidCallback onClear;
+  final VoidCallback? onClear;
 
-  final VoidCallback onCancel;
+  final VoidCallback? onCancel;
 
   // ****************** Slots ******************
 
-  final Widget leftSlot;
+  final Widget? leftSlot;
 
-  final Widget actionSlot;
+  final Widget? actionSlot;
 
-  final Widget labelSlot;
+  final Widget? labelSlot;
 
-  final Widget leftIconSlot;
+  final FlanIcon? leftIconSlot;
 
-  final Widget rightIconSlot;
+  final FlanIcon? rightIconSlot;
 
   @override
   Widget build(BuildContext context) {

@@ -7,7 +7,7 @@ import '../../styles/var.dart';
 /// 空状态时的占位提示
 class FlanEmpty extends StatelessWidget {
   const FlanEmpty({
-    Key key,
+    Key? key,
     this.imageType = FlanEmptyImageType.normal,
     this.imageUrl,
     this.imageSize,
@@ -15,33 +15,32 @@ class FlanEmpty extends StatelessWidget {
     this.child,
     this.imageSlot,
     this.descriptionSlot,
-  })  : assert(imageType != null && imageType is FlanEmptyImageType),
-        super(key: key);
+  }) : super(key: key);
 
   // ****************** Props ******************
   /// 图片类型，可选值为 `error` `network` `search`，支持传入图片 URL
   final FlanEmptyImageType imageType;
 
   /// 图片访问链接
-  final String imageUrl;
+  final String? imageUrl;
 
   /// 图片大小
-  final double imageSize;
+  final double? imageSize;
 
   /// 图片下方的描述文字
-  final String description;
+  final String? description;
 
   // ****************** Events ******************
 
   // ****************** Slots ******************
   /// 自定义底部内容
-  final Widget child;
+  final Widget? child;
 
   /// 自定义图标
-  final Widget imageSlot;
+  final Widget? imageSlot;
 
   /// 自定义描述文字
-  final Widget descriptionSlot;
+  final Widget? descriptionSlot;
 
   @override
   Widget build(BuildContext context) {
@@ -64,7 +63,7 @@ class FlanEmpty extends StatelessWidget {
 
   Widget _buildImage(BuildContext context) {
     if (this.imageSlot != null) {
-      return this.imageSlot;
+      return this.imageSlot!;
     }
 
     if (this.imageType == FlanEmptyImageType.network) {
@@ -79,7 +78,7 @@ class FlanEmpty extends StatelessWidget {
   }
 
   Widget _buildDescription(BuildContext context) {
-    final text = this.descriptionSlot ?? Text(this.description);
+    final text = this.descriptionSlot ?? Text(this.description ?? "");
 
     return Container(
       margin: EdgeInsets.only(top: ThemeVars.emptyDescriptionMarginTop),

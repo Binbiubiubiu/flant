@@ -10,7 +10,7 @@ import './icon.dart';
 /// 单元格为列表中的单个展示项。
 class FlanCell extends RouteStatelessWidget {
   const FlanCell({
-    Key key,
+    Key? key,
     this.title,
     this.value,
     this.label,
@@ -35,44 +35,29 @@ class FlanCell extends RouteStatelessWidget {
     this.iconSlot,
     this.rightIconSlot,
     this.extraSlots,
-    String toName,
-    PageRoute toRoute,
+    String? toName,
+    PageRoute? toRoute,
     bool replace = false,
-  })  : assert(size != null && size is FlanCellSize),
-        assert(iconPrefix != null),
-        assert(border != null),
-        assert(clickable != null),
-        assert(isLink != null),
-        assert(isRequired != null),
-        assert(disabled != null),
-        assert(center != null),
-        assert(
-            arrowDirection != null && arrowDirection is FlanCellArrowDirection),
-        super(
-          key: key,
-          toName: toName,
-          toRoute: toRoute,
-          replace: replace,
-        );
+  }) : super(key: key, toName: toName, toRoute: toRoute, replace: replace);
 
   // ****************** Props ******************
   /// 左侧标题
-  final String title;
+  final String? title;
 
   /// 右侧内容
-  final String value;
+  final String? value;
 
   /// 标题下方的描述信息
-  final String label;
+  final String? label;
 
   /// 单元格大小，可选值为 `large`
   final FlanCellSize size;
 
   /// 左侧图标名称
-  final int iconName;
+  final int? iconName;
 
   /// 左侧图片链接
-  final String iconUrl;
+  final String? iconUrl;
 
   /// 图标类名前缀，同 Icon 组件的 class-prefix 属性
   final String iconPrefix;
@@ -99,36 +84,36 @@ class FlanCell extends RouteStatelessWidget {
   final FlanCellArrowDirection arrowDirection;
 
   /// 左侧标题额外样式
-  final TextStyle titleStyle;
+  final TextStyle? titleStyle;
 
   /// 右侧内容额外类名
-  final TextStyle valueStyle;
+  final TextStyle? valueStyle;
 
   /// 描述信息额外类名
-  final TextStyle labelStyle;
+  final TextStyle? labelStyle;
 
   // ****************** Events ******************
   /// 点击单元格时触发
-  final GestureTapCallback onClick;
+  final GestureTapCallback? onClick;
 
   // ****************** Slots ******************
   /// 自定义右侧 value 的内容
-  final Widget child;
+  final Widget? child;
 
   /// 自定义左侧 title 的内容
-  final Widget titleSlot;
+  final Widget? titleSlot;
 
   /// 自定义标题下方 label 的内容
-  final Widget labelSlot;
+  final Widget? labelSlot;
 
   /// 自定义左侧图标
-  final Widget iconSlot;
+  final Widget? iconSlot;
 
   /// 自定义右侧按钮，默认为 `arrow`
-  final Widget rightIconSlot;
+  final Widget? rightIconSlot;
 
   /// 自定义单元格最右侧的额外内容
-  final Widget extraSlots;
+  final Widget? extraSlots;
 
   @override
   Widget build(BuildContext context) {
@@ -157,8 +142,8 @@ class FlanCell extends RouteStatelessWidget {
           this._buildTitle(context),
           this._buildValue(context),
           this._buildRigthIcon(context),
-          this.extraSlots,
-        ].where((element) => element != null).toList(),
+          this.extraSlots ?? SizedBox.shrink(),
+        ],
       ),
     );
 
@@ -193,7 +178,7 @@ class FlanCell extends RouteStatelessWidget {
             return;
           }
           if (this.onClick != null) {
-            this.onClick();
+            this.onClick!();
           }
           this.route(context);
         },
@@ -215,15 +200,15 @@ class FlanCell extends RouteStatelessWidget {
 
   /// 是否有左侧标题
   bool get _hasTitle =>
-      this.titleSlot != null || (this.title != null && this.title.isNotEmpty);
+      this.titleSlot != null || (this.title != null && this.title!.isNotEmpty);
 
   /// 是否有右侧内容
   bool get _hasValue =>
-      this.child != null || (this.value != null && this.value.isNotEmpty);
+      this.child != null || (this.value != null && this.value!.isNotEmpty);
 
   /// 是否有标题下方的描述信息
   bool get _hasLabel =>
-      this.labelSlot != null || (this.label != null && this.label.isNotEmpty);
+      this.labelSlot != null || (this.label != null && this.label!.isNotEmpty);
 
   /// 默认字体样式
   TextStyle get _cellTextStyle {
@@ -252,13 +237,13 @@ class FlanCell extends RouteStatelessWidget {
         titleFontSize: ThemeVars.cellLargeTitleFontSize,
         labelFontSize: ThemeVars.cellLargeLabelFontSize,
       ),
-    }[this.size];
+    }[this.size]!;
   }
 
   /// 构建标题
   Widget _buildTitle(BuildContext context) {
     if (this._hasTitle) {
-      Widget title = this.titleSlot ?? Text(this.title);
+      Widget title = this.titleSlot ?? Text(this.title ?? "");
       TextStyle tStyle = _cellTextStyle;
 
       if (this.titleStyle != null) {
@@ -278,11 +263,11 @@ class FlanCell extends RouteStatelessWidget {
               child: title,
             ),
             this._buildLabel(context),
-          ].where((element) => element != null).toList(),
+          ],
         ),
       );
     }
-    return null;
+    return SizedBox.shrink();
   }
 
   /// 构建标题下方的描述信息
@@ -290,7 +275,7 @@ class FlanCell extends RouteStatelessWidget {
     if (this._hasLabel) {
       final label = Padding(
         padding: EdgeInsets.only(top: ThemeVars.cellLabelMarginTop),
-        child: this.labelSlot ?? Text(this.label),
+        child: this.labelSlot ?? Text(this.label ?? ""),
       );
 
       TextStyle lstyle = _cellTextStyle.copyWith(
@@ -308,7 +293,7 @@ class FlanCell extends RouteStatelessWidget {
         child: label,
       );
     }
-    return null;
+    return SizedBox.shrink();
   }
 
   /// 构建右侧内容
@@ -317,7 +302,7 @@ class FlanCell extends RouteStatelessWidget {
       final value = Expanded(
         child: Align(
           alignment: Alignment.topRight,
-          child: this.child ?? Text(this.value),
+          child: this.child ?? Text(this.value ?? ""),
         ),
       );
 
@@ -337,7 +322,7 @@ class FlanCell extends RouteStatelessWidget {
       );
     }
 
-    return null;
+    return SizedBox.shrink();
   }
 
   /// 构建左侧图标
@@ -378,7 +363,8 @@ class FlanCell extends RouteStatelessWidget {
         ),
       );
     }
-    return null;
+
+    return SizedBox.shrink();
   }
 
   /// 构建右侧图标
@@ -408,7 +394,7 @@ class FlanCell extends RouteStatelessWidget {
         FlanCellArrowDirection.up: FlanIcons.arrow_up,
         FlanCellArrowDirection.left: FlanIcons.arrow_left,
         FlanCellArrowDirection.right: FlanIcons.arrow,
-      }[this.arrowDirection];
+      }[this.arrowDirection]!;
 
       return Container(
         constraints: BoxConstraints(
@@ -429,7 +415,7 @@ class FlanCell extends RouteStatelessWidget {
       );
     }
 
-    return null;
+    return SizedBox.shrink();
   }
 
   @override
@@ -482,9 +468,9 @@ enum FlanCellArrowDirection {
 /// 单元格样式类
 class _FlanCellSizeStyle {
   const _FlanCellSizeStyle({
-    this.paddingVertical,
-    this.titleFontSize,
-    this.labelFontSize,
+    required this.paddingVertical,
+    required this.titleFontSize,
+    required this.labelFontSize,
   });
 
   final double paddingVertical;

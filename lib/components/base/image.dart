@@ -8,7 +8,7 @@ import './icon.dart';
 /// 增强版的 img 标签，提供多种图片填充模式，支持图片懒加载、加载中提示、加载失败提示。
 class FlanImage extends StatelessWidget {
   const FlanImage({
-    Key key,
+    Key? key,
     this.src,
     this.alt,
     this.fit = BoxFit.fill,
@@ -29,31 +29,26 @@ class FlanImage extends StatelessWidget {
     this.child,
     this.loadingSlot,
     this.errorSlot,
-  })  : assert(fit != null && fit is BoxFit),
-        assert(round != null),
-        assert(lazyLoad != null),
-        assert(showError != null),
-        assert(showLoading != null),
-        super(key: key);
+  }) : super(key: key);
 
   // ****************** Props ******************
   /// 图片链接
-  final String src;
+  final String? src;
 
   /// 图片填充模式
   final BoxFit fit;
 
   /// 替代文本
-  final String alt;
+  final String? alt;
 
   /// 宽度
-  final double width;
+  final double? width;
 
   /// 高度
-  final double height;
+  final double? height;
 
   /// 圆角大小
-  final double radius;
+  final double? radius;
 
   /// 是否显示为圆形
   final bool round;
@@ -70,33 +65,33 @@ class FlanImage extends StatelessWidget {
   final int errorIconName;
 
   /// 失败时提示的图片链接
-  final String errorIconUrl;
+  final String? errorIconUrl;
 
   /// 加载时提示的图标名称
   final int loadingIconName;
 
   /// 加载时提示的图片链接
-  final String loadingIconUrl;
+  final String? loadingIconUrl;
 
   // ****************** Events ******************
   /// 点击图片时触发
-  final VoidCallback onClick;
+  final VoidCallback? onClick;
 
   /// 图片加载完毕时触发
-  final VoidCallback onLoad;
+  final VoidCallback? onLoad;
 
   /// 图片加载失败时触发
-  final VoidCallback onError;
+  final VoidCallback? onError;
 
   // ****************** Slots ******************
   /// 自定义图片下方的内容
-  final Widget child;
+  final Widget? child;
 
   /// 自定义加载中的提示内容
-  final Widget loadingSlot;
+  final Widget? loadingSlot;
 
   /// 自定义加载失败时的提示内容
-  final Widget errorSlot;
+  final Widget? errorSlot;
 
   @override
   Widget build(BuildContext context) {
@@ -104,8 +99,8 @@ class FlanImage extends StatelessWidget {
       mainAxisSize: MainAxisSize.min,
       children: [
         this._buildImage(),
-        this.child,
-      ].where((element) => element != null).toList(),
+        this.child ?? SizedBox.shrink(),
+      ],
     );
 
     if (this.round) {
@@ -113,7 +108,7 @@ class FlanImage extends StatelessWidget {
     } else if (this.radius != null) {
       image = ClipRRect(
         child: image,
-        borderRadius: BorderRadius.circular(this.radius),
+        borderRadius: BorderRadius.circular(this.radius!),
       );
     }
 
@@ -155,8 +150,8 @@ class FlanImage extends StatelessWidget {
 
   /// 图片加载回调
   Widget onImageLoad(
-      BuildContext context, Widget child, ImageChunkEvent loadingProgress) {
-    if (this.src.isNotEmpty && loadingProgress == null) {
+      BuildContext context, Widget child, ImageChunkEvent? loadingProgress) {
+    if (this.src != null && this.src!.isNotEmpty && loadingProgress == null) {
       return child;
     }
 
@@ -164,14 +159,14 @@ class FlanImage extends StatelessWidget {
       return this._buildLoadingIcon();
     }
 
-    return null;
+    return SizedBox.shrink();
   }
 
   /// 图片加载错误回调
   Widget _onImageError(
-      BuildContext context, Object error, StackTrace stackTrace) {
+      BuildContext context, Object error, StackTrace? stackTrace) {
     if (!this.showError) {
-      return null;
+      return SizedBox.shrink();
     }
 
     return DefaultTextStyle(
@@ -206,11 +201,11 @@ class FlanImage extends StatelessWidget {
       return this._buildLoadingIcon();
     }
 
-    final isNetwork = RegExp("^https?:\/\/").hasMatch(this.src);
+    final isNetwork = RegExp("^https?:\/\/").hasMatch(this.src!);
 
     if (isNetwork) {
       return Image.network(
-        this.src,
+        this.src!,
         width: this.width,
         height: this.height,
         loadingBuilder: this.onImageLoad,
@@ -220,7 +215,7 @@ class FlanImage extends StatelessWidget {
     }
 
     return Image.asset(
-      this.src,
+      this.src!,
       width: this.width,
       height: this.height,
       fit: this.fit,

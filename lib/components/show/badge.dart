@@ -6,46 +6,45 @@ import '../../styles/var.dart';
 /// 增强版的 img 标签，提供多种图片填充模式，支持图片懒加载、加载中提示、加载失败提示。
 class FlanBadge extends StatelessWidget {
   const FlanBadge({
-    Key key,
+    Key? key,
     this.content,
     this.dot = false,
     this.max,
     this.color,
     this.child,
     this.contentSlot,
-  })  : assert(dot != null),
-        super(key: key);
+  }) : super(key: key);
 
   // ****************** Props ******************
   /// 徽标内容
-  final String content;
+  final String? content;
 
   /// 徽标背景颜色
-  final Color color;
+  final Color? color;
 
   /// 徽标背景颜色
   final bool dot;
 
   /// 最大值，超过最大值会显示 `{max}+`，仅当 content 为数字时有效
-  final int max;
+  final int? max;
 
   // ****************** Events ******************
 
   // ****************** Slots ******************
   /// 徽标包裹的子元素
-  final Widget child;
+  final Widget? child;
 
   /// 自定义徽标内容
-  final Widget contentSlot;
+  final Widget? contentSlot;
 
   @override
   Widget build(BuildContext context) {
     if (this.child != null) {
       return Stack(
+        clipBehavior: Clip.none,
         fit: StackFit.loose,
-        overflow: Overflow.visible,
         children: [
-          this.child,
+          this.child ?? SizedBox.shrink(),
           Positioned(
             top: 0.0,
             right: 0.0,
@@ -64,7 +63,7 @@ class FlanBadge extends StatelessWidget {
   /// 是否有内容
   bool get _hasContent {
     return this.contentSlot != null ||
-        (this.content != null && this.content.isNotEmpty);
+        (this.content != null && this.content!.isNotEmpty);
   }
 
   /// 构建内容
@@ -80,17 +79,17 @@ class FlanBadge extends StatelessWidget {
                 color: style.color,
                 size: style.fontSize,
               ),
-              child: this.contentSlot,
+              child: this.contentSlot ?? SizedBox.shrink(),
             );
           },
         );
       }
 
-      var text = this.content;
-      var contentNumber = double.tryParse(this.content);
+      var text = this.content!;
+      var contentNumber = double.tryParse(text);
       if (this.max != null &&
           contentNumber != null &&
-          contentNumber > this.max) {
+          contentNumber > this.max!) {
         text = "$max+";
       }
 
@@ -100,7 +99,7 @@ class FlanBadge extends StatelessWidget {
       );
     }
 
-    return null;
+    return SizedBox.shrink();
   }
 
   /// 构建点样式徽标
@@ -167,7 +166,7 @@ class FlanBadge extends StatelessWidget {
       );
     }
 
-    return null;
+    return SizedBox.shrink();
   }
 
   @override

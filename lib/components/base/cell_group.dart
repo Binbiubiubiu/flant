@@ -6,17 +6,16 @@ import './cell.dart';
 /// ### FlanCellGroup 单元格组
 class FlanCellGroup extends StatelessWidget {
   const FlanCellGroup({
-    Key key,
+    Key? key,
     this.title,
     this.border = false,
     this.children,
     this.titleSlot,
-  })  : assert(border != null),
-        super(key: key);
+  }) : super(key: key);
 
   // ****************** Props ******************
   /// 分组标题
-  final String title;
+  final String? title;
 
   /// 是否显示外边框
   final bool border;
@@ -25,10 +24,10 @@ class FlanCellGroup extends StatelessWidget {
 
   // ****************** Slots ******************
   /// 默认插槽
-  final List<Widget> children;
+  final List<Widget>? children;
 
   /// 自定义分组标题
-  final Widget titleSlot;
+  final Widget? titleSlot;
 
   @override
   Widget build(BuildContext context) {
@@ -47,7 +46,7 @@ class FlanCellGroup extends StatelessWidget {
       child: this.children != null
           ? Column(
               crossAxisAlignment: CrossAxisAlignment.start,
-              children: this.children,
+              children: this.children ?? [],
             )
           : null,
     );
@@ -84,7 +83,7 @@ class FlanCellGroup extends StatelessWidget {
           height: ThemeVars.cellGroupTitleLineHeight /
               ThemeVars.cellGroupTitleFontSize,
         ),
-        child: this.titleSlot ?? Text(this.title),
+        child: this.titleSlot ?? Text(this.title ?? ""),
       ),
     );
   }

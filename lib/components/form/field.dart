@@ -7,7 +7,7 @@ import '../../styles/var.dart';
 /// 表单中的输入框组件。
 class FlanField extends StatelessWidget {
   const FlanField({
-    Key key,
+    Key? key,
   }) : super(key: key);
 
   // ****************** Props ******************

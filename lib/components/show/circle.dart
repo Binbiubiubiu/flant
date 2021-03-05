@@ -12,7 +12,7 @@ double _formatRate(double rate) => math.min(math.max(rate, 0), 100);
 /// 圆环形的进度条组件，支持进度渐变动画。
 class FlanCircle extends StatefulWidget {
   FlanCircle({
-    Key key,
+    Key? key,
     this.currentRate = 0.0,
     this.rate = 100.0,
     this.size = 100.0,
@@ -25,18 +25,13 @@ class FlanCircle extends StatefulWidget {
     this.strokeWidth = 4.0,
     this.strokeLineCap = StrokeCap.round,
     this.clockwise = true,
-    this.onChange,
+    required this.onChange,
     this.child,
-  })  : assert(
-            currentRate != null && currentRate >= 0.0 && currentRate <= 100.0),
-        assert(rate != null && rate >= 0.0 && rate <= 100.0),
-        assert(size != null && size >= 0.0),
-        assert(color != null),
-        assert(layerColor != null),
-        assert(speed != null && speed >= 0.0),
-        assert(strokeWidth != null && strokeWidth > 0.0),
-        assert(strokeLineCap != null && strokeLineCap is StrokeCap),
-        assert(clockwise != null),
+  })  : assert(currentRate >= 0.0 && currentRate <= 100.0),
+        assert(rate >= 0.0 && rate <= 100.0),
+        assert(size >= 0.0),
+        assert(speed >= 0.0),
+        assert(strokeWidth > 0.0),
         super(key: key);
 
   // ****************** Props ******************
@@ -53,19 +48,19 @@ class FlanCircle extends StatefulWidget {
   final Color color;
 
   /// 进度条颜色，传入对象格式可以定义渐变色
-  final Gradient gradient;
+  final Gradient? gradient;
 
   /// final Color layerColor;
   final Color layerColor;
 
   ///填充颜色
-  final Color fill;
+  final Color? fill;
 
   /// 动画速度（单位为 rate/s）
   final double speed;
 
   /// 文字
-  final String text;
+  final String? text;
 
   /// 进度条宽度
   final double strokeWidth;
@@ -79,7 +74,7 @@ class FlanCircle extends StatefulWidget {
   // ****************** Events ******************
 
   // ****************** Slots ******************
-  final Widget child;
+  final Widget? child;
   final ValueChanged onChange;
 
   @override
@@ -88,7 +83,7 @@ class FlanCircle extends StatefulWidget {
 
 class _FlanCircleState extends State<FlanCircle>
     with SingleTickerProviderStateMixin {
-  AnimationController _animationController;
+  late AnimationController _animationController;
 
   @override
   void initState() {
@@ -101,14 +96,13 @@ class _FlanCircleState extends State<FlanCircle>
     _animationController
       ..stop()
       ..dispose();
-    _animationController = null;
     super.dispose();
   }
 
   @override
   void didUpdateWidget(covariant FlanCircle oldWidget) {
     if (this.widget.rate != oldWidget.rate) {
-      WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
+      WidgetsBinding.instance?.addPostFrameCallback((timeStamp) {
         this._watchRate(this.widget.rate, oldWidget.rate);
       });
     }
@@ -123,7 +117,7 @@ class _FlanCircleState extends State<FlanCircle>
 
     void animate() {
       final rate =
-          lerpDouble(0, endRate - startRate, _animationController.value) +
+          lerpDouble(0, endRate - startRate, _animationController.value)! +
               startRate;
 
       this.widget.onChange(_formatRate(rate).roundToDouble());
@@ -133,12 +127,10 @@ class _FlanCircleState extends State<FlanCircle>
       }
     }
 
-    if (this.widget.speed != null) {
-      if (_animationController != null) {
-        _animationController
-          ..stop()
-          ..reset();
-      }
+    if (this.widget.speed > 0.0) {
+      _animationController
+        ..stop()
+        ..reset();
 
       _animationController
         ..duration = Duration(milliseconds: duration.round())
@@ -243,18 +235,16 @@ class _FlanCircleState extends State<FlanCircle>
 /// 环形进度条绘制工具类
 class _FlanDividerCirclePainter extends CustomPainter {
   _FlanDividerCirclePainter({
-    this.rate,
+    required this.rate,
     this.color = Colors.blue,
     this.gradient,
     this.fill,
-    this.strokeWidth,
+    required this.strokeWidth,
     this.clockwise = true,
     this.strokeLineCap = StrokeCap.round,
-  })  : assert(rate != null && rate >= 0.0 && rate <= 100.0),
-        assert(color != null),
-        assert(strokeWidth != null && strokeWidth > 0.0),
-        assert(clockwise != null),
-        assert(strokeLineCap != null && strokeLineCap is StrokeCap),
+  })  : assert(rate >= 0.0 && rate <= 100.0),
+        assert(strokeWidth > 0.0),
+        assert(strokeLineCap is StrokeCap),
         _paint = Paint()
           ..strokeWidth = strokeWidth
           ..strokeCap = strokeLineCap
@@ -268,13 +258,13 @@ class _FlanDividerCirclePainter extends CustomPainter {
   final Color color;
 
   /// 进度条的颜色(渐变色)
-  final Gradient gradient;
+  final Gradient? gradient;
 
   /// 进度条的粗细
   final double strokeWidth;
 
   /// 进度条的背景色
-  final Color fill;
+  final Color? fill;
 
   /// 是否是顺时针
   final bool clockwise;
@@ -303,16 +293,16 @@ class _FlanDividerCirclePainter extends CustomPainter {
         false,
         _paint
           ..style = PaintingStyle.fill
-          ..color = this.fill,
+          ..color = this.fill!,
       );
     }
     // draw line
     if (this.gradient != null) {
-      _paint.shader = this.gradient.createShader(rect);
+      _paint.shader = this.gradient!.createShader(rect);
     }
-    if (this.color != null) {
-      _paint.color = this.color;
-    }
+
+    _paint.color = this.color;
+
     canvas.drawArc(
       rect,
       math.pi * -0.5,

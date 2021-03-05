@@ -8,7 +8,7 @@ import '../base/icon.dart';
 /// 圆环形的进度条组件，支持进度渐变动画。
 class FlanTag extends StatelessWidget {
   const FlanTag({
-    Key key,
+    Key? key,
     this.type = FlanTagType.normal,
     this.size = FlanTagSize.normal,
     this.color,
@@ -20,14 +20,7 @@ class FlanTag extends StatelessWidget {
     this.show = true,
     this.onClose,
     this.child,
-  })  : assert(type != null && type is FlanTagType),
-        assert(size != null && size is FlanTagSize),
-        assert(plain != null),
-        assert(round != null),
-        assert(mark != null),
-        assert(closeable != null),
-        assert(show != null),
-        super(key: key);
+  }) : super(key: key);
 
   // ****************** Props ******************
   /// 类型，可选值为 `normal` `primary` `success` `danger` `warning`
@@ -37,7 +30,7 @@ class FlanTag extends StatelessWidget {
   final FlanTagSize size;
 
   /// 标签颜色
-  final Color color;
+  final Color? color;
 
   /// 是否为空心样式
   final bool plain;
@@ -49,7 +42,7 @@ class FlanTag extends StatelessWidget {
   final bool mark;
 
   /// 文本颜色，优先级高于`color`属性
-  final Color textColor;
+  final Color? textColor;
 
   /// 是否为可关闭标签
   final bool closeable;
@@ -60,12 +53,12 @@ class FlanTag extends StatelessWidget {
   // ****************** Events ******************
 
   /// 标签关闭的回调事件
-  final VoidCallback onClose;
+  final VoidCallback? onClose;
 
   // ****************** Slots ******************
 
   /// 标签显示内容
-  final Widget child;
+  final Widget? child;
 
   @override
   Widget build(BuildContext context) {
@@ -89,7 +82,7 @@ class FlanTag extends StatelessWidget {
       FlanTagSize.normal: ThemeVars.tagPadding,
       FlanTagSize.medium: ThemeVars.tagMediumPadding,
       FlanTagSize.large: ThemeVars.tagLargePadding,
-    }[this.size];
+    }[this.size]!;
   }
 
   /// 计算标签不同type的主题色
@@ -100,16 +93,16 @@ class FlanTag extends StatelessWidget {
       FlanTagType.primary: ThemeVars.tagPrimaryColor,
       FlanTagType.success: ThemeVars.tagSuccessColor,
       FlanTagType.warning: ThemeVars.tagWarningColor
-    }[this.type];
+    }[this.type]!;
   }
 
   /// 计算标签文字颜色
   Color get _textColor {
     if (this.textColor != null) {
-      return this.textColor;
+      return this.textColor!;
     }
     if (this.color != null && this.plain) {
-      return this.color;
+      return this.color!;
     }
 
     return this.plain ? this._themeColor : ThemeVars.tagTextColor;
@@ -167,9 +160,9 @@ class FlanTag extends StatelessWidget {
           runAlignment: WrapAlignment.center,
           crossAxisAlignment: WrapCrossAlignment.center,
           children: [
-            this.child,
+            this.child ?? SizedBox.shrink(),
             this._buildCloseIcon(),
-          ].where((element) => element != null).toList(),
+          ],
         ),
       ),
     );
@@ -194,7 +187,7 @@ class FlanTag extends StatelessWidget {
       );
     }
 
-    return null;
+    return SizedBox.shrink();
   }
 
   @override

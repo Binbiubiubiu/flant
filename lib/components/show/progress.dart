@@ -6,7 +6,7 @@ import '../../styles/var.dart';
 /// 空状态时的占位提示
 class FlanProgress extends StatelessWidget {
   const FlanProgress({
-    Key key,
+    Key? key,
     this.color,
     this.gradient,
     this.inactive = false,
@@ -18,36 +18,34 @@ class FlanProgress extends StatelessWidget {
     this.percentage = 0.0,
     this.showPivot = true,
     this.child,
-  })  : assert(inactive != null),
-        assert(percentage != null && (percentage >= 0 && percentage <= 100)),
-        assert(showPivot != null),
+  })  : assert(percentage >= 0 && percentage <= 100),
         super(key: key);
 
   // ****************** Props ******************
 
   /// 进度条颜色
-  final Color color;
+  final Color? color;
 
   /// 进度条颜色，传入对象格式可以定义渐变色
-  final Gradient gradient;
+  final Gradient? gradient;
 
   /// 是否置灰
   final bool inactive;
 
   /// 进度文字内容
-  final String pivotText;
+  final String? pivotText;
 
   /// 进度文字颜色
-  final Color textColor;
+  final Color? textColor;
 
   /// 进度文字背景色
-  final Color pivotColor;
+  final Color? pivotColor;
 
   /// 轨道颜色
-  final Color trackColor;
+  final Color? trackColor;
 
   /// 进度条粗细
-  final double strokeWidth;
+  final double? strokeWidth;
 
   /// 进度百分比
   final double percentage;
@@ -59,7 +57,7 @@ class FlanProgress extends StatelessWidget {
 
   // ****************** Slots ******************
   /// 自定义底部内容
-  final Widget child;
+  final Widget? child;
 
   @override
   Widget build(BuildContext context) {
@@ -69,7 +67,7 @@ class FlanProgress extends StatelessWidget {
         builder: (context, constraints) {
           final current = constraints.maxWidth * this.percentage / 100.0;
           return Stack(
-            overflow: Overflow.visible,
+            clipBehavior: Clip.none,
             children: [
               Container(
                 height: constraints.maxHeight,
@@ -140,7 +138,7 @@ class FlanProgress extends StatelessWidget {
     return SizedBox.shrink();
   }
 
-  Color get background => this.inactive ? const Color(0xffcacaca) : this.color;
+  Color? get background => this.inactive ? const Color(0xffcacaca) : this.color;
 
   @override
   void debugFillProperties(DiagnosticPropertiesBuilder properties) {

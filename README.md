@@ -38,7 +38,7 @@
 - [ ] Dialog 弹出框
 - [ ] DropdownMenu 下拉菜单
 - [x] Loading 加载
-- [ ] Notify 消息通知
+- [x] Notify 消息通知
 - [ ] Overlay 遮罩层
 - [ ] PullRefresh 下拉刷新
 - [ ] ShareSheet 分享面板
@@ -53,7 +53,7 @@
 - [x] Divider 分割线
 - [x] Empty 空状态
 - [ ] ImagePreview 图片预览
-- [ ] Lazyload 懒加载
+- [ ] ~~Lazyload 懒加载~~
 - [ ] List 列表
 - [x] NoticeBar 通知栏
 - [ ] Popover 气泡弹出框

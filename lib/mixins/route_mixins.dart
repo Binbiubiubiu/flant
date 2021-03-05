@@ -33,14 +33,14 @@ abstract class RouteStatelessWidget extends StatelessWidget {
     this.toRoute,
     this.toName,
     this.replace = false,
-    Key key,
+    Key? key,
   }) : super(key: key);
 
   /// 点击后跳转的目标路由对象
-  final PageRoute toRoute;
+  final PageRoute? toRoute;
 
   /// 点击后跳转的目标路由对象name
-  final String toName;
+  final String? toName;
 
   /// 是否在跳转时替换当前页面历史
   final bool replace;
@@ -54,15 +54,15 @@ abstract class RouteStatelessWidget extends StatelessWidget {
 
     if (this.toRoute != null) {
       this.replace
-          ? navigator.pushReplacement(this.toRoute)
-          : navigator.push(this.toRoute);
+          ? navigator.pushReplacement(this.toRoute!)
+          : navigator.push(this.toRoute!);
       return;
     }
 
     if (this.toName != null) {
       this.replace
-          ? navigator.pushReplacementNamed(this.toName)
-          : navigator.pushNamed(this.toName);
+          ? navigator.pushReplacementNamed(this.toName!)
+          : navigator.pushNamed(this.toName!);
       return;
     }
 

@@ -5,15 +5,15 @@ import './row.dart' show FlanRowProvider;
 /// ### FlanCol 列布局
 class FlanCol extends StatelessWidget {
   const FlanCol({
-    Key key,
+    Key? key,
     this.offset,
     this.span = 0.0,
-    this.children,
+    this.children = const <Widget>[],
   }) : super(key: key);
 
   // ****************** Props ******************
   /// 列元素偏移距离
-  final double offset;
+  final double? offset;
 
   /// 列元素宽度
   final double span;
@@ -28,8 +28,8 @@ class FlanCol extends StatelessWidget {
   Widget build(BuildContext context) {
     final parent = FlanRowProvider.of(context);
 
-    BoxConstraints colSpan;
-    EdgeInsets colOffset;
+    BoxConstraints? colSpan;
+    EdgeInsets? colOffset;
     EdgeInsets colPadding = EdgeInsets.zero;
     if (parent != null) {
       final spaces = parent.spaces;
@@ -40,14 +40,13 @@ class FlanCol extends StatelessWidget {
         right: spaces[index].right,
       );
 
-      if (this.span != null) {
-        colSpan = BoxConstraints.tightFor(
-          width: parent.maxWidth * (this.span / 24),
-        );
-      }
+      colSpan = BoxConstraints.tightFor(
+        width: parent.maxWidth * (this.span / 24),
+      );
 
       if (this.offset != null) {
-        colOffset = EdgeInsets.only(left: parent.maxWidth * (this.offset / 24));
+        colOffset =
+            EdgeInsets.only(left: parent.maxWidth * (this.offset! / 24));
       }
     }
 

@@ -5,11 +5,11 @@ import './col.dart';
 /// ### FlanRow 行布局
 class FlanRow extends StatefulWidget {
   const FlanRow({
-    Key key,
+    Key? key,
     this.gutter = 0.0,
     this.justify = WrapAlignment.start,
     this.align = WrapAlignment.start,
-    this.children,
+    this.children = const <Widget>[],
   }) : super(key: key);
 
   // ****************** Props ******************
@@ -116,9 +116,9 @@ class _FlanRowState extends State<FlanRow> {
 /// FlanRow 共享信息
 class FlanRowProvider extends InheritedWidget {
   const FlanRowProvider({
-    @required this.spaces,
-    @required this.maxWidth,
-    this.child,
+    required this.spaces,
+    required this.maxWidth,
+    required this.child,
   }) : super(child: child);
 
   final List<RowSpace> spaces;
@@ -126,7 +126,7 @@ class FlanRowProvider extends InheritedWidget {
   final Wrap child;
 
   //定义一个便捷方法，方便子树中的widget获取共享数据
-  static FlanRowProvider of(BuildContext context) {
+  static FlanRowProvider? of(BuildContext context) {
     return context.dependOnInheritedWidgetOfExactType<FlanRowProvider>();
   }
 

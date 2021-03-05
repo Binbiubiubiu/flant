@@ -5,23 +5,21 @@ import '../../styles/var.dart';
 
 /// ### FlanSwitch
 /// 用于在打开和关闭状态之间进行切换。
-class FlanSwitch<T extends dynamic> extends StatefulWidget {
+class FlanSwitch<T> extends StatefulWidget {
   const FlanSwitch({
-    Key key,
-    T value,
+    Key? key,
+    required T value,
     this.loading = false,
     this.disabled = false,
     this.size,
     this.activeColor,
     this.inActiveColor,
-    T activeValue,
-    T inActiveValue,
-    this.onChange,
-  })  : assert(loading != null),
-        assert(disabled != null),
-        value = value ?? false,
-        activeValue = activeValue ?? true,
-        inActiveValue = inActiveValue ?? false,
+    T? activeValue,
+    T? inActiveValue,
+    required this.onChange,
+  })   : value = value ?? false as T,
+        activeValue = activeValue ?? true as T,
+        inActiveValue = inActiveValue ?? false as T,
         super(key: key);
 
   // ****************** Props ******************
@@ -35,13 +33,13 @@ class FlanSwitch<T extends dynamic> extends StatefulWidget {
   final bool disabled;
 
   /// 开关尺寸
-  final double size;
+  final double? size;
 
   /// 打开时的背景色
-  final Color activeColor;
+  final Color? activeColor;
 
   /// 关闭时的背景色
-  final Color inActiveColor;
+  final Color? inActiveColor;
 
   /// 打开时对应的值
   final T activeValue;
@@ -55,20 +53,21 @@ class FlanSwitch<T extends dynamic> extends StatefulWidget {
   final ValueChanged<T> onChange;
 
   @override
-  _FlanSwitchState createState() => _FlanSwitchState();
+  _FlanSwitchState<T> createState() => _FlanSwitchState<T>();
 }
 
-class _FlanSwitchState extends State<FlanSwitch> with TickerProviderStateMixin {
-  Animation<Color> bgColorAnimation;
-  AnimationController bgColorAnimationController;
+class _FlanSwitchState<T> extends State<FlanSwitch<T>>
+    with TickerProviderStateMixin {
+  late Animation<Color?> bgColorAnimation;
+  late AnimationController bgColorAnimationController;
 
-  Animation<double> nodeAnimation;
-  AnimationController nodeAnimationCotroller;
+  late Animation<double> nodeAnimation;
+  late AnimationController nodeAnimationCotroller;
 
   @override
   void initState() {
     this.bgColorAnimationController = AnimationController(
-      value: this.widget.value ? 1.0 : 0.0,
+      value: this.isChecked ? 1.0 : 0.0,
       duration: ThemeVars.switchTransitionDuration,
       vsync: this,
     )..addListener(this._handleChange);
@@ -79,7 +78,7 @@ class _FlanSwitchState extends State<FlanSwitch> with TickerProviderStateMixin {
         .animate(this.bgColorAnimationController);
 
     this.nodeAnimationCotroller = AnimationController(
-      value: this.widget.value ? 1.0 : 0.0,
+      value: this.isChecked ? 1.0 : 0.0,
       duration: ThemeVars.switchTransitionDuration,
       vsync: this,
     );
@@ -92,9 +91,9 @@ class _FlanSwitchState extends State<FlanSwitch> with TickerProviderStateMixin {
 
   @override
   void dispose() {
-    this.bgColorAnimationController?.removeListener(this._handleChange);
-    this.bgColorAnimationController?.dispose();
-    this.nodeAnimationCotroller?.dispose();
+    this.bgColorAnimationController.removeListener(this._handleChange);
+    this.bgColorAnimationController.dispose();
+    this.nodeAnimationCotroller.dispose();
     super.dispose();
   }
 
@@ -151,7 +150,7 @@ class _FlanSwitchState extends State<FlanSwitch> with TickerProviderStateMixin {
       button: true,
       enabled: !this.widget.disabled,
       label: "switch",
-      checked: this.widget.value,
+      checked: this.isChecked,
     );
   }
 

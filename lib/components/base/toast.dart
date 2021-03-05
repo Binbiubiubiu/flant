@@ -13,8 +13,8 @@ void showToast(
   FlanToastType type = FlanToastType.text,
   FlanToastPosition position = FlanToastPosition.middle,
   String message = "",
-  int iconName,
-  String iconUrl,
+  int? iconName,
+  String? iconUrl,
   String iconPrefix = kFlanIconsFamily,
   bool overlay = false,
   bool forbidClick = false,
@@ -23,8 +23,8 @@ void showToast(
   FlanLoadingType loadingType = FlanLoadingType.circular,
   Duration duration = const Duration(seconds: 2),
   FlanTransitionBuilder transitionBuilder = kFlanFadeTransitionBuilder,
-  VoidCallback onOpened,
-  VoidCallback onClose,
+  VoidCallback? onOpened,
+  VoidCallback? onClose,
 }) {
   OverlayEntry entry = OverlayEntry(
     builder: (context) {
@@ -48,14 +48,14 @@ void showToast(
       );
     },
   );
-  Overlay.of(context, rootOverlay: true).insert(entry);
+  Overlay.of(context, rootOverlay: true)?.insert(entry);
   Future.delayed(const Duration(seconds: 2)).then((value) => entry.remove());
   // return entry;
 }
 
 class FlanToast extends StatelessWidget {
   const FlanToast({
-    Key key,
+    Key? key,
     this.show = false,
     this.type = FlanToastType.text,
     this.position = FlanToastPosition.middle,
@@ -97,10 +97,10 @@ class FlanToast extends StatelessWidget {
   final String message;
 
   /// 自定义图标，支持传入图标名称
-  final int iconName;
+  final int? iconName;
 
   /// 自定义图标，支持传入图片链接
-  final String iconUrl;
+  final String? iconUrl;
 
   /// 图标类名前缀，同 Icon 组件的 class-prefix 属性
   final String iconPrefix;
@@ -129,10 +129,10 @@ class FlanToast extends StatelessWidget {
   // ****************** Events ******************
 
   /// 完全展示后的回调函数
-  final VoidCallback onOpened;
+  final VoidCallback? onOpened;
 
   /// 关闭时的回调函数
-  final VoidCallback onClose;
+  final VoidCallback? onClose;
 
   // ****************** Slots ******************
 
@@ -177,11 +177,11 @@ class FlanToast extends StatelessWidget {
               crossAxisAlignment: WrapCrossAlignment.center,
               children: [
                 this._buildIcon(),
-                isText && !hasIcon
-                    ? null
-                    : SizedBox(height: ThemeVars.paddingXs),
+                SizedBox(
+                  height: isText && !hasIcon ? 0.0 : ThemeVars.paddingXs,
+                ),
                 this._buildMessage(),
-              ].where((element) => element != null).toList(),
+              ],
             ),
           ),
         ),
@@ -198,8 +198,6 @@ class FlanToast extends StatelessWidget {
       case FlanToastPosition.bottom:
         return Alignment(0.0, 0.6);
     }
-
-    return Alignment(0.0, 0.0);
   }
 
   Widget _buildIcon() {
@@ -209,7 +207,7 @@ class FlanToast extends StatelessWidget {
         this.type == FlanToastType.fail;
 
     if (hasIcon) {
-      int name = this.iconName;
+      int? name = this.iconName;
       if (this.type == FlanToastType.success) {
         name = FlanIcons.success;
       }
@@ -223,6 +221,7 @@ class FlanToast extends StatelessWidget {
         iconUrl: this.iconUrl,
         size: ThemeVars.toastIconSize,
         classPrefix: this.iconPrefix,
+        color: this.iconUrl != null ? null : ThemeVars.toastTextColor,
       );
     }
 
@@ -235,14 +234,14 @@ class FlanToast extends StatelessWidget {
         ),
       );
     }
-    return null;
+    return SizedBox.shrink();
   }
 
   Widget _buildMessage() {
-    if (this.message != null && this.message.isNotEmpty) {
+    if (this.message.isNotEmpty) {
       return Text(this.message);
     }
-    return null;
+    return SizedBox.shrink();
   }
 
   @override

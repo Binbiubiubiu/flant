@@ -7,7 +7,7 @@ import '../../styles/var.dart';
 /// 加载图标，用于表示加载中的过渡状态。
 class FlanLoading extends StatelessWidget {
   FlanLoading({
-    Key key,
+    Key? key,
     this.color,
     this.type = FlanLoadingType.circular,
     this.size,
@@ -15,25 +15,23 @@ class FlanLoading extends StatelessWidget {
     this.textColor,
     this.vertical = false,
     this.child,
-  })  : assert(type != null && type is FlanLoadingType),
-        assert(vertical != null),
-        super(key: key);
+  }) : super(key: key);
 
   // ****************** Props ******************
   /// 颜色
-  final Color color;
+  final Color? color;
 
   /// 类型，可选值为 `spinner`
   final FlanLoadingType type;
 
   /// 加载图标大小
-  final double size;
+  final double? size;
 
   /// 文字大小
-  final double textSize;
+  final double? textSize;
 
   /// 文字颜色
-  final Color textColor;
+  final Color? textColor;
 
   /// 是否垂直排列图标和文字内容
   final bool vertical;
@@ -42,7 +40,7 @@ class FlanLoading extends StatelessWidget {
 
   // ****************** Slots ******************
   /// 加载文案
-  final Widget child;
+  final Widget? child;
 
   @override
   Widget build(BuildContext context) {
@@ -91,7 +89,7 @@ class FlanLoading extends StatelessWidget {
             fontSize: this.textSize ?? ThemeVars.loadingTextFontSize,
             color: this.textColor ?? this.color ?? ThemeVars.loadingTextColor,
           ),
-          child: this.child,
+          child: this.child ?? SizedBox.shrink(),
         ),
       );
     }
@@ -118,11 +116,11 @@ class FlanLoading extends StatelessWidget {
 
 class _FlanLoadingCirclar extends StatefulWidget {
   _FlanLoadingCirclar({
-    Key key,
+    Key? key,
     this.color,
   }) : super(key: key);
 
-  final Color color;
+  final Color? color;
 
   @override
   __FlanLoadingCirclarState createState() => __FlanLoadingCirclarState();
@@ -130,9 +128,9 @@ class _FlanLoadingCirclar extends StatefulWidget {
 
 class __FlanLoadingCirclarState extends State<_FlanLoadingCirclar>
     with TickerProviderStateMixin {
-  AnimationController controller;
-  Animation<double> lengthAnimation;
-  Animation<double> offsetAnimation;
+  late AnimationController controller;
+  late Animation<double> lengthAnimation;
+  late Animation<double> offsetAnimation;
 
   @override
   void initState() {
@@ -164,8 +162,8 @@ class __FlanLoadingCirclarState extends State<_FlanLoadingCirclar>
 
   @override
   void dispose() {
-    this.lengthAnimation?.removeListener(this._handleChange);
-    this.controller?.dispose();
+    this.lengthAnimation.removeListener(this._handleChange);
+    this.controller.dispose();
 
     super.dispose();
   }
@@ -178,7 +176,7 @@ class __FlanLoadingCirclarState extends State<_FlanLoadingCirclar>
       painter: _FlanLoadingCirclarPainter(
         length: this.lengthAnimation.value,
         offset: this.offsetAnimation.value,
-        color: this.widget.color,
+        color: this.widget.color ?? ThemeVars.loadingSpinnerColor,
       ),
     );
   }
@@ -186,10 +184,10 @@ class __FlanLoadingCirclarState extends State<_FlanLoadingCirclar>
 
 class _FlanLoadingCirclarPainter extends CustomPainter {
   _FlanLoadingCirclarPainter({
-    this.color = ThemeVars.loadingSpinnerColor,
-    this.length,
-    this.offset,
-  })  : _paint = Paint()
+    required this.color,
+    required this.length,
+    required this.offset,
+  })   : _paint = Paint()
           ..color = color
           ..style = PaintingStyle.stroke
           ..strokeWidth = 2.0
@@ -231,8 +229,8 @@ class _FlanLoadingCirclarPainter extends CustomPainter {
 
 class _FlanLoadingSpinner extends StatefulWidget {
   _FlanLoadingSpinner({
-    Key key,
-    this.color,
+    Key? key,
+    required this.color,
   }) : super(key: key);
 
   final Color color;
@@ -243,8 +241,8 @@ class _FlanLoadingSpinner extends StatefulWidget {
 
 class __FlanLoadingSpinnerState extends State<_FlanLoadingSpinner>
     with TickerProviderStateMixin {
-  Animation<int> animation;
-  AnimationController controller;
+  late Animation<int> animation;
+  late AnimationController controller;
 
   @override
   void initState() {
@@ -263,8 +261,8 @@ class __FlanLoadingSpinnerState extends State<_FlanLoadingSpinner>
 
   @override
   void dispose() {
-    this.animation?.removeListener(this._handleChange);
-    this.controller?.dispose();
+    this.animation.removeListener(this._handleChange);
+    this.controller.dispose();
 
     super.dispose();
   }

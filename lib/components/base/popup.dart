@@ -8,13 +8,13 @@ import '../../styles/var.dart';
 /// 弹出层容器，用于展示弹窗、信息提示等内容，支持多个弹出层叠加展示。
 class FlanPopup extends StatefulWidget {
   const FlanPopup({
-    Key key,
-    this.show = false,
+    Key? key,
+    required this.show,
     this.overlay = true,
     this.position = FlanPopupPosition.center,
     this.style,
     this.overlayStyle,
-    this.duration = const Duration(milliseconds: 300),
+    this.duration,
     this.round = false,
     // this.lockScroll = true,
     // this.lazyRender = true,
@@ -28,7 +28,7 @@ class FlanPopup extends StatefulWidget {
     this.transitionAppearBuilder,
     this.transitionAppear = false,
     this.safeAreaInsetBottom = false,
-    this.onChange,
+    required this.onChange,
     this.onClick,
     // this.onClickOverlay,
     this.onClickCloseIcon,
@@ -36,21 +36,9 @@ class FlanPopup extends StatefulWidget {
     this.onClose,
     this.onOpened,
     this.onClosed,
-    @required this.child,
-  })  : assert(show != null),
-        assert(overlay != null),
-        assert(position != null && position is FlanPopupPosition),
-        assert(duration != null && duration is Duration),
-        assert(round != null),
-        // assert(lockScroll != null),
-        // assert(lazyRender != null),
-        // assert(closeOnPopstate != null),
-        assert(closeOnClickOverlay != null),
-        assert(closeable != null),
-        assert(closeIconPosition != null &&
-            closeIconPosition is FlanPopupCloseIconPosition),
-        assert(transitionAppear != null),
-        assert(safeAreaInsetBottom != null),
+    required this.child,
+  })   : assert(!transitionAppear ||
+            transitionAppear && transitionAppearBuilder != null),
         super(key: key);
 
   // ****************** Props ******************
@@ -64,13 +52,13 @@ class FlanPopup extends StatefulWidget {
   final FlanPopupPosition position;
 
   /// 弹窗的样式
-  final BoxDecoration style;
+  final BoxDecoration? style;
 
   /// 自定义遮罩层样式
-  final BoxDecoration overlayStyle;
+  final BoxDecoration? overlayStyle;
 
   /// 动画时长，单位秒
-  final Duration duration;
+  final Duration? duration;
 
   /// 是否显示圆角
   final bool round;
@@ -94,16 +82,16 @@ class FlanPopup extends StatefulWidget {
   final int closeIconName;
 
   /// 关闭图片链接
-  final String closeIconUrl;
+  final String? closeIconUrl;
 
   /// 关闭图标位置，可选值为 `topleft` `topRight` `bottomLeft` `bottomRight`
   final FlanPopupCloseIconPosition closeIconPosition;
 
   /// 动画类名，等价于 transtion 的name属性
-  final RouteTransitionsBuilder transitionBuilder;
+  final RouteTransitionsBuilder? transitionBuilder;
 
   /// 动画类名，等价于 transtion 的name属性
-  final RouteTransitionsBuilder transitionAppearBuilder;
+  final RouteTransitionsBuilder? transitionAppearBuilder;
 
   /// 是否在初始渲染时启用过渡动画
   final bool transitionAppear;
@@ -116,25 +104,25 @@ class FlanPopup extends StatefulWidget {
   final ValueChanged<bool> onChange;
 
   /// 点击弹出层时触发
-  final GestureTapCallback onClick;
+  final GestureTapCallback? onClick;
 
   // /// 点击遮罩层时触发
   // final GestureTapCallback onClickOverlay;
 
   /// 点击关闭图标时触发
-  final GestureTapCallback onClickCloseIcon;
+  final GestureTapCallback? onClickCloseIcon;
 
   /// 打开弹出层时触发
-  final VoidCallback onOpen;
+  final VoidCallback? onOpen;
 
   /// 关闭弹出层时触发
-  final VoidCallback onClose;
+  final VoidCallback? onClose;
 
   /// 打开弹出层且动画结束后触发
-  final VoidCallback onOpened;
+  final VoidCallback? onOpened;
 
   /// 关闭弹出层且动画结束后触发
-  final VoidCallback onClosed;
+  final VoidCallback? onClosed;
 
   // ****************** Slots ******************
   /// 内容
@@ -176,7 +164,7 @@ class _FlanPopupState extends State<FlanPopup> {
       FlanPopupPosition.top: Alignment.topLeft,
       FlanPopupPosition.left: Alignment.centerLeft,
       FlanPopupPosition.right: Alignment.centerRight,
-    }[this.widget.position];
+    }[this.widget.position]!;
   }
 
   BorderRadius get _roundRadius {
@@ -193,13 +181,11 @@ class _FlanPopupState extends State<FlanPopup> {
       case FlanPopupPosition.center:
         return BorderRadius.all(radius);
     }
-
-    return null;
   }
 
   RouteTransitionsBuilder get _popupTransitionsBuilder {
     if (this.widget.transitionAppear && this.isFirstOpen) {
-      return this.widget.transitionAppearBuilder;
+      return this.widget.transitionAppearBuilder!;
     }
 
     return this.widget.transitionBuilder ??
@@ -210,7 +196,7 @@ class _FlanPopupState extends State<FlanPopup> {
     if (this.opened) {
       this.opened = false;
       if (this.widget.onClose != null) {
-        this.widget.onClose();
+        this.widget.onClose!();
       }
       this.widget.onChange(false);
     }
@@ -223,10 +209,10 @@ class _FlanPopupState extends State<FlanPopup> {
     this.opened = true;
 
     if (this.widget.onOpen != null) {
-      this.widget.onOpen();
+      this.widget.onOpen!();
     }
 
-    WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
+    WidgetsBinding.instance?.addPostFrameCallback((timeStamp) {
       Navigator.of(context, rootNavigator: true)
           .push(_FlanPopupRoute(
             pageBuilder: (
@@ -253,10 +239,14 @@ class _FlanPopupState extends State<FlanPopup> {
                 this.isFirstOpen = false;
               }
               if (this.widget.onOpened != null) {
-                this.widget.onOpened();
+                this.widget.onOpened!();
               }
             },
-            onTransitionRouteLeave: this.widget.onClosed,
+            onTransitionRouteLeave: () {
+              if (this.widget.onClosed != null) {
+                this.widget.onClosed!();
+              }
+            },
           ))
           .then((value) => this.closePopup());
     });
@@ -343,9 +333,11 @@ class _FlanPopupState extends State<FlanPopup> {
               type: MaterialType.card,
               child: Stack(
                 children: [
-                  this.widget.closeable ? this._buildCloseIcon() : null,
+                  this.widget.closeable
+                      ? this._buildCloseIcon()
+                      : SizedBox.shrink(),
                   this.widget.child,
-                ].where((element) => element != null).toList(),
+                ],
               ),
             ),
           ),
@@ -387,12 +379,6 @@ class _FlanPopupState extends State<FlanPopup> {
           child: icon,
         );
     }
-
-    return Positioned(
-      top: ThemeVars.popupCloseIconMargin,
-      right: ThemeVars.popupCloseIconMargin,
-      child: icon,
-    );
   }
 
   @override
@@ -444,36 +430,35 @@ class _FlanPopupState extends State<FlanPopup> {
 
 class _FlanPopupRoute<T> extends PopupRoute<T> {
   _FlanPopupRoute({
-    @required RoutePageBuilder pageBuilder,
+    required RoutePageBuilder pageBuilder,
     bool barrierDismissible = true,
-    String barrierLabel,
+    String? barrierLabel,
     Color barrierColor = const Color(0x80000000),
     Duration transitionDuration = const Duration(milliseconds: 200),
-    RouteTransitionsBuilder transitionBuilder,
-    RouteSettings settings,
+    RouteTransitionsBuilder? transitionBuilder,
+    RouteSettings? settings,
     this.appear = false,
     this.onTransitionRouteEnter,
     this.onTransitionRouteLeave,
-  })  : assert(barrierDismissible != null),
-        _pageBuilder = pageBuilder,
+  })  : _pageBuilder = pageBuilder,
         _barrierDismissible = barrierDismissible,
-        _barrierLabel = barrierLabel,
+        _barrierLabel = barrierLabel!,
         _barrierColor = barrierColor,
         _transitionDuration = transitionDuration,
-        _transitionBuilder = transitionBuilder,
+        _transitionBuilder = transitionBuilder!,
         super(settings: settings);
 
   final RoutePageBuilder _pageBuilder;
 
   final bool appear;
-  final VoidCallback onTransitionRouteEnter;
-  final VoidCallback onTransitionRouteLeave;
+  final VoidCallback? onTransitionRouteEnter;
+  final VoidCallback? onTransitionRouteLeave;
 
   void _onFlanPopupTransitionChange(AnimationStatus status) {
     switch (status) {
       case AnimationStatus.dismissed:
         if (this.onTransitionRouteLeave != null) {
-          this.onTransitionRouteLeave();
+          this.onTransitionRouteLeave!();
         }
         break;
       case AnimationStatus.forward:
@@ -482,7 +467,7 @@ class _FlanPopupRoute<T> extends PopupRoute<T> {
         break;
       case AnimationStatus.completed:
         if (this.onTransitionRouteEnter != null) {
-          this.onTransitionRouteEnter();
+          this.onTransitionRouteEnter!();
         }
         break;
     }
@@ -491,7 +476,7 @@ class _FlanPopupRoute<T> extends PopupRoute<T> {
   @override
   void install() {
     super.install();
-    this.animation.addStatusListener(this._onFlanPopupTransitionChange);
+    this.animation?.addStatusListener(this._onFlanPopupTransitionChange);
   }
 
   @override
@@ -549,20 +534,20 @@ enum FlanPopupCloseIconPosition {
 /// 弹窗关闭图标按钮
 class _FlanPopupCloseIcon extends StatefulWidget {
   const _FlanPopupCloseIcon({
-    Key key,
+    Key? key,
     this.closeIconName,
     this.closeIconUrl,
     this.onPress,
   }) : super(key: key);
 
   /// 图标属性
-  final int closeIconName;
+  final int? closeIconName;
 
   /// 图标链接
-  final String closeIconUrl;
+  final String? closeIconUrl;
 
   /// 图标点击事件
-  final VoidCallback onPress;
+  final VoidCallback? onPress;
 
   @override
   __FlanPopupCloseIconState createState() => __FlanPopupCloseIconState();
@@ -594,7 +579,7 @@ class __FlanPopupCloseIconState extends State<_FlanPopupCloseIcon> {
         highlightColor: Colors.transparent,
         onTap: () {
           if (this.widget.onPress != null) {
-            this.widget.onPress();
+            this.widget.onPress!();
           }
           Navigator.of(context).pop();
           this.disactiveText();

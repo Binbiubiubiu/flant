@@ -8,15 +8,13 @@ import './collapse_item.dart';
 /// 将一组内容放置在多个折叠面板中，点击面板的标题可以展开或收缩其内容。
 class FlanCollapse<T extends dynamic> extends StatelessWidget {
   const FlanCollapse({
-    Key key,
-    this.value,
+    Key? key,
+    required this.value,
+    required this.onChange,
     this.accordion = false,
     this.border = true,
-    this.onChange,
-    this.children,
-  })  : assert(value != null && (value is String || value is List<String>)),
-        assert(accordion != null),
-        assert(border != null),
+    this.children = const <FlanCollapseItem>[],
+  })  : assert(value is String || value is List<String>),
         super(key: key);
 
   // ****************** Props ******************
@@ -101,9 +99,9 @@ class FlanCollapse<T extends dynamic> extends StatelessWidget {
 /// FlanRow 共享信息
 class FlanCollapseProvider<T extends dynamic> extends InheritedWidget {
   const FlanCollapseProvider({
-    this.toggle,
-    this.isExpanded,
-    this.child,
+    required this.toggle,
+    required this.isExpanded,
+    required this.child,
   }) : super(child: child);
 
   final void Function(T name, bool expanded) toggle;
@@ -111,7 +109,7 @@ class FlanCollapseProvider<T extends dynamic> extends InheritedWidget {
   final Column child;
 
   //定义一个便捷方法，方便子树中的widget获取共享数据
-  static FlanCollapseProvider<T> of<T>(BuildContext context) {
+  static FlanCollapseProvider<T>? of<T>(BuildContext context) {
     return context
         .dependOnInheritedWidgetOfExactType<FlanCollapseProvider<T>>();
   }

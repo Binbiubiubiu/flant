@@ -8,16 +8,13 @@ import '../../styles/var.dart';
 /// 增强版的 img 标签，提供多种图片填充模式，支持图片懒加载、加载中提示、加载失败提示。
 class FlanDivider extends StatelessWidget {
   const FlanDivider({
-    Key key,
+    Key? key,
     this.dashed = false,
     this.hairline = true,
     this.contentPosition = FlanDividerContentPosition.center,
     this.child,
     this.style,
-  })  : assert(hairline != null),
-        assert(contentPosition !=
-            null), //&& DividerContentPosition.values.contains(contentPosition),
-        super(key: key);
+  }) : super(key: key);
 
   // ****************** Props ******************
   /// 是否使用虚线
@@ -30,12 +27,12 @@ class FlanDivider extends StatelessWidget {
   final FlanDividerContentPosition contentPosition;
 
   /// 分割线样式
-  final FlanDividerStyle style;
+  final FlanDividerStyle? style;
   // ****************** Events ******************
 
   // ****************** Slots ******************
   /// 内容
-  final Widget child;
+  final Widget? child;
 
   @override
   Widget build(BuildContext context) {
@@ -59,13 +56,13 @@ class FlanDivider extends StatelessWidget {
                   position: FlanDividerContentPosition.left,
                 ),
                 this._buildContentSpace(),
-                child,
+                child ?? SizedBox.shrink(),
                 this._buildContentSpace(),
                 this._buildLine(
                   constraints,
                   position: FlanDividerContentPosition.right,
                 ),
-              ].where((element) => element != null).toList(),
+              ],
             );
           },
         ),
@@ -75,15 +72,15 @@ class FlanDivider extends StatelessWidget {
 
   /// 构建空白区域
   Widget _buildContentSpace() {
-    return this.child != null
-        ? SizedBox(width: ThemeVars.dividerContentPadding)
-        : null;
+    return SizedBox(
+      width: this.child != null ? ThemeVars.dividerContentPadding : 0.0,
+    );
   }
 
   /// 构建线条
   Widget _buildLine(
     BoxConstraints constraints, {
-    FlanDividerContentPosition position,
+    required FlanDividerContentPosition position,
   }) {
     final line = CustomPaint(
       painter: _DividerPainter(
@@ -118,7 +115,7 @@ class FlanDivider extends StatelessWidget {
 class _DividerPainter extends CustomPainter {
   _DividerPainter({
     this.dashed = false,
-    this.color,
+    required this.color,
     this.strokeWidth = 1.0,
   })  : _paint = Paint()
           ..color = color
@@ -171,9 +168,9 @@ enum FlanDividerContentPosition {
 /// 分割线样式
 class FlanDividerStyle {
   const FlanDividerStyle({
-    this.color,
-    this.borderColor,
-    this.padding,
+    required this.color,
+    required this.borderColor,
+    required this.padding,
   }) : super();
 
   final Color color;

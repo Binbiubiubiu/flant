@@ -8,7 +8,7 @@ const DEFAULT_LAST_ROW_WIDTH = 0.6;
 /// ### Skeleton 骨架屏
 class FlanSkeleton extends StatelessWidget {
   FlanSkeleton({
-    Key key,
+    Key? key,
     this.row = 0,
     this.rowWidth = DEFAULT_ROW_WIDTH,
     this.title = false,
@@ -17,9 +17,9 @@ class FlanSkeleton extends StatelessWidget {
     this.animate = true,
     this.round = false,
     this.titleWidth = 0.4,
-    this.avatarSize = 32.0,
+    this.avatarSize,
     this.avatarShape = FlanSkeletonAvatarShape.round,
-    this.rowWidths,
+    this.rowWidths = const <double>[],
     this.child,
   }) : super(key: key);
   // ****************** Props ******************
@@ -55,7 +55,7 @@ class FlanSkeleton extends StatelessWidget {
   final double titleWidth;
 
   /// 头像占位图大小
-  final double avatarSize;
+  final double? avatarSize;
 
   /// 头像占位图形状，可选值为`square`
   final FlanSkeletonAvatarShape avatarShape;
@@ -65,7 +65,7 @@ class FlanSkeleton extends StatelessWidget {
   // ****************** Slots ******************
 
   /// 默认插槽
-  final Widget child;
+  final Widget? child;
 
   /// 块状圆角
   BorderRadius get borderRadius {
@@ -77,7 +77,7 @@ class FlanSkeleton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     if (!this.loading) {
-      return this.child;
+      return this.child ?? SizedBox.shrink();
     }
 
     final skeleton = Padding(
@@ -160,7 +160,7 @@ class FlanSkeleton extends StatelessWidget {
   }
 
   List<Widget> _buildRows(BuildContext context) {
-    final rows = List<Widget>();
+    final rows = <Widget>[];
     for (var i = 0; i < this.row; i++) {
       final rWidth = this.getRowWidth(i);
       Widget row = Container(
@@ -211,8 +211,8 @@ class FlanSkeleton extends StatelessWidget {
 
 class _AnimatedOpacityBlock extends StatefulWidget {
   const _AnimatedOpacityBlock({
-    Key key,
-    this.child,
+    Key? key,
+    required this.child,
   }) : super(key: key);
 
   final Widget child;
@@ -223,8 +223,8 @@ class _AnimatedOpacityBlock extends StatefulWidget {
 
 class __AnimatedOpacityBlockState extends State<_AnimatedOpacityBlock>
     with TickerProviderStateMixin {
-  AnimationController controller;
-  Animation<double> animation;
+  late AnimationController controller;
+  late Animation<double> animation;
 
   @override
   void initState() {
@@ -246,8 +246,8 @@ class __AnimatedOpacityBlockState extends State<_AnimatedOpacityBlock>
 
   @override
   void dispose() {
-    this.animation?.removeListener(this._handleChange);
-    this.controller?.dispose();
+    this.animation.removeListener(this._handleChange);
+    this.controller.dispose();
     super.dispose();
   }
 

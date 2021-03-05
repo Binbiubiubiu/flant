@@ -5,8 +5,8 @@ import './tabbar_item.dart';
 
 class FlanTabbar<T extends dynamic> extends StatelessWidget {
   FlanTabbar({
-    Key key,
-    T value,
+    Key? key,
+    required T value,
     // this.route = false,
     // this.placeholder = false,
     this.activeColor,
@@ -14,15 +14,9 @@ class FlanTabbar<T extends dynamic> extends StatelessWidget {
     this.inactiveColor,
     this.border = true,
     this.safeAreaInsetBottom = false,
-    this.onChange,
-    this.children,
-  })  :
-        // assert(route != null),
-        // assert(placeholder != null),
-        assert(value != null),
-        assert(border != null),
-        assert(safeAreaInsetBottom != null),
-        value = value ?? 0,
+    required this.onChange,
+    this.children = const <FlanTabbarItem>[],
+  })  : value = value ?? 0,
         super(key: key);
 
   // ****************** Props ******************
@@ -33,12 +27,13 @@ class FlanTabbar<T extends dynamic> extends StatelessWidget {
   // final bool placeholder;
 
   /// 选中标签的颜色
-  final Color activeColor;
+  final Color? activeColor;
 
-  final bool Function(T name) beforeChange;
+  /// 切换标签前的回调函数，返回 `false` 可阻止切换
+  final bool Function(T name)? beforeChange;
 
   /// 未选中标签的颜色
-  final Color inactiveColor;
+  final Color? inactiveColor;
 
   /// 当前选中标签的名称或索引值
   final T value;
@@ -71,17 +66,16 @@ class FlanTabbar<T extends dynamic> extends StatelessWidget {
         inactiveColor: this.inactiveColor,
         setActive: (dynamic value) {
           if (value != this.value) {
-            if (this.beforeChange != null) {
-              this.beforeChange(value);
-            }
-            if (this.onChange != null) {
+            final canChange =
+                this.beforeChange != null ? this.beforeChange!(value) : true;
+
+            if (canChange) {
               this.onChange(value);
             }
           }
         },
         child: Row(
-          children:
-              (this.children ?? []).map((e) => Expanded(child: e)).toList(),
+          children: this.children.map((e) => Expanded(child: e)).toList(),
         ),
       ),
     );
@@ -98,24 +92,24 @@ class FlanTabbar<T extends dynamic> extends StatelessWidget {
 
 class FlanTabbarProvider extends InheritedWidget {
   FlanTabbarProvider({
-    Key key,
+    Key? key,
     this.value,
     this.activeColor,
     this.inactiveColor,
-    this.setActive,
-    this.child,
+    required this.setActive,
+    required this.child,
   }) : super(key: key, child: child);
 
   final dynamic value;
 
-  final Color activeColor;
-  final Color inactiveColor;
+  final Color? activeColor;
+  final Color? inactiveColor;
 
   final ValueChanged<dynamic> setActive;
 
   final Row child;
 
-  static FlanTabbarProvider of(BuildContext context) {
+  static FlanTabbarProvider? of(BuildContext context) {
     return context.dependOnInheritedWidgetOfExactType<FlanTabbarProvider>();
   }
 

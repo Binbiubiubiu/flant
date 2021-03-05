@@ -11,7 +11,7 @@ import '../base/icon.dart';
 /// 用于循环播放展示一组消息通知。
 class FlanNoticeBar extends StatefulWidget {
   const FlanNoticeBar({
-    Key key,
+    Key? key,
     this.text = "",
     this.mode,
     this.color,
@@ -28,11 +28,8 @@ class FlanNoticeBar extends StatefulWidget {
     this.child,
     this.leftIconSlot,
     this.rightIconSlot,
-  })  : assert(wrapable != null),
-        assert(scrollable != null),
-        assert(delay != null && delay > 0.0),
-        assert(speed != null && speed > 0.0),
-        assert(child != null || text != null),
+  })  : assert(delay > 0.0),
+        assert(speed > 0.0),
         super(key: key);
 
   // ****************** Props ******************
@@ -41,22 +38,22 @@ class FlanNoticeBar extends StatefulWidget {
   final String text;
 
   /// 通知栏模式，可选值为 `closeable` `link`
-  final FlanNoticeBarMode mode;
+  final FlanNoticeBarMode? mode;
 
   /// 通知文本颜色
-  final Color color;
+  final Color? color;
 
   /// 左侧图标名称
-  final int leftIconName;
+  final int? leftIconName;
 
   /// 左侧图片链接
-  final String leftIconUrl;
+  final String? leftIconUrl;
 
   /// 是否开启文本换行，只在禁用滚动时生效
   final bool wrapable;
 
   /// 滚动条背景
-  final Color background;
+  final Color? background;
 
   /// 是否开启滚动播放，内容长度溢出时默认开启
   final bool scrollable;
@@ -70,24 +67,24 @@ class FlanNoticeBar extends StatefulWidget {
   // ****************** Events ******************
 
   /// 点击通知栏时触发
-  final VoidCallback onClick;
+  final VoidCallback? onClick;
 
   /// 关闭通知栏时触发
-  final VoidCallback onClose;
+  final VoidCallback? onClose;
 
   /// 每当滚动栏重新开始滚动时触发
-  final VoidCallback onReplay;
+  final VoidCallback? onReplay;
 
   // ****************** Slots ******************
 
   /// 通知文本内容
-  final Widget child;
+  final Widget? child;
 
   /// 自定义左侧图标
-  final Widget leftIconSlot;
+  final Widget? leftIconSlot;
 
   /// 自定义右侧图标
-  final Widget rightIconSlot;
+  final Widget? rightIconSlot;
 
   @override
   _FlanNoticeBarState createState() => _FlanNoticeBarState();
@@ -97,10 +94,10 @@ class _FlanNoticeBarState extends State<FlanNoticeBar>
     with TickerProviderStateMixin {
   bool show = true;
 
-  AnimationController controller;
-  Animation<Offset> animation;
+  late AnimationController controller;
+  late Animation<Offset> animation;
 
-  Timer startTimer;
+  late Timer startTimer;
 
   GlobalKey wrapRef = GlobalKey();
   GlobalKey contentRef = GlobalKey();
@@ -109,7 +106,7 @@ class _FlanNoticeBarState extends State<FlanNoticeBar>
   _handleAnimationStatusChange(AnimationStatus status) {
     if (status == AnimationStatus.completed) {
       if (this.widget.onReplay != null) {
-        this.widget.onReplay();
+        this.widget.onReplay!();
       }
     }
   }
@@ -121,19 +118,18 @@ class _FlanNoticeBarState extends State<FlanNoticeBar>
       ..addListener(_handelChange);
     this.animation =
         Tween(begin: Offset.zero, end: Offset.zero).animate(this.controller);
-
-    WidgetsBinding.instance.addPostFrameCallback((duration) => this.start());
+    this.startTimer = Timer(const Duration(seconds: 1), () {});
+    WidgetsBinding.instance?.addPostFrameCallback((duration) => this.start());
     super.initState();
   }
 
   @override
   void dispose() {
-    if (this.controller != null) {
-      this.controller
-        ..removeStatusListener(this._handleAnimationStatusChange)
-        ..removeListener(this._handelChange)
-        ..dispose();
-    }
+    this.controller
+      ..removeStatusListener(this._handleAnimationStatusChange)
+      ..removeListener(this._handelChange)
+      ..dispose();
+
     super.dispose();
   }
 
@@ -147,11 +143,9 @@ class _FlanNoticeBarState extends State<FlanNoticeBar>
   }
 
   void start() {
-    final ms = Duration(
-        milliseconds:
-            this.widget.delay != null ? (this.widget.delay * 1000).toInt() : 0);
+    final ms = Duration(milliseconds: (this.widget.delay * 1000).toInt());
 
-    this.startTimer?.cancel();
+    this.startTimer.cancel();
 
     this.startTimer = Timer(ms, () {
       if (!this.mounted || !this.widget.scrollable) {
@@ -159,9 +153,9 @@ class _FlanNoticeBarState extends State<FlanNoticeBar>
       }
 
       final wrapRefWidth =
-          wrapRef.currentContext.findRenderObject().paintBounds.size.width;
+          wrapRef.currentContext!.findRenderObject()!.paintBounds.size.width;
       final contentRefWidth =
-          contentRef.currentContext.findRenderObject().paintBounds.size.width;
+          contentRef.currentContext!.findRenderObject()!.paintBounds.size.width;
       // debugPrint(
       //     "wrapRefWidth:$wrapRefWidth --- contentRefWidth:$contentRefWidth");
       if (this.widget.scrollable || contentRefWidth > wrapRefWidth) {
@@ -251,7 +245,7 @@ class _FlanNoticeBarState extends State<FlanNoticeBar>
 
   Widget _buildLeftIcon(BuildContext context) {
     if (this.widget.leftIconSlot != null) {
-      return this.widget.leftIconSlot;
+      return this.widget.leftIconSlot!;
     }
 
     if (this.widget.leftIconName != null || this.widget.leftIconUrl != null) {
@@ -262,6 +256,7 @@ class _FlanNoticeBarState extends State<FlanNoticeBar>
           size: ThemeVars.noticeBarIconSize,
           iconName: this.widget.leftIconName,
           iconUrl: this.widget.leftIconUrl,
+          color: this.widget.color ?? ThemeVars.noticeBarTextColor,
         ),
       );
     }
@@ -271,7 +266,7 @@ class _FlanNoticeBarState extends State<FlanNoticeBar>
 
   Widget _buildRightIcon(BuildContext context) {
     if (this.widget.rightIconSlot != null) {
-      return this.widget.rightIconSlot;
+      return this.widget.rightIconSlot!;
     }
 
     if (this.rightIconName > 0) {
@@ -293,7 +288,7 @@ class _FlanNoticeBarState extends State<FlanNoticeBar>
     if (this.widget.mode == FlanNoticeBarMode.closeable) {
       this.setState(() => this.show = false);
       if (this.widget.onClose != null) {
-        this.widget.onClose();
+        this.widget.onClose!();
       }
     }
   }
