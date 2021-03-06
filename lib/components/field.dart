@@ -1,7 +1,7 @@
-import 'package:flant/components/alert/loading.dart';
+import 'package:flant/components/loading.dart';
 import "package:flutter/material.dart";
 import 'package:flutter/foundation.dart';
-import '../../styles/var.dart';
+import '../styles/var.dart';
 
 /// ### FlanField
 /// 表单中的输入框组件。

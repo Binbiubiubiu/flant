@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/foundation.dart';
 
-import '../show/badge.dart';
-import '../../styles/icons.dart';
-export '../../styles/icons.dart';
+import '../styles/icons.dart';
+import 'badge.dart';
+export '../styles/icons.dart';
 
 /// ### FlanIcon 单元格
 /// 基于字体的图标集，可以通过 Icon 组件使用，也可以在其他组件中通过 `icon` 属性引用。

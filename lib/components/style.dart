@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/foundation.dart';
-import '../../styles/var.dart';
+import '../styles/var.dart';
 
 /// 1px 边框
 class FlanHairLine extends BorderSide {

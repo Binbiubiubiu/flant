@@ -1,11 +1,11 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
-import '../../styles/var.dart';
-import '../base/style.dart';
-import '../base/icon.dart';
-import '../show/badge.dart';
-import './tabbar.dart';
+import '../styles/var.dart';
+import 'style.dart';
+import 'icon.dart';
+import 'badge.dart';
+import 'tabbar.dart';
 
 typedef FlanTabbarItemSlotBuilder = Widget Function(
     BuildContext context, bool active);
@@ -130,7 +130,13 @@ class FlanTabbarItem<T extends dynamic> extends StatelessWidget {
 
   @override
   void debugFillProperties(DiagnosticPropertiesBuilder properties) {
-    // TODO: implement debugFillProperties
+    properties.add(DiagnosticsProperty<T>("name", name));
+    properties.add(DiagnosticsProperty<int>("iconName", iconName));
+    properties.add(DiagnosticsProperty<String>("iconUrl", iconUrl));
+    properties.add(DiagnosticsProperty<String>("iconPrefix", iconPrefix,
+        defaultValue: kFlanIconsFamily));
+    properties.add(DiagnosticsProperty<bool>("dot", dot, defaultValue: false));
+    properties.add(DiagnosticsProperty<String>("badge", badge));
     super.debugFillProperties(properties);
   }
 }

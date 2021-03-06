@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/foundation.dart';
 import 'dart:math' as math;
-import '../../styles/var.dart';
+import '../styles/var.dart';
 
 /// ### FlanImage 加载
 /// 加载图标，用于表示加载中的过渡状态。

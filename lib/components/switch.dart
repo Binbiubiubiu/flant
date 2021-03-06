@@ -1,7 +1,7 @@
-import 'package:flant/components/alert/loading.dart';
+import 'package:flant/components/loading.dart';
 import "package:flutter/material.dart";
 import 'package:flutter/foundation.dart';
-import '../../styles/var.dart';
+import '../styles/var.dart';
 
 /// ### FlanSwitch
 /// 用于在打开和关闭状态之间进行切换。

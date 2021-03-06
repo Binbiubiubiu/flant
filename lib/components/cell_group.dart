@@ -1,7 +1,7 @@
 import "package:flutter/material.dart";
 import 'package:flutter/foundation.dart';
-import '../../styles/var.dart';
-import './cell.dart';
+import '../styles/var.dart';
+import 'cell.dart';
 
 /// ### FlanCellGroup 单元格组
 class FlanCellGroup extends StatelessWidget {

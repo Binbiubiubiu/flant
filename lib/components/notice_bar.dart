@@ -4,8 +4,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/scheduler.dart';
 
-import '../../styles/var.dart';
-import '../base/icon.dart';
+import '../styles/var.dart';
+import 'icon.dart';
 
 /// ### NoticeBar 通知栏
 /// 用于循环播放展示一组消息通知。

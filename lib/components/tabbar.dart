@@ -1,14 +1,12 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import '../../styles/var.dart';
-import './tabbar_item.dart';
+import '../styles/var.dart';
+import 'tabbar_item.dart';
 
 class FlanTabbar<T extends dynamic> extends StatelessWidget {
   FlanTabbar({
     Key? key,
     required T value,
-    // this.route = false,
-    // this.placeholder = false,
     this.activeColor,
     this.beforeChange,
     this.inactiveColor,
@@ -20,11 +18,6 @@ class FlanTabbar<T extends dynamic> extends StatelessWidget {
         super(key: key);
 
   // ****************** Props ******************
-  /// 当前展开面板的 `name`
-  // final bool route;
-
-  /// 固定在底部时，是否在标签位置生成一个等高的占位元素
-  // final bool placeholder;
 
   /// 选中标签的颜色
   final Color? activeColor;
@@ -85,7 +78,16 @@ class FlanTabbar<T extends dynamic> extends StatelessWidget {
 
   @override
   void debugFillProperties(DiagnosticPropertiesBuilder properties) {
-    // TODO: implement debugFillProperties
+    properties.add(DiagnosticsProperty<Color>("activeColor", activeColor));
+    properties.add(
+        DiagnosticsProperty<Function(T name)>("beforeChange", beforeChange));
+    properties.add(DiagnosticsProperty<Color>("inactiveColor", inactiveColor));
+    properties.add(DiagnosticsProperty<T>("value", value));
+    properties
+        .add(DiagnosticsProperty<bool>("border", border, defaultValue: false));
+    properties.add(DiagnosticsProperty<bool>(
+        "safeAreaInsetBottom", safeAreaInsetBottom,
+        defaultValue: false));
     super.debugFillProperties(properties);
   }
 }

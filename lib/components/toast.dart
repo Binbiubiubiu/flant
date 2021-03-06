@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/foundation.dart';
-import './icon.dart';
-import './style.dart';
-import '../alert/loading.dart';
-import '../../styles/var.dart';
+
+import '../styles/var.dart';
+import 'icon.dart';
+import 'style.dart';
+import 'loading.dart';
 
 int tUuid = 0;
 

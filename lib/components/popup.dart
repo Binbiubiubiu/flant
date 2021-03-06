@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/semantics.dart';
 import './icon.dart' show FlanIcon, FlanIcons;
-import '../../styles/var.dart';
+import '../styles/var.dart';
 
 /// ### FlanPopup 列布局
 /// 弹出层容器，用于展示弹窗、信息提示等内容，支持多个弹出层叠加展示。

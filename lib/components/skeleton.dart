@@ -1,6 +1,6 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import '../../styles/var.dart';
+import '../styles/var.dart';
 
 const DEFAULT_ROW_WIDTH = 1.0;
 const DEFAULT_LAST_ROW_WIDTH = 0.6;
@@ -19,7 +19,7 @@ class FlanSkeleton extends StatelessWidget {
     this.titleWidth = 0.4,
     this.avatarSize,
     this.avatarShape = FlanSkeletonAvatarShape.round,
-    this.rowWidths = const <double>[],
+    this.rowWidths,
     this.child,
   }) : super(key: key);
   // ****************** Props ******************
@@ -34,7 +34,7 @@ class FlanSkeleton extends StatelessWidget {
   /// 段落占位图宽度，可传数组来设置每一行的宽度
   /// - `0.1` == `10%`
   /// - `20.0` == `20.0`
-  final List<double> rowWidths;
+  final List<double>? rowWidths;
 
   /// 是否显示标题占位图
   final bool title;
@@ -153,7 +153,7 @@ class FlanSkeleton extends StatelessWidget {
     }
 
     if (this.rowWidths != null) {
-      return this.rowWidths[index];
+      return this.rowWidths![index];
     }
 
     return this.rowWidth;

@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/foundation.dart';
 
-import '../base/style.dart';
-import './collapse_item.dart';
+import 'collapse_item.dart';
+import 'style.dart';
 
 /// ### FlanCollapse 折叠面板
 /// 将一组内容放置在多个折叠面板中，点击面板的标题可以展开或收缩其内容。

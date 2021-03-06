@@ -1,9 +1,8 @@
 import "package:flutter/material.dart";
 import 'package:flutter/foundation.dart';
 
-import '../../styles/var.dart';
-import '../base/icon.dart';
-import './field.dart';
+import 'icon.dart';
+import 'field.dart';
 
 /// ### FlanSearch
 /// 用于搜索场景的输入框组件。

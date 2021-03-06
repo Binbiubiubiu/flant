@@ -3,7 +3,7 @@ import 'dart:ui';
 
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import '../../styles/var.dart';
+import '../styles/var.dart';
 
 /// 格式化百分比
 double _formatRate(double rate) => math.min(math.max(rate, 0), 100);

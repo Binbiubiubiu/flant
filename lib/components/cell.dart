@@ -1,10 +1,8 @@
-import 'dart:io';
-
 import "package:flutter/material.dart";
 import 'package:flutter/foundation.dart';
-import '../../styles/var.dart';
-import '../../mixins/route_mixins.dart';
-import './icon.dart';
+import '../styles/var.dart';
+import '../mixins/route_mixins.dart';
+import 'icon.dart';
 
 /// ### FlanCell 单元格
 /// 单元格为列表中的单个展示项。

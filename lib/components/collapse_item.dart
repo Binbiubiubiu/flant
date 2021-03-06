@@ -1,12 +1,11 @@
-import 'package:flant/components/base/style.dart';
 import 'package:flant/styles/var.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/semantics.dart';
 
-import '../base/cell.dart';
-import '../base/icon.dart';
-import './collapse.dart';
+import 'cell.dart';
+import 'icon.dart';
+import 'collapse.dart';
 
 /// ### FlanCollapseItem 折叠面板
 class FlanCollapseItem extends StatefulWidget {

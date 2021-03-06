@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/foundation.dart';
-import '../../styles/var.dart';
-import './icon.dart';
-import '../alert/loading.dart';
-import '../../mixins/route_mixins.dart';
+import '../mixins/route_mixins.dart';
+import '../styles/var.dart';
+import 'icon.dart';
+import 'loading.dart';
 
 /// ### FlanButton 按钮
 /// 用于触发一个操作，如提交表单

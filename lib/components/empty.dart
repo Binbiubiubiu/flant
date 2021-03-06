@@ -1,7 +1,7 @@
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/foundation.dart';
-import '../../styles/var.dart';
+import '../styles/var.dart';
 
 /// ### FlanEmpty 空状态
 /// 空状态时的占位提示

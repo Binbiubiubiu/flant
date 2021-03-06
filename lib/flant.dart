@@ -1,33 +1,35 @@
 library flant;
 
 // basic components
-export './components/base/button.dart';
-export './components/base/cell.dart';
-export './components/base/cell_group.dart';
-export './components/base/icon.dart';
-export './components/base/image.dart';
-export './components/base/row.dart';
-export './components/base/col.dart';
-export './components/base/popup.dart';
-export './components/base/style.dart';
-export './components/base/toast.dart';
+export './components/button.dart';
+export './components/cell.dart';
+export './components/cell_group.dart';
+export './components/icon.dart';
+export './components/image.dart';
+export './components/row.dart';
+export './components/col.dart';
+export './components/popup.dart';
+export './components/style.dart';
+export './components/toast.dart';
 // form components
-export './components/form/search.dart';
-export './components/form/field.dart';
-export './components/form/switch.dart';
+export './components/search.dart';
+export './components/field.dart';
+export './components/switch.dart';
 // show components
-export './components/show/badge.dart';
-export './components/show/circle.dart';
-export './components/show/collapse.dart';
-export './components/show/collapse_item.dart';
-export './components/show/empty.dart';
-export './components/show/divider.dart';
-export './components/show/notice_bar.dart';
-export './components/show/progress.dart';
-export './components/show/skeleton.dart';
-export './components/show/tag.dart';
+export './components/badge.dart';
+export './components/circle.dart';
+export './components/collapse.dart';
+export './components/collapse_item.dart';
+export './components/empty.dart';
+export './components/divider.dart';
+export './components/notice_bar.dart';
+export './components/progress.dart';
+export './components/skeleton.dart';
+export './components/tag.dart';
 // alert components
-export './components/alert/loading.dart';
+export 'components/loading.dart';
 // navigator components
-export './components/navigator/tabbar.dart';
-export './components/navigator/tabbar_item.dart';
+export './components/tabbar.dart';
+export './components/tabbar_item.dart';
+
+export './locale/main.dart';
