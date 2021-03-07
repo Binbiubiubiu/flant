@@ -9,7 +9,7 @@ class FlanCellGroup extends StatelessWidget {
     Key? key,
     this.title,
     this.border = false,
-    this.children,
+    this.children = const <FlanCell>[],
     this.titleSlot,
   }) : super(key: key);
 
@@ -24,31 +24,40 @@ class FlanCellGroup extends StatelessWidget {
 
   // ****************** Slots ******************
   /// 默认插槽
-  final List<Widget>? children;
+  final List<FlanCell> children;
 
   /// 自定义分组标题
   final Widget? titleSlot;
 
   @override
   Widget build(BuildContext context) {
-    final noBottonBorder = this.children?.last is FlanCell;
+    List<Widget> cells = [];
+    if (this.children.length > 0) {
+      final line = Divider(
+        height: 0.5,
+        indent: ThemeVars.cellHorizontalPadding,
+        endIndent: ThemeVars.cellHorizontalPadding,
+      );
+      for (var i = 0; i < this.children.length; i++) {
+        if (i > 0) {
+          cells.add(line);
+        }
+        cells.add(this.children[i]);
+      }
+    }
 
     Widget group = Container(
       decoration: BoxDecoration(
         color: ThemeVars.cellGroupBackgroundColor,
         border: Border(
-          bottom: noBottonBorder
-              ? BorderSide.none
-              : BorderSide(width: 0.5, color: ThemeVars.cellBorderColor),
+          bottom: BorderSide(width: 0.5, color: ThemeVars.cellBorderColor),
           top: BorderSide(width: 0.5, color: ThemeVars.cellBorderColor),
         ),
       ),
-      child: this.children != null
-          ? Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: this.children ?? [],
-            )
-          : null,
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: cells,
+      ),
     );
 
     if (this._hasTitle) {

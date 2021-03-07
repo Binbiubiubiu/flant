@@ -39,6 +39,7 @@ class FlanCollapse<T extends dynamic> extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       decoration: BoxDecoration(
+        color: Colors.white,
         border: Border(
           bottom: this.border ? FlanHairLine() : BorderSide.none,
         ),
@@ -54,9 +55,7 @@ class FlanCollapse<T extends dynamic> extends StatelessWidget {
   }
 
   void updateName(dynamic name) {
-    if (this.onChange != null) {
-      this.onChange(name);
-    }
+    this.onChange(name);
   }
 
   void toggle(String name, bool expanded) {

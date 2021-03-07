@@ -199,8 +199,7 @@ class _FlanCollapseItemState extends State<FlanCollapseItem>
         iconSlot: this.widget.iconSlot,
         titleSlot: this.widget.titleSlot,
         child: this.widget.valueSlot,
-        border:
-            this.expanded ? (this.widget.border) : false, //this.widget.border,
+        border: this.expanded ? this.widget.border : false,
         title: this.widget.title,
         value: this.widget.value,
         label: this.widget.label,

@@ -151,6 +151,7 @@ class FlanBadge extends StatelessWidget {
   Widget _buildBadge() {
     if (this._hasContent || this.dot) {
       return Material(
+        color: Colors.transparent,
         textStyle: TextStyle(
           height: 1.2,
           fontSize: ThemeVars.badgeFontSize,

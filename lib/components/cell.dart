@@ -1,3 +1,4 @@
+import 'package:flant/components/cell_group.dart';
 import "package:flutter/material.dart";
 import 'package:flutter/foundation.dart';
 import '../styles/var.dart';
@@ -16,7 +17,7 @@ class FlanCell extends RouteStatelessWidget {
     this.iconName,
     this.iconUrl,
     this.iconPrefix = kFlanIconsFamily,
-    this.border = true,
+    this.border = false,
     this.clickable = false,
     this.isLink = false,
     this.isRequired = false,
@@ -115,15 +116,6 @@ class FlanCell extends RouteStatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final borderDecoration = BoxDecoration(
-      border: Border(
-        bottom: BorderSide(
-          width: 0.5,
-          color: ThemeVars.cellBorderColor,
-        ),
-      ),
-    );
-
     Widget cell = Container(
       margin: EdgeInsets.symmetric(
         horizontal: ThemeVars.cellHorizontalPadding,
@@ -131,7 +123,13 @@ class FlanCell extends RouteStatelessWidget {
       padding: EdgeInsets.symmetric(
         vertical: this._sizeStyle.paddingVertical,
       ),
-      decoration: this.border ? borderDecoration : null,
+      decoration: BoxDecoration(
+        border: Border(
+          bottom: this.border
+              ? BorderSide(width: 0.5, color: ThemeVars.cellBorderColor)
+              : BorderSide.none,
+        ),
+      ),
       child: Row(
         crossAxisAlignment:
             this.center ? CrossAxisAlignment.center : CrossAxisAlignment.start,
