@@ -20,6 +20,7 @@ export './components/badge.dart';
 export './components/circle.dart';
 export './components/collapse.dart';
 export './components/collapse_item.dart';
+export './components/count_down.dart';
 export './components/empty.dart';
 export './components/divider.dart';
 export './components/notice_bar.dart';
@@ -33,3 +34,4 @@ export './components/tabbar.dart';
 export './components/tabbar_item.dart';
 
 export './locale/main.dart';
+export './styles/var.dart';

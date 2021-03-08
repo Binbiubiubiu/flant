@@ -1,8 +1,8 @@
-import 'package:flant/styles/var.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/semantics.dart';
 
+import '../styles/var.dart';
 import 'cell.dart';
 import 'icon.dart';
 import 'collapse.dart';
