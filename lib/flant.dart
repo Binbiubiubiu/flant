@@ -30,6 +30,8 @@ export './components/tag.dart';
 // alert components
 export 'components/loading.dart';
 // navigator components
+export './components/grid.dart';
+export './components/grid_item.dart';
 export './components/tabbar.dart';
 export './components/tabbar_item.dart';
 
