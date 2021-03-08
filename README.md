@@ -49,7 +49,7 @@
 - [x] Badge 徽标
 - [x] Circle 环形进度条
 - [x] Collapse 折叠面板
-- [ ] CountDown 倒计时
+- [x] CountDown 倒计时
 - [x] Divider 分割线
 - [x] Empty 空状态
 - [ ] ImagePreview 图片预览
@@ -66,7 +66,7 @@
 
 ##### 导航组件
 
-- [ ] Grid 宫格
+- [x] Grid 宫格
 - [ ] IndexBar 索引栏
 - [ ] NavBar 导航栏
 - [ ] Pagination 分页
