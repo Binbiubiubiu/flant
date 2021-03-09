@@ -82,13 +82,23 @@ Widget kFlanSlideRightTransitionBuilder(animation, child) {
 /// - 通过类型`Visibility`的子组件`child`的`visible` 控制展示和隐藏
 class FlanTransition extends StatefulWidget {
   FlanTransition({
+    this.duration,
     this.curveBuilder = kFlanCurveBuilder,
+    this.onCompleted,
+    this.onDismissed,
     required this.transitionBuilder,
     required this.child,
   });
 
+  /// 动画时间
+  final Duration? duration;
+
   /// 动画曲线构造器
   final FlanCurveBuilder curveBuilder;
+
+  final VoidCallback? onCompleted;
+
+  final VoidCallback? onDismissed;
 
   /// 过渡动画构造器
   final FlanTransitionBuilder transitionBuilder;
@@ -97,27 +107,54 @@ class FlanTransition extends StatefulWidget {
   final Visibility child;
 
   /// 过渡动画`Fade`
-  factory FlanTransition.fade({required Visibility child}) => FlanTransition(
-      transitionBuilder: kFlanFadeTransitionBuilder, child: child);
+  FlanTransition.fade({
+    this.duration,
+    this.curveBuilder = kFlanCurveBuilder,
+    this.onCompleted,
+    this.onDismissed,
+    this.transitionBuilder = kFlanFadeTransitionBuilder,
+    required this.child,
+  });
 
   /// 过渡动画`Slide Down`
-  factory FlanTransition.slideDown({required Visibility child}) =>
-      FlanTransition(
-          transitionBuilder: kFlanSlideDownTransitionBuilder, child: child);
+  FlanTransition.slideDown({
+    this.duration,
+    this.curveBuilder = kFlanCurveBuilder,
+    this.onCompleted,
+    this.onDismissed,
+    this.transitionBuilder = kFlanSlideDownTransitionBuilder,
+    required this.child,
+  });
 
   /// 过渡动画`Slide Up`
-  factory FlanTransition.slideUp({required Visibility child}) => FlanTransition(
-      transitionBuilder: kFlanSlideUpTransitionBuilder, child: child);
+  FlanTransition.slideUp({
+    this.duration,
+    this.curveBuilder = kFlanCurveBuilder,
+    this.onCompleted,
+    this.onDismissed,
+    this.transitionBuilder = kFlanSlideUpTransitionBuilder,
+    required this.child,
+  });
 
   /// 过渡动画`Slide Left`
-  factory FlanTransition.slideLeft({required Visibility child}) =>
-      FlanTransition(
-          transitionBuilder: kFlanSlideLeftTransitionBuilder, child: child);
+  FlanTransition.slideLeft({
+    this.duration,
+    this.curveBuilder = kFlanCurveBuilder,
+    this.onCompleted,
+    this.onDismissed,
+    this.transitionBuilder = kFlanSlideLeftTransitionBuilder,
+    required this.child,
+  });
 
   /// 过渡动画`Slide Right`
-  factory FlanTransition.slideRight({required Visibility child}) =>
-      FlanTransition(
-          transitionBuilder: kFlanSlideRightTransitionBuilder, child: child);
+  FlanTransition.slideRight({
+    this.duration,
+    this.curveBuilder = kFlanCurveBuilder,
+    this.onCompleted,
+    this.onDismissed,
+    this.transitionBuilder = kFlanSlideRightTransitionBuilder,
+    required this.child,
+  });
 
   @override
   _FlanTransitionState createState() => _FlanTransitionState();
@@ -136,8 +173,8 @@ class _FlanTransitionState extends State<FlanTransition>
   void initState() {
     this.animationController = AnimationController(
       vsync: this,
-      duration: ThemeVars.animationDurationBase,
-    )..addStatusListener(this._transitionLeaveEnd);
+      duration: widget.duration ?? ThemeVars.animationDurationBase,
+    )..addStatusListener(this._transitionStatusChange);
     this.content = this.widget.child;
     if (this.show) {
       this.animationController.forward();
@@ -149,7 +186,7 @@ class _FlanTransitionState extends State<FlanTransition>
   @override
   void dispose() {
     this.animationController
-      ..removeStatusListener(this._transitionLeaveEnd)
+      ..removeStatusListener(this._transitionStatusChange)
       ..dispose();
 
     super.dispose();
@@ -181,11 +218,19 @@ class _FlanTransitionState extends State<FlanTransition>
     return this.widget.transitionBuilder(curvedAnimation, this.content);
   }
 
-  void _transitionLeaveEnd(AnimationStatus status) {
+  void _transitionStatusChange(AnimationStatus status) {
     if (status == AnimationStatus.dismissed) {
       this.setState(() {
         this.content = this.widget.child;
+
+        if (widget.onDismissed != null) {
+          widget.onDismissed!();
+        }
       });
+    } else if (status == AnimationStatus.completed) {
+      if (widget.onCompleted != null) {
+        widget.onCompleted!();
+      }
     }
   }
 

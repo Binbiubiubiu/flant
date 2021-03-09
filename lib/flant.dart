@@ -28,7 +28,8 @@ export './components/progress.dart';
 export './components/skeleton.dart';
 export './components/tag.dart';
 // alert components
-export 'components/loading.dart';
+export './components/loading.dart';
+export './components/overlay.dart';
 // navigator components
 export './components/grid.dart';
 export './components/grid_item.dart';
