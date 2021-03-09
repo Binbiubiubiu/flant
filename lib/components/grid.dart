@@ -135,6 +135,14 @@ class FlanGridProvider extends InheritedWidget {
 
   @override
   bool updateShouldNotify(FlanGridProvider oldWidget) {
-    return true;
+    return maxWidth != oldWidget.maxWidth ||
+        columnNum != oldWidget.columnNum ||
+        center != oldWidget.center ||
+        border != oldWidget.border ||
+        square != oldWidget.square ||
+        iconSize != oldWidget.iconSize ||
+        gutter != oldWidget.gutter ||
+        direction != oldWidget.direction ||
+        clickable != oldWidget.clickable;
   }
 }

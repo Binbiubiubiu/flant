@@ -112,4 +112,14 @@ class _FlanOverlayState extends State<FlanOverlay> {
   Widget build(BuildContext context) {
     return SizedBox.shrink();
   }
+
+  @override
+  void debugFillProperties(DiagnosticPropertiesBuilder properties) {
+    properties.add(
+        DiagnosticsProperty<bool>("show", widget.show, defaultValue: false));
+    properties.add(DiagnosticsProperty<Duration>("duration", widget.duration,
+        defaultValue: const Duration(milliseconds: 200)));
+    properties.add(DiagnosticsProperty<Color>("color", widget.color));
+    super.debugFillProperties(properties);
+  }
 }
