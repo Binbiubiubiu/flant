@@ -71,6 +71,7 @@ class FlanGrid extends StatelessWidget {
             direction: direction,
             clickable: clickable,
             child: Wrap(
+              crossAxisAlignment: WrapCrossAlignment.center,
               children: children,
             ),
           );

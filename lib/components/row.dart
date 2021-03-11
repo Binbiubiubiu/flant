@@ -76,10 +76,6 @@ class _FlanRowState extends State<FlanRow> {
   List<RowSpace> get spaces {
     final List<RowSpace> spaces = <RowSpace>[];
 
-    if (widget.gutter == 0.0) {
-      return spaces;
-    }
-
     for (final List<int> group in groups) {
       final double averagePadding =
           (widget.gutter * (group.length - 1)) / group.length;

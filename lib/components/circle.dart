@@ -75,7 +75,7 @@ class FlanCircle extends StatefulWidget {
 
   // ****************** Slots ******************
   final Widget? child;
-  final ValueChanged onChange;
+  final ValueChanged<double> onChange;
 
   @override
   _FlanCircleState createState() => _FlanCircleState();

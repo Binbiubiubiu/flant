@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import '../styles/var.dart';
 import 'tabbar_item.dart';
 
-class FlanTabbar<T extends dynamic> extends StatelessWidget {
+class FlanTabbar<T> extends StatelessWidget {
   const FlanTabbar({
     Key? key,
     required T value,
@@ -13,8 +13,8 @@ class FlanTabbar<T extends dynamic> extends StatelessWidget {
     this.border = true,
     this.safeAreaInsetBottom = false,
     required this.onChange,
-    this.children = const <FlanTabbarItem<T>>[],
-  })  : value = value ?? 0 as T,
+    required this.children,
+  })   : value = value ?? 0 as T,
         super(key: key);
 
   // ****************** Props ******************

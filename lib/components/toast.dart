@@ -133,8 +133,8 @@ class FlanToast extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final Size size = MediaQuery.of(context).size;
-    final bool isText = type == FlanToastType.text;
-    final bool hasIcon = iconName != null || iconUrl != null;
+    final bool isText =
+        type == FlanToastType.text && iconName == null && iconUrl == null;
 
     return MediaQuery.removeViewInsets(
       removeLeft: true,
@@ -151,31 +151,33 @@ class FlanToast extends StatelessWidget {
             fontSize: ThemeVars.toastFontSize,
             // height: ThemeVars.toastLineHeight / ThemeVars.toastFontSize,
           ),
-          child: Container(
-            constraints: BoxConstraints(
-              maxWidth: ThemeVars.toastMaxWidth * size.width,
-              minWidth: ThemeVars.toastDefaultWidth,
-              minHeight: isText ? 0.0 : ThemeVars.toastDefaultMinHeight,
-            ),
-            padding: isText
-                ? ThemeVars.toastTextPadding
-                : ThemeVars.toastDefaultPadding,
+          child: DecoratedBox(
             decoration: BoxDecoration(
               color: ThemeVars.toastBackgroundColor,
               borderRadius: BorderRadius.circular(ThemeVars.toastBorderRadius),
             ),
-            child: Wrap(
-              direction: Axis.vertical,
-              runAlignment: WrapAlignment.center,
-              alignment: WrapAlignment.center,
-              crossAxisAlignment: WrapCrossAlignment.center,
-              children: <Widget>[
-                _buildIcon(),
-                SizedBox(
-                  height: isText && !hasIcon ? 0.0 : ThemeVars.paddingXs,
-                ),
-                _buildMessage(),
-              ],
+            child: Container(
+              constraints: BoxConstraints(
+                maxWidth: ThemeVars.toastMaxWidth * size.width,
+                minWidth: ThemeVars.toastDefaultWidth,
+                minHeight: isText ? 0.0 : ThemeVars.toastDefaultMinHeight,
+              ),
+              margin: isText
+                  ? ThemeVars.toastTextPadding
+                  : ThemeVars.toastDefaultPadding,
+              child: Wrap(
+                direction: Axis.vertical,
+                runAlignment: WrapAlignment.center,
+                alignment: WrapAlignment.center,
+                crossAxisAlignment: WrapCrossAlignment.center,
+                children: <Widget>[
+                  _buildIcon(),
+                  SizedBox(
+                    height: isText ? 0.0 : ThemeVars.paddingXs,
+                  ),
+                  _buildMessage(),
+                ],
+              ),
             ),
           ),
         ),

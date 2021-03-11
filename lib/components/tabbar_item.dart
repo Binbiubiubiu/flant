@@ -10,7 +10,7 @@ import 'tabbar.dart';
 typedef FlanTabbarItemSlotBuilder = Widget Function(
     BuildContext context, bool active);
 
-class FlanTabbarItem<T extends dynamic> extends StatelessWidget {
+class FlanTabbarItem<T> extends StatelessWidget {
   const FlanTabbarItem({
     Key? key,
     this.name,
