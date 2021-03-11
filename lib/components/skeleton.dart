@@ -2,12 +2,12 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import '../styles/var.dart';
 
-const DEFAULT_ROW_WIDTH = 1.0;
-const DEFAULT_LAST_ROW_WIDTH = 0.6;
+const double DEFAULT_ROW_WIDTH = 1.0;
+const double DEFAULT_LAST_ROW_WIDTH = 0.6;
 
 /// ### Skeleton 骨架屏
 class FlanSkeleton extends StatelessWidget {
-  FlanSkeleton({
+  const FlanSkeleton({
     Key? key,
     this.row = 0,
     this.rowWidth = DEFAULT_ROW_WIDTH,
@@ -69,30 +69,30 @@ class FlanSkeleton extends StatelessWidget {
 
   /// 块状圆角
   BorderRadius get borderRadius {
-    return this.round
+    return round
         ? BorderRadius.circular(ThemeVars.borderRadiusMax)
         : BorderRadius.zero;
   }
 
   @override
   Widget build(BuildContext context) {
-    if (!this.loading) {
-      return this.child ?? SizedBox.shrink();
+    if (!loading) {
+      return child ?? const SizedBox.shrink();
     }
 
-    final skeleton = Padding(
+    final Padding skeleton = Padding(
       padding: const EdgeInsets.symmetric(horizontal: ThemeVars.paddingMd),
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          this._buildAvatar(context),
+        children: <Widget>[
+          _buildAvatar(context),
           Expanded(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                SizedBox(height: ThemeVars.paddingXs),
-                this._buildTitle(context),
-                ...this._buildRows(context),
+              children: <Widget>[
+                const SizedBox(height: ThemeVars.paddingXs),
+                _buildTitle(context),
+                ..._buildRows(context),
               ],
             ),
           ),
@@ -100,7 +100,7 @@ class FlanSkeleton extends StatelessWidget {
       ),
     );
 
-    if (this.animate) {
+    if (animate) {
       return _AnimatedOpacityBlock(
         child: skeleton,
       );
@@ -109,66 +109,66 @@ class FlanSkeleton extends StatelessWidget {
     return skeleton;
   }
 
-  _buildAvatar(BuildContext context) {
-    if (this.avatar) {
+  Widget _buildAvatar(BuildContext context) {
+    if (avatar) {
       return Padding(
         padding: const EdgeInsets.only(right: ThemeVars.paddingMd),
         child: CircleAvatar(
           backgroundColor: ThemeVars.skeletonAvatarBackgroundColor,
-          radius: (this.avatarSize ?? ThemeVars.skeletonAvatarSize) / 2,
+          radius: (avatarSize ?? ThemeVars.skeletonAvatarSize) / 2,
         ),
       );
     }
 
-    return SizedBox.shrink();
+    return const SizedBox.shrink();
   }
 
   Widget _buildTitle(BuildContext context) {
-    if (this.title) {
-      final tWidth =
-          this.titleWidth > 1 ? this.titleWidth : ThemeVars.skeletonTitleWidth;
+    if (title) {
+      final double tWidth =
+          titleWidth > 1 ? titleWidth : ThemeVars.skeletonTitleWidth;
       Widget title = Container(
         width: tWidth,
         height: ThemeVars.skeletonRowHeight,
         decoration: BoxDecoration(
           color: ThemeVars.skeletonRowBackgroundColor,
-          borderRadius: this.borderRadius,
+          borderRadius: borderRadius,
         ),
       );
 
-      if (this.titleWidth <= 1) {
+      if (titleWidth <= 1) {
         title = FractionallySizedBox(
-          widthFactor: this.titleWidth,
+          widthFactor: titleWidth,
           child: title,
         );
       }
       return title;
     }
-    return SizedBox.shrink();
+    return const SizedBox.shrink();
   }
 
   double getRowWidth(int index) {
-    if (this.rowWidth == DEFAULT_ROW_WIDTH && index == this.row - 1) {
+    if (rowWidth == DEFAULT_ROW_WIDTH && index == row - 1) {
       return DEFAULT_LAST_ROW_WIDTH;
     }
 
-    if (this.rowWidths != null) {
-      return this.rowWidths![index];
+    if (rowWidths != null) {
+      return rowWidths![index];
     }
 
-    return this.rowWidth;
+    return rowWidth;
   }
 
   List<Widget> _buildRows(BuildContext context) {
-    final rows = <Widget>[];
-    for (var i = 0; i < this.row; i++) {
-      final rWidth = this.getRowWidth(i);
+    final List<Widget> rows = <Widget>[];
+    for (int i = 0; i < row; i++) {
+      final double rWidth = getRowWidth(i);
       Widget row = Container(
         width: rWidth,
         height: ThemeVars.skeletonRowHeight,
         decoration: BoxDecoration(
           color: ThemeVars.skeletonRowBackgroundColor,
-          borderRadius: this.borderRadius,
+          borderRadius: borderRadius,
         ),
       );
       if (rWidth <= 1) {
@@ -177,7 +177,9 @@ class FlanSkeleton extends StatelessWidget {
           child: row,
         );
       }
-      rows..add(SizedBox(height: ThemeVars.skeletonRowMarginTop))..add(row);
+      rows
+        ..add(const SizedBox(height: ThemeVars.skeletonRowMarginTop))
+        ..add(row);
     }
 
     return rows;
@@ -185,25 +187,25 @@ class FlanSkeleton extends StatelessWidget {
 
   @override
   void debugFillProperties(DiagnosticPropertiesBuilder properties) {
-    properties.add(DiagnosticsProperty<int>("row", row, defaultValue: 0));
+    properties.add(DiagnosticsProperty<int>('row', row, defaultValue: 0));
     properties.add(
-        DiagnosticsProperty<double>("rowWidth", rowWidth, defaultValue: 1.0));
+        DiagnosticsProperty<double>('rowWidth', rowWidth, defaultValue: 1.0));
     properties
-        .add(DiagnosticsProperty<bool>("title", title, defaultValue: false));
+        .add(DiagnosticsProperty<bool>('title', title, defaultValue: false));
     properties
-        .add(DiagnosticsProperty<bool>("avatar", avatar, defaultValue: false));
+        .add(DiagnosticsProperty<bool>('avatar', avatar, defaultValue: false));
     properties
-        .add(DiagnosticsProperty<bool>("loading", loading, defaultValue: true));
+        .add(DiagnosticsProperty<bool>('loading', loading, defaultValue: true));
     properties
-        .add(DiagnosticsProperty<bool>("animate", animate, defaultValue: true));
+        .add(DiagnosticsProperty<bool>('animate', animate, defaultValue: true));
     properties
-        .add(DiagnosticsProperty<bool>("round", round, defaultValue: true));
-    properties.add(DiagnosticsProperty<double>("titleWidth", titleWidth,
+        .add(DiagnosticsProperty<bool>('round', round, defaultValue: true));
+    properties.add(DiagnosticsProperty<double>('titleWidth', titleWidth,
         defaultValue: 0.4));
-    properties.add(DiagnosticsProperty<double>("avatarSize", avatarSize,
+    properties.add(DiagnosticsProperty<double>('avatarSize', avatarSize,
         defaultValue: 32.0));
     properties.add(DiagnosticsProperty<FlanSkeletonAvatarShape>(
-        "avatarShape", avatarShape,
+        'avatarShape', avatarShape,
         defaultValue: FlanSkeletonAvatarShape.round));
     super.debugFillProperties(properties);
   }
@@ -228,36 +230,42 @@ class __AnimatedOpacityBlockState extends State<_AnimatedOpacityBlock>
 
   @override
   void initState() {
-    this.controller = AnimationController(
+    controller = AnimationController(
       duration: ThemeVars.skeletonAnimationDuration,
       vsync: this,
     );
-    this.animation = TweenSequence([
-      TweenSequenceItem(tween: Tween(begin: 1.0, end: 0.6), weight: 0.5),
-      TweenSequenceItem(tween: Tween(begin: 0.6, end: 1.0), weight: 0.5),
+    animation = TweenSequence<double>(<TweenSequenceItem<double>>[
+      TweenSequenceItem<double>(
+        tween: Tween<double>(begin: 1.0, end: 0.6),
+        weight: 0.5,
+      ),
+      TweenSequenceItem<double>(
+        tween: Tween<double>(begin: 0.6, end: 1.0),
+        weight: 0.5,
+      ),
     ]).animate(CurvedAnimation(
-      parent: this.controller,
+      parent: controller,
       curve: Curves.easeInOut,
     ))
-      ..addListener(this._handleChange);
-    this.controller.repeat(reverse: true);
+      ..addListener(_handleChange);
+    controller.repeat(reverse: true);
     super.initState();
   }
 
   @override
   void dispose() {
-    this.animation.removeListener(this._handleChange);
-    this.controller.dispose();
+    animation.removeListener(_handleChange);
+    controller.dispose();
     super.dispose();
   }
 
-  _handleChange() => this.setState(() {});
+  void _handleChange() => setState(() {});
 
   @override
   Widget build(BuildContext context) {
     return Opacity(
-      opacity: this.animation.value,
-      child: this.widget.child,
+      opacity: animation.value,
+      child: widget.child,
     );
   }
 }

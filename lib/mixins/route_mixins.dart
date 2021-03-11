@@ -37,7 +37,7 @@ abstract class RouteStatelessWidget extends StatelessWidget {
   }) : super(key: key);
 
   /// 点击后跳转的目标路由对象
-  final PageRoute? toRoute;
+  final PageRoute<Object?>? toRoute;
 
   /// 点击后跳转的目标路由对象name
   final String? toName;
@@ -46,35 +46,35 @@ abstract class RouteStatelessWidget extends StatelessWidget {
   final bool replace;
 
   void route(BuildContext context) {
-    if (this.toRoute == null && this.toName == null) {
+    if (toRoute == null && toName == null) {
       return;
     }
 
-    final navigator = Navigator.of(context);
+    final NavigatorState navigator = Navigator.of(context);
 
-    if (this.toRoute != null) {
-      this.replace
-          ? navigator.pushReplacement(this.toRoute!)
-          : navigator.push(this.toRoute!);
+    if (toRoute != null) {
+      replace
+          ? navigator.pushReplacement<Object?, Object?>(toRoute!)
+          : navigator.push<Object?>(toRoute!);
       return;
     }
 
-    if (this.toName != null) {
-      this.replace
-          ? navigator.pushReplacementNamed(this.toName!)
-          : navigator.pushNamed(this.toName!);
+    if (toName != null) {
+      replace
+          ? navigator.pushReplacementNamed(toName!)
+          : navigator.pushNamed(toName!);
       return;
     }
 
-    throw "to 属性类型必须是 Route 或者 String";
+    throw 'to 属性类型必须是 Route 或者 String';
   }
 
   @override
   void debugFillProperties(DiagnosticPropertiesBuilder properties) {
-    properties.add(DiagnosticsProperty<String>("toName", toName));
-    properties.add(DiagnosticsProperty<PageRoute>("toRoute", toRoute));
+    properties.add(DiagnosticsProperty<String>('toName', toName));
+    properties.add(DiagnosticsProperty<PageRoute<Object?>>('toRoute', toRoute));
     properties.add(
-        DiagnosticsProperty<bool>("replace", replace, defaultValue: false));
+        DiagnosticsProperty<bool>('replace', replace, defaultValue: false));
     super.debugFillProperties(properties);
   }
 }

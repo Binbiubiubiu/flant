@@ -1,11 +1,11 @@
-import 'package:flutter/material.dart';
 import 'package:flutter/foundation.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter/semantics.dart';
 
 import '../styles/var.dart';
 import 'cell.dart';
-import 'icon.dart';
 import 'collapse.dart';
+import 'icon.dart';
 
 /// ### FlanCollapseItem 折叠面板
 class FlanCollapseItem extends StatefulWidget {
@@ -125,26 +125,20 @@ class _FlanCollapseItemState extends State<FlanCollapseItem>
 
   @override
   void initState() {
-    this.collapseAnimationController = AnimationController(
+    collapseAnimationController = AnimationController(
       duration: ThemeVars.collapseItemTransitionDuration,
       vsync: this,
-    )..addListener(this._handleAnimationChange);
-    this.collapseIconAnimation = Tween(begin: 0.0, end: -0.5).animate(
-      CurvedAnimation(
-        parent: this.collapseAnimationController,
-        curve: Curves.linear,
-      ),
-    );
-    this.collapseWrapperAnimation = CurvedAnimation(
-      parent: this.collapseAnimationController,
-      curve: Curves.easeInOut,
-    );
-    WidgetsBinding.instance?.addPostFrameCallback((timeStamp) {
-      final height = wrapKey.currentContext?.size?.height;
-      this.collapseWrapperAnimation =
-          Tween(begin: 0.0, end: height).animate(collapseWrapperAnimation);
+    )..addListener(_handleAnimationChange);
+    collapseIconAnimation = collapseAnimationController
+        .drive(CurveTween(curve: Curves.linear))
+        .drive(Tween<double>(begin: 0.0, end: -0.5));
 
-      this.collapseAnimationController.value = this.expanded ? 1.0 : 0.0;
+    WidgetsBinding.instance?.addPostFrameCallback((Duration timeStamp) {
+      final double? height = wrapKey.currentContext?.size?.height;
+      collapseWrapperAnimation = Tween<double>(begin: 0.0, end: height)
+          .animate(collapseWrapperAnimation);
+
+      collapseAnimationController.value = expanded ? 1.0 : 0.0;
     });
 
     super.initState();
@@ -154,73 +148,71 @@ class _FlanCollapseItemState extends State<FlanCollapseItem>
   void didUpdateWidget(FlanCollapseItem oldWidget) {
     super.didUpdateWidget(oldWidget);
 
-    if (this.expanded) {
-      this.collapseAnimationController.forward();
+    if (expanded) {
+      collapseAnimationController.forward();
     } else {
-      this.collapseAnimationController.reverse();
+      collapseAnimationController.reverse();
     }
   }
 
-  _handleAnimationChange() => this.setState(() {});
+  void _handleAnimationChange() => setState(() {});
 
   @override
   void dispose() {
-    if (this.collapseAnimationController != null) {
-      this.collapseAnimationController
-        ..removeListener(this._handleAnimationChange)
-        ..dispose();
-    }
+    collapseAnimationController
+      ..removeListener(_handleAnimationChange)
+      ..dispose();
     super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
-    final title = Semantics(
+    final Semantics title = Semantics(
       button: true,
-      sortKey: OrdinalSortKey(this.widget.disabled ? -1 : 0),
+      sortKey: OrdinalSortKey(widget.disabled ? -1 : 0),
       excludeSemantics: true,
-      toggled: this.expanded,
+      toggled: expanded,
       child: FlanCell(
-        disabled: this.widget.disabled,
+        disabled: widget.disabled,
         rightIconSlot: RotationTransition(
-          turns: this.collapseIconAnimation,
+          turns: collapseIconAnimation,
           child:
-              this.widget.rightIconSlot ?? FlanIcon.name(FlanIcons.arrow_down),
+              widget.rightIconSlot ?? const FlanIcon.name(FlanIcons.arrow_down),
         ), // this.widget.rightIconSlot,
         onClick: () {
-          if (this.expanded) {
-            this.collapseAnimationController.reverse();
+          if (expanded) {
+            collapseAnimationController.reverse();
           } else {
-            this.collapseAnimationController.forward();
+            collapseAnimationController.forward();
           }
 
-          parent.toggle(currentName, !this.expanded);
+          parent.toggle(currentName, !expanded);
         },
-        iconSlot: this.widget.iconSlot,
-        titleSlot: this.widget.titleSlot,
-        child: this.widget.valueSlot,
-        border: this.expanded ? this.widget.border : false,
-        title: this.widget.title,
-        value: this.widget.value,
-        label: this.widget.label,
-        size: this.widget.size,
-        iconName: this.widget.iconName,
-        iconUrl: this.widget.iconUrl,
-        iconPrefix: this.widget.iconPrefix,
-        clickable: this.widget.clickable,
-        isLink: this.widget.isLink,
-        isRequired: this.widget.isRequired,
-        center: this.widget.center,
-        arrowDirection: this.widget.arrowDirection,
-        titleStyle: this.widget.titleStyle,
-        valueStyle: this.widget.valueStyle,
-        labelStyle: this.widget.labelStyle,
+        iconSlot: widget.iconSlot,
+        titleSlot: widget.titleSlot,
+        child: widget.valueSlot,
+        border: expanded && widget.border,
+        title: widget.title,
+        value: widget.value,
+        label: widget.label,
+        size: widget.size,
+        iconName: widget.iconName,
+        iconUrl: widget.iconUrl,
+        iconPrefix: widget.iconPrefix,
+        clickable: widget.clickable,
+        isLink: widget.isLink,
+        isRequired: widget.isRequired,
+        center: widget.center,
+        arrowDirection: widget.arrowDirection,
+        titleStyle: widget.titleStyle,
+        valueStyle: widget.valueStyle,
+        labelStyle: widget.labelStyle,
       ),
     );
 
-    final content = SizedBox(
+    final SizedBox content = SizedBox(
       width: double.infinity,
-      height: this.collapseWrapperAnimation.value,
+      height: collapseWrapperAnimation.value,
       child: SingleChildScrollView(
         primary: false,
         physics: const NeverScrollableScrollPhysics(),
@@ -232,12 +224,12 @@ class _FlanCollapseItemState extends State<FlanCollapseItem>
             color: ThemeVars.collapseItemContentBackgroundColor,
             padding: ThemeVars.collapseItemContentPadding,
             child: DefaultTextStyle(
-              style: TextStyle(
+              style: const TextStyle(
                 color: ThemeVars.collapseItemContentTextColor,
                 fontSize: ThemeVars.collapseItemContentFontSize,
                 height: ThemeVars.collapseItemContentLineHeight,
               ),
-              child: this.widget.child ?? SizedBox.shrink(),
+              child: widget.child ?? const SizedBox.shrink(),
             ),
           ),
         ),
@@ -245,9 +237,9 @@ class _FlanCollapseItemState extends State<FlanCollapseItem>
     );
 
     return Column(
-      children: [
+      children: <Widget>[
         Visibility(
-          visible: index > 0 && this.widget.border,
+          visible: index > 0 && widget.border,
           child: Divider(
             height: 0.5,
             indent: ThemeVars.collapseItemContentPadding.left,
@@ -262,62 +254,62 @@ class _FlanCollapseItemState extends State<FlanCollapseItem>
   }
 
   FlanCollapseProvider<String> get parent {
-    final parent = FlanCollapseProvider.of<String>(context);
+    final FlanCollapseProvider<String>? parent =
+        FlanCollapseProvider.of<String>(context);
     if (parent == null) {
-      throw "FlanCollapseItem must be a child component of FlanCollapse";
+      throw 'FlanCollapseItem must be a child component of FlanCollapse';
     }
 
     return parent;
   }
 
-  int get index => parent.child.children.indexOf(this.widget);
+  int get index => (parent.child as Column).children.indexOf(widget);
 
-  String get currentName => widget.name ?? "$index";
+  String get currentName => widget.name ?? '$index';
 
   bool get expanded => parent.isExpanded(currentName);
 
   @override
   void debugFillProperties(DiagnosticPropertiesBuilder properties) {
-    properties.add(DiagnosticsProperty<String>("value", this.widget.value));
-    properties.add(DiagnosticsProperty<String>("value", this.widget.value));
-    properties.add(DiagnosticsProperty<String>("title", this.widget.title));
-    properties.add(DiagnosticsProperty<String>("value", this.widget.value));
-    properties.add(DiagnosticsProperty<FlanCellSize>("size", this.widget.size,
+    properties.add(DiagnosticsProperty<String>('value', widget.value));
+    properties.add(DiagnosticsProperty<String>('value', widget.value));
+    properties.add(DiagnosticsProperty<String>('title', widget.title));
+    properties.add(DiagnosticsProperty<String>('value', widget.value));
+    properties.add(DiagnosticsProperty<FlanCellSize>('size', widget.size,
         defaultValue: FlanCellSize.normal));
-    properties.add(DiagnosticsProperty<int>("iconName", this.widget.iconName));
-    properties.add(DiagnosticsProperty<String>("iconUrl", this.widget.iconUrl));
+    properties.add(DiagnosticsProperty<int>('iconName', widget.iconName));
+    properties.add(DiagnosticsProperty<String>('iconUrl', widget.iconUrl));
     properties
-        .add(DiagnosticsProperty<String>("iconPrefix", this.widget.iconPrefix));
-    properties.add(DiagnosticsProperty<bool>("border", this.widget.border,
-        defaultValue: true));
-    properties.add(DiagnosticsProperty<bool>("clickable", this.widget.clickable,
+        .add(DiagnosticsProperty<String>('iconPrefix', widget.iconPrefix));
+    properties.add(
+        DiagnosticsProperty<bool>('border', widget.border, defaultValue: true));
+    properties.add(DiagnosticsProperty<bool>('clickable', widget.clickable,
         defaultValue: false));
-    properties.add(DiagnosticsProperty<bool>("isLink", this.widget.isLink,
+    properties.add(DiagnosticsProperty<bool>('isLink', widget.isLink,
         defaultValue: false));
-    properties.add(DiagnosticsProperty<bool>(
-        "isRequired", this.widget.isRequired,
+    properties.add(DiagnosticsProperty<bool>('isRequired', widget.isRequired,
         defaultValue: false));
-    properties.add(DiagnosticsProperty<bool>("disabled", this.widget.disabled,
+    properties.add(DiagnosticsProperty<bool>('disabled', widget.disabled,
         defaultValue: false));
-    properties.add(DiagnosticsProperty<bool>("center", this.widget.center,
+    properties.add(DiagnosticsProperty<bool>('center', widget.center,
         defaultValue: false));
     properties.add(DiagnosticsProperty<FlanCellArrowDirection>(
-        "arrowDirection", this.widget.arrowDirection,
+        'arrowDirection', widget.arrowDirection,
         defaultValue: FlanCellArrowDirection.right));
-    properties.add(
-        DiagnosticsProperty<TextStyle>("titleStyle", this.widget.titleStyle));
-    properties.add(
-        DiagnosticsProperty<TextStyle>("valueStyle", this.widget.valueStyle));
-    properties.add(
-        DiagnosticsProperty<TextStyle>("labelStyle", this.widget.labelStyle));
-    properties.add(DiagnosticsProperty<FlanCellSize>("size", this.widget.size,
+    properties
+        .add(DiagnosticsProperty<TextStyle>('titleStyle', widget.titleStyle));
+    properties
+        .add(DiagnosticsProperty<TextStyle>('valueStyle', widget.valueStyle));
+    properties
+        .add(DiagnosticsProperty<TextStyle>('labelStyle', widget.labelStyle));
+    properties.add(DiagnosticsProperty<FlanCellSize>('size', widget.size,
         defaultValue: FlanCellSize.normal));
     super.debugFillProperties(properties);
   }
 }
 
 class _FlanCollapseContent extends StatefulWidget {
-  _FlanCollapseContent({Key? key}) : super(key: key);
+  const _FlanCollapseContent({Key? key}) : super(key: key);
 
   @override
   __FlanCollapseContentState createState() => __FlanCollapseContentState();
@@ -327,7 +319,7 @@ class __FlanCollapseContentState extends State<_FlanCollapseContent> {
   @override
   Widget build(BuildContext context) {
     return Container(
-      child: SizedBox(),
+      child: const SizedBox(),
     );
   }
 }

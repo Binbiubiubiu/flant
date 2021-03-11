@@ -11,7 +11,7 @@ double _formatRate(double rate) => math.min(math.max(rate, 0), 100);
 /// ### FlanCircle 环形进度条
 /// 圆环形的进度条组件，支持进度渐变动画。
 class FlanCircle extends StatefulWidget {
-  FlanCircle({
+  const FlanCircle({
     Key? key,
     this.currentRate = 0.0,
     this.rate = 100.0,
@@ -101,9 +101,9 @@ class _FlanCircleState extends State<FlanCircle>
 
   @override
   void didUpdateWidget(covariant FlanCircle oldWidget) {
-    if (this.widget.rate != oldWidget.rate) {
-      WidgetsBinding.instance?.addPostFrameCallback((timeStamp) {
-        this._watchRate(this.widget.rate, oldWidget.rate);
+    if (widget.rate != oldWidget.rate) {
+      WidgetsBinding.instance?.addPostFrameCallback((Duration timeStamp) {
+        _watchRate(widget.rate, oldWidget.rate);
       });
     }
     super.didUpdateWidget(oldWidget);
@@ -111,23 +111,24 @@ class _FlanCircleState extends State<FlanCircle>
 
   /// 监听进度条的进度变化
   void _watchRate(double rate, double oldRate) {
-    final startRate = this.widget.currentRate;
-    final endRate = _formatRate(rate);
-    final duration = (((startRate - endRate) * 1000) / this.widget.speed).abs();
+    final double startRate = widget.currentRate;
+    final double endRate = _formatRate(rate);
+    final double duration =
+        (((startRate - endRate) * 1000) / widget.speed).abs();
 
     void animate() {
-      final rate =
+      final double rate =
           lerpDouble(0, endRate - startRate, _animationController.value)! +
               startRate;
 
-      this.widget.onChange(_formatRate(rate).roundToDouble());
+      widget.onChange(_formatRate(rate).roundToDouble());
 
       if (endRate > startRate ? rate >= endRate : rate <= endRate) {
-        this._animationController..removeListener(animate);
+        _animationController.removeListener(animate);
       }
     }
 
-    if (this.widget.speed > 0.0) {
+    if (widget.speed > 0.0) {
       _animationController
         ..stop()
         ..reset();
@@ -137,14 +138,14 @@ class _FlanCircleState extends State<FlanCircle>
         ..addListener(animate)
         ..forward();
     } else {
-      this.widget.onChange(endRate);
+      widget.onChange(endRate);
     }
   }
 
   @override
   Widget build(BuildContext context) {
     return Material(
-      textStyle: TextStyle(
+      textStyle: const TextStyle(
         fontWeight: ThemeVars.circleTextFontWeight,
         fontSize: ThemeVars.circleTextFontSize,
         height: ThemeVars.circleTextLineHeight / ThemeVars.circleTextFontSize,
@@ -153,37 +154,37 @@ class _FlanCircleState extends State<FlanCircle>
       type: MaterialType.canvas,
       child: Row(
         mainAxisSize: MainAxisSize.min,
-        children: [
+        children: <Widget>[
           Stack(
-            children: [
+            children: <Widget>[
               CustomPaint(
-                key: ValueKey("layer"),
-                size: Size.square(this.widget.size),
+                key: const ValueKey<String>('layer'),
+                size: Size.square(widget.size),
                 painter: _FlanDividerCirclePainter(
                   rate: 100.0,
-                  color: this.widget.layerColor,
-                  strokeWidth: this.widget.strokeWidth,
-                  strokeLineCap: this.widget.strokeLineCap,
-                  fill: this.widget.fill,
+                  color: widget.layerColor,
+                  strokeWidth: widget.strokeWidth,
+                  strokeLineCap: widget.strokeLineCap,
+                  fill: widget.fill,
                 ),
               ),
               CustomPaint(
-                key: ValueKey("hover"),
-                size: Size.square(this.widget.size),
+                key: const ValueKey<String>('hover'),
+                size: Size.square(widget.size),
                 painter: _FlanDividerCirclePainter(
-                  rate: this.widget.currentRate,
-                  color: this.widget.color,
-                  gradient: this.widget.gradient,
-                  strokeWidth: this.widget.strokeWidth,
-                  strokeLineCap: this.widget.strokeLineCap,
-                  clockwise: this.widget.clockwise,
+                  rate: widget.currentRate,
+                  color: widget.color,
+                  gradient: widget.gradient,
+                  strokeWidth: widget.strokeWidth,
+                  strokeLineCap: widget.strokeLineCap,
+                  clockwise: widget.clockwise,
                 ),
                 child: SizedBox(
-                  width: this.widget.size,
-                  height: this.widget.size,
+                  width: widget.size,
+                  height: widget.size,
                   child: Center(
-                    child: this.widget.child ??
-                        Text(this.widget.text ?? "${this.widget.currentRate}%"),
+                    child: widget.child ??
+                        Text(widget.text ?? '${widget.currentRate}%'),
                   ),
                 ),
               ),
@@ -197,7 +198,7 @@ class _FlanCircleState extends State<FlanCircle>
   @override
   void debugFillProperties(DiagnosticPropertiesBuilder properties) {
     properties.add(
-        DiagnosticsProperty<String>('text', widget.text, defaultValue: ""));
+        DiagnosticsProperty<String>('text', widget.text, defaultValue: ''));
     properties.add(DiagnosticsProperty<StrokeCap>(
         'strokeLineCap', widget.strokeLineCap,
         defaultValue: StrokeCap.round));
@@ -277,7 +278,7 @@ class _FlanDividerCirclePainter extends CustomPainter {
 
   @override
   void paint(Canvas canvas, Size size) {
-    final rect = Rect.fromCircle(
+    final Rect rect = Rect.fromCircle(
       center: Offset(
         size.width * .5,
         size.height * .5,
@@ -285,7 +286,7 @@ class _FlanDividerCirclePainter extends CustomPainter {
       radius: size.width * .5,
     );
     // draw fill
-    if (this.fill != null) {
+    if (fill != null) {
       canvas.drawArc(
         rect,
         0,
@@ -293,20 +294,20 @@ class _FlanDividerCirclePainter extends CustomPainter {
         false,
         _paint
           ..style = PaintingStyle.fill
-          ..color = this.fill!,
+          ..color = fill!,
       );
     }
     // draw line
-    if (this.gradient != null) {
-      _paint.shader = this.gradient!.createShader(rect);
+    if (gradient != null) {
+      _paint.shader = gradient!.createShader(rect);
     }
 
-    _paint.color = this.color;
+    _paint.color = color;
 
     canvas.drawArc(
       rect,
       math.pi * -0.5,
-      math.pi * 2 * this.rate / 100 * (this.clockwise ? 1 : -1),
+      math.pi * 2 * rate / 100 * (clockwise ? 1 : -1),
       false,
       _paint..style = PaintingStyle.stroke,
     );
@@ -314,10 +315,10 @@ class _FlanDividerCirclePainter extends CustomPainter {
 
   @override
   bool shouldRepaint(_FlanDividerCirclePainter oldDelegate) =>
-      this.rate != oldDelegate.rate ||
-      this.color != oldDelegate.color ||
-      this.strokeWidth != oldDelegate.strokeWidth ||
-      this.fill != oldDelegate.fill ||
-      this.clockwise != oldDelegate.clockwise ||
-      this.strokeLineCap != oldDelegate.strokeLineCap;
+      rate != oldDelegate.rate ||
+      color != oldDelegate.color ||
+      strokeWidth != oldDelegate.strokeWidth ||
+      fill != oldDelegate.fill ||
+      clockwise != oldDelegate.clockwise ||
+      strokeLineCap != oldDelegate.strokeLineCap;
 }

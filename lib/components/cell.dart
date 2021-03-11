@@ -1,8 +1,8 @@
-import 'package:flant/components/cell_group.dart';
-import "package:flutter/material.dart";
 import 'package:flutter/foundation.dart';
-import '../styles/var.dart';
+import 'package:flutter/material.dart';
+
 import '../mixins/route_mixins.dart';
+import '../styles/var.dart';
 import 'icon.dart';
 
 /// ### FlanCell 单元格
@@ -35,7 +35,7 @@ class FlanCell extends RouteStatelessWidget {
     this.rightIconSlot,
     this.extraSlots,
     String? toName,
-    PageRoute? toRoute,
+    PageRoute<Object?>? toRoute,
     bool replace = false,
   }) : super(key: key, toName: toName, toRoute: toRoute, replace: replace);
 
@@ -117,40 +117,40 @@ class FlanCell extends RouteStatelessWidget {
   @override
   Widget build(BuildContext context) {
     Widget cell = Container(
-      margin: EdgeInsets.symmetric(
+      margin: const EdgeInsets.symmetric(
         horizontal: ThemeVars.cellHorizontalPadding,
       ),
       padding: EdgeInsets.symmetric(
-        vertical: this._sizeStyle.paddingVertical,
+        vertical: _sizeStyle.paddingVertical,
       ),
       decoration: BoxDecoration(
         border: Border(
-          bottom: this.border
-              ? BorderSide(width: 0.5, color: ThemeVars.cellBorderColor)
+          bottom: border
+              ? const BorderSide(width: 0.5, color: ThemeVars.cellBorderColor)
               : BorderSide.none,
         ),
       ),
       child: Row(
         crossAxisAlignment:
-            this.center ? CrossAxisAlignment.center : CrossAxisAlignment.start,
-        children: [
-          this._buildLeftIcon(context),
-          this._buildTitle(context),
-          this._buildValue(context),
-          this._buildRigthIcon(context),
-          this.extraSlots ?? SizedBox.shrink(),
+            center ? CrossAxisAlignment.center : CrossAxisAlignment.start,
+        children: <Widget>[
+          _buildLeftIcon(context),
+          _buildTitle(context),
+          _buildValue(context),
+          _buildRigthIcon(context),
+          extraSlots ?? const SizedBox.shrink(),
         ],
       ),
     );
 
-    if (this.isRequired) {
+    if (isRequired) {
       cell = Stack(
-        children: [
+        children: <Widget>[
           Positioned(
-            top: this._sizeStyle.paddingVertical,
+            top: _sizeStyle.paddingVertical,
             left: ThemeVars.paddingXs,
-            child: Text(
-              "*",
+            child: const Text(
+              '*',
               style: TextStyle(
                 color: ThemeVars.cellRequiredColor,
                 fontSize: ThemeVars.cellFontSize,
@@ -163,20 +163,20 @@ class FlanCell extends RouteStatelessWidget {
       );
     }
 
-    if (this._isClickable) {
+    if (_isClickable) {
       cell = InkWell(
         splashColor: Colors.transparent,
         highlightColor:
-            this.disabled ? Colors.white : ThemeVars.black.withOpacity(0.1),
+            disabled ? Colors.white : ThemeVars.black.withOpacity(0.1),
         // enableFeedback: false,
         onTap: () {
-          if (this.disabled) {
+          if (disabled) {
             return;
           }
-          if (this.onClick != null) {
-            this.onClick!();
+          if (onClick != null) {
+            onClick!();
           }
-          this.route(context);
+          route(context);
         },
         child: cell,
       );
@@ -184,10 +184,10 @@ class FlanCell extends RouteStatelessWidget {
 
     return Semantics(
       container: true,
-      button: this._isClickable,
+      button: _isClickable,
       child: Material(
-        type: this._isClickable ? MaterialType.button : MaterialType.canvas,
-        textStyle: this._cellTextStyle,
+        type: _isClickable ? MaterialType.button : MaterialType.canvas,
+        textStyle: _cellTextStyle,
         color: ThemeVars.cellBackgroundColor,
         child: cell,
       ),
@@ -196,121 +196,119 @@ class FlanCell extends RouteStatelessWidget {
 
   /// 是否有左侧标题
   bool get _hasTitle =>
-      this.titleSlot != null || (this.title != null && this.title!.isNotEmpty);
+      titleSlot != null || (title != null && title!.isNotEmpty);
 
   /// 是否有右侧内容
-  bool get _hasValue =>
-      this.child != null || (this.value != null && this.value!.isNotEmpty);
+  bool get _hasValue => child != null || (value != null && value!.isNotEmpty);
 
   /// 是否有标题下方的描述信息
   bool get _hasLabel =>
-      this.labelSlot != null || (this.label != null && this.label!.isNotEmpty);
+      labelSlot != null || (label != null && label!.isNotEmpty);
 
   /// 默认字体样式
   TextStyle get _cellTextStyle {
     return TextStyle(
       color: ThemeVars.cellTextColor,
-      fontSize: this._sizeStyle.titleFontSize,
+      fontSize: _sizeStyle.titleFontSize,
       // height: ThemeVars.cellLineHeight / this._sizeStyle.titleFontSize,
     );
   }
 
   /// 是否可以点击
-  bool get _isClickable => this.isLink || this.clickable;
+  bool get _isClickable => isLink || clickable;
 
-  double get _iconLineHeight => this._sizeStyle.titleFontSize * 1.4;
+  double get _iconLineHeight => _sizeStyle.titleFontSize * 1.4;
 
   /// 单元格大小样式
   _FlanCellSizeStyle get _sizeStyle {
-    return {
-      FlanCellSize.normal: _FlanCellSizeStyle(
+    return <FlanCellSize, _FlanCellSizeStyle>{
+      FlanCellSize.normal: const _FlanCellSizeStyle(
         paddingVertical: ThemeVars.cellVerticalPadding,
         titleFontSize: ThemeVars.cellFontSize,
         labelFontSize: ThemeVars.cellLabelFontSize,
       ),
-      FlanCellSize.large: _FlanCellSizeStyle(
+      FlanCellSize.large: const _FlanCellSizeStyle(
         paddingVertical: ThemeVars.cellLargeVerticalPadding,
         titleFontSize: ThemeVars.cellLargeTitleFontSize,
         labelFontSize: ThemeVars.cellLargeLabelFontSize,
       ),
-    }[this.size]!;
+    }[size]!;
   }
 
   /// 构建标题
   Widget _buildTitle(BuildContext context) {
-    if (this._hasTitle) {
-      Widget title = this.titleSlot ?? Text(this.title ?? "");
+    if (_hasTitle) {
+      final Widget title = titleSlot ?? Text(this.title ?? '');
       TextStyle tStyle = _cellTextStyle;
 
-      if (this.titleStyle != null) {
-        tStyle = tStyle.merge(this.titleStyle);
+      if (titleStyle != null) {
+        tStyle = tStyle.merge(titleStyle);
       }
 
       return Expanded(
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
+          children: <Widget>[
             DefaultTextStyle(
               style: tStyle.copyWith(
-                color: this.disabled
-                    ? ThemeVars.collapseItemTitleDisabledColor
-                    : null,
+                color:
+                    disabled ? ThemeVars.collapseItemTitleDisabledColor : null,
               ),
               child: title,
             ),
-            this._buildLabel(context),
+            _buildLabel(context),
           ],
         ),
       );
     }
-    return SizedBox.shrink();
+    return const SizedBox.shrink();
   }
 
   /// 构建标题下方的描述信息
   Widget _buildLabel(BuildContext context) {
-    if (this._hasLabel) {
-      final label = Padding(
-        padding: EdgeInsets.only(top: ThemeVars.cellLabelMarginTop),
-        child: this.labelSlot ?? Text(this.label ?? ""),
+    if (_hasLabel) {
+      final Padding label = Padding(
+        padding: const EdgeInsets.only(top: ThemeVars.cellLabelMarginTop),
+        child: labelSlot ?? Text(this.label ?? ''),
       );
 
       TextStyle lstyle = _cellTextStyle.copyWith(
-        color: this.disabled
+        color: disabled
             ? ThemeVars.collapseItemTitleDisabledColor
             : ThemeVars.cellLabelColor,
-        fontSize: this._sizeStyle.labelFontSize,
+        fontSize: _sizeStyle.labelFontSize,
         // height: ThemeVars.cellLineHeight / this._sizeStyle.labelFontSize,
       );
-      if (this.labelStyle != null) {
-        lstyle = lstyle.merge(this.labelStyle);
+      if (labelStyle != null) {
+        lstyle = lstyle.merge(labelStyle);
       }
       return DefaultTextStyle(
         style: lstyle,
         child: label,
       );
     }
-    return SizedBox.shrink();
+    return const SizedBox.shrink();
   }
 
   /// 构建右侧内容
   Widget _buildValue(BuildContext context) {
     if (_hasValue) {
-      final value = Expanded(
+      final Expanded value = Expanded(
         child: Align(
           alignment: Alignment.topRight,
-          child: this.child ?? Text(this.value ?? ""),
+          child: child ?? Text(this.value ?? ''),
         ),
       );
 
-      final vStyle = _cellTextStyle.copyWith(
-        color: this.disabled
+      final TextStyle vStyle = _cellTextStyle.copyWith(
+        color: disabled
             ? ThemeVars.collapseItemTitleDisabledColor
-            : !this._hasTitle
+            : !_hasTitle
                 ? ThemeVars.textColor
                 : ThemeVars.cellValueColor,
       );
-      if (this.valueStyle != null) {
-        vStyle..merge(this.valueStyle);
+      if (valueStyle != null) {
+        vStyle.merge(valueStyle);
       }
       return DefaultTextStyle(
         style: vStyle,
@@ -318,130 +316,128 @@ class FlanCell extends RouteStatelessWidget {
       );
     }
 
-    return SizedBox.shrink();
+    return const SizedBox.shrink();
   }
 
   /// 构建左侧图标
   Widget _buildLeftIcon(BuildContext context) {
-    if (this.iconSlot != null) {
+    if (iconSlot != null) {
       return IconTheme(
         data: IconThemeData(
-          color:
-              this.disabled ? ThemeVars.collapseItemTitleDisabledColor : null,
+          color: disabled ? ThemeVars.collapseItemTitleDisabledColor : null,
           size: ThemeVars.cellIconSize,
         ),
         child: Container(
           constraints: BoxConstraints(
-            minHeight: this._iconLineHeight,
+            minHeight: _iconLineHeight,
           ),
-          padding: EdgeInsets.only(right: ThemeVars.paddingBase),
+          padding: const EdgeInsets.only(right: ThemeVars.paddingBase),
           alignment: Alignment.center,
-          child: this.iconSlot,
+          child: iconSlot,
         ),
       );
     }
 
-    if (this.iconName != null || this.iconUrl != null) {
+    if (iconName != null || iconUrl != null) {
       return Container(
         constraints: BoxConstraints(
           minWidth: ThemeVars.cellFontSize,
-          minHeight: this._iconLineHeight,
+          minHeight: _iconLineHeight,
         ),
-        padding: EdgeInsets.only(right: ThemeVars.paddingBase),
+        padding: const EdgeInsets.only(right: ThemeVars.paddingBase),
         alignment: Alignment.center,
         child: FlanIcon(
-          iconName: this.iconName,
-          iconUrl: this.iconUrl,
+          iconName: iconName,
+          iconUrl: iconUrl,
           size: ThemeVars.cellIconSize,
-          color:
-              this.disabled ? ThemeVars.collapseItemTitleDisabledColor : null,
-          classPrefix: this.iconPrefix,
+          color: disabled ? ThemeVars.collapseItemTitleDisabledColor : null,
+          classPrefix: iconPrefix,
         ),
       );
     }
 
-    return SizedBox.shrink();
+    return const SizedBox.shrink();
   }
 
   /// 构建右侧图标
   Widget _buildRigthIcon(BuildContext context) {
-    if (this.rightIconSlot != null) {
+    if (rightIconSlot != null) {
       return IconTheme(
         data: IconThemeData(
           size: ThemeVars.cellIconSize,
-          color: this.disabled
+          color: disabled
               ? ThemeVars.collapseItemTitleDisabledColor
               : ThemeVars.cellRightIconColor,
         ),
         child: Container(
           constraints: BoxConstraints(
-            minHeight: this._iconLineHeight,
+            minHeight: _iconLineHeight,
           ),
-          padding: EdgeInsets.only(left: ThemeVars.paddingBase),
+          padding: const EdgeInsets.only(left: ThemeVars.paddingBase),
           alignment: Alignment.center,
-          child: this.rightIconSlot,
+          child: rightIconSlot,
         ),
       );
     }
 
-    if (this.isLink) {
-      final int iconName = {
+    if (isLink) {
+      final int iconName = <FlanCellArrowDirection, int>{
         FlanCellArrowDirection.down: FlanIcons.arrow_down,
         FlanCellArrowDirection.up: FlanIcons.arrow_up,
         FlanCellArrowDirection.left: FlanIcons.arrow_left,
         FlanCellArrowDirection.right: FlanIcons.arrow,
-      }[this.arrowDirection]!;
+      }[arrowDirection]!;
 
       return Container(
         constraints: BoxConstraints(
           minWidth: ThemeVars.cellFontSize,
-          minHeight: this._iconLineHeight,
+          minHeight: _iconLineHeight,
         ),
-        padding: EdgeInsets.only(left: ThemeVars.paddingBase),
+        padding: const EdgeInsets.only(left: ThemeVars.paddingBase),
         // height: this._iconLineHeight,
         alignment: Alignment.center,
         child: FlanIcon(
           iconName: iconName,
           size: ThemeVars.cellIconSize,
-          color: this.disabled
+          color: disabled
               ? ThemeVars.collapseItemTitleDisabledColor
               : ThemeVars.cellRightIconColor,
-          classPrefix: this.iconPrefix,
+          classPrefix: iconPrefix,
         ),
       );
     }
 
-    return SizedBox.shrink();
+    return const SizedBox.shrink();
   }
 
   @override
   void debugFillProperties(DiagnosticPropertiesBuilder properties) {
-    properties.add(DiagnosticsProperty<String>("title", title));
-    properties.add(DiagnosticsProperty<String>("value", value));
-    properties.add(DiagnosticsProperty<FlanCellSize>("size", size,
+    properties.add(DiagnosticsProperty<String>('title', title));
+    properties.add(DiagnosticsProperty<String>('value', value));
+    properties.add(DiagnosticsProperty<FlanCellSize>('size', size,
         defaultValue: FlanCellSize.normal));
-    properties.add(DiagnosticsProperty<int>("iconName", iconName));
-    properties.add(DiagnosticsProperty<String>("iconUrl", iconUrl));
-    properties.add(DiagnosticsProperty<String>("iconPrefix", iconPrefix));
+    properties.add(DiagnosticsProperty<int>('iconName', iconName));
+    properties.add(DiagnosticsProperty<String>('iconUrl', iconUrl));
+    properties.add(DiagnosticsProperty<String>('iconPrefix', iconPrefix));
     properties
-        .add(DiagnosticsProperty<bool>("border", border, defaultValue: true));
+        .add(DiagnosticsProperty<bool>('border', border, defaultValue: true));
     properties.add(
-        DiagnosticsProperty<bool>("clickable", clickable, defaultValue: false));
+        DiagnosticsProperty<bool>('clickable', clickable, defaultValue: false));
     properties
-        .add(DiagnosticsProperty<bool>("isLink", isLink, defaultValue: false));
-    properties.add(DiagnosticsProperty<bool>("isRequired", isRequired,
+        .add(DiagnosticsProperty<bool>('isLink', isLink, defaultValue: false));
+    properties.add(DiagnosticsProperty<bool>('isRequired', isRequired,
         defaultValue: false));
     properties.add(
-        DiagnosticsProperty<bool>("disabled", disabled, defaultValue: false));
+        DiagnosticsProperty<bool>('disabled', disabled, defaultValue: false));
     properties
-        .add(DiagnosticsProperty<bool>("center", center, defaultValue: false));
+        .add(DiagnosticsProperty<bool>('center', center, defaultValue: false));
     properties.add(DiagnosticsProperty<FlanCellArrowDirection>(
-        "arrowDirection", arrowDirection,
+        'arrowDirection', arrowDirection,
         defaultValue: FlanCellArrowDirection.right));
-    properties.add(DiagnosticsProperty<TextStyle>("titleStyle", titleStyle));
-    properties.add(DiagnosticsProperty<TextStyle>("valueStyle", valueStyle));
-    properties.add(DiagnosticsProperty<TextStyle>("labelStyle", labelStyle));
-    properties.add(DiagnosticsProperty<FlanCellSize>("size", size,
+    properties.add(DiagnosticsProperty<TextStyle>('titleStyle', titleStyle));
+    properties.add(DiagnosticsProperty<TextStyle>('valueStyle', valueStyle));
+    properties.add(DiagnosticsProperty<TextStyle>('labelStyle', labelStyle));
+    properties.add(DiagnosticsProperty<FlanCellSize>('size', size,
         defaultValue: FlanCellSize.normal));
     super.debugFillProperties(properties);
   }

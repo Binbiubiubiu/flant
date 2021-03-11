@@ -1,10 +1,10 @@
-import 'package:flutter/material.dart';
 import 'package:flutter/foundation.dart';
+import 'package:flutter/material.dart';
 
 import '../styles/var.dart';
 import 'icon.dart';
-import 'style.dart';
 import 'loading.dart';
+import 'style.dart';
 
 int tUuid = 0;
 
@@ -13,7 +13,7 @@ void showToast(
   bool show = false,
   FlanToastType type = FlanToastType.text,
   FlanToastPosition position = FlanToastPosition.middle,
-  String message = "",
+  String message = '',
   int? iconName,
   String? iconUrl,
   String iconPrefix = kFlanIconsFamily,
@@ -27,8 +27,8 @@ void showToast(
   VoidCallback? onOpened,
   VoidCallback? onClose,
 }) {
-  OverlayEntry entry = OverlayEntry(
-    builder: (context) {
+  final OverlayEntry entry = OverlayEntry(
+    builder: (BuildContext context) {
       return FlanToast(
         show: show,
         type: type,
@@ -50,7 +50,8 @@ void showToast(
     },
   );
   Overlay.of(context, rootOverlay: true)?.insert(entry);
-  Future.delayed(const Duration(seconds: 2)).then((value) => entry.remove());
+  Future<dynamic>.delayed(const Duration(seconds: 2))
+      .then((dynamic value) => entry.remove());
   // return entry;
 }
 
@@ -60,7 +61,7 @@ class FlanToast extends StatelessWidget {
     this.show = false,
     this.type = FlanToastType.text,
     this.position = FlanToastPosition.middle,
-    this.message = "",
+    this.message = '',
     this.iconName,
     this.iconUrl,
     this.iconPrefix = kFlanIconsFamily,
@@ -73,16 +74,8 @@ class FlanToast extends StatelessWidget {
     this.transitionBuilder = kFlanFadeTransitionBuilder,
     this.onOpened,
     this.onClose,
-  })  : assert(type != null && type is FlanToastType),
-        assert(position != null && position is FlanToastPosition),
-        assert(message != null),
-        assert(iconPrefix != null),
-        assert(overlay != null),
-        assert(forbidClick != null),
-        assert(closeOnClick != null),
-        assert(closeOnClickOverlay != null),
-        assert(loadingType != null),
-        assert(duration != null),
+  })  : assert(type is FlanToastType),
+        assert(position is FlanToastPosition),
         super(key: key);
 
   // ****************** Props ******************
@@ -139,9 +132,9 @@ class FlanToast extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final size = MediaQuery.of(context).size;
-    final isText = this.type == FlanToastType.text;
-    final hasIcon = this.iconName != null || this.iconUrl != null;
+    final Size size = MediaQuery.of(context).size;
+    final bool isText = type == FlanToastType.text;
+    final bool hasIcon = iconName != null || iconUrl != null;
 
     return MediaQuery.removeViewInsets(
       removeLeft: true,
@@ -150,10 +143,10 @@ class FlanToast extends StatelessWidget {
       removeBottom: true,
       context: context,
       child: Align(
-        alignment: this._position,
+        alignment: _position,
         child: DefaultTextStyle(
           textAlign: TextAlign.center,
-          style: TextStyle(
+          style: const TextStyle(
             color: ThemeVars.toastTextColor,
             fontSize: ThemeVars.toastFontSize,
             // height: ThemeVars.toastLineHeight / ThemeVars.toastFontSize,
@@ -176,12 +169,12 @@ class FlanToast extends StatelessWidget {
               runAlignment: WrapAlignment.center,
               alignment: WrapAlignment.center,
               crossAxisAlignment: WrapCrossAlignment.center,
-              children: [
-                this._buildIcon(),
+              children: <Widget>[
+                _buildIcon(),
                 SizedBox(
                   height: isText && !hasIcon ? 0.0 : ThemeVars.paddingXs,
                 ),
-                this._buildMessage(),
+                _buildMessage(),
               ],
             ),
           ),
@@ -191,64 +184,58 @@ class FlanToast extends StatelessWidget {
   }
 
   Alignment get _position {
-    switch (this.position) {
+    switch (position) {
       case FlanToastPosition.top:
-        return Alignment(0.0, -0.6);
+        return const Alignment(0.0, -0.6);
       case FlanToastPosition.middle:
-        return Alignment(0.0, 0.0);
+        return const Alignment(0.0, 0.0);
       case FlanToastPosition.bottom:
-        return Alignment(0.0, 0.6);
+        return const Alignment(0.0, 0.6);
     }
   }
 
   Widget _buildIcon() {
-    final hasIcon = this.iconName != null ||
-        this.iconUrl != null ||
-        this.type == FlanToastType.success ||
-        this.type == FlanToastType.fail;
+    final bool hasIcon = iconName != null ||
+        iconUrl != null ||
+        type == FlanToastType.success ||
+        type == FlanToastType.fail;
 
     if (hasIcon) {
-      int? name = this.iconName;
-      if (this.type == FlanToastType.success) {
+      int? name = iconName;
+      if (type == FlanToastType.success) {
         name = FlanIcons.success;
       }
 
-      if (this.type == FlanToastType.fail) {
+      if (type == FlanToastType.fail) {
         name = FlanIcons.fail;
       }
 
       return FlanIcon(
         iconName: name,
-        iconUrl: this.iconUrl,
+        iconUrl: iconUrl,
         size: ThemeVars.toastIconSize,
-        classPrefix: this.iconPrefix,
-        color: this.iconUrl != null ? null : ThemeVars.toastTextColor,
+        classPrefix: iconPrefix,
+        color: iconUrl != null ? null : ThemeVars.toastTextColor,
       );
     }
 
-    if (this.type == FlanToastType.loading) {
+    if (type == FlanToastType.loading) {
       return Padding(
         padding: const EdgeInsets.all(ThemeVars.paddingBase),
         child: FlanLoading(
-          type: this.loadingType,
+          type: loadingType,
           color: ThemeVars.toastLoadingIconColor,
         ),
       );
     }
-    return SizedBox.shrink();
+    return const SizedBox.shrink();
   }
 
   Widget _buildMessage() {
-    if (this.message.isNotEmpty) {
-      return Text(this.message);
+    if (message.isNotEmpty) {
+      return Text(message);
     }
-    return SizedBox.shrink();
-  }
-
-  @override
-  void debugFillProperties(DiagnosticPropertiesBuilder properties) {
-    // TODO: implement debugFillProperties
-    super.debugFillProperties(properties);
+    return const SizedBox.shrink();
   }
 }
 

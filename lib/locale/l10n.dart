@@ -14,22 +14,23 @@ import 'intl/messages_all.dart';
 
 class FlanS {
   FlanS();
-  
+
   static FlanS? current;
-  
-  static const AppLocalizationDelegate delegate =
-    AppLocalizationDelegate();
+
+  static const AppLocalizationDelegate delegate = AppLocalizationDelegate();
 
   static Future<FlanS> load(Locale locale) {
-    final name = (locale.countryCode?.isEmpty ?? false) ? locale.languageCode : locale.toString();
-    final localeName = Intl.canonicalizedLocale(name); 
+    final String name = (locale.countryCode?.isEmpty ?? false)
+        ? locale.languageCode
+        : locale.toString();
+    final localeName = Intl.canonicalizedLocale(name);
     return initializeMessages(localeName).then((_) {
       Intl.defaultLocale = localeName;
       FlanS.current = FlanS();
-      
+
       return FlanS.current!;
     });
-  } 
+  }
 
   static FlanS? of(BuildContext context) {
     return Localizations.of<FlanS>(context, FlanS);

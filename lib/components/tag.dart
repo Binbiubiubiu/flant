@@ -62,76 +62,75 @@ class FlanTag extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    if (this.closeable) {
+    if (closeable) {
       return AnimatedOpacity(
-        opacity: this.show ? 1.0 : 0.0,
+        opacity: show ? 1.0 : 0.0,
         duration: ThemeVars.animationDurationBase,
-        curve: this.show
+        curve: show
             ? ThemeVars.animationTimingFunctionLeave
             : ThemeVars.animationTimingFunctionEnter,
-        child: this._buildTag(),
+        child: _buildTag(),
       );
     }
 
-    return this._buildTag();
+    return _buildTag();
   }
 
   /// 计算标签不同size的padding
   EdgeInsets get _tagPadding {
-    return {
+    return <FlanTagSize, EdgeInsets>{
       FlanTagSize.normal: ThemeVars.tagPadding,
       FlanTagSize.medium: ThemeVars.tagMediumPadding,
       FlanTagSize.large: ThemeVars.tagLargePadding,
-    }[this.size]!;
+    }[size]!;
   }
 
   /// 计算标签不同type的主题色
   Color get _themeColor {
-    return {
+    return <FlanTagType, Color>{
       FlanTagType.normal: ThemeVars.tagDefaultColor,
       FlanTagType.danger: ThemeVars.tagDangerColor,
       FlanTagType.primary: ThemeVars.tagPrimaryColor,
       FlanTagType.success: ThemeVars.tagSuccessColor,
       FlanTagType.warning: ThemeVars.tagWarningColor
-    }[this.type]!;
+    }[type]!;
   }
 
   /// 计算标签文字颜色
   Color get _textColor {
-    if (this.textColor != null) {
-      return this.textColor!;
+    if (textColor != null) {
+      return textColor!;
     }
-    if (this.color != null && this.plain) {
-      return this.color!;
+    if (color != null && plain) {
+      return color!;
     }
 
-    return this.plain ? this._themeColor : ThemeVars.tagTextColor;
+    return plain ? _themeColor : ThemeVars.tagTextColor;
   }
 
   /// 计算标签背景颜色
-  Color get _backgroundColor => this.plain
-      ? ThemeVars.tagPlainBackgroundColor
-      : (this.color ?? this._themeColor);
+  Color get _backgroundColor =>
+      plain ? ThemeVars.tagPlainBackgroundColor : (color ?? _themeColor);
 
   /// 计算标签字体大小
-  double get _textSize => this.size == FlanTagSize.large
+  double get _textSize => size == FlanTagSize.large
       ? ThemeVars.tagLargeFontSize
       : ThemeVars.tagFontSize;
 
   /// 计算标签圆角大小
   BorderRadius get _borderRadius {
-    if (this.mark) {
-      return BorderRadius.only(
+    if (mark) {
+      return const BorderRadius.only(
         topRight: Radius.circular(ThemeVars.tagRoundBorderRadius),
         bottomRight: Radius.circular(ThemeVars.tagRoundBorderRadius),
       );
     }
 
-    if (this.round) {
+    if (round) {
       return BorderRadius.circular(ThemeVars.tagRoundBorderRadius);
     }
 
-    if (this.size == FlanTagSize.large) {
+    if (size == FlanTagSize.large) {
       return BorderRadius.circular(ThemeVars.tagLargeBorderRadius);
     }
 
@@ -142,26 +141,25 @@ class FlanTag extends StatelessWidget {
   Widget _buildTag() {
     return Material(
       textStyle: TextStyle(
-        color: this._textColor,
-        fontSize: this._textSize,
+        color: _textColor,
+        fontSize: _textSize,
         // height: ThemeVars.tagLineHeight / ThemeVars.tagFontSize,
       ),
       shape: RoundedRectangleBorder(
-        side: this.plain
-            ? BorderSide(width: 1.0, color: this._textColor)
-            : BorderSide.none,
-        borderRadius: this._borderRadius,
+        side:
+            plain ? BorderSide(width: 1.0, color: _textColor) : BorderSide.none,
+        borderRadius: _borderRadius,
       ),
-      color: this._backgroundColor,
+      color: _backgroundColor,
       child: Padding(
-        padding: this._tagPadding,
+        padding: _tagPadding,
         child: Wrap(
           alignment: WrapAlignment.center,
           runAlignment: WrapAlignment.center,
           crossAxisAlignment: WrapCrossAlignment.center,
-          children: [
-            this.child ?? SizedBox.shrink(),
-            this._buildCloseIcon(),
+          children: <Widget>[
+            child ?? const SizedBox.shrink(),
+            _buildCloseIcon(),
           ],
         ),
       ),
@@ -170,15 +168,15 @@ class FlanTag extends StatelessWidget {
 
   ///构建关闭图标
   Widget _buildCloseIcon() {
-    if (this.closeable) {
+    if (closeable) {
       return LayoutBuilder(
         builder: (BuildContext context, BoxConstraints constraints) {
-          final tagStyle = DefaultTextStyle.of(context).style;
+          final TextStyle tagStyle = DefaultTextStyle.of(context).style;
           return Padding(
             padding: const EdgeInsets.only(left: 2.0),
             child: FlanIcon.name(
               FlanIcons.cross,
-              onClick: this.onClose,
+              onClick: onClose,
               size: tagStyle.fontSize,
               color: tagStyle.color,
             ),
@@ -187,28 +185,28 @@ class FlanTag extends StatelessWidget {
       );
     }
 
-    return SizedBox.shrink();
+    return const SizedBox.shrink();
   }
 
   @override
   void debugFillProperties(DiagnosticPropertiesBuilder properties) {
-    properties.add(DiagnosticsProperty<FlanTagType>("type", type,
+    properties.add(DiagnosticsProperty<FlanTagType>('type', type,
         defaultValue: FlanTagType.normal));
-    properties.add(DiagnosticsProperty<FlanTagSize>("size", size,
+    properties.add(DiagnosticsProperty<FlanTagSize>('size', size,
         defaultValue: FlanTagSize.normal));
-    properties.add(DiagnosticsProperty<Color>("color", color));
+    properties.add(DiagnosticsProperty<Color>('color', color));
     properties
-        .add(DiagnosticsProperty<bool>("plain", plain, defaultValue: false));
+        .add(DiagnosticsProperty<bool>('plain', plain, defaultValue: false));
 
     properties
-        .add(DiagnosticsProperty<bool>("round", round, defaultValue: false));
+        .add(DiagnosticsProperty<bool>('round', round, defaultValue: false));
 
     properties
-        .add(DiagnosticsProperty<bool>("mark", mark, defaultValue: false));
-    properties.add(DiagnosticsProperty<Color>("textColor", textColor));
+        .add(DiagnosticsProperty<bool>('mark', mark, defaultValue: false));
+    properties.add(DiagnosticsProperty<Color>('textColor', textColor));
     properties.add(
-        DiagnosticsProperty<bool>("closeable", closeable, defaultValue: false));
-    properties.add(DiagnosticsProperty<bool>("show", show, defaultValue: true));
+        DiagnosticsProperty<bool>('closeable', closeable, defaultValue: false));
+    properties.add(DiagnosticsProperty<bool>('show', show, defaultValue: true));
 
     super.debugFillProperties(properties);
   }

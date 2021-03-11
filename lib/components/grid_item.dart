@@ -24,7 +24,7 @@ class FlanGridItem extends RouteStatelessWidget {
     this.textSlot,
     bool replace = false,
     String? toName,
-    PageRoute? toRoute,
+    PageRoute<Object?>? toRoute,
   }) : super(key: key, replace: replace, toName: toName, toRoute: toRoute);
 
   // ****************** Props ******************
@@ -59,22 +59,22 @@ class FlanGridItem extends RouteStatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final parent = FlanGridProvider.of(context);
+    final FlanGridProvider? parent = FlanGridProvider.of(context);
     if (parent == null) {
       throw 'GridItem must be a child widget of Grid';
     }
 
-    final index = parent.child.children.indexOf(this);
+    final int index = (parent.child as Wrap).children.indexOf(this);
 
-    final size = 1 / parent.columnNum * parent.maxWidth;
+    final double size = 1 / parent.columnNum * parent.maxWidth;
 
-    final surround = parent.border && parent.gutter > 0.0;
-    final border = parent.border
+    final bool surround = parent.border && parent.gutter > 0.0;
+    final Border? border = parent.border
         ? Border(
-            right: FlanHairLine(),
-            bottom: FlanHairLine(),
-            left: surround ? FlanHairLine() : BorderSide.none,
-            top: surround ? FlanHairLine() : BorderSide.none,
+            right: const FlanHairLine(),
+            bottom: const FlanHairLine(),
+            left: surround ? const FlanHairLine() : BorderSide.none,
+            top: surround ? const FlanHairLine() : BorderSide.none,
           )
         : null;
 
@@ -87,7 +87,7 @@ class FlanGridItem extends RouteStatelessWidget {
       ),
       child: Semantics(
         button: parent.clickable,
-        sortKey: parent.clickable ? OrdinalSortKey(0.0) : null,
+        sortKey: parent.clickable ? const OrdinalSortKey(0.0) : null,
         child: Material(
           type: parent.clickable ? MaterialType.button : MaterialType.canvas,
           color: ThemeVars.gridItemContentBackgroundColor,
@@ -113,7 +113,7 @@ class FlanGridItem extends RouteStatelessWidget {
                     ? CrossAxisAlignment.center
                     : CrossAxisAlignment.start,
                 direction: parent.direction,
-                children: this._buildContext(context),
+                children: _buildContext(context),
               ),
             ),
           ),
@@ -123,9 +123,9 @@ class FlanGridItem extends RouteStatelessWidget {
   }
 
   Widget _buildIcon(BuildContext context) {
-    final parent = FlanGridProvider.of(context)!;
+    final FlanGridProvider parent = FlanGridProvider.of(context)!;
 
-    if (this.iconSlot != null) {
+    if (iconSlot != null) {
       return FlanBadge(dot: dot, content: badge, child: iconSlot);
     }
 
@@ -139,7 +139,7 @@ class FlanGridItem extends RouteStatelessWidget {
         classPrefix: iconPrefix,
       );
     }
-    return SizedBox.shrink();
+    return const SizedBox.shrink();
   }
 
   Widget _buildText(BuildContext context) {
@@ -151,19 +151,19 @@ class FlanGridItem extends RouteStatelessWidget {
       return Text(text!);
     }
 
-    return SizedBox.shrink();
+    return const SizedBox.shrink();
   }
 
   List<Widget> _buildContext(BuildContext context) {
     if (child != null) {
-      return [child!];
+      return <Widget>[child!];
     }
 
-    return [
+    return <Widget>[
       _buildIcon(context),
-      SizedBox(width: ThemeVars.paddingXs, height: ThemeVars.paddingXs),
+      const SizedBox(width: ThemeVars.paddingXs, height: ThemeVars.paddingXs),
       DefaultTextStyle(
-        style: TextStyle(
+        style: const TextStyle(
           color: ThemeVars.gridItemTextColor,
           fontSize: ThemeVars.gridItemTextFontSize,
           height: 1.5,
@@ -175,12 +175,12 @@ class FlanGridItem extends RouteStatelessWidget {
 
   @override
   void debugFillProperties(DiagnosticPropertiesBuilder properties) {
-    properties.add(DiagnosticsProperty<String>("text", text));
-    properties.add(DiagnosticsProperty<int>("iconName", iconName));
-    properties.add(DiagnosticsProperty<String>("iconUrl", iconUrl));
-    properties.add(DiagnosticsProperty<String>("iconPrefix", iconPrefix));
-    properties.add(DiagnosticsProperty<bool>("dot", dot, defaultValue: false));
-    properties.add(DiagnosticsProperty<String>("badge", badge));
+    properties.add(DiagnosticsProperty<String>('text', text));
+    properties.add(DiagnosticsProperty<int>('iconName', iconName));
+    properties.add(DiagnosticsProperty<String>('iconUrl', iconUrl));
+    properties.add(DiagnosticsProperty<String>('iconPrefix', iconPrefix));
+    properties.add(DiagnosticsProperty<bool>('dot', dot, defaultValue: false));
+    properties.add(DiagnosticsProperty<String>('badge', badge));
     super.debugFillProperties(properties);
   }
 }

@@ -34,7 +34,7 @@ class FlanButton extends RouteStatelessWidget {
     this.child,
     this.loadingSlot,
     String? toName,
-    PageRoute? toRoute,
+    PageRoute<Object?>? toRoute,
     bool replace = false,
   })  : assert(loadingSize > 0.0),
         super(
@@ -118,21 +118,20 @@ class FlanButton extends RouteStatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final radius = this.square
+    final BorderRadius radius = square
         ? BorderRadius.zero
         : BorderRadius.circular(
-            this.round ? _btnSize.height / 2.0 : ThemeVars.buttonBorderRadius,
+            round ? _btnSize.height / 2.0 : ThemeVars.buttonBorderRadius,
           );
 
-    final textStyle = TextStyle(
-      fontSize: this._btnSize.fontSize,
+    final TextStyle textStyle = TextStyle(
+      fontSize: _btnSize.fontSize,
       // height: ThemeVars.buttonDefaultLineHeight /
       //     ThemeVars.buttonDefaultFontSize,
-      color: this._themeType.color,
+      color: _themeType.color,
     );
 
-    final bgColor =
-        (this.plain ? null : this.color) ?? this._themeType.backgroundColor;
+    final Color bgColor = (plain ? null : color) ?? _themeType.backgroundColor;
 
     Widget _btn = Material(
       type: MaterialType.button,
@@ -141,33 +140,33 @@ class FlanButton extends RouteStatelessWidget {
       borderRadius: radius,
       child: Ink(
         decoration: BoxDecoration(
-          border: this._themeType.border,
+          border: _themeType.border,
           borderRadius: radius,
-          gradient: this.gradient,
+          gradient: gradient,
         ),
-        height: this._btnSize.height,
+        height: _btnSize.height,
         child: InkWell(
           borderRadius: radius,
           splashColor: Colors.transparent,
           highlightColor: ThemeVars.black.withOpacity(0.1),
-          onTapDown: this.onTouchStart,
-          onTap: this.disabled
+          onTapDown: onTouchStart,
+          onTap: disabled
               ? null
               : () {
-                  if (this.onClick != null) {
-                    this.onClick!();
+                  if (onClick != null) {
+                    onClick!();
                   }
-                  this.route(context);
+                  route(context);
                 },
           child: Padding(
-            padding: this._btnSize.padding,
-            child: this._buildContent(context),
+            padding: _btnSize.padding,
+            child: _buildContent(context),
           ),
         ),
       ),
     );
 
-    if (this.disabled) {
+    if (disabled) {
       _btn = Opacity(
         opacity: .5,
         child: _btn,
@@ -177,69 +176,69 @@ class FlanButton extends RouteStatelessWidget {
     return Semantics(
       container: true,
       button: true,
-      enabled: !this.disabled,
+      enabled: !disabled,
       child: _btn,
     );
   }
 
   // 构建按钮文本
   Widget _buildText(BuildContext context) {
-    if (this.loading && this.loadingText != null) {
-      return Text(this.loadingText!);
+    if (loading && loadingText != null) {
+      return Text(loadingText!);
     }
 
-    return this.child ?? Text(this.text ?? "");
+    return child ?? Text(text ?? '');
   }
 
   /// loading 图标
   Widget _buildLoadingIcon(BuildContext context) {
-    return this.loadingSlot ??
+    return loadingSlot ??
         FlanLoading(
-          size: this.loadingSize,
-          type: this.loadingType,
-          color: this._themeType.color,
+          size: loadingSize,
+          type: loadingType,
+          color: _themeType.color,
         );
   }
 
   /// 构建图标
   Widget _buildIcon(BuildContext context) {
-    final iSize = DefaultTextStyle.of(context).style.fontSize! * 1.2;
+    final double iSize = DefaultTextStyle.of(context).style.fontSize! * 1.2;
 
-    if (this.loading) {
-      return this._buildLoadingIcon(context);
+    if (loading) {
+      return _buildLoadingIcon(context);
     }
 
-    if (this.iconName != null || this.iconUrl != null) {
+    if (iconName != null || iconUrl != null) {
       return FlanIcon(
-        iconName: this.iconName,
-        iconUrl: this.iconUrl,
-        color: this._themeType.color,
+        iconName: iconName,
+        iconUrl: iconUrl,
+        color: _themeType.color,
         size: iSize,
-        classPrefix: this.iconPrefix,
+        classPrefix: iconPrefix,
       );
     }
 
-    return SizedBox.shrink();
+    return const SizedBox.shrink();
   }
 
   /// 构建内容
   Widget _buildContent(BuildContext context) {
-    var children = [
-      this._buildText(context),
+    final List<Widget> children = <Widget>[
+      _buildText(context),
     ];
 
-    var sideIcon = this._buildIcon(context);
+    final Widget sideIcon = _buildIcon(context);
 
-    switch (this.iconPosition) {
+    switch (iconPosition) {
       case FlanButtonIconPosition.left:
-        if (this._isHasText) {
+        if (_isHasText) {
           children.insert(0, const SizedBox(width: 4.0));
         }
         children.insert(0, sideIcon);
         break;
       case FlanButtonIconPosition.right:
         children.add(sideIcon);
-        if (this._isHasText) {
+        if (_isHasText) {
           children.add(const SizedBox(width: 4.0));
         }
         break;
@@ -247,7 +246,7 @@ class FlanButton extends RouteStatelessWidget {
         break;
     }
 
-    if (this.size == FlanButtonSize.large || this.block) {
+    if (size == FlanButtonSize.large || block) {
       return Row(
         mainAxisAlignment: MainAxisAlignment.center,
         crossAxisAlignment: CrossAxisAlignment.center,
@@ -274,16 +273,16 @@ class FlanButton extends RouteStatelessWidget {
       color = Colors.white;
     }
 
-    if (this.gradient != null) {
+    if (gradient != null) {
       borderColor = Colors.transparent;
       color = Colors.white;
     }
     return _FlanButtonTheme(
       backgroundColor:
-          this.plain ? ThemeVars.buttonPlainBackgroundColor : backgroundColor,
-      color: this.plain ? borderColor : color,
+          plain ? ThemeVars.buttonPlainBackgroundColor : backgroundColor,
+      color: plain ? borderColor : color,
       border: Border.all(
-        width: this.hairline ? 0.5 : ThemeVars.buttonBorderWidth,
+        width: hairline ? 0.5 : ThemeVars.buttonBorderWidth,
         color: borderColor,
       ),
     );
@@ -291,12 +290,11 @@ class FlanButton extends RouteStatelessWidget {
 
   // bool get isBtnEnable => !this.disabled && this.onPressed != null;
   /// 按钮是否有内容
-  bool get _isHasText =>
-      (this.text != null && this.text!.isNotEmpty) || this.child != null;
+  bool get _isHasText => (text != null && text!.isNotEmpty) || child != null;
 
   /// 按钮大小集合
   _FlanButtonSize get _btnSize {
-    switch (this.size) {
+    switch (size) {
       case FlanButtonSize.large:
         return _FlanButtonSize(
           fontSize: ThemeVars.buttonDefaultFontSize,
@@ -315,47 +313,48 @@ class FlanButton extends RouteStatelessWidget {
         return _FlanButtonSize(
           fontSize: ThemeVars.buttonSmallFontSize,
           height: ThemeVars.buttonSmallHeight,
-          padding: EdgeInsets.symmetric(horizontal: ThemeVars.paddingSm),
+          padding: const EdgeInsets.symmetric(horizontal: ThemeVars.paddingSm),
         );
 
       case FlanButtonSize.mini:
         return _FlanButtonSize(
           fontSize: ThemeVars.buttonMiniFontSize,
           height: ThemeVars.buttonMiniHeight,
-          padding: EdgeInsets.symmetric(horizontal: ThemeVars.paddingBase),
+          padding:
+              const EdgeInsets.symmetric(horizontal: ThemeVars.paddingBase),
         );
     }
   }
 
   /// 按钮样式集合
   _FlanButtonTheme get _themeType {
-    switch (this.type) {
+    switch (type) {
       case FlanButtonType.primary:
-        return this._computedThemeType(
+        return _computedThemeType(
           backgroundColor: ThemeVars.buttonPrimaryBackgroundColor,
           color: ThemeVars.buttonPrimaryColor,
           borderColor: ThemeVars.buttonPrimaryBorderColor,
         );
       case FlanButtonType.success:
-        return this._computedThemeType(
+        return _computedThemeType(
           backgroundColor: ThemeVars.buttonSuccessBackgroundColor,
           color: ThemeVars.buttonSuccessColor,
           borderColor: ThemeVars.buttonSuccessBorderColor,
         );
       case FlanButtonType.danger:
-        return this._computedThemeType(
+        return _computedThemeType(
           backgroundColor: ThemeVars.buttonDangerBackgroundColor,
           color: ThemeVars.buttonDangerColor,
           borderColor: ThemeVars.buttonDangerBorderColor,
         );
       case FlanButtonType.warning:
-        return this._computedThemeType(
+        return _computedThemeType(
           backgroundColor: ThemeVars.buttonWarningBackgroundColor,
           color: ThemeVars.buttonWarningColor,
           borderColor: ThemeVars.buttonWarningBorderColor,
         );
       case FlanButtonType.normal:
-        return this._computedThemeType(
+        return _computedThemeType(
           backgroundColor: ThemeVars.buttonDefaultBackgroundColor,
           color: ThemeVars.buttonDefaultColor,
           borderColor: ThemeVars.buttonDefaultBorderColor,
@@ -365,32 +364,32 @@ class FlanButton extends RouteStatelessWidget {
 
   @override
   void debugFillProperties(DiagnosticPropertiesBuilder properties) {
-    properties.add(DiagnosticsProperty<String>("text", text, defaultValue: ""));
-    properties.add(DiagnosticsProperty<int>("iconName", iconName));
-    properties.add(DiagnosticsProperty<String>("iconUrl", iconUrl));
-    properties.add(DiagnosticsProperty<Color>("color", color));
+    properties.add(DiagnosticsProperty<String>('text', text, defaultValue: ''));
+    properties.add(DiagnosticsProperty<int>('iconName', iconName));
+    properties.add(DiagnosticsProperty<String>('iconUrl', iconUrl));
+    properties.add(DiagnosticsProperty<Color>('color', color));
     properties
-        .add(DiagnosticsProperty<bool>("block", block, defaultValue: false));
+        .add(DiagnosticsProperty<bool>('block', block, defaultValue: false));
     properties
-        .add(DiagnosticsProperty<bool>("plain", plain, defaultValue: false));
+        .add(DiagnosticsProperty<bool>('plain', plain, defaultValue: false));
     properties
-        .add(DiagnosticsProperty<bool>("round", round, defaultValue: false));
+        .add(DiagnosticsProperty<bool>('round', round, defaultValue: false));
     properties
-        .add(DiagnosticsProperty<bool>("square", square, defaultValue: false));
+        .add(DiagnosticsProperty<bool>('square', square, defaultValue: false));
     properties.add(
-        DiagnosticsProperty<bool>("loading", loading, defaultValue: false));
+        DiagnosticsProperty<bool>('loading', loading, defaultValue: false));
     properties.add(
-        DiagnosticsProperty<bool>("hairline", hairline, defaultValue: false));
+        DiagnosticsProperty<bool>('hairline', hairline, defaultValue: false));
     properties.add(
-        DiagnosticsProperty<bool>("disabled", disabled, defaultValue: false));
-    properties.add(DiagnosticsProperty<FlanButtonType>("type", type,
+        DiagnosticsProperty<bool>('disabled', disabled, defaultValue: false));
+    properties.add(DiagnosticsProperty<FlanButtonType>('type', type,
         defaultValue: FlanButtonType.normal));
-    properties.add(DiagnosticsProperty<FlanButtonSize>("size", size,
+    properties.add(DiagnosticsProperty<FlanButtonSize>('size', size,
         defaultValue: FlanButtonSize.normal));
-    properties.add(DiagnosticsProperty<double>("loadingSize", loadingSize,
+    properties.add(DiagnosticsProperty<double>('loadingSize', loadingSize,
         defaultValue: 10.0));
     properties.add(DiagnosticsProperty<FlanButtonIconPosition>(
-        "iconPosition", iconPosition,
+        'iconPosition', iconPosition,
         defaultValue: FlanButtonIconPosition.left));
     super.debugFillProperties(properties);
   }

@@ -9,10 +9,10 @@ import '../styles/var.dart';
 /// ### FlanCountDown 倒计时
 /// 用于实时展示倒计时数值，支持毫秒精度。
 class FlanCountDown extends StatefulWidget {
-  FlanCountDown({
+  const FlanCountDown({
     Key? key,
     this.time = 0,
-    this.format = "HH:mm:ss",
+    this.format = 'HH:mm:ss',
     this.autoStart = true,
     this.millisecond = false,
     this.onFinish,
@@ -64,7 +64,7 @@ class FlanCountDownState extends State<FlanCountDown>
   @override
   void didUpdateWidget(covariant FlanCountDown oldWidget) {
     if (widget.time != oldWidget.time) {
-      this.resetTime();
+      resetTime();
     }
     super.didUpdateWidget(oldWidget);
   }
@@ -82,7 +82,7 @@ class FlanCountDownState extends State<FlanCountDown>
         if (deactivated) {
           counting = true;
           deactivated = false;
-          this.setState(() {});
+          setState(() {});
           tick();
         }
         break;
@@ -90,7 +90,7 @@ class FlanCountDownState extends State<FlanCountDown>
         if (counting) {
           pause();
           deactivated = true;
-          this.setState(() {});
+          setState(() {});
         }
         break;
       case AppLifecycleState.paused:
@@ -104,7 +104,7 @@ class FlanCountDownState extends State<FlanCountDown>
 
   @override
   Widget build(BuildContext context) {
-    final textStyle = TextStyle(
+    const TextStyle textStyle = TextStyle(
       fontSize: ThemeVars.countDownFontSize,
       color: ThemeVars.countDownTextColor,
       height: ThemeVars.countDownLineHeight / ThemeVars.countDownFontSize,
@@ -112,8 +112,7 @@ class FlanCountDownState extends State<FlanCountDown>
 
     return DefaultTextStyle(
       style: textStyle,
-      child:
-          widget.builder != null ? widget.builder!(current) : Text("$timeText"),
+      child: widget.builder != null ? widget.builder!(current) : Text(timeText),
     );
   }
 
@@ -148,7 +147,7 @@ class FlanCountDownState extends State<FlanCountDown>
         widget.onFinish!();
       }
     }
-    this.setState(() {});
+    setState(() {});
   }
 
   void microTick() {
@@ -169,7 +168,7 @@ class FlanCountDownState extends State<FlanCountDown>
     rafId = Ticker(
       (Duration duration) {
         if (counting) {
-          var remainRemain = getCurrentRemain();
+          final int remainRemain = getCurrentRemain();
 
           if (!isSameSecond(remainRemain, remain) || remainRemain == 0) {
             setRemain(remainRemain);
@@ -195,7 +194,7 @@ class FlanCountDownState extends State<FlanCountDown>
     if (!counting) {
       endTime = DateTime.now().millisecondsSinceEpoch + remain;
       counting = true;
-      this.setState(() {});
+      setState(() {});
       tick();
     }
   }
@@ -207,18 +206,18 @@ class FlanCountDownState extends State<FlanCountDown>
 
     pause();
     remain = totalTime;
-    this.setState(() {});
+    setState(() {});
   }
 
   @override
   void debugFillProperties(DiagnosticPropertiesBuilder properties) {
     properties
-        .add(DiagnosticsProperty<int>("time", widget.time, defaultValue: 0));
-    properties.add(DiagnosticsProperty<String>("format", widget.format,
-        defaultValue: "HH:mm:ss"));
-    properties.add(DiagnosticsProperty<bool>("autoStart", widget.autoStart,
+        .add(DiagnosticsProperty<int>('time', widget.time, defaultValue: 0));
+    properties.add(DiagnosticsProperty<String>('format', widget.format,
+        defaultValue: 'HH:mm:ss'));
+    properties.add(DiagnosticsProperty<bool>('autoStart', widget.autoStart,
         defaultValue: false));
-    properties.add(DiagnosticsProperty<bool>("millisecond", widget.millisecond,
+    properties.add(DiagnosticsProperty<bool>('millisecond', widget.millisecond,
         defaultValue: true));
     super.debugFillProperties(properties);
   }
@@ -243,7 +242,7 @@ class CurrentTime {
 }
 
 String padZero(int num, {int targetLength = 2}) {
-  var str = "$num";
+  String str = '$num';
 
   while (str.length < targetLength) {
     str = '0' + str;
@@ -253,12 +252,12 @@ String padZero(int num, {int targetLength = 2}) {
 }
 
 String parseFormat(String format, CurrentTime currentTime) {
-  final days = currentTime.days;
+  final int days = currentTime.days;
 
-  var hours = currentTime.hours;
-  var minutes = currentTime.minutes;
-  var seconds = currentTime.seconds;
-  var milliseconds = currentTime.milliseconds;
+  int hours = currentTime.hours;
+  int minutes = currentTime.minutes;
+  int seconds = currentTime.seconds;
+  int milliseconds = currentTime.milliseconds;
 
   if (format.contains('DD')) {
     format = format.replaceAll('DD', padZero(days));
@@ -285,7 +284,7 @@ String parseFormat(String format, CurrentTime currentTime) {
   }
 
   if (format.contains('S')) {
-    final ms = padZero(milliseconds, targetLength: 3);
+    final String ms = padZero(milliseconds, targetLength: 3);
 
     if (format.contains('SSS')) {
       format = format.replaceAll('SSS', ms);
@@ -299,17 +298,17 @@ String parseFormat(String format, CurrentTime currentTime) {
   return format;
 }
 
-const SECOND = 1000;
-const MINUTE = 60 * SECOND;
-const HOUR = 60 * MINUTE;
-const DAY = 24 * HOUR;
+const int SECOND = 1000;
+const int MINUTE = 60 * SECOND;
+const int HOUR = 60 * MINUTE;
+const int DAY = 24 * HOUR;
 
 CurrentTime parseTime(int time) {
-  var days = (time / DAY).floor();
-  var hours = (time % DAY / HOUR).floor();
-  var minutes = (time % HOUR / MINUTE).floor();
-  var seconds = (time % MINUTE / SECOND).floor();
-  var milliseconds = (time % SECOND).floor();
+  final int days = (time / DAY).floor();
+  final int hours = (time % DAY / HOUR).floor();
+  final int minutes = (time % HOUR / MINUTE).floor();
+  final int seconds = (time % MINUTE / SECOND).floor();
+  final int milliseconds = (time % SECOND).floor();
   return CurrentTime(
     total: time,
     days: days,
@@ -320,5 +319,5 @@ CurrentTime parseTime(int time) {
   );
 }
 
-bool isSameSecond(time1, time2) =>
+bool isSameSecond(int time1, int time2) =>
     (time1 / 1000).floor() == (time2 / 1000).floor();

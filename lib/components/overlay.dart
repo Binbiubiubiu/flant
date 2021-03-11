@@ -7,7 +7,7 @@ import '../styles/var.dart';
 
 /// Overlay 遮罩层
 class FlanOverlay extends StatefulWidget {
-  FlanOverlay({
+  const FlanOverlay({
     Key? key,
     this.show = false,
     this.duration = const Duration(milliseconds: 200),
@@ -62,14 +62,14 @@ class _FlanOverlayState extends State<FlanOverlay> {
     super.didUpdateWidget(oldWidget);
   }
 
-  _onOverlayClick() {
+  void _onOverlayClick() {
     if (widget.onClick != null) {
-      this.widget.onClick!();
+      widget.onClick!();
     }
   }
 
-  open() {
-    overlayEntry = OverlayEntry(builder: (context) {
+  void open() {
+    overlayEntry = OverlayEntry(builder: (BuildContext context) {
       return MediaQuery.removeViewInsets(
         removeLeft: true,
         removeTop: true,
@@ -87,7 +87,7 @@ class _FlanOverlayState extends State<FlanOverlay> {
               onTap: _onOverlayClick,
               child: Container(
                 color: widget.color ?? ThemeVars.overlayBackgroundColor,
-                child: widget.child ?? SizedBox.shrink(),
+                child: widget.child ?? const SizedBox.shrink(),
               ),
             ),
           ),
@@ -98,28 +98,28 @@ class _FlanOverlayState extends State<FlanOverlay> {
     Overlay.of(context)?.insert(overlayEntry!);
   }
 
-  close() {
+  void close() {
     overlayEntry?.remove();
   }
 
-  _nextTick(cb) {
-    WidgetsBinding.instance?.addPostFrameCallback((timeStamp) {
+  void _nextTick(VoidCallback cb) {
+    WidgetsBinding.instance?.addPostFrameCallback((Duration timeStamp) {
       cb();
     });
   }
 
   @override
   Widget build(BuildContext context) {
-    return SizedBox.shrink();
+    return const SizedBox.shrink();
   }
 
   @override
   void debugFillProperties(DiagnosticPropertiesBuilder properties) {
     properties.add(
-        DiagnosticsProperty<bool>("show", widget.show, defaultValue: false));
-    properties.add(DiagnosticsProperty<Duration>("duration", widget.duration,
+        DiagnosticsProperty<bool>('show', widget.show, defaultValue: false));
+    properties.add(DiagnosticsProperty<Duration>('duration', widget.duration,
         defaultValue: const Duration(milliseconds: 200)));
-    properties.add(DiagnosticsProperty<Color>("color", widget.color));
+    properties.add(DiagnosticsProperty<Color>('color', widget.color));
     super.debugFillProperties(properties);
   }
 }

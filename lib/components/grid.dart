@@ -2,7 +2,6 @@ import 'package:flant/components/style.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/foundation.dart';
 
-import '../styles/var.dart';
 import 'grid_item.dart';
 
 class FlanGrid extends StatelessWidget {
@@ -16,7 +15,7 @@ class FlanGrid extends StatelessWidget {
     this.square = false,
     this.clickable = false,
     this.direction = Axis.vertical,
-    this.children = const [],
+    this.children = const <FlanGridItem>[],
   }) : super(key: key);
 
   // ****************** Props ******************
@@ -55,12 +54,12 @@ class FlanGrid extends StatelessWidget {
     return Container(
       decoration: BoxDecoration(
         border: Border(
-          top: border && gutter == 0.0 ? FlanHairLine() : BorderSide.none,
+          top: border && gutter == 0.0 ? const FlanHairLine() : BorderSide.none,
         ),
       ),
       padding: EdgeInsets.only(left: gutter),
       child: LayoutBuilder(
-        builder: (context, constraints) {
+        builder: (BuildContext context, BoxConstraints constraints) {
           return FlanGridProvider(
             maxWidth: constraints.maxWidth,
             columnNum: columnNum,
@@ -83,27 +82,27 @@ class FlanGrid extends StatelessWidget {
   @override
   void debugFillProperties(DiagnosticPropertiesBuilder properties) {
     properties
-        .add(DiagnosticsProperty<int>("columnNum", columnNum, defaultValue: 4));
+        .add(DiagnosticsProperty<int>('columnNum', columnNum, defaultValue: 4));
     properties.add(
-        DiagnosticsProperty<double>("iconSize", iconSize, defaultValue: 28.0));
+        DiagnosticsProperty<double>('iconSize', iconSize, defaultValue: 28.0));
     properties
-        .add(DiagnosticsProperty<double>("gutter", gutter, defaultValue: 0.0));
+        .add(DiagnosticsProperty<double>('gutter', gutter, defaultValue: 0.0));
     properties
-        .add(DiagnosticsProperty<bool>("border", border, defaultValue: true));
+        .add(DiagnosticsProperty<bool>('border', border, defaultValue: true));
     properties
-        .add(DiagnosticsProperty<bool>("center", center, defaultValue: true));
+        .add(DiagnosticsProperty<bool>('center', center, defaultValue: true));
     properties
-        .add(DiagnosticsProperty<bool>("square", square, defaultValue: false));
+        .add(DiagnosticsProperty<bool>('square', square, defaultValue: false));
     properties.add(
-        DiagnosticsProperty<bool>("clickable", clickable, defaultValue: false));
-    properties.add(DiagnosticsProperty<Axis>("direction", direction,
+        DiagnosticsProperty<bool>('clickable', clickable, defaultValue: false));
+    properties.add(DiagnosticsProperty<Axis>('direction', direction,
         defaultValue: Axis.vertical));
     super.debugFillProperties(properties);
   }
 }
 
 class FlanGridProvider extends InheritedWidget {
-  FlanGridProvider({
+  const FlanGridProvider({
     Key? key,
     required this.maxWidth,
     required this.columnNum,
@@ -114,7 +113,7 @@ class FlanGridProvider extends InheritedWidget {
     required this.gutter,
     required this.direction,
     required this.clickable,
-    required this.child,
+    required Wrap child,
   }) : super(key: key, child: child);
 
   final double maxWidth;
@@ -127,7 +126,6 @@ class FlanGridProvider extends InheritedWidget {
   final double gutter;
   final Axis direction;
   final bool clickable;
-  final Wrap child;
 
   static FlanGridProvider? of(BuildContext context) {
     return context.dependOnInheritedWidgetOfExactType<FlanGridProvider>();

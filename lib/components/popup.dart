@@ -1,16 +1,17 @@
 import 'dart:async';
 import 'dart:ui' as ui;
 
+import 'package:flutter/foundation.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/foundation.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter/semantics.dart';
 import 'package:flutter/services.dart';
-import './icon.dart' show FlanIcon, FlanIcons;
-import '../styles/var.dart';
 
-const FLANPOPUP_CLOSE_FROM = Symbol("flanpopup_close_from");
+import '../styles/var.dart';
+import './icon.dart' show FlanIcon, FlanIcons;
+
+const Symbol FLANPOPUP_CLOSE_FROM = Symbol('flanpopup_close_from');
 enum FlanPopupCloseFromType {
   backBtn,
   closeBtn,
@@ -152,118 +153,117 @@ class _FlanPopupState extends State<FlanPopup> {
   @override
   void initState() {
     super.initState();
-    if (this.widget.show) {
-      this.openPopup();
+    if (widget.show) {
+      openPopup();
     }
   }
 
   @override
   void didUpdateWidget(covariant FlanPopup oldWidget) {
-    if (!oldWidget.show && this.widget.show) {
-      this.openPopup();
+    if (!oldWidget.show && widget.show) {
+      openPopup();
     }
     super.didUpdateWidget(oldWidget);
   }
 
   @override
   Widget build(BuildContext context) {
-    return SizedBox();
+    return const SizedBox();
   }
 
   Alignment get _popupAlign {
-    return {
+    return <FlanPopupPosition, Alignment>{
       FlanPopupPosition.center: Alignment.center,
       FlanPopupPosition.bottom: Alignment.bottomLeft,
       FlanPopupPosition.top: Alignment.topLeft,
       FlanPopupPosition.left: Alignment.centerLeft,
       FlanPopupPosition.right: Alignment.centerRight,
-    }[this.widget.position]!;
+    }[widget.position]!;
   }
 
   BorderRadius get _roundRadius {
-    const radius = Radius.circular(ThemeVars.popupRoundBorderRadius);
-    switch (this.widget.position) {
+    const ui.Radius radius = Radius.circular(ThemeVars.popupRoundBorderRadius);
+    switch (widget.position) {
       case FlanPopupPosition.top:
-        return BorderRadius.only(bottomLeft: radius, bottomRight: radius);
+        return const BorderRadius.only(bottomLeft: radius, bottomRight: radius);
       case FlanPopupPosition.bottom:
-        return BorderRadius.only(topLeft: radius, topRight: radius);
+        return const BorderRadius.only(topLeft: radius, topRight: radius);
       case FlanPopupPosition.right:
-        return BorderRadius.only(topLeft: radius, bottomLeft: radius);
+        return const BorderRadius.only(topLeft: radius, bottomLeft: radius);
       case FlanPopupPosition.left:
-        return BorderRadius.only(topRight: radius, bottomRight: radius);
+        return const BorderRadius.only(topRight: radius, bottomRight: radius);
       case FlanPopupPosition.center:
-        return BorderRadius.all(radius);
+        return const BorderRadius.all(radius);
     }
   }
 
   RouteTransitionsBuilder get _popupTransitionsBuilder {
-    if (this.widget.transitionAppear && this.isFirstOpen) {
-      return this.widget.transitionAppearBuilder!;
+    if (widget.transitionAppear && isFirstOpen) {
+      return widget.transitionAppearBuilder!;
     }
 
-    return this.widget.transitionBuilder ??
-        this._buildMaterialDialogTransitions;
+    return widget.transitionBuilder ?? _buildMaterialDialogTransitions;
   }
 
   void closePopup() {
-    if (this.opened) {
-      this.opened = false;
-      if (this.widget.onClose != null) {
-        this.widget.onClose!();
+    if (opened) {
+      opened = false;
+      if (widget.onClose != null) {
+        widget.onClose!();
       }
-      this.widget.onChange(false);
+      widget.onChange(false);
     }
   }
 
   void openPopup() {
-    if (this.opened) {
+    if (opened) {
       return;
     }
-    this.opened = true;
+    opened = true;
 
-    if (this.widget.onOpen != null) {
-      this.widget.onOpen!();
+    if (widget.onOpen != null) {
+      widget.onOpen!();
     }
 
-    WidgetsBinding.instance?.addPostFrameCallback((timeStamp) {
+    WidgetsBinding.instance?.addPostFrameCallback((Duration timeStamp) {
       Navigator.of(context, rootNavigator: true)
-          .push(_FlanPopupRoute(
+          .push<dynamic>(_FlanPopupRoute<dynamic>(
             pageBuilder: (
               BuildContext buildContext,
               Animation<double> animation,
               Animation<double> secondaryAnimation,
             ) {
-              Widget dialog = this._buildPopupContent();
-              if (this.widget.safeAreaInsetBottom) {
+              Widget dialog = _buildPopupContent();
+              if (widget.safeAreaInsetBottom) {
                 dialog = SafeArea(child: dialog);
               }
               return dialog;
             },
-            onOverlayClick: this.widget.onClickOverlay,
-            barrierDismissible: this.widget.closeOnClickOverlay,
-            closeOnPopstate: this.widget.closeOnPopstate,
+            onOverlayClick: widget.onClickOverlay,
+            barrierDismissible: widget.closeOnClickOverlay,
+            closeOnPopstate: widget.closeOnPopstate,
             barrierLabel:
                 MaterialLocalizations.of(context).modalBarrierDismissLabel,
-            barrierColor: this.widget.overlayStyle?.color ??
-                ThemeVars.overlayBackgroundColor,
+            barrierColor:
+                widget.overlayStyle?.color ?? ThemeVars.overlayBackgroundColor,
             transitionDuration:
-                this.widget.duration ?? ThemeVars.popupTransitionDuration,
-            transitionBuilder: this._popupTransitionsBuilder,
+                widget.duration ?? ThemeVars.popupTransitionDuration,
+            transitionBuilder: _popupTransitionsBuilder,
             onTransitionRouteEnter: () {
-              if (this.isFirstOpen) {
-                this.isFirstOpen = false;
+              if (isFirstOpen) {
+                isFirstOpen = false;
               }
-              if (this.widget.onOpened != null) {
-                this.widget.onOpened!();
+              if (widget.onOpened != null) {
+                widget.onOpened!();
               }
             },
             onTransitionRouteLeave: () {
-              if (this.widget.onClosed != null) {
-                this.widget.onClosed!();
+              if (widget.onClosed != null) {
+                widget.onClosed!();
               }
             },
           ))
-          .then((value) => this.closePopup());
+          .then((dynamic value) => closePopup());
     });
   }
 
@@ -273,43 +273,43 @@ class _FlanPopupState extends State<FlanPopup> {
     Animation<double> secondaryAnimation,
     Widget child,
   ) {
-    final curve = CurvedAnimation(
+    final CurvedAnimation curve = CurvedAnimation(
       parent: animation,
-      curve: this.widget.show
+      curve: widget.show
           ? ThemeVars.animationTimingFunctionEnter
           : ThemeVars.animationTimingFunctionLeave,
     );
 
-    switch (this.widget.position) {
+    switch (widget.position) {
       case FlanPopupPosition.top:
         return SlideTransition(
-          position: Tween(
-            begin: Offset(0, -1),
-            end: Offset(0, 0),
+          position: Tween<Offset>(
+            begin: const Offset(0, -1),
+            end: const Offset(0, 0),
           ).animate(curve),
           child: child,
         );
       case FlanPopupPosition.bottom:
         return SlideTransition(
-          position: Tween(
-            begin: Offset(0, 1),
-            end: Offset(0, 0),
+          position: Tween<Offset>(
+            begin: const Offset(0, 1),
+            end: const Offset(0, 0),
           ).animate(curve),
           child: child,
         );
       case FlanPopupPosition.right:
         return SlideTransition(
-          position: Tween(
-            begin: Offset(1, 0),
-            end: Offset(0, 0),
+          position: Tween<Offset>(
+            begin: const Offset(1, 0),
+            end: const Offset(0, 0),
           ).animate(curve),
           child: child,
         );
       case FlanPopupPosition.left:
         return SlideTransition(
-          position: Tween(
-            begin: Offset(-1, 0),
-            end: Offset(0, 0),
+          position: Tween<Offset>(
+            begin: const Offset(-1, 0),
+            end: const Offset(0, 0),
           ).animate(curve),
           child: child,
         );
@@ -334,24 +334,25 @@ class _FlanPopupState extends State<FlanPopup> {
       removeBottom: true,
       context: context,
       child: Align(
-        alignment: this._popupAlign,
+        alignment: _popupAlign,
         child: SizedBox(
-          width: this.widget.position == FlanPopupPosition.top ||
-                  this.widget.position == FlanPopupPosition.bottom
+          width: widget.position == FlanPopupPosition.top ||
+                  widget.position == FlanPopupPosition.bottom
               ? double.infinity
               : null,
           child: GestureDetector(
-            onTap: this.widget.onClick,
+            onTap: widget.onClick,
             child: Material(
-              borderRadius: this.widget.round ? this._roundRadius : null,
+              borderRadius: widget.round ? _roundRadius : null,
               color: ThemeVars.popupBackgroundColor,
               type: MaterialType.card,
               child: Stack(
-                children: [
-                  this.widget.closeable
-                      ? this._buildCloseIcon()
-                      : SizedBox.shrink(),
-                  this.widget.child,
+                children: <Widget>[
+                  if (widget.closeable)
+                    _buildCloseIcon()
+                  else
+                    const SizedBox.shrink(),
+                  widget.child,
                 ],
               ),
             ),
@@ -362,13 +363,13 @@ class _FlanPopupState extends State<FlanPopup> {
   }
 
   Widget _buildCloseIcon() {
-    final icon = _FlanPopupCloseIcon(
-      closeIconName: this.widget.closeIconName,
-      closeIconUrl: this.widget.closeIconUrl,
-      onPress: this.widget.onClickCloseIcon,
+    final _FlanPopupCloseIcon icon = _FlanPopupCloseIcon(
+      closeIconName: widget.closeIconName,
+      closeIconUrl: widget.closeIconUrl,
+      onPress: widget.onClickCloseIcon,
     );
 
-    switch (this.widget.closeIconPosition) {
+    switch (widget.closeIconPosition) {
       case FlanPopupCloseIconPosition.topLeft:
         return Positioned(
           top: ThemeVars.popupCloseIconMargin,
@@ -399,45 +400,45 @@ class _FlanPopupState extends State<FlanPopup> {
   @override
   void debugFillProperties(DiagnosticPropertiesBuilder properties) {
     properties.add(
-        DiagnosticsProperty<bool>("show", widget.show, defaultValue: false));
-    properties.add(DiagnosticsProperty<bool>("overlay", widget.overlay,
+        DiagnosticsProperty<bool>('show', widget.show, defaultValue: false));
+    properties.add(DiagnosticsProperty<bool>('overlay', widget.overlay,
         defaultValue: true));
     properties.add(DiagnosticsProperty<FlanPopupPosition>(
-        "position", widget.position,
+        'position', widget.position,
         defaultValue: FlanPopupPosition.center));
     properties.add(DiagnosticsProperty<BoxDecoration>(
-        "overlayStyle", widget.overlayStyle));
-    properties.add(DiagnosticsProperty<Duration>("duration", widget.duration,
+        'overlayStyle', widget.overlayStyle));
+    properties.add(DiagnosticsProperty<Duration>('duration', widget.duration,
         defaultValue: const Duration(milliseconds: 300)));
     properties.add(
-        DiagnosticsProperty<bool>("round", widget.round, defaultValue: false));
+        DiagnosticsProperty<bool>('round', widget.round, defaultValue: false));
     // properties.add(DiagnosticsProperty<bool>("lockScroll", widget.lockScroll,
     //     defaultValue: true));
     // properties.add(DiagnosticsProperty<bool>("lazyRender", widget.lazyRender,
     //     defaultValue: true));
     properties.add(DiagnosticsProperty<bool>(
-        "closeOnPopstate", widget.closeOnPopstate,
+        'closeOnPopstate', widget.closeOnPopstate,
         defaultValue: false));
     properties.add(DiagnosticsProperty<bool>(
-        "closeOnClickOverlay", widget.closeOnClickOverlay,
+        'closeOnClickOverlay', widget.closeOnClickOverlay,
         defaultValue: true));
-    properties.add(DiagnosticsProperty<bool>("closeable", widget.closeable,
+    properties.add(DiagnosticsProperty<bool>('closeable', widget.closeable,
         defaultValue: false));
     properties.add(DiagnosticsProperty<int>(
-        "closeIconName", widget.closeIconName,
+        'closeIconName', widget.closeIconName,
         defaultValue: FlanIcons.cross));
     properties
-        .add(DiagnosticsProperty<String>("closeIconUrl", widget.closeIconUrl));
+        .add(DiagnosticsProperty<String>('closeIconUrl', widget.closeIconUrl));
     properties.add(DiagnosticsProperty<FlanPopupCloseIconPosition>(
-        "closeIconPosition", widget.closeIconPosition,
+        'closeIconPosition', widget.closeIconPosition,
         defaultValue: FlanPopupCloseIconPosition.topRight));
     properties.add(DiagnosticsProperty<RouteTransitionsBuilder>(
-        "transition", widget.transitionBuilder));
+        'transition', widget.transitionBuilder));
     properties.add(DiagnosticsProperty<bool>(
-        "transitionAppear", widget.transitionAppear,
+        'transitionAppear', widget.transitionAppear,
         defaultValue: false));
     properties.add(DiagnosticsProperty<bool>(
-        "safeAreaInsetBottom", widget.safeAreaInsetBottom,
+        'safeAreaInsetBottom', widget.safeAreaInsetBottom,
         defaultValue: false));
     super.debugFillProperties(properties);
   }
@@ -476,8 +477,8 @@ class _FlanPopupRoute<T extends dynamic> extends PopupRoute<T> {
   void _onFlanPopupTransitionChange(AnimationStatus status) {
     switch (status) {
       case AnimationStatus.dismissed:
-        if (this.onTransitionRouteLeave != null) {
-          this.onTransitionRouteLeave!();
+        if (onTransitionRouteLeave != null) {
+          onTransitionRouteLeave!();
         }
         break;
       case AnimationStatus.forward:
@@ -485,8 +486,8 @@ class _FlanPopupRoute<T extends dynamic> extends PopupRoute<T> {
       case AnimationStatus.reverse:
         break;
       case AnimationStatus.completed:
-        if (this.onTransitionRouteEnter != null) {
-          this.onTransitionRouteEnter!();
+        if (onTransitionRouteEnter != null) {
+          onTransitionRouteEnter!();
         }
         break;
     }
@@ -494,25 +495,26 @@ class _FlanPopupRoute<T extends dynamic> extends PopupRoute<T> {
 
   @override
   void install() {
-    this.animation?.addStatusListener(this._onFlanPopupTransitionChange);
+    animation?.addStatusListener(_onFlanPopupTransitionChange);
     super.install();
   }
 
   @override
   void dispose() {
-    this.animation?.removeStatusListener(this._onFlanPopupTransitionChange);
+    animation?.removeStatusListener(_onFlanPopupTransitionChange);
     super.dispose();
   }
 
   @override
   bool didPop(T? result) {
-    final from =
+    final dynamic from =
         result?[FLANPOPUP_CLOSE_FROM] ?? FlanPopupCloseFromType.backBtn;
     result?.remove(FlanPopupCloseFromType);
 
-    return (!closeOnPopstate) && from == FlanPopupCloseFromType.backBtn
-        ? false
-        : super.didPop(result);
+    return !((!closeOnPopstate) &&
+            (from as FlanPopupCloseFromType) ==
+                FlanPopupCloseFromType.backBtn) &&
+        super.didPop(result);
   }
 
   @override
@@ -559,13 +561,12 @@ class _FlanPopupRoute<T extends dynamic> extends PopupRoute<T> {
 }
 
 class _FlanPopupProvider extends InheritedWidget {
-  _FlanPopupProvider({
+  const _FlanPopupProvider({
     Key? key,
     this.onOverlayClick,
-    required this.child,
+    required Widget child,
   }) : super(key: key, child: child);
 
-  final Widget child;
   final VoidCallback? onOverlayClick;
 
   static _FlanPopupProvider? of(BuildContext context) {
@@ -620,15 +621,15 @@ class _FlanPopupCloseIcon extends StatefulWidget {
 class __FlanPopupCloseIconState extends State<_FlanPopupCloseIcon> {
   bool active = false;
 
-  activeText() {
-    this.setState(() {
-      this.active = true;
+  void activeText() {
+    setState(() {
+      active = true;
     });
   }
 
-  disactiveText() {
-    this.setState(() {
-      this.active = false;
+  void disactiveText() {
+    setState(() {
+      active = false;
     });
   }
 
@@ -636,28 +637,28 @@ class __FlanPopupCloseIconState extends State<_FlanPopupCloseIcon> {
   Widget build(BuildContext context) {
     return Semantics(
       button: true,
-      enabled: this.widget.onPress != null,
+      enabled: widget.onPress != null,
       sortKey: const OrdinalSortKey(0.0),
       child: InkResponse(
         splashColor: Colors.transparent,
         highlightColor: Colors.transparent,
         onTap: () {
-          if (this.widget.onPress != null) {
-            this.widget.onPress!();
+          if (widget.onPress != null) {
+            widget.onPress!();
           }
-          Navigator.of(context).maybePop({
+          Navigator.of(context).maybePop(<Symbol, FlanPopupCloseFromType>{
             FLANPOPUP_CLOSE_FROM: FlanPopupCloseFromType.closeBtn,
           });
-          this.disactiveText();
+          disactiveText();
         },
-        onTapDown: (e) {
-          this.activeText();
+        onTapDown: (TapDownDetails e) {
+          activeText();
         },
-        onTapCancel: this.disactiveText,
+        onTapCancel: disactiveText,
         child: FlanIcon(
-          iconName: this.widget.closeIconName,
-          iconUrl: this.widget.closeIconUrl,
-          color: this.active
+          iconName: widget.closeIconName,
+          iconUrl: widget.closeIconUrl,
+          color: active
               ? ThemeVars.popupCloseIconActiveColor
               : ThemeVars.popupCloseIconColor,
         ),
@@ -1130,7 +1131,9 @@ abstract class ModalRoute<T> extends TransitionRoute<T>
   bool get offstage => _offstage;
   bool _offstage = false;
   set offstage(bool value) {
-    if (_offstage == value) return;
+    if (_offstage == value) {
+      return;
+    }
     setState(() {
       _offstage = value;
     });
@@ -1178,7 +1181,9 @@ abstract class ModalRoute<T> extends TransitionRoute<T>
     assert(scope != null);
     for (final WillPopCallback callback
         in List<WillPopCallback>.from(_willPopCallbacks)) {
-      if (await callback() != true) return RoutePopDisposition.doNotPop;
+      if (await callback() != true) {
+        return RoutePopDisposition.doNotPop;
+      }
     }
     return await super.willPop();
   }
@@ -1490,7 +1495,7 @@ abstract class TransitionRoute<T> extends OverlayRoute<T> {
         'Cannot reuse a $runtimeType after disposing it.');
     final Duration duration = transitionDuration;
     final Duration reverseDuration = reverseTransitionDuration;
-    assert(duration != null && duration >= Duration.zero);
+    assert(duration >= Duration.zero);
     return AnimationController(
       duration: duration,
       reverseDuration: reverseDuration,
@@ -1514,11 +1519,15 @@ abstract class TransitionRoute<T> extends OverlayRoute<T> {
   void _handleStatusChanged(AnimationStatus status) {
     switch (status) {
       case AnimationStatus.completed:
-        if (overlayEntries.isNotEmpty) overlayEntries.first.opaque = opaque;
+        if (overlayEntries.isNotEmpty) {
+          overlayEntries.first.opaque = opaque;
+        }
         break;
       case AnimationStatus.forward:
       case AnimationStatus.reverse:
-        if (overlayEntries.isNotEmpty) overlayEntries.first.opaque = false;
+        if (overlayEntries.isNotEmpty) {
+          overlayEntries.first.opaque = false;
+        }
         break;
       case AnimationStatus.dismissed:
         // We might still be an active route if a subclass is controlling the
@@ -1827,7 +1836,9 @@ abstract class OverlayRoute<T> extends Route<T> {
   bool didPop(T? result) {
     final bool returnValue = super.didPop(result);
     assert(returnValue);
-    if (finishedWhenPopped) navigator!.finalizeRoute(this);
+    if (finishedWhenPopped) {
+      navigator!.finalizeRoute(this);
+    }
     return returnValue;
   }
 
@@ -1845,11 +1856,7 @@ class _ModalScopeStatus extends InheritedWidget {
     required this.canPop,
     required this.route,
     required Widget child,
-  })   : assert(isCurrent != null),
-        assert(canPop != null),
-        assert(route != null),
-        assert(child != null),
-        super(key: key, child: child);
+  }) : super(key: key, child: child);
 
   final bool isCurrent;
   final bool canPop;
@@ -2053,8 +2060,9 @@ class _DismissModalAction extends DismissAction {
 
   @override
   Object invoke(DismissIntent intent) {
-    return Navigator.of(context)
-        .maybePop({FLANPOPUP_CLOSE_FROM: FlanPopupCloseFromType.backBtn});
+    return Navigator.of(context).maybePop(<Symbol, FlanPopupCloseFromType>{
+      FLANPOPUP_CLOSE_FROM: FlanPopupCloseFromType.backBtn
+    });
   }
 }
 
@@ -2135,7 +2143,6 @@ class ModalBarrier extends StatelessWidget {
         platformSupportsDismissingBarrier = true;
         break;
     }
-    assert(platformSupportsDismissingBarrier != null);
     final bool semanticsDismissible =
         dismissible && platformSupportsDismissingBarrier;
     final bool modalBarrierSemanticsDismissible =
@@ -2147,7 +2154,7 @@ class ModalBarrier extends StatelessWidget {
         excluding: !semanticsDismissible || !modalBarrierSemanticsDismissible,
         child: _ModalBarrierGestureDetector(
           onDismiss: () {
-            final onOverlayClick =
+            final VoidCallback? onOverlayClick =
                 _FlanPopupProvider.of(context)?.onOverlayClick;
             if (onOverlayClick != null) {
               onOverlayClick();
@@ -2155,7 +2162,9 @@ class ModalBarrier extends StatelessWidget {
             if (dismissible)
               Navigator.maybePop(
                 context,
-                {FLANPOPUP_CLOSE_FROM: FlanPopupCloseFromType.overlay},
+                <Symbol, FlanPopupCloseFromType>{
+                  FLANPOPUP_CLOSE_FROM: FlanPopupCloseFromType.overlay
+                },
               );
             else
               SystemSound.play(SystemSoundType.alert);
@@ -2268,7 +2277,9 @@ class _AnyTapGestureRecognizer extends BaseTapGestureRecognizer {
   @protected
   @override
   bool isPointerAllowed(PointerDownEvent event) {
-    if (onAnyTapUp == null) return false;
+    if (onAnyTapUp == null) {
+      return false;
+    }
     return super.isPointerAllowed(event);
   }
 
@@ -2281,7 +2292,9 @@ class _AnyTapGestureRecognizer extends BaseTapGestureRecognizer {
   @protected
   @override
   void handleTapUp({PointerDownEvent? down, PointerUpEvent? up}) {
-    if (onAnyTapUp != null) onAnyTapUp!();
+    if (onAnyTapUp != null) {
+      onAnyTapUp!();
+    }
   }
 
   @protected

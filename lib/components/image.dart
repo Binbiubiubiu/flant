@@ -53,6 +53,7 @@ class FlanImage extends StatelessWidget {
   final bool round;
 
   /// 是否开启图片懒加载(暂不支持)
+  // ignore: flutter_style_todos
   final bool lazyLoad; //TODO: 暂时解决不了
   /// 是否展示图片加载失败提示
   final bool showError;
@@ -96,24 +97,24 @@ class FlanImage extends StatelessWidget {
   Widget build(BuildContext context) {
     Widget image = Column(
       mainAxisSize: MainAxisSize.min,
-      children: [
-        this._buildImage(),
-        this.child ?? SizedBox.shrink(),
+      children: <Widget>[
+        _buildImage(),
+        child ?? const SizedBox.shrink(),
       ],
     );
 
-    if (this.round) {
+    if (round) {
       image = ClipOval(child: image);
-    } else if (this.radius != null) {
+    } else if (radius != null) {
       image = ClipRRect(
         child: image,
-        borderRadius: BorderRadius.circular(this.radius!),
+        borderRadius: BorderRadius.circular(radius!),
       );
     }
 
     return Semantics(
       image: true,
-      label: this.alt,
+      label: alt,
       excludeSemantics: false,
       child: image,
     );
@@ -122,24 +123,24 @@ class FlanImage extends StatelessWidget {
   /// 构建图片Loading图标
   Widget _buildLoadingIcon() {
     return DefaultTextStyle(
-      style: TextStyle(
+      style: const TextStyle(
         color: ThemeVars.imagePlaceholderTextColor,
         fontSize: ThemeVars.imagePlaceholderFontSize,
       ),
       child: IconTheme(
-        data: IconThemeData(
+        data: const IconThemeData(
           color: ThemeVars.imageLoadingIconColor,
           size: ThemeVars.imageLoadingIconSize,
         ),
         child: Container(
-          width: this.width,
-          height: this.height,
+          width: width,
+          height: height,
           color: ThemeVars.imagePlaceholderBackgroundColor,
           child: Center(
-            child: this.loadingSlot ??
+            child: loadingSlot ??
                 FlanIcon(
-                  iconName: this.loadingIconName,
-                  iconUrl: this.loadingIconUrl,
+                  iconName: loadingIconName,
+                  iconUrl: loadingIconUrl,
                 ),
           ),
         ),
@@ -150,43 +151,43 @@ class FlanImage extends StatelessWidget {
   /// 图片加载回调
   Widget onImageLoad(
       BuildContext context, Widget child, ImageChunkEvent? loadingProgress) {
-    if (this.src != null && this.src!.isNotEmpty && loadingProgress == null) {
+    if (src != null && src!.isNotEmpty && loadingProgress == null) {
       return child;
     }
 
-    if (this.showLoading) {
-      return this._buildLoadingIcon();
+    if (showLoading) {
+      return _buildLoadingIcon();
     }
 
-    return SizedBox.shrink();
+    return const SizedBox.shrink();
   }
 
   /// 图片加载错误回调
   Widget _onImageError(
       BuildContext context, Object error, StackTrace? stackTrace) {
-    if (!this.showError) {
-      return SizedBox.shrink();
+    if (!showError) {
+      return const SizedBox.shrink();
     }
 
     return DefaultTextStyle(
-      style: TextStyle(
+      style: const TextStyle(
         color: ThemeVars.imagePlaceholderTextColor,
         fontSize: ThemeVars.imagePlaceholderFontSize,
       ),
       child: IconTheme(
-        data: IconThemeData(
+        data: const IconThemeData(
           color: ThemeVars.imageErrorIconColor,
           size: ThemeVars.imageErrorIconSize,
         ),
         child: Container(
-          width: this.width,
-          height: this.height,
+          width: width,
+          height: height,
           color: ThemeVars.imagePlaceholderBackgroundColor,
           child: Center(
-            child: this.errorSlot ??
+            child: errorSlot ??
                 FlanIcon(
-                  iconName: this.errorIconName,
-                  iconUrl: this.errorIconUrl,
+                  iconName: errorIconName,
+                  iconUrl: errorIconUrl,
                 ),
           ),
         ),
@@ -196,55 +197,55 @@ class FlanImage extends StatelessWidget {
 
   /// 构建图片内容
   Widget _buildImage() {
-    if (this.src == null) {
-      return this._buildLoadingIcon();
+    if (src == null) {
+      return _buildLoadingIcon();
     }
 
-    final isNetwork = RegExp("^https?:\/\/").hasMatch(this.src!);
+    final bool isNetwork = RegExp('^https?:\/\/').hasMatch(src!);
 
     if (isNetwork) {
       return Image.network(
-        this.src!,
-        width: this.width,
-        height: this.height,
-        loadingBuilder: this.onImageLoad,
-        errorBuilder: this._onImageError,
-        fit: this.fit,
+        src!,
+        width: width,
+        height: height,
+        loadingBuilder: onImageLoad,
+        errorBuilder: _onImageError,
+        fit: fit,
       );
     }
 
     return Image.asset(
-      this.src!,
-      width: this.width,
-      height: this.height,
-      fit: this.fit,
+      src!,
+      width: width,
+      height: height,
+      fit: fit,
     );
   }
 
   @override
   void debugFillProperties(DiagnosticPropertiesBuilder properties) {
-    properties.add(DiagnosticsProperty<String>("src", src));
-    properties.add(DiagnosticsProperty<String>("alt", alt));
+    properties.add(DiagnosticsProperty<String>('src', src));
+    properties.add(DiagnosticsProperty<String>('alt', alt));
     properties.add(
-        DiagnosticsProperty<BoxFit>("fit", fit, defaultValue: BoxFit.fill));
+        DiagnosticsProperty<BoxFit>('fit', fit, defaultValue: BoxFit.fill));
     properties
-        .add(DiagnosticsProperty<bool>("round", round, defaultValue: false));
-    properties.add(DiagnosticsProperty<double>("width", width));
-    properties.add(DiagnosticsProperty<double>("height", height));
-    properties.add(DiagnosticsProperty<double>("radius", radius));
+        .add(DiagnosticsProperty<bool>('round', round, defaultValue: false));
+    properties.add(DiagnosticsProperty<double>('width', width));
+    properties.add(DiagnosticsProperty<double>('height', height));
+    properties.add(DiagnosticsProperty<double>('radius', radius));
     properties.add(
-        DiagnosticsProperty<bool>("lazyLoad", lazyLoad, defaultValue: false));
+        DiagnosticsProperty<bool>('lazyLoad', lazyLoad, defaultValue: false));
     properties.add(
-        DiagnosticsProperty<bool>("showError", showError, defaultValue: true));
-    properties.add(DiagnosticsProperty<bool>("showLoading", showLoading,
+        DiagnosticsProperty<bool>('showError', showError, defaultValue: true));
+    properties.add(DiagnosticsProperty<bool>('showLoading', showLoading,
         defaultValue: true));
-    properties.add(DiagnosticsProperty<int>("errorIconName", errorIconName,
+    properties.add(DiagnosticsProperty<int>('errorIconName', errorIconName,
         defaultValue: FlanIcons.photo_fail));
-    properties.add(DiagnosticsProperty<String>("errorIconUrl", errorIconUrl));
-    properties.add(DiagnosticsProperty<int>("loadingIconName", loadingIconName,
+    properties.add(DiagnosticsProperty<String>('errorIconUrl', errorIconUrl));
+    properties.add(DiagnosticsProperty<int>('loadingIconName', loadingIconName,
         defaultValue: FlanIcons.photo));
     properties
-        .add(DiagnosticsProperty<String>("loadingIconUrl", loadingIconUrl));
+        .add(DiagnosticsProperty<String>('loadingIconUrl', loadingIconUrl));
     super.debugFillProperties(properties);
   }
 }

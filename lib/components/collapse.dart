@@ -41,56 +41,55 @@ class FlanCollapse<T extends dynamic> extends StatelessWidget {
       decoration: BoxDecoration(
         color: Colors.white,
         border: Border(
-          bottom: this.border ? FlanHairLine() : BorderSide.none,
+          bottom: border ? const FlanHairLine() : BorderSide.none,
         ),
       ),
-      child: FlanCollapseProvider(
-        toggle: this.toggle,
-        isExpanded: this.isExpanded,
+      child: FlanCollapseProvider<String>(
+        toggle: toggle,
+        isExpanded: isExpanded,
         child: Column(
-          children: this.children,
+          children: children,
         ),
       ),
     );
   }
 
   void updateName(dynamic name) {
-    this.onChange(name);
+    onChange(name as T);
   }
 
   void toggle(String name, bool expanded) {
-    if (this.accordion) {
-      this.updateName(name == this.value ? '' : name);
+    if (accordion) {
+      updateName(name == value ? '' : name);
     } else if (expanded) {
-      this.updateName([...(this.value as List<String>), name]);
+      updateName(<String>[...value as List<String>, name]);
     } else {
-      this.updateName((this.value as List<String>)
-          .where((activeName) => activeName != name)
+      updateName((value as List<String>)
+          .where((String activeName) => activeName != name)
           .toList());
     }
   }
 
   bool isExpanded(String name) {
-    if (this.accordion && this.value is List<String>) {
-      throw "FlanCollapse: value should not be Array in accordion mode";
+    if (accordion && value is List<String>) {
+      throw 'FlanCollapse: value should not be Array in accordion mode';
     }
 
-    if (!this.accordion && !(this.value is List<String>)) {
-      throw "FlanCollapse: value should be Array in non-accordion mode";
+    // ignore: prefer_is_not_operator
+    if (!accordion && !(value is List<String>)) {
+      throw 'FlanCollapse: value should be Array in non-accordion mode';
     }
 
-    return this.accordion
-        ? this.value == name
-        : (this.value as List<String>).contains(name);
+    return accordion ? value == name : (value as List<String>).contains(name);
   }
 
   @override
   void debugFillProperties(DiagnosticPropertiesBuilder properties) {
-    properties.add(DiagnosticsProperty<T>("value", value));
+    properties.add(DiagnosticsProperty<T>('value', value));
     properties.add(
-        DiagnosticsProperty<bool>("accordion", accordion, defaultValue: false));
+        DiagnosticsProperty<bool>('accordion', accordion, defaultValue: false));
     properties
-        .add(DiagnosticsProperty<bool>("border", border, defaultValue: true));
+        .add(DiagnosticsProperty<bool>('border', border, defaultValue: true));
     super.debugFillProperties(properties);
   }
 }
@@ -100,12 +99,11 @@ class FlanCollapseProvider<T extends dynamic> extends InheritedWidget {
   const FlanCollapseProvider({
     required this.toggle,
     required this.isExpanded,
-    required this.child,
+    required Column child,
   }) : super(child: child);
 
   final void Function(T name, bool expanded) toggle;
   final bool Function(T name) isExpanded;
-  final Column child;
 
   //定义一个便捷方法，方便子树中的widget获取共享数据
   static FlanCollapseProvider<T>? of<T>(BuildContext context) {

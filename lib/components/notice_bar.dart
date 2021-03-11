@@ -12,7 +12,7 @@ import 'icon.dart';
 class FlanNoticeBar extends StatefulWidget {
   const FlanNoticeBar({
     Key? key,
-    this.text = "",
+    this.text = '',
     this.mode,
     this.color,
     this.leftIconName,
@@ -102,32 +102,33 @@ class _FlanNoticeBarState extends State<FlanNoticeBar>
   GlobalKey wrapRef = GlobalKey();
   GlobalKey contentRef = GlobalKey();
 
-  _handelChange() => this.setState(() {});
-  _handleAnimationStatusChange(AnimationStatus status) {
+  void _handelChange() => setState(() {});
+  void _handleAnimationStatusChange(AnimationStatus status) {
     if (status == AnimationStatus.completed) {
-      if (this.widget.onReplay != null) {
-        this.widget.onReplay!();
+      if (widget.onReplay != null) {
+        widget.onReplay!();
       }
     }
   }
 
   @override
   void initState() {
-    this.controller = AnimationController(vsync: this)
-      ..addStatusListener(this._handleAnimationStatusChange)
+    controller = AnimationController(vsync: this)
+      ..addStatusListener(_handleAnimationStatusChange)
       ..addListener(_handelChange);
-    this.animation =
-        Tween(begin: Offset.zero, end: Offset.zero).animate(this.controller);
-    this.startTimer = Timer(const Duration(seconds: 1), () {});
-    WidgetsBinding.instance?.addPostFrameCallback((duration) => this.start());
+    animation =
+        Tween<Offset>(begin: Offset.zero, end: Offset.zero).animate(controller);
+    startTimer = Timer(const Duration(seconds: 1), () {});
+    WidgetsBinding.instance
+        ?.addPostFrameCallback((Duration duration) => start());
     super.initState();
   }
 
   @override
   void dispose() {
-    this.controller
-      ..removeStatusListener(this._handleAnimationStatusChange)
-      ..removeListener(this._handelChange)
+    controller
+      ..removeStatusListener(_handleAnimationStatusChange)
+      ..removeListener(_handelChange)
       ..dispose();
 
     super.dispose();
@@ -135,70 +136,69 @@ class _FlanNoticeBarState extends State<FlanNoticeBar>
 
   @override
   void didUpdateWidget(covariant FlanNoticeBar oldWidget) {
-    if (oldWidget.text != this.widget.text ||
-        oldWidget.scrollable != this.widget.scrollable) {
-      this.start();
+    if (oldWidget.text != widget.text ||
+        oldWidget.scrollable != widget.scrollable) {
+      start();
     }
     super.didUpdateWidget(oldWidget);
   }
 
   void start() {
-    final ms = Duration(milliseconds: (this.widget.delay * 1000).toInt());
+    final Duration ms = Duration(milliseconds: (widget.delay * 1000).toInt());
 
-    this.startTimer.cancel();
+    startTimer.cancel();
 
-    this.startTimer = Timer(ms, () {
-      if (!this.mounted || !this.widget.scrollable) {
+    startTimer = Timer(ms, () {
+      if (!mounted || !widget.scrollable) {
         return;
       }
 
-      final wrapRefWidth =
+      final double wrapRefWidth =
           wrapRef.currentContext!.findRenderObject()!.paintBounds.size.width;
-      final contentRefWidth =
+      final double contentRefWidth =
           contentRef.currentContext!.findRenderObject()!.paintBounds.size.width;
       // debugPrint(
       //     "wrapRefWidth:$wrapRefWidth --- contentRefWidth:$contentRefWidth");
-      if (this.widget.scrollable || contentRefWidth > wrapRefWidth) {
-        this.controller
+      if (widget.scrollable || contentRefWidth > wrapRefWidth) {
+        controller
           ..value = wrapRefWidth / (wrapRefWidth + contentRefWidth)
-          ..duration = Duration(seconds: wrapRefWidth ~/ this.widget.speed);
-        this.animation = Tween(
+          ..duration = Duration(seconds: wrapRefWidth ~/ widget.speed);
+        animation = Tween<Offset>(
           begin: Offset(wrapRefWidth, 0.0),
           end: Offset(-contentRefWidth, 0.0),
         ).animate(
-          CurvedAnimation(parent: this.controller, curve: Curves.linear),
+          CurvedAnimation(parent: controller, curve: Curves.linear),
         );
-        this.controller.repeat();
+        controller.repeat();
       }
     });
   }
 
   @override
   Widget build(BuildContext context) {
-    final noticeBar = Material(
-      color: this.widget.background ?? ThemeVars.noticeBarBackgroundColor,
+    final Material noticeBar = Material(
+      color: widget.background ?? ThemeVars.noticeBarBackgroundColor,
       textStyle: TextStyle(
-        color: this.widget.color ?? ThemeVars.noticeBarTextColor,
+        color: widget.color ?? ThemeVars.noticeBarTextColor,
         height: ThemeVars.noticeBarLineHeight / ThemeVars.noticeBarFontSize,
       ),
       child: Ink(
         // height: this.widget.wrapable ? null : ThemeVars.noticeBarHeight,
-        padding: this.widget.wrapable
+        padding: widget.wrapable
             ? ThemeVars.noticeBarWrapablePadding
             : ThemeVars.noticeBarPadding,
         child: ConstrainedBox(
           constraints: BoxConstraints(
-            maxHeight: this.widget.wrapable
-                ? double.infinity
-                : ThemeVars.noticeBarHeight,
-            minHeight: this.widget.wrapable ? 0.0 : ThemeVars.noticeBarHeight,
+            maxHeight:
+                widget.wrapable ? double.infinity : ThemeVars.noticeBarHeight,
+            minHeight: widget.wrapable ? 0.0 : ThemeVars.noticeBarHeight,
           ),
           child: Row(
             crossAxisAlignment: CrossAxisAlignment.center,
-            children: [
-              this._buildLeftIcon(context),
-              Expanded(child: this._buildMarquee(context)),
-              this._buildRightIcon(context)
+            children: <Widget>[
+              _buildLeftIcon(context),
+              Expanded(child: _buildMarquee(context)),
+              _buildRightIcon(context)
             ],
           ),
         ),
@@ -207,29 +207,29 @@ class _FlanNoticeBarState extends State<FlanNoticeBar>
 
     return Semantics(
       container: true,
-      link: this.widget.mode == FlanNoticeBarMode.link,
-      label: "alert",
-      hidden: !this.show,
+      link: widget.mode == FlanNoticeBarMode.link,
+      label: 'alert',
+      hidden: !show,
       child: Visibility(
-        visible: this.show,
+        visible: show,
         child: noticeBar,
       ),
     );
   }
 
   Widget _buildMarquee(BuildContext context) {
-    final ellipsis = !this.widget.scrollable && !this.widget.wrapable;
-    Widget marquee = this.widget.child ??
+    final bool ellipsis = !widget.scrollable && !widget.wrapable;
+    Widget marquee = widget.child ??
         Text(
-          this.widget.text,
-          softWrap: this.widget.wrapable,
+          widget.text,
+          softWrap: widget.wrapable,
           overflow: ellipsis ? TextOverflow.ellipsis : TextOverflow.clip,
         );
-    if (this.widget.scrollable) {
+    if (widget.scrollable) {
       marquee = ClipRect(
         key: wrapRef,
         child: Transform.translate(
-          offset: this.animation.value,
+          offset: animation.value,
           child: marquee,
         ),
       );
@@ -238,67 +238,71 @@ class _FlanNoticeBarState extends State<FlanNoticeBar>
     return Semantics(
       key: contentRef,
       container: true,
-      label: "marquee",
+      label: 'marquee',
       child: marquee,
     );
   }
 
   Widget _buildLeftIcon(BuildContext context) {
-    if (this.widget.leftIconSlot != null) {
-      return this.widget.leftIconSlot!;
+    if (widget.leftIconSlot != null) {
+      return widget.leftIconSlot!;
     }
 
-    if (this.widget.leftIconName != null || this.widget.leftIconUrl != null) {
+    if (widget.leftIconName != null || widget.leftIconUrl != null) {
       return Container(
-        constraints: BoxConstraints(minWidth: ThemeVars.noticeBarIconMinWidth),
+        constraints: const BoxConstraints(
+          minWidth: ThemeVars.noticeBarIconMinWidth,
+        ),
         alignment: Alignment.centerLeft,
         child: FlanIcon(
           size: ThemeVars.noticeBarIconSize,
-          iconName: this.widget.leftIconName,
-          iconUrl: this.widget.leftIconUrl,
-          color: this.widget.color ?? ThemeVars.noticeBarTextColor,
+          iconName: widget.leftIconName,
+          iconUrl: widget.leftIconUrl,
+          color: widget.color ?? ThemeVars.noticeBarTextColor,
         ),
       );
     }
 
-    return SizedBox.shrink();
+    return const SizedBox.shrink();
   }
 
   Widget _buildRightIcon(BuildContext context) {
-    if (this.widget.rightIconSlot != null) {
-      return this.widget.rightIconSlot!;
+    if (widget.rightIconSlot != null) {
+      return widget.rightIconSlot!;
     }
 
-    if (this.rightIconName > 0) {
+    if (rightIconName > 0) {
       return Container(
-        constraints: BoxConstraints(minWidth: ThemeVars.noticeBarIconMinWidth),
+        constraints: const BoxConstraints(
+          minWidth: ThemeVars.noticeBarIconMinWidth,
+        ),
         alignment: Alignment.centerRight,
         child: FlanIcon(
           size: ThemeVars.noticeBarIconSize,
-          iconName: this.rightIconName,
-          onClick: this.onClickRightIcon,
+          iconName: rightIconName,
+          onClick: onClickRightIcon,
         ),
       );
     }
 
-    return SizedBox.shrink();
+    return const SizedBox.shrink();
   }
 
   void onClickRightIcon() {
-    if (this.widget.mode == FlanNoticeBarMode.closeable) {
-      this.setState(() => this.show = false);
-      if (this.widget.onClose != null) {
-        this.widget.onClose!();
+    if (widget.mode == FlanNoticeBarMode.closeable) {
+      setState(() => show = false);
+      if (widget.onClose != null) {
+        widget.onClose!();
       }
     }
   }
 
   int get rightIconName {
-    if (this.widget.mode == FlanNoticeBarMode.closeable) {
+    if (widget.mode == FlanNoticeBarMode.closeable) {
       return FlanIcons.cross;
     }
 
-    if (this.widget.mode == FlanNoticeBarMode.link) {
+    if (widget.mode == FlanNoticeBarMode.link) {
       return FlanIcons.arrow;
     }
 
@@ -307,22 +311,22 @@ class _FlanNoticeBarState extends State<FlanNoticeBar>
 
   @override
   void debugFillProperties(DiagnosticPropertiesBuilder properties) {
-    properties.add(DiagnosticsProperty<String>("text", widget.text));
-    properties.add(DiagnosticsProperty<FlanNoticeBarMode>("mode", widget.mode));
-    properties.add(DiagnosticsProperty<Color>("color", widget.color));
+    properties.add(DiagnosticsProperty<String>('text', widget.text));
+    properties.add(DiagnosticsProperty<FlanNoticeBarMode>('mode', widget.mode));
+    properties.add(DiagnosticsProperty<Color>('color', widget.color));
     properties
-        .add(DiagnosticsProperty<int>("leftIconName", widget.leftIconName));
+        .add(DiagnosticsProperty<int>('leftIconName', widget.leftIconName));
     properties
-        .add(DiagnosticsProperty<String>("leftIconUrl", widget.leftIconUrl));
-    properties.add(DiagnosticsProperty<bool>("wrapable", widget.wrapable,
+        .add(DiagnosticsProperty<String>('leftIconUrl', widget.leftIconUrl));
+    properties.add(DiagnosticsProperty<bool>('wrapable', widget.wrapable,
         defaultValue: false));
-    properties.add(DiagnosticsProperty<Color>("background", widget.background));
-    properties.add(DiagnosticsProperty<bool>("scrollable", widget.scrollable,
+    properties.add(DiagnosticsProperty<Color>('background', widget.background));
+    properties.add(DiagnosticsProperty<bool>('scrollable', widget.scrollable,
         defaultValue: false));
     properties.add(
-        DiagnosticsProperty<double>("delay", widget.delay, defaultValue: 1.0));
+        DiagnosticsProperty<double>('delay', widget.delay, defaultValue: 1.0));
     properties.add(
-        DiagnosticsProperty<double>("speed", widget.speed, defaultValue: 50.0));
+        DiagnosticsProperty<double>('speed', widget.speed, defaultValue: 50.0));
     super.debugFillProperties(properties);
   }
 }

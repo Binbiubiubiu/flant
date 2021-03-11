@@ -62,17 +62,17 @@ class FlanProgress extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return SizedBox(
-      height: this.strokeWidth ?? ThemeVars.progressHeight,
+      height: strokeWidth ?? ThemeVars.progressHeight,
       child: LayoutBuilder(
-        builder: (context, constraints) {
-          final current = constraints.maxWidth * this.percentage / 100.0;
+        builder: (BuildContext context, BoxConstraints constraints) {
+          final double current = constraints.maxWidth * percentage / 100.0;
           return Stack(
             clipBehavior: Clip.none,
-            children: [
+            children: <Widget>[
               Container(
                 height: constraints.maxHeight,
                 decoration: BoxDecoration(
-                  color: this.trackColor ?? ThemeVars.progressBackgroundColor,
+                  color: trackColor ?? ThemeVars.progressBackgroundColor,
                   borderRadius: BorderRadius.circular(ThemeVars.progressHeight),
                 ),
                 width: constraints.maxWidth,
@@ -80,8 +80,8 @@ class FlanProgress extends StatelessWidget {
               Container(
                 height: constraints.maxHeight,
                 decoration: BoxDecoration(
-                  gradient: this.gradient,
-                  color: this.background ?? ThemeVars.progressColor,
+                  gradient: gradient,
+                  color: background ?? ThemeVars.progressColor,
                   borderRadius: BorderRadius.circular(ThemeVars.progressHeight),
                 ),
                 width: current,
@@ -89,7 +89,7 @@ class FlanProgress extends StatelessWidget {
               Positioned(
                 top: constraints.maxHeight / 2,
                 left: current,
-                child: this._buildPivot(context),
+                child: _buildPivot(context),
               ),
             ],
           );
@@ -101,23 +101,23 @@ class FlanProgress extends StatelessWidget {
   Widget _buildPivot(BuildContext context) {
     dynamic fomatNumber(double n) => n.toInt() == n ? n.toInt() : n;
 
-    final text = this.pivotText ?? "${fomatNumber(this.percentage)}%";
-    final show = this.showPivot && text.isNotEmpty;
+    final String text = pivotText ?? '${fomatNumber(percentage)}%';
+    final bool show = showPivot && text.isNotEmpty;
 
     if (show) {
       return FractionalTranslation(
-        translation: Offset(-0.5, -0.5),
+        translation: const Offset(-0.5, -0.5),
         child: Container(
           height: ThemeVars.progressPivotLineHeight *
               ThemeVars.progressPivotFontSize,
           alignment: Alignment.center,
-          constraints: BoxConstraints(
+          constraints: const BoxConstraints(
             minWidth: 3 * ThemeVars.progressPivotFontSize,
           ),
           padding: ThemeVars.progressPivotPadding,
           decoration: BoxDecoration(
-            color: this.pivotColor ??
-                this.background ??
+            color: pivotColor ??
+                background ??
                 ThemeVars.progressPivotBackgroundColor,
             borderRadius:
                 BorderRadius.circular(ThemeVars.progressPivotFontSize),
@@ -127,7 +127,7 @@ class FlanProgress extends StatelessWidget {
             style: TextStyle(
               // height: ThemeVars.progressPivotLineHeight,
               fontSize: ThemeVars.progressPivotFontSize,
-              color: this.textColor ?? ThemeVars.progressPivotTextColor,
+              color: textColor ?? ThemeVars.progressPivotTextColor,
             ),
             textAlign: TextAlign.center,
           ),
@@ -135,26 +135,26 @@ class FlanProgress extends StatelessWidget {
       );
     }
 
-    return SizedBox.shrink();
+    return const SizedBox.shrink();
   }
 
-  Color? get background => this.inactive ? const Color(0xffcacaca) : this.color;
+  Color? get background => inactive ? const Color(0xffcacaca) : color;
 
   @override
   void debugFillProperties(DiagnosticPropertiesBuilder properties) {
-    properties.add(DiagnosticsProperty<Color>("color", color));
+    properties.add(DiagnosticsProperty<Color>('color', color));
     properties.add(
-        DiagnosticsProperty<bool>("inactive", inactive, defaultValue: false));
+        DiagnosticsProperty<bool>('inactive', inactive, defaultValue: false));
     properties.add(
-        DiagnosticsProperty<String>("pivotText", pivotText, defaultValue: ""));
-    properties.add(DiagnosticsProperty<Color>("textColor", textColor));
-    properties.add(DiagnosticsProperty<Color>("pivotColor", pivotColor));
-    properties.add(DiagnosticsProperty<Color>("trackColor", trackColor));
-    properties.add(DiagnosticsProperty<double>("strokeWidth", strokeWidth));
-    properties.add(DiagnosticsProperty<double>("percentage", percentage,
+        DiagnosticsProperty<String>('pivotText', pivotText, defaultValue: ''));
+    properties.add(DiagnosticsProperty<Color>('textColor', textColor));
+    properties.add(DiagnosticsProperty<Color>('pivotColor', pivotColor));
+    properties.add(DiagnosticsProperty<Color>('trackColor', trackColor));
+    properties.add(DiagnosticsProperty<double>('strokeWidth', strokeWidth));
+    properties.add(DiagnosticsProperty<double>('percentage', percentage,
         defaultValue: 0.0));
     properties.add(
-        DiagnosticsProperty<bool>("showPivot", showPivot, defaultValue: true));
+        DiagnosticsProperty<bool>('showPivot', showPivot, defaultValue: true));
     super.debugFillProperties(properties);
   }
 }

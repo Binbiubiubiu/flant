@@ -1,8 +1,8 @@
-import "package:flutter/material.dart";
 import 'package:flutter/foundation.dart';
+import 'package:flutter/material.dart';
 
-import 'icon.dart';
 import 'field.dart';
+import 'icon.dart';
 
 /// ### FlanSearch
 /// 用于搜索场景的输入框组件。
@@ -120,14 +120,6 @@ class FlanSearch extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container();
-  }
-
-  @override
-  void debugFillProperties(DiagnosticPropertiesBuilder properties) {
-    // properties.add(DiagnosticsProperty<dynamic>("value", widget.value,
-    //     defaultValue: false));
-
-    super.debugFillProperties(properties);
   }
 }
 

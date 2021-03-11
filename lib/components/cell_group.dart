@@ -1,4 +1,4 @@
-import "package:flutter/material.dart";
+import 'package:flutter/material.dart';
 import 'package:flutter/foundation.dart';
 import '../styles/var.dart';
 import 'cell.dart';
@@ -31,23 +31,23 @@ class FlanCellGroup extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    List<Widget> cells = [];
-    if (this.children.length > 0) {
-      final line = Divider(
+    final List<Widget> cells = <Widget>[];
+    if (children.isNotEmpty) {
+      const Divider line = Divider(
         height: 0.5,
         indent: ThemeVars.cellHorizontalPadding,
         endIndent: ThemeVars.cellHorizontalPadding,
       );
-      for (var i = 0; i < this.children.length; i++) {
+      for (int i = 0; i < children.length; i++) {
         if (i > 0) {
           cells.add(line);
         }
-        cells.add(this.children[i]);
+        cells.add(children[i]);
       }
     }
 
     Widget group = Container(
-      decoration: BoxDecoration(
+      decoration: const BoxDecoration(
         color: ThemeVars.cellGroupBackgroundColor,
         border: Border(
           bottom: BorderSide(width: 0.5, color: ThemeVars.cellBorderColor),
@@ -60,11 +60,11 @@ class FlanCellGroup extends StatelessWidget {
       ),
     );
 
-    if (this._hasTitle) {
+    if (_hasTitle) {
       group = Column(
         crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          this._buildTitle(),
+        children: <Widget>[
+          _buildTitle(),
           group,
         ],
       );
@@ -79,29 +79,29 @@ class FlanCellGroup extends StatelessWidget {
   }
 
   /// 是否有标题
-  bool get _hasTitle => this.title != null || this.titleSlot != null;
+  bool get _hasTitle => title != null || titleSlot != null;
 
   /// 构建标题
   Widget _buildTitle() {
     return Padding(
       padding: ThemeVars.cellGroupTitlePadding,
       child: DefaultTextStyle(
-        style: TextStyle(
+        style: const TextStyle(
           color: ThemeVars.cellGroupTitleColor,
           fontSize: ThemeVars.cellGroupTitleFontSize,
           height: ThemeVars.cellGroupTitleLineHeight /
               ThemeVars.cellGroupTitleFontSize,
         ),
-        child: this.titleSlot ?? Text(this.title ?? ""),
+        child: titleSlot ?? Text(title ?? ''),
       ),
     );
   }
 
   @override
   void debugFillProperties(DiagnosticPropertiesBuilder properties) {
-    properties.add(DiagnosticsProperty<String>("title", title));
+    properties.add(DiagnosticsProperty<String>('title', title));
     properties
-        .add(DiagnosticsProperty<bool>("border", border, defaultValue: false));
+        .add(DiagnosticsProperty<bool>('border', border, defaultValue: false));
     super.debugFillProperties(properties);
   }
 }

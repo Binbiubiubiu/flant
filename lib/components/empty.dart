@@ -51,10 +51,10 @@ class FlanEmpty extends StatelessWidget {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           crossAxisAlignment: CrossAxisAlignment.center,
-          children: [
-            this._buildImage(context),
-            this._buildDescription(context),
-            this._buildBottom(context),
+          children: <Widget>[
+            _buildImage(context),
+            _buildDescription(context),
+            _buildBottom(context),
           ],
         ),
       ),
@@ -62,29 +62,29 @@ class FlanEmpty extends StatelessWidget {
   }
 
   Widget _buildImage(BuildContext context) {
-    if (this.imageSlot != null) {
-      return this.imageSlot!;
+    if (imageSlot != null) {
+      return imageSlot!;
     }
 
-    if (this.imageType == FlanEmptyImageType.network) {
+    if (imageType == FlanEmptyImageType.network) {
       return kNetWorkImage;
     }
 
     return Image.network(
-      this.imageUrl ?? this.imageTypeUrl,
-      width: this.imageSize ?? ThemeVars.emptyImageSize,
-      height: this.imageSize ?? ThemeVars.emptyImageSize,
+      imageUrl ?? imageTypeUrl,
+      width: imageSize ?? ThemeVars.emptyImageSize,
+      height: imageSize ?? ThemeVars.emptyImageSize,
     );
   }
 
   Widget _buildDescription(BuildContext context) {
-    final text = this.descriptionSlot ?? Text(this.description ?? "");
+    final Widget text = descriptionSlot ?? Text(description ?? '');
 
     return Container(
-      margin: EdgeInsets.only(top: ThemeVars.emptyDescriptionMarginTop),
+      margin: const EdgeInsets.only(top: ThemeVars.emptyDescriptionMarginTop),
       padding: ThemeVars.emptyDescriptionPadding,
       child: DefaultTextStyle(
-        style: TextStyle(
+        style: const TextStyle(
           color: ThemeVars.emptyDescriptionColor,
           fontSize: ThemeVars.emptyDescriptionFontSize,
           height: ThemeVars.emptyDescriptionLineHeight /
@@ -96,33 +96,33 @@ class FlanEmpty extends StatelessWidget {
   }
 
   Widget _buildBottom(BuildContext context) {
-    if (this.child != null) {
+    if (child != null) {
       return Padding(
         padding: const EdgeInsets.only(top: ThemeVars.emptyBottomMarginTop),
-        child: this.child,
+        child: child,
       );
     }
-    return SizedBox.shrink();
+    return const SizedBox.shrink();
   }
 
   String get imageTypeUrl {
-    final url = {
-      FlanEmptyImageType.normal: "default",
-      FlanEmptyImageType.error: "error",
-      FlanEmptyImageType.network: "network",
-      FlanEmptyImageType.search: "search",
-    }[this.imageType];
-    return "https://img01.yzcdn.cn/vant/empty-image-$url.png";
+    final String? url = <FlanEmptyImageType, String>{
+      FlanEmptyImageType.normal: 'default',
+      FlanEmptyImageType.error: 'error',
+      FlanEmptyImageType.network: 'network',
+      FlanEmptyImageType.search: 'search',
+    }[imageType];
+    return 'https://img01.yzcdn.cn/vant/empty-image-$url.png';
   }
 
   @override
   void debugFillProperties(DiagnosticPropertiesBuilder properties) {
     properties
-        .add(DiagnosticsProperty<FlanEmptyImageType>("imageType", imageType));
-    properties.add(DiagnosticsProperty<String>("imageUrl", imageUrl));
-    properties.add(DiagnosticsProperty<double>("imageSize", imageSize,
+        .add(DiagnosticsProperty<FlanEmptyImageType>('imageType', imageType));
+    properties.add(DiagnosticsProperty<String>('imageUrl', imageUrl));
+    properties.add(DiagnosticsProperty<double>('imageSize', imageSize,
         defaultValue: false));
-    properties.add(DiagnosticsProperty<String>("description", description));
+    properties.add(DiagnosticsProperty<String>('description', description));
     super.debugFillProperties(properties);
   }
 }

@@ -1,7 +1,5 @@
-import 'package:flant/components/loading.dart';
-import "package:flutter/material.dart";
+import 'package:flutter/material.dart';
 import 'package:flutter/foundation.dart';
-import '../styles/var.dart';
 
 /// ### FlanField
 /// 表单中的输入框组件。
@@ -19,11 +17,6 @@ class FlanField extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container();
-  }
-
-  @override
-  void debugFillProperties(DiagnosticPropertiesBuilder properties) {
-    super.debugFillProperties(properties);
   }
 }
 

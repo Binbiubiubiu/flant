@@ -1,5 +1,5 @@
 import 'package:flant/components/loading.dart';
-import "package:flutter/material.dart";
+import 'package:flutter/material.dart';
 import 'package:flutter/foundation.dart';
 import '../styles/var.dart';
 
@@ -66,72 +66,71 @@ class _FlanSwitchState<T> extends State<FlanSwitch<T>>
 
   @override
   void initState() {
-    this.bgColorAnimationController = AnimationController(
-      value: this.isChecked ? 1.0 : 0.0,
+    bgColorAnimationController = AnimationController(
+      value: isChecked ? 1.0 : 0.0,
       duration: ThemeVars.switchTransitionDuration,
       vsync: this,
-    )..addListener(this._handleChange);
+    )..addListener(_handleChange);
 
-    this.bgColorAnimation = ColorTween(
-            begin: this.widget.inActiveColor ?? ThemeVars.switchBackgroundColor,
-            end: this.widget.activeColor ?? ThemeVars.switchOnBackgroundColor)
-        .animate(this.bgColorAnimationController);
+    bgColorAnimation = ColorTween(
+            begin: widget.inActiveColor ?? ThemeVars.switchBackgroundColor,
+            end: widget.activeColor ?? ThemeVars.switchOnBackgroundColor)
+        .animate(bgColorAnimationController);
 
-    this.nodeAnimationCotroller = AnimationController(
-      value: this.isChecked ? 1.0 : 0.0,
+    nodeAnimationCotroller = AnimationController(
+      value: isChecked ? 1.0 : 0.0,
       duration: ThemeVars.switchTransitionDuration,
       vsync: this,
     );
-    this.nodeAnimation = Tween(
+    nodeAnimation = Tween<double>(
       begin: 0.0,
-      end: ThemeVars.switchWidth * this.em - ThemeVars.switchNodeSize * this.em,
-    ).animate(this.nodeAnimationCotroller);
+      end: ThemeVars.switchWidth * em - ThemeVars.switchNodeSize * em,
+    ).animate(nodeAnimationCotroller);
     super.initState();
   }
 
   @override
   void dispose() {
-    this.bgColorAnimationController.removeListener(this._handleChange);
-    this.bgColorAnimationController.dispose();
-    this.nodeAnimationCotroller.dispose();
+    bgColorAnimationController.removeListener(_handleChange);
+    bgColorAnimationController.dispose();
+    nodeAnimationCotroller.dispose();
     super.dispose();
   }
 
-  _handleChange() => this.setState(() {});
+  void _handleChange() => setState(() {});
 
-  get em => this.widget.size ?? ThemeVars.switchSize;
+  double get em => widget.size ?? ThemeVars.switchSize;
 
   @override
   Widget build(BuildContext context) {
-    final node = Container(
-      width: ThemeVars.switchNodeSize * this.em,
-      height: ThemeVars.switchNodeSize * this.em,
+    final Container node = Container(
+      width: ThemeVars.switchNodeSize * em,
+      height: ThemeVars.switchNodeSize * em,
       decoration: BoxDecoration(
         color: ThemeVars.switchNodeBackgroundColor,
         shape: BoxShape.circle,
         boxShadow: ThemeVars.switchNodeBoxShadow,
       ),
-      child: this._buildLoading(context),
+      child: _buildLoading(context),
     );
 
-    final sWidget = Container(
-      width: ThemeVars.switchWidth * this.em + ThemeVars.switchBorder.width * 2,
-      height:
-          ThemeVars.switchHeight * this.em + ThemeVars.switchBorder.width * 2,
+    final Container sWidget = Container(
+      width: ThemeVars.switchWidth * em + ThemeVars.switchBorder.width * 2,
+      height: ThemeVars.switchHeight * em + ThemeVars.switchBorder.width * 2,
       decoration: BoxDecoration(
-        color: this.bgColorAnimation.value,
-        border: Border.fromBorderSide(ThemeVars.switchBorder),
+        color: bgColorAnimation.value,
+        border: const Border.fromBorderSide(ThemeVars.switchBorder),
         borderRadius: BorderRadius.circular(
-          ThemeVars.switchNodeSize * this.em,
+          ThemeVars.switchNodeSize * em,
         ),
       ),
       child: Stack(
-        children: [
+        children: <Widget>[
           Positioned(
             top: 0,
             left: 0,
             child: Transform.translate(
-              offset: Offset(this.nodeAnimation.value, 0.0),
+              offset: Offset(nodeAnimation.value, 0.0),
               child: node,
             ),
           ),
@@ -141,70 +140,69 @@ class _FlanSwitchState<T> extends State<FlanSwitch<T>>
 
     return Semantics(
       child: GestureDetector(
-        onTap: this.onClick,
+        onTap: onClick,
         child: Opacity(
-          opacity: this.widget.disabled ? ThemeVars.switchDisabledOpacity : 1.0,
+          opacity: widget.disabled ? ThemeVars.switchDisabledOpacity : 1.0,
           child: sWidget,
         ),
       ),
       button: true,
-      enabled: !this.widget.disabled,
-      label: "switch",
-      checked: this.isChecked,
+      enabled: !widget.disabled,
+      label: 'switch',
+      checked: isChecked,
     );
   }
 
   void onClick() {
-    if (!this.widget.disabled && !this.widget.loading) {
-      if (this.isChecked) {
-        this.nodeAnimationCotroller.reverse();
-        this.bgColorAnimationController.reverse();
-        this.widget.onChange(this.widget.inActiveValue);
+    if (!widget.disabled && !widget.loading) {
+      if (isChecked) {
+        nodeAnimationCotroller.reverse();
+        bgColorAnimationController.reverse();
+        widget.onChange(widget.inActiveValue);
       } else {
-        this.nodeAnimationCotroller.forward();
-        this.bgColorAnimationController.forward();
-        this.widget.onChange(this.widget.activeValue);
+        nodeAnimationCotroller.forward();
+        bgColorAnimationController.forward();
+        widget.onChange(widget.activeValue);
       }
     }
   }
 
-  bool get isChecked => this.widget.value == this.widget.activeValue;
+  bool get isChecked => widget.value == widget.activeValue;
 
   Widget _buildLoading(BuildContext context) {
-    if (this.widget.loading) {
-      final color = (this.isChecked
-              ? this.widget.activeColor
-              : this.widget.inActiveColor) ??
-          ThemeVars.switchOnBackgroundColor;
+    if (widget.loading) {
+      final Color color =
+          (isChecked ? widget.activeColor : widget.inActiveColor) ??
+              ThemeVars.switchOnBackgroundColor;
       return FractionallySizedBox(
         widthFactor: .5,
         // heightFactor: .5,
         child: FlanLoading(color: color),
       );
     }
-    return SizedBox.shrink();
+    return const SizedBox.shrink();
   }
 
   @override
   void debugFillProperties(DiagnosticPropertiesBuilder properties) {
-    properties.add(DiagnosticsProperty<dynamic>("value", widget.value,
+    properties.add(DiagnosticsProperty<dynamic>('value', widget.value,
         defaultValue: false));
-    properties.add(DiagnosticsProperty<bool>("loading", widget.loading,
+    properties.add(DiagnosticsProperty<bool>('loading', widget.loading,
         defaultValue: false));
-    properties.add(DiagnosticsProperty<bool>("disabled", widget.disabled,
+    properties.add(DiagnosticsProperty<bool>('disabled', widget.disabled,
         defaultValue: false));
     properties.add(
-        DiagnosticsProperty<double>("size", widget.size, defaultValue: 30.0));
-    properties.add(DiagnosticsProperty<Color>("activeColor", widget.activeColor,
+        DiagnosticsProperty<double>('size', widget.size, defaultValue: 30.0));
+    properties.add(DiagnosticsProperty<Color>('activeColor', widget.activeColor,
         defaultValue: const Color(0xff1989fa)));
     properties.add(DiagnosticsProperty<Color>(
-        "inActiveColor", widget.inActiveColor,
+        'inActiveColor', widget.inActiveColor,
         defaultValue: Colors.white));
     properties.add(DiagnosticsProperty<dynamic>(
-        "activeValue", widget.activeValue,
+        'activeValue', widget.activeValue,
         defaultValue: true));
     properties.add(DiagnosticsProperty<dynamic>(
-        "inActiveValue", widget.inActiveValue,
+        'inActiveValue', widget.inActiveValue,
         defaultValue: false));
     super.debugFillProperties(properties);
   }

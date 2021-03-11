@@ -29,7 +29,7 @@ class FlanIcon extends StatelessWidget {
     this.classPrefix = kFlanIconsFamily,
     this.badge,
     this.onClick,
-  })  : this.iconUrl = null,
+  })  : iconUrl = null,
         super(key: key);
 
   const FlanIcon.url(
@@ -41,7 +41,7 @@ class FlanIcon extends StatelessWidget {
     this.classPrefix = kFlanIconsFamily,
     this.badge,
     this.onClick,
-  })  : this.iconName = null,
+  })  : iconName = null,
         super(key: key);
 
   // ****************** Props ******************
@@ -74,15 +74,15 @@ class FlanIcon extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final badge = FlanBadge(
-      dot: this.dot,
+    final FlanBadge badge = FlanBadge(
+      dot: dot,
       content: this.badge,
-      child: this._buildIcon(context),
+      child: _buildIcon(context),
     );
 
-    if (this.onClick != null) {
+    if (onClick != null) {
       return GestureDetector(
-        onTap: this.onClick,
+        onTap: onClick,
         child: badge,
       );
     }
@@ -92,23 +92,23 @@ class FlanIcon extends StatelessWidget {
 
   // 构建图片图标
   Widget _buildIcon(BuildContext context) {
-    final iconTheme = IconTheme.of(context);
-    final iconSize = this.size ?? iconTheme.size;
+    final IconThemeData iconTheme = IconTheme.of(context);
+    final double? iconSize = size ?? iconTheme.size;
 
-    if (this.iconName != null) {
+    if (iconName != null) {
       return Icon(
-        IconData(this.iconName!, fontFamily: this.classPrefix),
-        color: this.color ?? iconTheme.color,
+        IconData(iconName!, fontFamily: classPrefix),
+        color: color ?? iconTheme.color,
         size: iconSize,
       );
     }
 
-    final isNetWork = RegExp("^https?:\/\/").hasMatch(this.iconUrl!);
+    final bool isNetWork = RegExp('^https?:\/\/').hasMatch(iconUrl!);
 
     if (isNetWork) {
       return Image.network(
-        this.iconUrl!,
-        color: this.color, //?? textStyle.color,
+        iconUrl!,
+        color: color, //?? textStyle.color,
         width: iconSize,
         height: iconSize,
         fit: BoxFit.contain,
@@ -116,8 +116,8 @@ class FlanIcon extends StatelessWidget {
     }
 
     return Image.asset(
-      this.iconUrl!,
-      color: this.color, //?? textStyle.color,
+      iconUrl!,
+      color: color, //?? textStyle.color,
       width: iconSize,
       height: iconSize,
       fit: BoxFit.contain,
@@ -126,13 +126,13 @@ class FlanIcon extends StatelessWidget {
 
   @override
   void debugFillProperties(DiagnosticPropertiesBuilder properties) {
-    properties.add(DiagnosticsProperty<int>("iconName", iconName));
-    properties.add(DiagnosticsProperty<String>("iconUrl", iconUrl));
-    properties.add(DiagnosticsProperty<bool>("dot", dot));
-    properties.add(DiagnosticsProperty<double>("size", size));
-    properties.add(DiagnosticsProperty<Color>("color", color));
-    properties.add(DiagnosticsProperty<String>("classPrefix", classPrefix));
-    properties.add(DiagnosticsProperty<String>("badge", badge));
+    properties.add(DiagnosticsProperty<int>('iconName', iconName));
+    properties.add(DiagnosticsProperty<String>('iconUrl', iconUrl));
+    properties.add(DiagnosticsProperty<bool>('dot', dot));
+    properties.add(DiagnosticsProperty<double>('size', size));
+    properties.add(DiagnosticsProperty<Color>('color', color));
+    properties.add(DiagnosticsProperty<String>('classPrefix', classPrefix));
+    properties.add(DiagnosticsProperty<String>('badge', badge));
     super.debugFillProperties(properties);
   }
 }

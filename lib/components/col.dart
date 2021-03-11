@@ -1,3 +1,4 @@
+import 'package:flant/components/row.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/foundation.dart';
 import './row.dart' show FlanRowProvider;
@@ -26,14 +27,14 @@ class FlanCol extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final parent = FlanRowProvider.of(context);
+    final FlanRowProvider? parent = FlanRowProvider.of(context);
 
     BoxConstraints? colSpan;
     EdgeInsets? colOffset;
     EdgeInsets colPadding = EdgeInsets.zero;
     if (parent != null) {
-      final spaces = parent.spaces;
-      final index = parent.child.children.indexOf(this);
+      final List<RowSpace> spaces = parent.spaces;
+      final int index = (parent.child as Wrap).children.indexOf(this);
 
       colPadding = EdgeInsets.only(
         left: spaces[index].left,
@@ -41,12 +42,11 @@ class FlanCol extends StatelessWidget {
       );
 
       colSpan = BoxConstraints.tightFor(
-        width: parent.maxWidth * (this.span / 24),
+        width: parent.maxWidth * (span / 24),
       );
 
-      if (this.offset != null) {
-        colOffset =
-            EdgeInsets.only(left: parent.maxWidth * (this.offset! / 24));
+      if (offset != null) {
+        colOffset = EdgeInsets.only(left: parent.maxWidth * (offset! / 24));
       }
     }
 
@@ -55,16 +55,16 @@ class FlanCol extends StatelessWidget {
       margin: colOffset,
       padding: colPadding,
       child: Wrap(
-        children: this.children,
+        children: children,
       ),
     );
   }
 
   @override
   void debugFillProperties(DiagnosticPropertiesBuilder properties) {
-    properties.add(DiagnosticsProperty<double>("offset", offset));
+    properties.add(DiagnosticsProperty<double>('offset', offset));
     properties
-        .add(DiagnosticsProperty<double>("span", span, defaultValue: 0.0));
+        .add(DiagnosticsProperty<double>('span', span, defaultValue: 0.0));
     super.debugFillProperties(properties);
   }
 }

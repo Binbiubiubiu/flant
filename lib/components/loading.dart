@@ -1,12 +1,14 @@
-import 'package:flutter/material.dart';
-import 'package:flutter/foundation.dart';
 import 'dart:math' as math;
+
+import 'package:flutter/foundation.dart';
+import 'package:flutter/material.dart';
+
 import '../styles/var.dart';
 
 /// ### FlanImage 加载
 /// 加载图标，用于表示加载中的过渡状态。
 class FlanLoading extends StatelessWidget {
-  FlanLoading({
+  const FlanLoading({
     Key? key,
     this.color,
     this.type = FlanLoadingType.circular,
@@ -44,24 +46,22 @@ class FlanLoading extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final icon = SizedBox(
-      width: this.size ?? ThemeVars.loadingSpinnerSize,
-      height: this.size ?? ThemeVars.loadingSpinnerSize,
-      child: this.type == FlanLoadingType.spinner
-          ? _FlanLoadingSpinner(
-              color: this.color ?? ThemeVars.loadingSpinnerColor)
-          : _FlanLoadingCirclar(
-              color: this.color ?? ThemeVars.loadingSpinnerColor),
+    final SizedBox icon = SizedBox(
+      width: size ?? ThemeVars.loadingSpinnerSize,
+      height: size ?? ThemeVars.loadingSpinnerSize,
+      child: type == FlanLoadingType.spinner
+          ? _FlanLoadingSpinner(color: color ?? ThemeVars.loadingSpinnerColor)
+          : _FlanLoadingCirclar(color: color ?? ThemeVars.loadingSpinnerColor),
     );
 
-    if (this.vertical) {
+    if (vertical) {
       return Wrap(
         direction: Axis.vertical,
         crossAxisAlignment: WrapCrossAlignment.center,
         // runSpacing: ThemeVars.paddingXs,
-        children: [
+        children: <Widget>[
           icon,
-          this.buildText(context),
+          buildText(context),
         ],
       );
     }
@@ -70,52 +70,52 @@ class FlanLoading extends StatelessWidget {
       direction: Axis.horizontal,
       crossAxisAlignment: WrapCrossAlignment.center,
       // spacing: ThemeVars.paddingXs,
-      children: [
+      children: <Widget>[
         icon,
-        this.buildText(context),
+        buildText(context),
       ],
     );
   }
 
   Widget buildText(BuildContext context) {
-    if (this.child != null) {
+    if (child != null) {
       return Padding(
         padding: EdgeInsets.only(
-          left: this.vertical ? 0.0 : 8.0,
-          top: this.vertical ? 8.0 : 0.0,
+          left: vertical ? 0.0 : 8.0,
+          top: vertical ? 8.0 : 0.0,
         ),
         child: DefaultTextStyle(
           style: TextStyle(
-            fontSize: this.textSize ?? ThemeVars.loadingTextFontSize,
-            color: this.textColor ?? this.color ?? ThemeVars.loadingTextColor,
+            fontSize: textSize ?? ThemeVars.loadingTextFontSize,
+            color: textColor ?? color ?? ThemeVars.loadingTextColor,
           ),
-          child: this.child ?? SizedBox.shrink(),
+          child: child ?? const SizedBox.shrink(),
         ),
       );
     }
-    return SizedBox.shrink();
+    return const SizedBox.shrink();
   }
 
   @override
   void debugFillProperties(DiagnosticPropertiesBuilder properties) {
-    properties.add(DiagnosticsProperty<Color>("color", color,
+    properties.add(DiagnosticsProperty<Color>('color', color,
         defaultValue: ThemeVars.loadingSpinnerColor));
-    properties.add(DiagnosticsProperty<FlanLoadingType>("type", type,
+    properties.add(DiagnosticsProperty<FlanLoadingType>('type', type,
         defaultValue: FlanLoadingType.circular));
     properties
-        .add(DiagnosticsProperty<double>("size", size, defaultValue: 30.0));
+        .add(DiagnosticsProperty<double>('size', size, defaultValue: 30.0));
     properties.add(
-        DiagnosticsProperty<double>("textSize", textSize, defaultValue: 14.0));
-    properties.add(DiagnosticsProperty<Color>("textColor", textColor,
+        DiagnosticsProperty<double>('textSize', textSize, defaultValue: 14.0));
+    properties.add(DiagnosticsProperty<Color>('textColor', textColor,
         defaultValue: ThemeVars.loadingTextColor));
     properties.add(
-        DiagnosticsProperty<bool>("vertical", vertical, defaultValue: false));
+        DiagnosticsProperty<bool>('vertical', vertical, defaultValue: false));
     super.debugFillProperties(properties);
   }
 }
 
 class _FlanLoadingCirclar extends StatefulWidget {
-  _FlanLoadingCirclar({
+  const _FlanLoadingCirclar({
     Key? key,
     this.color,
   }) : super(key: key);
@@ -134,49 +134,61 @@ class __FlanLoadingCirclarState extends State<_FlanLoadingCirclar>
 
   @override
   void initState() {
-    this.controller = AnimationController(
+    controller = AnimationController(
       value: 0.0,
       duration: const Duration(seconds: 2),
       vsync: this,
     );
 
-    final curveAnimation = CurvedAnimation(
-      parent: this.controller,
+    final CurvedAnimation curveAnimation = CurvedAnimation(
+      parent: controller,
       curve: Curves.easeInOut,
     );
 
-    this.lengthAnimation = TweenSequence([
-      TweenSequenceItem(tween: Tween(begin: 1.0, end: 90.0), weight: .5),
-      TweenSequenceItem(tween: Tween(begin: 90.0, end: 90.0), weight: .5),
+    lengthAnimation = TweenSequence<double>(<TweenSequenceItem<double>>[
+      TweenSequenceItem<double>(
+        tween: Tween<double>(begin: 1.0, end: 90.0),
+        weight: .5,
+      ),
+      TweenSequenceItem<double>(
+        tween: Tween<double>(begin: 90.0, end: 90.0),
+        weight: .5,
+      ),
     ]).animate(curveAnimation)
-      ..addListener(this._handleChange);
+      ..addListener(_handleChange);
 
-    this.offsetAnimation = TweenSequence([
-      TweenSequenceItem(tween: Tween(begin: 0.0, end: -40.0), weight: .5),
-      TweenSequenceItem(tween: Tween(begin: -40.0, end: -120.0), weight: .5),
+    offsetAnimation = TweenSequence<double>(<TweenSequenceItem<double>>[
+      TweenSequenceItem<double>(
+        tween: Tween<double>(begin: 0.0, end: -40.0),
+        weight: .5,
+      ),
+      TweenSequenceItem<double>(
+        tween: Tween<double>(begin: -40.0, end: -120.0),
+        weight: .5,
+      ),
     ]).animate(curveAnimation);
 
-    this.controller.repeat();
+    controller.repeat();
     super.initState();
   }
 
   @override
   void dispose() {
-    this.lengthAnimation.removeListener(this._handleChange);
-    this.controller.dispose();
+    lengthAnimation.removeListener(_handleChange);
+    controller.dispose();
 
     super.dispose();
   }
 
-  _handleChange() => this.setState(() {});
+  void _handleChange() => setState(() {});
 
   @override
   Widget build(BuildContext context) {
     return CustomPaint(
       painter: _FlanLoadingCirclarPainter(
-        length: this.lengthAnimation.value,
-        offset: this.offsetAnimation.value,
-        color: this.widget.color ?? ThemeVars.loadingSpinnerColor,
+        length: lengthAnimation.value,
+        offset: offsetAnimation.value,
+        color: widget.color ?? ThemeVars.loadingSpinnerColor,
       ),
     );
   }
@@ -202,33 +214,32 @@ class _FlanLoadingCirclarPainter extends CustomPainter {
 
   @override
   void paint(Canvas canvas, Size size) {
-    final r = 20.0;
-    final num1 = this.length / r;
-    final num3 = this.offset / r;
+    const double r = 20.0;
+    final double num1 = length / r;
+    final double num3 = offset / r;
 
-    canvas
-      ..drawArc(
-        Rect.fromCircle(
-          center: Offset(size.width / 2, size.height / 2),
-          radius: size.width / 2 - 2.0,
-        ),
-        -num3,
-        (-num3 + num1 > 2 * math.pi) ? 2 * math.pi + num3 : num1,
-        false,
-        _paint,
-      );
+    canvas.drawArc(
+      Rect.fromCircle(
+        center: Offset(size.width / 2, size.height / 2),
+        radius: size.width / 2 - 2.0,
+      ),
+      -num3,
+      (-num3 + num1 > 2 * math.pi) ? 2 * math.pi + num3 : num1,
+      false,
+      _paint,
+    );
   }
 
   @override
   bool shouldRepaint(_FlanLoadingCirclarPainter oldDelegate) =>
-      this.length != oldDelegate.length || this.offset != oldDelegate.offset;
+      length != oldDelegate.length || offset != oldDelegate.offset;
 
   @override
   bool shouldRebuildSemantics(_FlanLoadingCirclarPainter oldDelegate) => false;
 }
 
 class _FlanLoadingSpinner extends StatefulWidget {
-  _FlanLoadingSpinner({
+  const _FlanLoadingSpinner({
     Key? key,
     required this.color,
   }) : super(key: key);
@@ -246,31 +257,30 @@ class __FlanLoadingSpinnerState extends State<_FlanLoadingSpinner>
 
   @override
   void initState() {
-    this.controller = AnimationController(
+    controller = AnimationController(
       value: 0.0,
       duration: ThemeVars.loadingSpinnerAnimationDuration,
       vsync: this,
     );
 
-    this.animation = IntTween(begin: 0, end: 11).animate(this.controller)
-      ..addListener(this._handleChange);
+    animation = IntTween(begin: 0, end: 11).animate(controller)
+      ..addListener(_handleChange);
 
-    this.controller.repeat();
+    controller.repeat();
     super.initState();
   }
 
   @override
   void dispose() {
-    this.animation.removeListener(this._handleChange);
-    this.controller.dispose();
+    animation.removeListener(_handleChange);
+    controller.dispose();
 
     super.dispose();
   }
 
-  _handleChange() => this.setState(() {});
+  void _handleChange() => setState(() {});
 
-  Matrix4 get transform =>
-      Matrix4.rotationZ(this.animation.value * math.pi / 6);
+  Matrix4 get transform => Matrix4.rotationZ(animation.value * math.pi / 6);
 
   @override
   Widget build(BuildContext context) {
@@ -278,8 +288,8 @@ class __FlanLoadingSpinnerState extends State<_FlanLoadingSpinner>
       transform: transform,
       alignment: Alignment.center,
       child: CustomPaint(
-        size: Size.square(30.0),
-        painter: _FlanLoadingSpinnerPainter(color: this.widget.color),
+        size: const Size.square(30.0),
+        painter: _FlanLoadingSpinnerPainter(color: widget.color),
       ),
     );
   }
@@ -299,17 +309,17 @@ class _FlanLoadingSpinnerPainter extends CustomPainter {
 
   @override
   void paint(Canvas canvas, Size size) {
-    final canvasWidth = size.width;
-    final canvasHeight = size.height;
+    final double canvasWidth = size.width;
+    final double canvasHeight = size.height;
     canvas.translate(canvasWidth / 2, canvasHeight / 2);
     for (int i = 0; i < 12; i++) {
-      this._paint.color = this.color.withOpacity(1 - 0.75 / 12 * i);
+      _paint.color = color.withOpacity(1 - 0.75 / 12 * i);
       canvas
         ..rotate(math.pi / 6)
         ..drawLine(
           Offset(0, canvasHeight * .28),
           Offset(0, canvasHeight * .5),
-          this._paint,
+          _paint,
         );
     }
   }

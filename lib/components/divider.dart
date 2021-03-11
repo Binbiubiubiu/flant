@@ -39,26 +39,26 @@ class FlanDivider extends StatelessWidget {
     return Material(
       color: Colors.transparent,
       textStyle: TextStyle(
-        color: this.style?.color ?? ThemeVars.dividerTextColor,
+        color: style?.color ?? ThemeVars.dividerTextColor,
         fontSize: ThemeVars.dividerFontSize,
         height: ThemeVars.dividerLineHeight / ThemeVars.dividerFontSize,
       ),
       child: Container(
         margin: ThemeVars.dividerMargin,
-        padding: this.style?.padding ?? EdgeInsets.zero,
+        padding: style?.padding ?? EdgeInsets.zero,
         child: LayoutBuilder(
-          builder: (context, constraints) {
+          builder: (BuildContext context, BoxConstraints constraints) {
             return Row(
               crossAxisAlignment: CrossAxisAlignment.center,
-              children: [
-                this._buildLine(
+              children: <Widget>[
+                _buildLine(
                   constraints,
                   position: FlanDividerContentPosition.left,
                 ),
-                this._buildContentSpace(),
-                child ?? SizedBox.shrink(),
-                this._buildContentSpace(),
-                this._buildLine(
+                _buildContentSpace(),
+                child ?? const SizedBox.shrink(),
+                _buildContentSpace(),
+                _buildLine(
                   constraints,
                   position: FlanDividerContentPosition.right,
                 ),
@@ -73,7 +73,7 @@ class FlanDivider extends StatelessWidget {
   /// 构建空白区域
   Widget _buildContentSpace() {
     return SizedBox(
-      width: this.child != null ? ThemeVars.dividerContentPadding : 0.0,
+      width: child != null ? ThemeVars.dividerContentPadding : 0.0,
     );
   }
 
@@ -82,15 +82,15 @@ class FlanDivider extends StatelessWidget {
     BoxConstraints constraints, {
     required FlanDividerContentPosition position,
   }) {
-    final line = CustomPaint(
+    final CustomPaint line = CustomPaint(
       painter: _DividerPainter(
-        dashed: this.dashed,
-        color: this.style?.borderColor ?? ThemeVars.dividerBorderColor,
-        strokeWidth: ThemeVars.borderWidthBase * (this.hairline ? 0.5 : 1.0),
+        dashed: dashed,
+        color: style?.borderColor ?? ThemeVars.dividerBorderColor,
+        strokeWidth: ThemeVars.borderWidthBase * (hairline ? 0.5 : 1.0),
       ),
     );
 
-    if (this.contentPosition != position) {
+    if (contentPosition != position) {
       return Expanded(child: line);
     }
 
@@ -100,13 +100,13 @@ class FlanDivider extends StatelessWidget {
   @override
   void debugFillProperties(DiagnosticPropertiesBuilder properties) {
     properties
-        .add(DiagnosticsProperty<bool>("dashed", dashed, defaultValue: false));
+        .add(DiagnosticsProperty<bool>('dashed', dashed, defaultValue: false));
     properties.add(
-        DiagnosticsProperty<bool>("hairline", hairline, defaultValue: true));
+        DiagnosticsProperty<bool>('hairline', hairline, defaultValue: true));
     properties.add(DiagnosticsProperty<FlanDividerContentPosition>(
-        "contentPosition", contentPosition,
+        'contentPosition', contentPosition,
         defaultValue: FlanDividerContentPosition.center));
-    properties.add(DiagnosticsProperty<FlanDividerStyle>("style", style));
+    properties.add(DiagnosticsProperty<FlanDividerStyle>('style', style));
     super.debugFillProperties(properties);
   }
 }
@@ -136,26 +136,27 @@ class _DividerPainter extends CustomPainter {
 
   @override
   void paint(Canvas canvas, Size size) {
-    final y = size.height * 0.5;
-    if (!this.dashed) {
+    final double y = size.height * 0.5;
+    if (!dashed) {
       canvas.drawLine(Offset(0.0, y), Offset(size.width, y), _paint);
       return;
     }
 
-    const dashWith = 3.0;
-    var list = List.filled((size.width / dashWith).floor(), 0)
-        .asMap()
-        .keys
-        .map((i) => Offset(i * dashWith, y))
-        .toList();
+    const double dashWith = 3.0;
+    final List<Offset> list =
+        List<Offset>.filled((size.width / dashWith).floor(), Offset.zero)
+            .asMap()
+            .keys
+            .map((int i) => Offset(i * dashWith, y))
+            .toList();
     canvas.drawPoints(PointMode.lines, list, _paint);
   }
 
   @override
   bool shouldRepaint(_DividerPainter oldDelegate) =>
-      this.dashed != oldDelegate.dashed ||
-      this.color != oldDelegate.color ||
-      this.strokeWidth != oldDelegate.strokeWidth;
+      dashed != oldDelegate.dashed ||
+      color != oldDelegate.color ||
+      strokeWidth != oldDelegate.strokeWidth;
 }
 
 /// 分割线内容位置

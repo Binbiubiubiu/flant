@@ -2,9 +2,9 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
 import '../styles/var.dart';
-import 'style.dart';
-import 'icon.dart';
 import 'badge.dart';
+import 'icon.dart';
+import 'style.dart';
 import 'tabbar.dart';
 
 typedef FlanTabbarItemSlotBuilder = Widget Function(
@@ -57,44 +57,45 @@ class FlanTabbarItem<T extends dynamic> extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final parent = FlanTabbarProvider.of(context);
+    final FlanTabbarProvider? parent = FlanTabbarProvider.of(context);
 
     if (parent == null) {
       throw 'TabbarItem must be a child component of Tabbar.';
     }
-    final index = parent.child.children
-        .indexWhere((element) => (element as Expanded).child == this);
+    final int index = (parent.child as Row)
+        .children
+        .indexWhere((Widget element) => (element as Expanded).child == this);
 
-    final active = (this.name ?? index) == parent.value;
+    final bool active = (name ?? index) == parent.value;
 
-    final color = active
+    final Color color = active
         ? (parent.activeColor ?? ThemeVars.tabbarItemActiveColor)
         : (parent.inactiveColor ?? ThemeVars.tabbarItemTextColor);
 
     Widget? customIcon =
-        (this.iconBuilder != null ? this.iconBuilder!(context, active) : null);
-    if (customIcon != null && !(customIcon is FlanIcons)) {
+        iconBuilder != null ? iconBuilder!(context, active) : null;
+    if (customIcon != null && customIcon is! FlanIcons) {
       customIcon = SizedBox(height: 20.0, child: customIcon);
     }
 
-    final iconWidget = IconTheme(
+    final IconTheme iconWidget = IconTheme(
       data: IconThemeData(
         color: color,
         size: ThemeVars.tabbarItemIconSize,
       ),
       child: customIcon ??
           FlanIcon(
-            iconName: this.iconName,
-            iconUrl: this.iconUrl,
-            classPrefix: this.iconPrefix,
+            iconName: iconName,
+            iconUrl: iconUrl,
+            classPrefix: iconPrefix,
           ),
     );
 
     return GestureDetector(
       onTap: () {
         parent.setActive(name ?? index);
-        if (this.onClick != null) {
-          this.onClick!();
+        if (onClick != null) {
+          onClick!();
         }
       },
       child: Material(
@@ -106,21 +107,22 @@ class FlanTabbarItem<T extends dynamic> extends StatelessWidget {
         color: Colors.transparent,
         child: Ink(
           height: ThemeVars.tabbarHeight,
-          decoration: BoxDecoration(border: Border(top: FlanHairLine())),
+          decoration: const BoxDecoration(border: Border(top: FlanHairLine())),
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             crossAxisAlignment: CrossAxisAlignment.center,
-            children: [
-              SizedBox(height: ThemeVars.paddingBase),
+            children: <Widget>[
+              const SizedBox(height: ThemeVars.paddingBase),
               FlanBadge(
-                dot: this.dot,
-                content: this.badge,
+                dot: dot,
+                content: badge,
                 child: iconWidget,
               ),
-              SizedBox(height: ThemeVars.tabbarItemMarginBottom),
-              this.textBuilder != null
-                  ? this.textBuilder!(context, active)
-                  : SizedBox.shrink(),
+              const SizedBox(height: ThemeVars.tabbarItemMarginBottom),
+              if (textBuilder != null)
+                textBuilder!(context, active)
+              else
+                const SizedBox.shrink(),
             ],
           ),
         ),
@@ -130,13 +132,13 @@ class FlanTabbarItem<T extends dynamic> extends StatelessWidget {
 
   @override
   void debugFillProperties(DiagnosticPropertiesBuilder properties) {
-    properties.add(DiagnosticsProperty<T>("name", name));
-    properties.add(DiagnosticsProperty<int>("iconName", iconName));
-    properties.add(DiagnosticsProperty<String>("iconUrl", iconUrl));
-    properties.add(DiagnosticsProperty<String>("iconPrefix", iconPrefix,
+    properties.add(DiagnosticsProperty<T>('name', name));
+    properties.add(DiagnosticsProperty<int>('iconName', iconName));
+    properties.add(DiagnosticsProperty<String>('iconUrl', iconUrl));
+    properties.add(DiagnosticsProperty<String>('iconPrefix', iconPrefix,
         defaultValue: kFlanIconsFamily));
-    properties.add(DiagnosticsProperty<bool>("dot", dot, defaultValue: false));
-    properties.add(DiagnosticsProperty<String>("badge", badge));
+    properties.add(DiagnosticsProperty<bool>('dot', dot, defaultValue: false));
+    properties.add(DiagnosticsProperty<String>('badge', badge));
     super.debugFillProperties(properties);
   }
 }

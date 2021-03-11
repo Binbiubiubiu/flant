@@ -39,58 +39,55 @@ class FlanBadge extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    if (this.child != null) {
+    if (child != null) {
       return Stack(
         clipBehavior: Clip.none,
         fit: StackFit.loose,
-        children: [
-          this.child ?? SizedBox.shrink(),
+        children: <Widget>[
+          child ?? const SizedBox.shrink(),
           Positioned(
             top: 0.0,
             right: 0.0,
             child: SizedOverflowBox(
               size: const Size(0.0, 0.0),
-              child: this._buildBadge(),
+              child: _buildBadge(),
             ),
           ),
         ],
       );
     }
 
-    return this._buildBadge();
+    return _buildBadge();
   }
 
   /// 是否有内容
   bool get _hasContent {
-    return this.contentSlot != null ||
-        (this.content != null && this.content!.isNotEmpty);
+    return contentSlot != null || (content != null && content!.isNotEmpty);
   }
 
   /// 构建内容
   Widget _buildContent() {
-    if (!this.dot && this._hasContent) {
-      if (this.contentSlot != null) {
+    if (!dot && _hasContent) {
+      if (contentSlot != null) {
         return LayoutBuilder(
           builder: (BuildContext context, BoxConstraints constraints) {
-            final style = DefaultTextStyle.of(context).style;
+            final TextStyle style = DefaultTextStyle.of(context).style;
 
             return IconTheme(
               data: IconThemeData(
                 color: style.color,
                 size: style.fontSize,
               ),
-              child: this.contentSlot ?? SizedBox.shrink(),
+              child: contentSlot ?? const SizedBox.shrink(),
             );
           },
         );
       }
 
-      var text = this.content!;
-      var contentNumber = double.tryParse(text);
-      if (this.max != null &&
-          contentNumber != null &&
-          contentNumber > this.max!) {
-        text = "$max+";
+      String text = content!;
+      final double? contentNumber = double.tryParse(text);
+      if (max != null && contentNumber != null && contentNumber > max!) {
+        text = '$max+';
       }
 
       return Text(
@@ -99,7 +96,7 @@ class FlanBadge extends StatelessWidget {
       );
     }
 
-    return SizedBox.shrink();
+    return const SizedBox.shrink();
   }
 
   /// 构建点样式徽标
@@ -107,52 +104,52 @@ class FlanBadge extends StatelessWidget {
     return Container(
       width: ThemeVars.badgeDotSize,
       height: ThemeVars.badgeDotSize,
-      constraints: BoxConstraints(
+      constraints: const BoxConstraints(
         minWidth: 0,
       ),
       padding: ThemeVars.badgePadding,
       decoration: BoxDecoration(
-        color: this.color ?? ThemeVars.badgeDotColor,
+        color: color ?? ThemeVars.badgeDotColor,
         border: Border.all(
           color: ThemeVars.white,
           width: ThemeVars.badgeBorderWidth,
         ),
-        borderRadius: BorderRadius.all(
+        borderRadius: const BorderRadius.all(
           Radius.circular(ThemeVars.badgeDotSize),
         ),
       ),
-      child: this._buildContent(),
+      child: _buildContent(),
     );
   }
 
   /// 构建内容
   Widget _buildContentBadge() {
     return Container(
-      constraints: BoxConstraints(
+      constraints: const BoxConstraints(
         minWidth: ThemeVars.badgeSize,
       ),
       alignment: Alignment.center,
       padding: ThemeVars.badgePadding,
       decoration: BoxDecoration(
-        color: this.color ?? ThemeVars.badgeBackgroundColor,
+        color: color ?? ThemeVars.badgeBackgroundColor,
         border: Border.all(
           color: ThemeVars.white,
           width: ThemeVars.badgeBorderWidth,
         ),
-        borderRadius: BorderRadius.all(
+        borderRadius: const BorderRadius.all(
           Radius.circular(ThemeVars.borderRadiusMax),
         ),
       ),
-      child: this._buildContent(),
+      child: _buildContent(),
     );
   }
 
   /// 构建徽标
   Widget _buildBadge() {
-    if (this._hasContent || this.dot) {
+    if (_hasContent || dot) {
       return Material(
         color: Colors.transparent,
-        textStyle: TextStyle(
+        textStyle: const TextStyle(
           height: 1.2,
           fontSize: ThemeVars.badgeFontSize,
           fontWeight: ThemeVars.badgeFontWeight,
@@ -160,22 +157,22 @@ class FlanBadge extends StatelessWidget {
         ),
         child: Row(
           mainAxisSize: MainAxisSize.min,
-          children: [
-            this.dot ? this._buildDotBadge() : this._buildContentBadge(),
+          children: <Widget>[
+            if (dot) _buildDotBadge() else _buildContentBadge(),
           ],
         ),
       );
     }
 
-    return SizedBox.shrink();
+    return const SizedBox.shrink();
   }
 
   @override
   void debugFillProperties(DiagnosticPropertiesBuilder properties) {
-    properties.add(DiagnosticsProperty<String>("content", content));
-    properties.add(DiagnosticsProperty<bool>("dot", dot, defaultValue: false));
-    properties.add(DiagnosticsProperty<int>("max", max));
-    properties.add(DiagnosticsProperty<Color>("color", color));
+    properties.add(DiagnosticsProperty<String>('content', content));
+    properties.add(DiagnosticsProperty<bool>('dot', dot, defaultValue: false));
+    properties.add(DiagnosticsProperty<int>('max', max));
+    properties.add(DiagnosticsProperty<Color>('color', color));
     super.debugFillProperties(properties);
   }
 }

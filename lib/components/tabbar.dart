@@ -4,7 +4,7 @@ import '../styles/var.dart';
 import 'tabbar_item.dart';
 
 class FlanTabbar<T extends dynamic> extends StatelessWidget {
-  FlanTabbar({
+  const FlanTabbar({
     Key? key,
     required T value,
     this.activeColor,
@@ -13,8 +13,8 @@ class FlanTabbar<T extends dynamic> extends StatelessWidget {
     this.border = true,
     this.safeAreaInsetBottom = false,
     required this.onChange,
-    this.children = const <FlanTabbarItem>[],
-  })  : value = value ?? 0,
+    this.children = const <FlanTabbarItem<T>>[],
+  })  : value = value ?? 0 as T,
         super(key: key);
 
   // ****************** Props ******************
@@ -43,63 +43,67 @@ class FlanTabbar<T extends dynamic> extends StatelessWidget {
 
   // ****************** Slots ******************
   // 内容
-  final List<FlanTabbarItem> children;
+  final List<FlanTabbarItem<T>> children;
 
   @override
   Widget build(BuildContext context) {
-    final tabbar = Container(
+    final Container tabbar = Container(
       width: double.infinity,
       height: ThemeVars.tabbarHeight,
-      decoration: BoxDecoration(
+      decoration: const BoxDecoration(
         color: ThemeVars.tabbarBackgroundColor,
       ),
       child: FlanTabbarProvider(
-        value: this.value,
-        activeColor: this.activeColor,
-        inactiveColor: this.inactiveColor,
+        value: value,
+        activeColor: activeColor,
+        inactiveColor: inactiveColor,
         setActive: (dynamic value) {
           if (value != this.value) {
-            final canChange =
-                this.beforeChange != null ? this.beforeChange!(value) : true;
+            bool canChange = true;
+            if (beforeChange != null) {
+              canChange = beforeChange!(value as T);
+            }
 
             if (canChange) {
-              this.onChange(value);
+              onChange(value as T);
             }
           }
         },
         child: Row(
-          children: this.children.map((e) => Expanded(child: e)).toList(),
+          children: children
+              .map((FlanTabbarItem<T> e) => Expanded(child: e))
+              .toList(),
         ),
       ),
     );
 
-    return SafeArea(bottom: this.safeAreaInsetBottom, child: tabbar);
+    return SafeArea(bottom: safeAreaInsetBottom, child: tabbar);
   }
 
   @override
   void debugFillProperties(DiagnosticPropertiesBuilder properties) {
-    properties.add(DiagnosticsProperty<Color>("activeColor", activeColor));
+    properties.add(DiagnosticsProperty<Color>('activeColor', activeColor));
     properties.add(
-        DiagnosticsProperty<Function(T name)>("beforeChange", beforeChange));
-    properties.add(DiagnosticsProperty<Color>("inactiveColor", inactiveColor));
-    properties.add(DiagnosticsProperty<T>("value", value));
+        DiagnosticsProperty<Function(T name)>('beforeChange', beforeChange));
+    properties.add(DiagnosticsProperty<Color>('inactiveColor', inactiveColor));
+    properties.add(DiagnosticsProperty<T>('value', value));
     properties
-        .add(DiagnosticsProperty<bool>("border", border, defaultValue: false));
+        .add(DiagnosticsProperty<bool>('border', border, defaultValue: false));
     properties.add(DiagnosticsProperty<bool>(
-        "safeAreaInsetBottom", safeAreaInsetBottom,
+        'safeAreaInsetBottom', safeAreaInsetBottom,
         defaultValue: false));
     super.debugFillProperties(properties);
   }
 }
 
 class FlanTabbarProvider extends InheritedWidget {
-  FlanTabbarProvider({
+  const FlanTabbarProvider({
     Key? key,
     this.value,
     this.activeColor,
     this.inactiveColor,
     required this.setActive,
-    required this.child,
+    required Row child,
   }) : super(key: key, child: child);
 
   final dynamic value;
@@ -108,8 +112,6 @@ class FlanTabbarProvider extends InheritedWidget {
   final Color? inactiveColor;
 
   final ValueChanged<dynamic> setActive;
-
-  final Row child;
 
   static FlanTabbarProvider? of(BuildContext context) {
     return context.dependOnInheritedWidgetOfExactType<FlanTabbarProvider>();

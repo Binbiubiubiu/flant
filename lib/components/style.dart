@@ -4,11 +4,9 @@ import '../styles/var.dart';
 
 /// 1px 边框
 class FlanHairLine extends BorderSide {
-  FlanHairLine({
-    this.color = ThemeVars.borderColor,
+  const FlanHairLine({
+    Color color = ThemeVars.borderColor,
   }) : super(color: color, width: 0.5);
-
-  final Color color;
 }
 
 /// 动画曲线构造器
@@ -20,11 +18,11 @@ Curve kFlanCurveBuilder(bool show) => show
     : ThemeVars.animationTimingFunctionLeave;
 
 /// 过渡动画构造器
-typedef FlanTransitionBuilder<T> = Widget Function(
-    Animation<T> animation, Widget child);
+typedef FlanTransitionBuilder = Widget Function(
+    Animation<double> animation, Widget child);
 
 /// 过渡动画`Fade` 构造器
-Widget kFlanFadeTransitionBuilder(animation, child) {
+Widget kFlanFadeTransitionBuilder(Animation<double> animation, Widget child) {
   return FadeTransition(
     opacity: animation,
     child: child,
@@ -32,9 +30,10 @@ Widget kFlanFadeTransitionBuilder(animation, child) {
 }
 
 /// 过渡动画`Slide Up` 构造器
-Widget kFlanSlideUpTransitionBuilder(animation, child) {
+Widget kFlanSlideUpTransitionBuilder(
+    Animation<double> animation, Widget child) {
   return SlideTransition(
-    position: Tween(
+    position: Tween<Offset>(
       begin: const Offset(0, 1),
       end: const Offset(0, 0),
     ).animate(animation),
@@ -43,9 +42,10 @@ Widget kFlanSlideUpTransitionBuilder(animation, child) {
 }
 
 /// 过渡动画`Slide Down` 构造器
-Widget kFlanSlideDownTransitionBuilder(animation, child) {
+Widget kFlanSlideDownTransitionBuilder(
+    Animation<double> animation, Widget child) {
   return SlideTransition(
-    position: Tween(
+    position: Tween<Offset>(
       begin: const Offset(0, -1),
       end: const Offset(0, 0),
     ).animate(animation),
@@ -54,9 +54,10 @@ Widget kFlanSlideDownTransitionBuilder(animation, child) {
 }
 
 /// 过渡动画`Slide Left` 构造器
-Widget kFlanSlideLeftTransitionBuilder(animation, child) {
+Widget kFlanSlideLeftTransitionBuilder(
+    Animation<double> animation, Widget child) {
   return SlideTransition(
-    position: Tween(
+    position: Tween<Offset>(
       begin: const Offset(-1, 0),
       end: const Offset(0, 0),
     ).animate(animation),
@@ -65,9 +66,10 @@ Widget kFlanSlideLeftTransitionBuilder(animation, child) {
 }
 
 /// 过渡动画`Slide Right` 构造器
-Widget kFlanSlideRightTransitionBuilder(animation, child) {
+Widget kFlanSlideRightTransitionBuilder(
+    Animation<double> animation, Widget child) {
   return SlideTransition(
-    position: Tween(
+    position: Tween<Offset>(
       begin: const Offset(1, 0),
       end: const Offset(0, 0),
     ).animate(animation),
@@ -81,12 +83,62 @@ Widget kFlanSlideRightTransitionBuilder(animation, child) {
 /// - `transitionBuilder` 过渡动画构造器
 /// - 通过类型`Visibility`的子组件`child`的`visible` 控制展示和隐藏
 class FlanTransition extends StatefulWidget {
-  FlanTransition({
+  const FlanTransition({
     this.duration,
     this.curveBuilder = kFlanCurveBuilder,
     this.onCompleted,
     this.onDismissed,
     required this.transitionBuilder,
+    required this.child,
+  });
+
+  /// 过渡动画`Fade`
+  const FlanTransition.fade({
+    this.duration,
+    this.curveBuilder = kFlanCurveBuilder,
+    this.onCompleted,
+    this.onDismissed,
+    this.transitionBuilder = kFlanFadeTransitionBuilder,
+    required this.child,
+  });
+
+  /// 过渡动画`Slide Down`
+  const FlanTransition.slideDown({
+    this.duration,
+    this.curveBuilder = kFlanCurveBuilder,
+    this.onCompleted,
+    this.onDismissed,
+    this.transitionBuilder = kFlanSlideDownTransitionBuilder,
+    required this.child,
+  });
+
+  /// 过渡动画`Slide Up`
+  const FlanTransition.slideUp({
+    this.duration,
+    this.curveBuilder = kFlanCurveBuilder,
+    this.onCompleted,
+    this.onDismissed,
+    this.transitionBuilder = kFlanSlideUpTransitionBuilder,
+    required this.child,
+  });
+
+  /// 过渡动画`Slide Left`
+  const FlanTransition.slideLeft({
+    this.duration,
+    this.curveBuilder = kFlanCurveBuilder,
+    this.onCompleted,
+    this.onDismissed,
+    this.transitionBuilder = kFlanSlideLeftTransitionBuilder,
+    required this.child,
+  });
+
+  /// 过渡动画`Slide Right`
+  const FlanTransition.slideRight({
+    this.duration,
+    this.curveBuilder = kFlanCurveBuilder,
+    this.onCompleted,
+    this.onDismissed,
+    this.transitionBuilder = kFlanSlideRightTransitionBuilder,
     required this.child,
   });
 
@@ -106,56 +158,6 @@ class FlanTransition extends StatefulWidget {
   /// 子组件
   final Visibility child;
 
-  /// 过渡动画`Fade`
-  FlanTransition.fade({
-    this.duration,
-    this.curveBuilder = kFlanCurveBuilder,
-    this.onCompleted,
-    this.onDismissed,
-    this.transitionBuilder = kFlanFadeTransitionBuilder,
-    required this.child,
-  });
-
-  /// 过渡动画`Slide Down`
-  FlanTransition.slideDown({
-    this.duration,
-    this.curveBuilder = kFlanCurveBuilder,
-    this.onCompleted,
-    this.onDismissed,
-    this.transitionBuilder = kFlanSlideDownTransitionBuilder,
-    required this.child,
-  });
-
-  /// 过渡动画`Slide Up`
-  FlanTransition.slideUp({
-    this.duration,
-    this.curveBuilder = kFlanCurveBuilder,
-    this.onCompleted,
-    this.onDismissed,
-    this.transitionBuilder = kFlanSlideUpTransitionBuilder,
-    required this.child,
-  });
-
-  /// 过渡动画`Slide Left`
-  FlanTransition.slideLeft({
-    this.duration,
-    this.curveBuilder = kFlanCurveBuilder,
-    this.onCompleted,
-    this.onDismissed,
-    this.transitionBuilder = kFlanSlideLeftTransitionBuilder,
-    required this.child,
-  });
-
-  /// 过渡动画`Slide Right`
-  FlanTransition.slideRight({
-    this.duration,
-    this.curveBuilder = kFlanCurveBuilder,
-    this.onCompleted,
-    this.onDismissed,
-    this.transitionBuilder = kFlanSlideRightTransitionBuilder,
-    required this.child,
-  });
-
   @override
   _FlanTransitionState createState() => _FlanTransitionState();
 }
@@ -166,18 +168,18 @@ class _FlanTransitionState extends State<FlanTransition>
   late Visibility content;
 
   bool get show {
-    return this.widget.child.visible;
+    return widget.child.visible;
   }
 
   @override
   void initState() {
-    this.animationController = AnimationController(
+    animationController = AnimationController(
       vsync: this,
       duration: widget.duration ?? ThemeVars.animationDurationBase,
-    )..addStatusListener(this._transitionStatusChange);
-    this.content = this.widget.child;
-    if (this.show) {
-      this.animationController.forward();
+    )..addStatusListener(_transitionStatusChange);
+    content = widget.child;
+    if (show) {
+      animationController.forward();
     }
 
     super.initState();
@@ -185,8 +187,8 @@ class _FlanTransitionState extends State<FlanTransition>
 
   @override
   void dispose() {
-    this.animationController
-      ..removeStatusListener(this._transitionStatusChange)
+    animationController
+      ..removeStatusListener(_transitionStatusChange)
       ..dispose();
 
     super.dispose();
@@ -194,16 +196,16 @@ class _FlanTransitionState extends State<FlanTransition>
 
   @override
   void didUpdateWidget(covariant FlanTransition oldWidget) {
-    final preShow = oldWidget.child.visible;
-    if (this.show && !preShow) {
-      this.setState(() {
-        this.content = this.widget.child;
-        this.animationController.forward();
+    final bool preShow = oldWidget.child.visible;
+    if (show && !preShow) {
+      setState(() {
+        content = widget.child;
+        animationController.forward();
       });
     }
 
-    if (!this.show && preShow) {
-      this.animationController.reverse();
+    if (!show && preShow) {
+      animationController.reverse();
     }
 
     super.didUpdateWidget(oldWidget);
@@ -211,17 +213,17 @@ class _FlanTransitionState extends State<FlanTransition>
 
   @override
   Widget build(BuildContext context) {
-    final curvedAnimation = CurvedAnimation(
-      parent: this.animationController,
-      curve: this.widget.curveBuilder(this.show),
+    final CurvedAnimation curvedAnimation = CurvedAnimation(
+      parent: animationController,
+      curve: widget.curveBuilder(show),
     );
-    return this.widget.transitionBuilder(curvedAnimation, this.content);
+    return widget.transitionBuilder(curvedAnimation, content);
   }
 
   void _transitionStatusChange(AnimationStatus status) {
     if (status == AnimationStatus.dismissed) {
-      this.setState(() {
-        this.content = this.widget.child;
+      setState(() {
+        content = widget.child;
 
         if (widget.onDismissed != null) {
           widget.onDismissed!();
@@ -237,10 +239,10 @@ class _FlanTransitionState extends State<FlanTransition>
   @override
   void debugFillProperties(DiagnosticPropertiesBuilder properties) {
     properties.add(DiagnosticsProperty<FlanCurveBuilder>(
-        "curveBuilder", widget.curveBuilder,
+        'curveBuilder', widget.curveBuilder,
         defaultValue: kFlanCurveBuilder));
     properties.add(DiagnosticsProperty<FlanTransitionBuilder>(
-        "transitionBuilder", widget.transitionBuilder));
+        'transitionBuilder', widget.transitionBuilder));
     super.debugFillProperties(properties);
   }
 }
