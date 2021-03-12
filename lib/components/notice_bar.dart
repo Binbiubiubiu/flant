@@ -281,6 +281,7 @@ class _FlanNoticeBarState extends State<FlanNoticeBar>
           size: ThemeVars.noticeBarIconSize,
           iconName: rightIconName,
           onClick: onClickRightIcon,
+          color: widget.color ?? ThemeVars.noticeBarTextColor,
         ),
       );
     }
