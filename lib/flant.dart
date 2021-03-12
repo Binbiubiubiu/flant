@@ -17,6 +17,7 @@ export './components/grid_item.dart';
 export './components/icon.dart';
 export './components/image.dart';
 export './components/loading.dart';
+export './components/navbar.dart';
 export './components/notice_bar.dart';
 export './components/overlay.dart';
 export './components/popup.dart';
