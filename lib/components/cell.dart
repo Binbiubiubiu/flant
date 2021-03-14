@@ -291,8 +291,10 @@ class FlanCell extends RouteStatelessWidget {
   /// 构建右侧内容
   Widget _buildValue(BuildContext context) {
     if (_hasValue) {
-      final Widget value =
-          child ?? Text(this.value ?? '', textAlign: TextAlign.right);
+      final Widget value = Align(
+        alignment: Alignment.centerRight,
+        child: child ?? Text(this.value ?? ''),
+      );
 
       final TextStyle vStyle = _cellTextStyle.copyWith(
         color: disabled
