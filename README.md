@@ -66,9 +66,10 @@
 
 ##### 导航组件
 
+- [ ] ActionBar 动作栏
 - [x] Grid 宫格
 - [ ] IndexBar 索引栏
-- [ ] NavBar 导航栏
+- [x] NavBar 导航栏
 - [ ] Pagination 分页
 - [ ] Sidebar 侧边导航
 - [ ] Tab 标签页

@@ -239,6 +239,7 @@ class _FlanPopupState extends State<FlanPopup> {
               }
               return dialog;
             },
+            popupPosition: _popupAlign,
             onOverlayClick: widget.onClickOverlay,
             barrierDismissible: widget.closeOnClickOverlay,
             closeOnPopstate: widget.closeOnPopstate,
@@ -273,57 +274,53 @@ class _FlanPopupState extends State<FlanPopup> {
     Animation<double> secondaryAnimation,
     Widget child,
   ) {
-    final CurvedAnimation curve = CurvedAnimation(
-      parent: animation,
-      curve: widget.show
-          ? ThemeVars.animationTimingFunctionEnter
-          : ThemeVars.animationTimingFunctionLeave,
+    final Animation<double> curve = animation.drive(
+      CurveTween(
+        curve: widget.show
+            ? ThemeVars.animationTimingFunctionEnter
+            : ThemeVars.animationTimingFunctionLeave,
+      ),
     );
 
     switch (widget.position) {
       case FlanPopupPosition.top:
         return SlideTransition(
           position: Tween<Offset>(
-            begin: const Offset(0, -1),
-            end: const Offset(0, 0),
+            begin: const Offset(0.0, -1.0),
+            end: const Offset(0.0, 0.0),
           ).animate(curve),
           child: child,
         );
       case FlanPopupPosition.bottom:
         return SlideTransition(
           position: Tween<Offset>(
-            begin: const Offset(0, 1),
-            end: const Offset(0, 0),
+            begin: const Offset(0.0, 1.0),
+            end: const Offset(0.0, 0.0),
           ).animate(curve),
           child: child,
         );
       case FlanPopupPosition.right:
         return SlideTransition(
           position: Tween<Offset>(
-            begin: const Offset(1, 0),
-            end: const Offset(0, 0),
+            begin: const Offset(1.0, 0.0),
+            end: const Offset(0.0, 0.0),
           ).animate(curve),
           child: child,
         );
       case FlanPopupPosition.left:
         return SlideTransition(
           position: Tween<Offset>(
-            begin: const Offset(-1, 0),
-            end: const Offset(0, 0),
+            begin: const Offset(-1.0, 0.0),
+            end: const Offset(0.0, 0.0),
           ).animate(curve),
           child: child,
         );
       case FlanPopupPosition.center:
-        FadeTransition(
+        return FadeTransition(
           opacity: curve,
           child: child,
         );
     }
-
-    return FadeTransition(
-      opacity: curve,
-      child: child,
-    );
   }
 
   Widget _buildPopupContent() {
@@ -338,7 +335,11 @@ class _FlanPopupState extends State<FlanPopup> {
         child: SizedBox(
           width: widget.position == FlanPopupPosition.top ||
                   widget.position == FlanPopupPosition.bottom
-              ? double.infinity
+              ? MediaQuery.of(context).size.width
+              : null,
+          height: widget.position == FlanPopupPosition.left ||
+                  widget.position == FlanPopupPosition.right
+              ? MediaQuery.of(context).size.height
               : null,
           child: GestureDetector(
             onTap: widget.onClick,
@@ -444,21 +445,22 @@ class _FlanPopupState extends State<FlanPopup> {
   }
 }
 
-class _FlanPopupRoute<T extends dynamic> extends PopupRoute<T> {
+class _FlanPopupRoute<T extends dynamic> extends FlanPopupRoute<T> {
   _FlanPopupRoute({
     required RoutePageBuilder pageBuilder,
     bool barrierDismissible = true,
     bool closeOnPopstate = false,
     String? barrierLabel,
-    Color barrierColor = const Color(0x80000000),
-    Duration transitionDuration = const Duration(milliseconds: 200),
+    required Color barrierColor,
+    required Duration transitionDuration,
     RouteTransitionsBuilder? transitionBuilder,
     RouteSettings? settings,
     VoidCallback? onOverlayClick,
     this.appear = false,
     this.onTransitionRouteEnter,
     this.onTransitionRouteLeave,
-  })  : _pageBuilder = pageBuilder,
+    required Alignment popupPosition,
+  })   : _pageBuilder = pageBuilder,
         _onOverlayClick = onOverlayClick,
         _barrierDismissible = barrierDismissible,
         _barrierLabel = barrierLabel!,
@@ -466,11 +468,16 @@ class _FlanPopupRoute<T extends dynamic> extends PopupRoute<T> {
         _closeOnPopstate = closeOnPopstate,
         _transitionDuration = transitionDuration,
         _transitionBuilder = transitionBuilder!,
+        _popupPosition = popupPosition,
         super(settings: settings);
 
   final RoutePageBuilder _pageBuilder;
+  final Alignment _popupPosition;
+  @override
+  Alignment get popupPosition => _popupPosition;
 
   final bool appear;
+
   final VoidCallback? onTransitionRouteEnter;
   final VoidCallback? onTransitionRouteLeave;
 
@@ -517,7 +524,6 @@ class _FlanPopupRoute<T extends dynamic> extends PopupRoute<T> {
         super.didPop(result);
   }
 
-  @override
   VoidCallback? get onOverlayClick => _onOverlayClick;
   final VoidCallback? _onOverlayClick;
 
@@ -529,7 +535,6 @@ class _FlanPopupRoute<T extends dynamic> extends PopupRoute<T> {
   String get barrierLabel => _barrierLabel;
   final String _barrierLabel;
 
-  @override
   bool get closeOnPopstate => _closeOnPopstate;
   final bool _closeOnPopstate;
 
@@ -667,9 +672,9 @@ class __FlanPopupCloseIconState extends State<_FlanPopupCloseIcon> {
   }
 }
 
-abstract class PopupRoute<T> extends ModalRoute<T> {
+abstract class FlanPopupRoute<T> extends FlanModalRoute<T> {
   /// Initializes the [PopupRoute].
-  PopupRoute({
+  FlanPopupRoute({
     RouteSettings? settings,
     ui.ImageFilter? filter,
   }) : super(
@@ -684,10 +689,10 @@ abstract class PopupRoute<T> extends ModalRoute<T> {
   bool get maintainState => true;
 }
 
-abstract class ModalRoute<T> extends TransitionRoute<T>
+abstract class FlanModalRoute<T> extends FlanTransitionRoute<T>
     with LocalHistoryRoute<T> {
   /// Creates a route that blocks interaction with previous routes.
-  ModalRoute({
+  FlanModalRoute({
     RouteSettings? settings,
     this.filter,
   }) : super(settings: settings);
@@ -935,6 +940,7 @@ abstract class ModalRoute<T> extends TransitionRoute<T>
   }
 
   bool get closeOnPopstate;
+  Alignment get popupPosition;
 
   // The API for subclasses to override - used by this class
 
@@ -1344,7 +1350,7 @@ abstract class ModalRoute<T> extends TransitionRoute<T>
             curve:
                 barrierCurve)), // changedInternalState is called if barrierCurve updates
       );
-      barrier = AnimatedModalBarrier(
+      barrier = FlanAnimatedModalBarrier(
         color: color,
         dismissible:
             barrierDismissible, // changedInternalState is called if barrierDismissible updates
@@ -1353,7 +1359,7 @@ abstract class ModalRoute<T> extends TransitionRoute<T>
         barrierSemanticsDismissible: semanticsDismissible,
       );
     } else {
-      barrier = ModalBarrier(
+      barrier = FlanModalBarrier(
         dismissible:
             barrierDismissible, // changedInternalState is called if barrierDismissible updates
         semanticsLabel:
@@ -1419,9 +1425,9 @@ abstract class ModalRoute<T> extends TransitionRoute<T>
       '${objectRuntimeType(this, 'ModalRoute')}($settings, animation: $_animation)';
 }
 
-abstract class TransitionRoute<T> extends OverlayRoute<T> {
+abstract class FlanTransitionRoute<T> extends FlanOverlayRoute<T> {
   /// Creates a route that animates itself when it is pushed or popped.
-  TransitionRoute({
+  FlanTransitionRoute({
     RouteSettings? settings,
   }) : super(settings: settings);
 
@@ -1582,7 +1588,7 @@ abstract class TransitionRoute<T> extends OverlayRoute<T> {
         '$runtimeType.didReplace called before calling install() or after calling dispose().');
     assert(!_transitionCompleter.isCompleted,
         'Cannot reuse a $runtimeType after disposing it.');
-    if (oldRoute is TransitionRoute)
+    if (oldRoute is FlanTransitionRoute)
       _controller!.value = oldRoute._controller!.value;
     super.didReplace(oldRoute);
   }
@@ -1633,7 +1639,7 @@ abstract class TransitionRoute<T> extends OverlayRoute<T> {
         _trainHoppingListenerRemover;
     _trainHoppingListenerRemover = null;
 
-    if (nextRoute is TransitionRoute<dynamic> &&
+    if (nextRoute is FlanTransitionRoute<dynamic> &&
         canTransitionTo(nextRoute) &&
         nextRoute.canTransitionFrom(this)) {
       final Animation<double>? current = _secondaryAnimation.parent;
@@ -1752,7 +1758,7 @@ abstract class TransitionRoute<T> extends OverlayRoute<T> {
   ///
   ///  * [canTransitionFrom], which must be true for [nextRoute] for the
   ///    [ModalRoute.buildTransitions] `secondaryAnimation` to run.
-  bool canTransitionTo(TransitionRoute<dynamic> nextRoute) => true;
+  bool canTransitionTo(FlanTransitionRoute<dynamic> nextRoute) => true;
 
   /// Returns true if [previousRoute] should animate when this route
   /// is pushed on top of it or when then this route is popped off of it.
@@ -1777,7 +1783,7 @@ abstract class TransitionRoute<T> extends OverlayRoute<T> {
   ///
   ///  * [canTransitionTo], which must be true for [previousRoute] for its
   ///    [ModalRoute.buildTransitions] `secondaryAnimation` to run.
-  bool canTransitionFrom(TransitionRoute<dynamic> previousRoute) => true;
+  bool canTransitionFrom(FlanTransitionRoute<dynamic> previousRoute) => true;
 
   @override
   void dispose() {
@@ -1793,13 +1799,13 @@ abstract class TransitionRoute<T> extends OverlayRoute<T> {
 
   @override
   String toString() =>
-      '${objectRuntimeType(this, 'TransitionRoute')}(animation: $_controller)';
+      '${objectRuntimeType(this, 'FlanTransitionRoute')}(animation: $_controller)';
 }
 
 /// A route that displays widgets in the [Navigator]'s [Overlay].
-abstract class OverlayRoute<T> extends Route<T> {
+abstract class FlanOverlayRoute<T> extends Route<T> {
   /// Creates a route that knows how to interact with an [Overlay].
-  OverlayRoute({
+  FlanOverlayRoute({
     RouteSettings? settings,
   }) : super(settings: settings);
 
@@ -1884,7 +1890,7 @@ class _ModalScope<T> extends StatefulWidget {
     required this.route,
   }) : super(key: key);
 
-  final ModalRoute<T> route;
+  final FlanModalRoute<T> route;
 
   @override
   _ModalScopeState<T> createState() => _ModalScopeState<T>();
@@ -1992,45 +1998,51 @@ class _ModalScopeState<T> extends State<_ModalScope<T>> {
                     child: FocusScope(
                       node: focusScopeNode, // immutable
                       child: RepaintBoundary(
-                        child: AnimatedBuilder(
-                          animation: _listenable, // immutable
-                          builder: (BuildContext context, Widget? child) {
-                            return widget.route.buildTransitions(
-                              context,
-                              widget.route.animation!,
-                              widget.route.secondaryAnimation!,
-                              // This additional AnimatedBuilder is include because if the
-                              // value of the userGestureInProgressNotifier changes, it's
-                              // only necessary to rebuild the IgnorePointer widget and set
-                              // the focus node's ability to focus.
-                              AnimatedBuilder(
-                                animation: widget.route.navigator
-                                        ?.userGestureInProgressNotifier ??
-                                    ValueNotifier<bool>(false),
-                                builder: (BuildContext context, Widget? child) {
-                                  final bool ignoreEvents =
-                                      _shouldIgnoreFocusRequest;
-                                  focusScopeNode.canRequestFocus =
-                                      !ignoreEvents;
-                                  return IgnorePointer(
-                                    ignoring: ignoreEvents,
-                                    child: child,
-                                  );
-                                },
-                                child: child,
-                              ),
-                            );
-                          },
-                          child: _page ??= RepaintBoundary(
-                            key: widget.route._subtreeKey, // immutable
-                            child: Builder(
-                              builder: (BuildContext context) {
-                                return widget.route.buildPage(
+                        child: Align(
+                          alignment: widget.route.popupPosition,
+                          child: UnconstrainedBox(
+                            child: AnimatedBuilder(
+                              animation: _listenable, // immutable
+                              builder: (BuildContext context, Widget? child) {
+                                return widget.route.buildTransitions(
                                   context,
                                   widget.route.animation!,
                                   widget.route.secondaryAnimation!,
+                                  // This additional AnimatedBuilder is include because if the
+                                  // value of the userGestureInProgressNotifier changes, it's
+                                  // only necessary to rebuild the IgnorePointer widget and set
+                                  // the focus node's ability to focus.
+                                  AnimatedBuilder(
+                                    animation: widget.route.navigator
+                                            ?.userGestureInProgressNotifier ??
+                                        ValueNotifier<bool>(false),
+                                    builder:
+                                        (BuildContext context, Widget? child) {
+                                      final bool ignoreEvents =
+                                          _shouldIgnoreFocusRequest;
+                                      focusScopeNode.canRequestFocus =
+                                          !ignoreEvents;
+                                      return IgnorePointer(
+                                        ignoring: ignoreEvents,
+                                        child: child,
+                                      );
+                                    },
+                                    child: child,
+                                  ),
                                 );
                               },
+                              child: _page ??= RepaintBoundary(
+                                key: widget.route._subtreeKey, // immutable
+                                child: Builder(
+                                  builder: (BuildContext context) {
+                                    return widget.route.buildPage(
+                                      context,
+                                      widget.route.animation!,
+                                      widget.route.secondaryAnimation!,
+                                    );
+                                  },
+                                ),
+                              ),
                             ),
                           ),
                         ),
@@ -2080,9 +2092,9 @@ class _DismissModalAction extends DismissAction {
 ///  * [ModalRoute], which indirectly uses this widget.
 ///  * [AnimatedModalBarrier], which is similar but takes an animated [color]
 ///    instead of a single color value.
-class ModalBarrier extends StatelessWidget {
+class FlanModalBarrier extends StatelessWidget {
   /// Creates a widget that blocks user interaction.
-  const ModalBarrier({
+  const FlanModalBarrier({
     Key? key,
     this.color,
     this.dismissible = true,
@@ -2209,9 +2221,9 @@ class ModalBarrier extends StatelessWidget {
 /// See also:
 ///
 ///  * [ModalRoute], which uses this widget.
-class AnimatedModalBarrier extends AnimatedWidget {
+class FlanAnimatedModalBarrier extends AnimatedWidget {
   /// Creates a widget that blocks user interaction.
-  const AnimatedModalBarrier({
+  const FlanAnimatedModalBarrier({
     Key? key,
     required Animation<Color?> color,
     this.dismissible = true,
@@ -2255,7 +2267,7 @@ class AnimatedModalBarrier extends AnimatedWidget {
 
   @override
   Widget build(BuildContext context) {
-    return ModalBarrier(
+    return FlanModalBarrier(
       color: color.value,
       dismissible: dismissible,
       semanticsLabel: semanticsLabel,

@@ -136,7 +136,7 @@ class FlanCell extends RouteStatelessWidget {
         children: <Widget>[
           _buildLeftIcon(context),
           _buildTitle(context),
-          _buildValue(context),
+          Expanded(child: _buildValue(context)),
           _buildRigthIcon(context),
           extraSlots ?? const SizedBox.shrink(),
         ],
@@ -217,7 +217,7 @@ class FlanCell extends RouteStatelessWidget {
   /// 是否可以点击
   bool get _isClickable => isLink || clickable;
 
-  double get _iconLineHeight => _sizeStyle.titleFontSize * 1.4;
+  double get _iconLineHeight => _sizeStyle.titleFontSize * 1.36;
 
   /// 单元格大小样式
   _FlanCellSizeStyle get _sizeStyle {
@@ -245,20 +245,18 @@ class FlanCell extends RouteStatelessWidget {
         tStyle = tStyle.merge(titleStyle);
       }
 
-      return Expanded(
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: <Widget>[
-            DefaultTextStyle(
-              style: tStyle.copyWith(
-                color:
-                    disabled ? ThemeVars.collapseItemTitleDisabledColor : null,
-              ),
-              child: title,
+      return Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: <Widget>[
+          DefaultTextStyle(
+            style: tStyle.copyWith(
+              color: disabled ? ThemeVars.collapseItemTitleDisabledColor : null,
+              // height: ThemeVars.cellLineHeight / ThemeVars.cellFontSize,
             ),
-            _buildLabel(context),
-          ],
-        ),
+            child: title,
+          ),
+          _buildLabel(context),
+        ],
       );
     }
     return const SizedBox.shrink();
@@ -293,12 +291,8 @@ class FlanCell extends RouteStatelessWidget {
   /// 构建右侧内容
   Widget _buildValue(BuildContext context) {
     if (_hasValue) {
-      final Expanded value = Expanded(
-        child: Align(
-          alignment: Alignment.topRight,
-          child: child ?? Text(this.value ?? ''),
-        ),
-      );
+      final Widget value =
+          child ?? Text(this.value ?? '', textAlign: TextAlign.right);
 
       final TextStyle vStyle = _cellTextStyle.copyWith(
         color: disabled
@@ -322,7 +316,7 @@ class FlanCell extends RouteStatelessWidget {
   /// 构建左侧图标
   Widget _buildLeftIcon(BuildContext context) {
     if (iconSlot != null) {
-      return IconTheme(
+      return IconTheme.merge(
         data: IconThemeData(
           color: disabled ? ThemeVars.collapseItemTitleDisabledColor : null,
           size: ThemeVars.cellIconSize,
@@ -362,7 +356,7 @@ class FlanCell extends RouteStatelessWidget {
   /// 构建右侧图标
   Widget _buildRigthIcon(BuildContext context) {
     if (rightIconSlot != null) {
-      return IconTheme(
+      return IconTheme.merge(
         data: IconThemeData(
           size: ThemeVars.cellIconSize,
           color: disabled
@@ -394,7 +388,6 @@ class FlanCell extends RouteStatelessWidget {
           minHeight: _iconLineHeight,
         ),
         padding: const EdgeInsets.only(left: ThemeVars.paddingBase),
-        // height: this._iconLineHeight,
         alignment: Alignment.center,
         child: FlanIcon(
           iconName: iconName,

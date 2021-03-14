@@ -416,7 +416,7 @@ class ThemeVars {
   static const double emptyBottomMarginTop = 24.0;
 
   // Field
-  static const String fieldLabelWidth = '6.2em';
+  static const double fieldLabelWidth = 6.2;
   static const Color fieldLabelColor = gray7;
   static const double fieldLabelMarginRight = paddingSm;
   static const Color fieldInputTextColor = textColor;
