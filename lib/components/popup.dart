@@ -524,6 +524,7 @@ class _FlanPopupRoute<T extends dynamic> extends FlanPopupRoute<T> {
         super.didPop(result);
   }
 
+  @override
   VoidCallback? get onOverlayClick => _onOverlayClick;
   final VoidCallback? _onOverlayClick;
 
@@ -535,6 +536,7 @@ class _FlanPopupRoute<T extends dynamic> extends FlanPopupRoute<T> {
   String get barrierLabel => _barrierLabel;
   final String _barrierLabel;
 
+  @override
   bool get closeOnPopstate => _closeOnPopstate;
   final bool _closeOnPopstate;
 

@@ -321,7 +321,7 @@ class _FlanFieldState<T extends dynamic> extends State<FlanField<T>> {
               Expanded(child: _buildInput()),
               if (showClear)
                 Padding(
-                  padding: EdgeInsets.only(left: ThemeVars.paddingXs),
+                  padding: const EdgeInsets.only(left: ThemeVars.paddingXs),
                   child: FlanIcon.name(
                     FlanIcons.clear,
                     color: ThemeVars.fieldClearIconColor,
