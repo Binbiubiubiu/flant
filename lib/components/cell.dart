@@ -154,7 +154,7 @@ class FlanCell extends RouteStatelessWidget {
               style: TextStyle(
                 color: ThemeVars.cellRequiredColor,
                 fontSize: ThemeVars.cellFontSize,
-                height: 1.4,
+                height: 1.2,
               ),
             ),
           ),

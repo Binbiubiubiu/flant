@@ -10,11 +10,11 @@ class FlanForm extends StatefulWidget {
     this.readonly = false,
     this.showError = true,
     this.labelWidth,
-    this.labelAlign = FlanFieldTextAlign.left,
-    this.inputAlign = FlanFieldTextAlign.left,
+    this.labelAlign = TextAlign.left,
+    this.inputAlign = TextAlign.left,
     this.scrollToError = false,
     this.validateFirst = false,
-    this.errMessageAlign = FlanFieldTextAlign.left,
+    this.errMessageAlign = TextAlign.left,
     this.submitOnEnter = true,
     this.validateTrigger = FlanFieldValidateTrigger.onBlur,
     this.showErrorMessage = true,
@@ -40,10 +40,10 @@ class FlanForm extends StatefulWidget {
   final double? labelWidth;
 
   /// 表单项 label 对齐方式，可选值为 `left` `center` `right`
-  final FlanFieldTextAlign labelAlign;
+  final TextAlign labelAlign;
 
   /// 输入框对齐方式，可选值为 `left` `center` `right`
-  final FlanFieldTextAlign inputAlign;
+  final TextAlign inputAlign;
 
   /// 是否在提交表单且校验不通过时滚动至错误的表单项
   final bool scrollToError;
@@ -52,7 +52,7 @@ class FlanForm extends StatefulWidget {
   final bool validateFirst;
 
   /// 错误提示文案对齐方式，可选值为 `left` `center` `right`
-  final FlanFieldTextAlign errMessageAlign;
+  final TextAlign errMessageAlign;
 
   /// 是否在按下回车键时提交表单
   final bool submitOnEnter;
@@ -197,12 +197,12 @@ class FlanFormState extends State<FlanForm> {
         defaultValue: true));
     properties
         .add(DiagnosticsProperty<double>('labelWidth', widget.labelWidth));
-    properties.add(DiagnosticsProperty<FlanFieldTextAlign>(
+    properties.add(DiagnosticsProperty<TextAlign>(
         'labelAlign', widget.labelAlign,
-        defaultValue: FlanFieldTextAlign.left));
-    properties.add(DiagnosticsProperty<FlanFieldTextAlign>(
+        defaultValue: TextAlign.left));
+    properties.add(DiagnosticsProperty<TextAlign>(
         'inputAlign', widget.inputAlign,
-        defaultValue: FlanFieldTextAlign.left));
+        defaultValue: TextAlign.left));
     properties.add(DiagnosticsProperty<bool>(
         'scrollToError', widget.scrollToError,
         defaultValue: false));
@@ -212,9 +212,9 @@ class FlanFormState extends State<FlanForm> {
     properties.add(DiagnosticsProperty<bool>(
         'submitOnEnter', widget.submitOnEnter,
         defaultValue: true));
-    properties.add(DiagnosticsProperty<FlanFieldTextAlign>(
+    properties.add(DiagnosticsProperty<TextAlign>(
         'errMessageAlign', widget.errMessageAlign,
-        defaultValue: FlanFieldTextAlign.left));
+        defaultValue: TextAlign.left));
     properties.add(DiagnosticsProperty<FlanFieldValidateTrigger>(
         'validateTrigger', widget.validateTrigger,
         defaultValue: FlanFieldValidateTrigger.onBlur));

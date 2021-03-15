@@ -45,6 +45,7 @@ class FlanField<T extends dynamic> extends StatefulWidget {
     this.inputAlign,
     this.errMessageAlign,
     this.autosize,
+    this.rows,
     this.leftIconName,
     this.leftIconUrl,
     this.rightIconName,
@@ -144,7 +145,7 @@ class FlanField<T extends dynamic> extends StatefulWidget {
   final String? errorMessage;
 
   /// 输入内容格式化函数
-  final TextInputFormatter? formatter;
+  final String Function(String)? formatter;
 
   /// 格式化函数触发的时机，可选值为 `onBlur` `onChange`
   final FlanFieldFormatTrigger formatTrigger;
@@ -159,16 +160,19 @@ class FlanField<T extends dynamic> extends StatefulWidget {
   final double? labelWidth;
 
   /// 左侧文本对齐方式，可选值为 `left` `center` `right`
-  final FlanFieldTextAlign? labelAlign;
+  final TextAlign? labelAlign;
 
   /// 输入框对齐方式，可选值为 `left` `center` `right`
-  final FlanFieldTextAlign? inputAlign;
+  final TextAlign? inputAlign;
 
   /// 错误提示文案对齐方式，可选值为 `left` `center` `right`
-  final FlanFieldTextAlign? errMessageAlign;
+  final TextAlign? errMessageAlign;
 
   /// 是否自适应内容高度，只对 textarea 有效
   final BoxConstraints? autosize;
+
+  /// 是否自适应内容高度，只对 textarea 有效
+  final int? rows;
 
   /// 左侧图标名称
   final int? leftIconName;
@@ -238,10 +242,10 @@ class FlanField<T extends dynamic> extends StatefulWidget {
       {List<FlanFieldRule>? rules}) validate;
 
   @override
-  _FlanFieldState<T> createState() => _FlanFieldState<T>();
+  FlanFieldState<T> createState() => FlanFieldState<T>();
 }
 
-class _FlanFieldState<T extends dynamic> extends State<FlanField<T>> {
+class FlanFieldState<T extends dynamic> extends State<FlanField<T>> {
   bool focuesd = false;
   bool validateFailed = false;
   String validateMessage = '';
@@ -267,7 +271,23 @@ class _FlanFieldState<T extends dynamic> extends State<FlanField<T>> {
   }
 
   void onInput() => updateValue(editingController.text);
-  void onFouse() => setState(() => focuesd = focusNode.hasFocus);
+  void onFouse() {
+    focuesd = focusNode.hasFocus;
+    if (focuesd) {
+      if (widget.onFocus != null) {
+        widget.onFocus!();
+      }
+    } else {
+      if (widget.formatTrigger == FlanFieldFormatTrigger.onBlur) {
+        updateValue(_formatNumber(modelvalue));
+      }
+      if (widget.onBlur != null) {
+        widget.onBlur!();
+      }
+      _validateWithTrigger(FlanFieldValidateTrigger.onBlur);
+    }
+    setState(() {});
+  }
 
   @override
   void dispose() {
@@ -292,6 +312,20 @@ class _FlanFieldState<T extends dynamic> extends State<FlanField<T>> {
     }
     super.didUpdateWidget(oldWidget);
   }
+
+  Future<FlanFieldValidateError?> validate({List<FlanFieldRule>? rules}) async {
+    rules ??= widget.rules;
+    _resetValidation();
+    if (rules.isNotEmpty) {
+      await _runRules(rules);
+      if (validateFailed) {
+        return FlanFieldValidateError(validateMessage, name: widget.name);
+      }
+    }
+  }
+
+  void focus() => focusNode.requestFocus();
+  void blur() => focusNode.unfocus();
 
   @override
   Widget build(BuildContext context) {
@@ -337,7 +371,11 @@ class _FlanFieldState<T extends dynamic> extends State<FlanField<T>> {
               else
                 const SizedBox.shrink(),
               _buildRightIcon(),
-              widget.buttonSlot ?? Container(child: widget.buttonSlot)
+              widget.buttonSlot ??
+                  Padding(
+                    padding: const EdgeInsets.only(left: ThemeVars.paddingXs),
+                    child: widget.buttonSlot,
+                  )
             ],
           ),
           _buildWordLimt(),
@@ -388,17 +426,6 @@ class _FlanFieldState<T extends dynamic> extends State<FlanField<T>> {
         validateFailed = false;
         validateMessage = '';
       });
-    }
-  }
-
-  Future<FlanFieldValidateError?> validate({List<FlanFieldRule>? rules}) async {
-    rules ??= widget.rules;
-    _resetValidation();
-    if (rules.isNotEmpty) {
-      await _runRules(rules);
-      if (validateFailed) {
-        return FlanFieldValidateError(validateMessage, name: widget.name);
-      }
     }
   }
 
@@ -467,20 +494,17 @@ class _FlanFieldState<T extends dynamic> extends State<FlanField<T>> {
   List<TextInputFormatter> get formatters {
     final List<TextInputFormatter> result = <TextInputFormatter>[];
     if (widget.type == FlanFieldType.number) {
-      result.add(
-        FilteringTextInputFormatter.allow(RegExp(r'^-?([0-9]+\.)?[0-9]*$')),
-      );
+      result.add(TextInputFormatter.withFunction(_customFormat(_formatNumber)));
     }
 
     if (widget.type == FlanFieldType.digit) {
-      result.add(
-        FilteringTextInputFormatter.digitsOnly,
-      );
+      result.add(FilteringTextInputFormatter.digitsOnly);
     }
 
     if (widget.formatter != null &&
         widget.formatTrigger == FlanFieldFormatTrigger.onChange) {
-      result.add(widget.formatter!);
+      result.add(
+          TextInputFormatter.withFunction(_customFormat(widget.formatter!)));
     }
 
     return result;
@@ -491,7 +515,7 @@ class _FlanFieldState<T extends dynamic> extends State<FlanField<T>> {
     return widget.value;
   }
 
-  bool showError() {
+  bool get showError {
     return widget.error || (form != null && form!.showError && validateFailed);
   }
 
@@ -509,43 +533,84 @@ class _FlanFieldState<T extends dynamic> extends State<FlanField<T>> {
   }
 
   Widget _buildInput() {
-    final FlanFieldTextAlign? inputAlign =
-        widget.inputAlign ?? form?.inputAlign;
+    final TextAlign inputAlign =
+        widget.inputAlign ?? form?.inputAlign ?? TextAlign.left;
     if (widget.inputSlot != null) {
       return Container(
-        child: widget.inputSlot,
+        constraints: const BoxConstraints(
+          minHeight: ThemeVars.cellLineHeight,
+        ),
+        alignment: <TextAlign, Alignment>{
+          TextAlign.left: Alignment.centerLeft,
+          TextAlign.center: Alignment.center,
+          TextAlign.right: Alignment.centerRight,
+        }[inputAlign],
+        child: DefaultTextStyle(
+          style: TextStyle(
+            color: showError
+                ? ThemeVars.fieldInputErrorTextColor
+                : ThemeVars.fieldInputTextColor,
+          ),
+          child: widget.inputSlot!,
+        ),
       );
     }
-    // if (editingController.text.isEmpty) {
-    //   return Text(widget.placeholder);
-    // }
 
-    return TextField(
-      decoration: InputDecoration(
-        border: InputBorder.none,
-        contentPadding: EdgeInsets.zero,
-        hintText: widget.placeholder,
-        hintStyle: const TextStyle(color: ThemeVars.fieldPlaceholderTextColor),
-        isDense: true,
-      ),
-      scrollPadding: EdgeInsets.zero,
-      mouseCursor: disabled ? SystemMouseCursors.forbidden : null,
-      enabled: !disabled,
-      readOnly: widget.readonly,
-      controller: editingController,
-      focusNode: focusNode,
-      keyboardType: <TextInputType, TextInputType>{}[widget.type],
-      cursorWidth: 1.0,
-      obscureText: widget.type == FlanFieldType.password,
-      obscuringCharacter: '●',
-      inputFormatters: formatters,
-      style: TextStyle(
-        color: disabled
-            ? ThemeVars.fieldDisabledTextColor
+    return Container(
+      constraints: widget.autosize ??
+          (widget.type == FlanFieldType.textarea
+              ? const BoxConstraints(
+                  minHeight: ThemeVars.fieldTextAreaMinHeight)
+              : widget.autosize),
+      child: TextField(
+        textAlign: inputAlign,
+        decoration: InputDecoration(
+          border: InputBorder.none,
+          contentPadding: EdgeInsets.zero,
+          hintText: widget.placeholder,
+          hintStyle: TextStyle(
+            color: showError
+                ? ThemeVars.fieldInputErrorTextColor
+                : ThemeVars.fieldPlaceholderTextColor,
+          ),
+
+          counterText: '',
+          // errorStyle: TextStyle(),
+          isDense: true,
+        ),
+        textInputAction: <FlanFieldType, TextInputAction>{
+          FlanFieldType.search: TextInputAction.search,
+        }[widget.type],
+        scrollPadding: EdgeInsets.zero,
+        mouseCursor: disabled ? SystemMouseCursors.forbidden : null,
+        enabled: !disabled,
+        readOnly: widget.readonly,
+        controller: editingController,
+        focusNode: focusNode,
+        keyboardType: <FlanFieldType, TextInputType>{
+          FlanFieldType.digit: TextInputType.number,
+          FlanFieldType.number: TextInputType.number,
+        }[widget.type],
+        cursorWidth: 1.0,
+        obscureText: widget.type == FlanFieldType.password,
+        obscuringCharacter: '●',
+        inputFormatters: formatters,
+        style: TextStyle(
+          color: disabled
+              ? ThemeVars.fieldDisabledTextColor
+              : showError
+                  ? ThemeVars.fieldInputErrorTextColor
+                  : ThemeVars.fieldInputTextColor,
+          fontSize: ThemeVars.cellFontSize,
+        ),
+        cursorColor: showError
+            ? ThemeVars.fieldInputErrorTextColor
             : ThemeVars.fieldInputTextColor,
-        fontSize: ThemeVars.cellFontSize,
+        maxLength: widget.maxLength,
+        maxLengthEnforcement: MaxLengthEnforcement.enforced,
+        maxLines: widget.type == FlanFieldType.textarea ? null : 1,
+        minLines: widget.rows,
       ),
-      cursorColor: ThemeVars.fieldInputTextColor,
     );
   }
 
@@ -597,7 +662,15 @@ class _FlanFieldState<T extends dynamic> extends State<FlanField<T>> {
     if (widget.showWordLimit && widget.maxLength != null) {
       final int count = modelvalue.length;
       return Container(
-        child: Text('$count/${widget.maxLength}'),
+        padding: const EdgeInsets.only(top: ThemeVars.paddingBase),
+        alignment: Alignment.centerRight,
+        child: Text(
+          '$count/${widget.maxLength}',
+          style: const TextStyle(
+            color: ThemeVars.fieldWordLimitColor,
+            fontSize: ThemeVars.fieldWordLimitFontSize,
+          ),
+        ),
       );
     }
 
@@ -611,11 +684,23 @@ class _FlanFieldState<T extends dynamic> extends State<FlanField<T>> {
 
     final String message = widget.errorMessage ?? validateMessage;
     if (message.isNotEmpty) {
-      final FlanFieldTextAlign? errorMessageAlign =
-          widget.errMessageAlign ?? form?.errMessageAlign;
+      final TextAlign errorMessageAlign =
+          widget.errMessageAlign ?? form?.errMessageAlign ?? TextAlign.left;
 
-      return Text(
-        message,
+      return Container(
+        alignment: <TextAlign, Alignment>{
+          TextAlign.left: Alignment.centerLeft,
+          TextAlign.center: Alignment.center,
+          TextAlign.right: Alignment.centerRight,
+        }[errorMessageAlign],
+        child: Text(
+          message,
+          style: TextStyle(
+            color: ThemeVars.fieldErrorMessageColor,
+            fontSize: ThemeVars.fieldErrorMessageTextColor,
+          ),
+          textAlign: errorMessageAlign,
+        ),
       );
     }
 
@@ -633,8 +718,8 @@ class _FlanFieldState<T extends dynamic> extends State<FlanField<T>> {
         right: ThemeVars.fieldLabelMarginRight,
       );
 
-      final FlanFieldTextAlign labelAlign =
-          widget.labelAlign ?? form?.labelAlign ?? FlanFieldTextAlign.left;
+      final TextAlign labelAlign =
+          widget.labelAlign ?? form?.labelAlign ?? TextAlign.left;
 
       Widget? labelContent;
 
@@ -665,10 +750,10 @@ class _FlanFieldState<T extends dynamic> extends State<FlanField<T>> {
           child: Container(
             width: labelWidth,
             padding: labelMargin,
-            alignment: <FlanFieldTextAlign, Alignment>{
-              FlanFieldTextAlign.left: Alignment.centerLeft,
-              FlanFieldTextAlign.center: Alignment.center,
-              FlanFieldTextAlign.right: Alignment.centerRight,
+            alignment: <TextAlign, Alignment>{
+              TextAlign.left: Alignment.centerLeft,
+              TextAlign.center: Alignment.center,
+              TextAlign.right: Alignment.centerRight,
             }[labelAlign],
             child: labelContent,
           ),
@@ -722,8 +807,8 @@ class _FlanFieldState<T extends dynamic> extends State<FlanField<T>> {
     properties.add(DiagnosticsProperty<String>(
         'errorMessage', widget.errorMessage,
         defaultValue: ''));
-    properties.add(
-        DiagnosticsProperty<TextInputFormatter>('formatter', widget.formatter));
+    properties.add(DiagnosticsProperty<String Function(String)>(
+        'formatter', widget.formatter));
     properties.add(DiagnosticsProperty<FlanFieldFormatTrigger>(
         'formatTrigger', widget.formatTrigger,
         defaultValue: FlanFieldFormatTrigger.onChange));
@@ -734,16 +819,16 @@ class _FlanFieldState<T extends dynamic> extends State<FlanField<T>> {
         .add(DiagnosticsProperty<TextStyle>('labelStyle', widget.labelStyle));
     properties.add(DiagnosticsProperty<double>('labelWidth', widget.labelWidth,
         defaultValue: 0.0));
-    properties.add(DiagnosticsProperty<FlanFieldTextAlign>(
+    properties.add(DiagnosticsProperty<TextAlign>(
         'labelAlign', widget.labelAlign,
-        defaultValue: FlanFieldTextAlign.left));
-    properties.add(DiagnosticsProperty<FlanFieldTextAlign>(
+        defaultValue: TextAlign.left));
+    properties.add(DiagnosticsProperty<TextAlign>(
         'inputAlign', widget.inputAlign,
-        defaultValue: FlanFieldTextAlign.left));
+        defaultValue: TextAlign.left));
 
-    properties.add(DiagnosticsProperty<FlanFieldTextAlign>(
+    properties.add(DiagnosticsProperty<TextAlign>(
         'errMessageAlign', widget.errMessageAlign,
-        defaultValue: FlanFieldTextAlign.left));
+        defaultValue: TextAlign.left));
 
     properties
         .add(DiagnosticsProperty<BoxConstraints>('autosize', widget.autosize));
@@ -830,12 +915,6 @@ enum FlanFieldType {
   textarea,
 }
 
-enum FlanFieldTextAlign {
-  left,
-  center,
-  right,
-}
-
 enum FlanFieldClearTrigger {
   always,
   focus,
@@ -887,4 +966,70 @@ String getRuleMessage(dynamic value, FlanFieldRule rule) {
 Future<dynamic> runRuleValidator(dynamic value, FlanFieldRule rule) async {
   final dynamic returnVal = rule.validator!<dynamic, dynamic>(value, rule);
   return returnVal;
+}
+
+String _trimExtraChar(String value, String char, RegExp regExp) {
+  final int index = value.indexOf(char);
+
+  if (index == -1) {
+    return value;
+  }
+
+  if (char == '-' && index != 0) {
+    return value.substring(0, index);
+  }
+
+  return value.substring(0, index + 1) +
+      value.substring(index).replaceAll(regExp, '');
+}
+
+String _formatNumber(String value) {
+  value = _trimExtraChar(value, '.', RegExp(r'\.'));
+
+  value = _trimExtraChar(value, '-', RegExp(r'-'));
+
+  return value.replaceAll(RegExp(r'[^-0-9.]'), '');
+}
+
+TextEditingValue Function(TextEditingValue, TextEditingValue) _customFormat(
+  String Function(String) formatFunction,
+) {
+  return (
+    TextEditingValue oldValue,
+    TextEditingValue value,
+  ) {
+    final int selectionStartIndex = value.selection.start;
+    final int selectionEndIndex = value.selection.end;
+    String manipulatedText;
+    TextSelection? manipulatedSelection;
+    if (selectionStartIndex < 0 || selectionEndIndex < 0) {
+      manipulatedText = formatFunction(value.text);
+    } else {
+      final String beforeSelection =
+          formatFunction(value.text.substring(0, selectionStartIndex));
+      final String inSelection = formatFunction(
+          value.text.substring(selectionStartIndex, selectionEndIndex));
+      final String afterSelection =
+          formatFunction(value.text.substring(selectionEndIndex));
+      manipulatedText = beforeSelection + inSelection + afterSelection;
+      if (value.selection.baseOffset > value.selection.extentOffset) {
+        manipulatedSelection = value.selection.copyWith(
+          baseOffset: beforeSelection.length + inSelection.length,
+          extentOffset: beforeSelection.length,
+        );
+      } else {
+        manipulatedSelection = value.selection.copyWith(
+          baseOffset: beforeSelection.length,
+          extentOffset: beforeSelection.length + inSelection.length,
+        );
+      }
+    }
+    return TextEditingValue(
+      text: manipulatedText,
+      selection:
+          manipulatedSelection ?? const TextSelection.collapsed(offset: -1),
+      composing:
+          manipulatedText == value.text ? value.composing : TextRange.empty,
+    );
+  };
 }
