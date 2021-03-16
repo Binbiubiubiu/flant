@@ -15,24 +15,35 @@ import 'intl/messages_all.dart';
 class FlanS {
   FlanS();
 
-  static FlanS? current;
+  static FlanS? _current;
 
-  static const AppLocalizationDelegate delegate = AppLocalizationDelegate();
-
-  static Future<FlanS> load(Locale locale) {
-    final String name = (locale.countryCode?.isEmpty ?? false)
-        ? locale.languageCode
-        : locale.toString();
-    final localeName = Intl.canonicalizedLocale(name);
-    return initializeMessages(localeName).then((_) {
-      Intl.defaultLocale = localeName;
-      FlanS.current = FlanS();
-
-      return FlanS.current!;
-    });
+  static FlanS get current {
+    assert(_current != null, 'No instance of FlanS was loaded. Try to initialize the FlanS delegate before accessing FlanS.current.');
+    return _current!;
   }
 
-  static FlanS? of(BuildContext context) {
+  static const AppLocalizationDelegate delegate =
+    AppLocalizationDelegate();
+
+  static Future<FlanS> load(Locale locale) {
+    final name = (locale.countryCode?.isEmpty ?? false) ? locale.languageCode : locale.toString();
+    final localeName = Intl.canonicalizedLocale(name); 
+    return initializeMessages(localeName).then((_) {
+      Intl.defaultLocale = localeName;
+      final instance = FlanS();
+      FlanS._current = instance;
+ 
+      return instance;
+    });
+  } 
+
+  static FlanS of(BuildContext context) {
+    final instance = FlanS.maybeOf(context);
+    assert(instance != null, 'No instance of FlanS present in the widget tree. Did you add FlanS.delegate in localizationsDelegates?');
+    return instance!;
+  }
+
+  static FlanS? maybeOf(BuildContext context) {
     return Localizations.of<FlanS>(context, FlanS);
   }
 

@@ -695,7 +695,7 @@ class FlanFieldState<T extends dynamic> extends State<FlanField<T>> {
         }[errorMessageAlign],
         child: Text(
           message,
-          style: TextStyle(
+          style: const TextStyle(
             color: ThemeVars.fieldErrorMessageColor,
             fontSize: ThemeVars.fieldErrorMessageTextColor,
           ),

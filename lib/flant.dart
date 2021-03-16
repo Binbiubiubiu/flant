@@ -31,5 +31,5 @@ export './components/tabbar.dart';
 export './components/tabbar_item.dart';
 export './components/tag.dart';
 export './components/toast.dart';
-export './locale/main.dart';
+export './locale/l10n.dart';
 export './styles/var.dart';

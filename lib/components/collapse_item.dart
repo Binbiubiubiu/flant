@@ -132,6 +132,7 @@ class _FlanCollapseItemState extends State<FlanCollapseItem>
     collapseIconAnimation = collapseAnimationController
         .drive(CurveTween(curve: Curves.linear))
         .drive(Tween<double>(begin: 0.0, end: -0.5));
+    collapseWrapperAnimation = collapseAnimationController;
 
     WidgetsBinding.instance?.addPostFrameCallback((Duration timeStamp) {
       final double? height = wrapKey.currentContext?.size?.height;
