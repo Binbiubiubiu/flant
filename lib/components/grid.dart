@@ -62,14 +62,7 @@ class FlanGrid extends StatelessWidget {
         builder: (BuildContext context, BoxConstraints constraints) {
           return FlanGridProvider(
             maxWidth: constraints.maxWidth,
-            columnNum: columnNum,
-            center: center,
-            border: border,
-            square: square,
-            iconSize: iconSize,
-            gutter: gutter,
-            direction: direction,
-            clickable: clickable,
+            grid: this,
             child: Wrap(
               crossAxisAlignment: WrapCrossAlignment.center,
               children: children,
@@ -106,27 +99,12 @@ class FlanGridProvider extends InheritedWidget {
   const FlanGridProvider({
     Key? key,
     required this.maxWidth,
-    required this.columnNum,
-    required this.center,
-    required this.border,
-    required this.square,
-    this.iconSize,
-    required this.gutter,
-    required this.direction,
-    required this.clickable,
+    required this.grid,
     required Wrap child,
   }) : super(key: key, child: child);
 
   final double maxWidth;
-
-  final int columnNum;
-  final bool center;
-  final bool border;
-  final bool square;
-  final double? iconSize;
-  final double gutter;
-  final Axis direction;
-  final bool clickable;
+  final FlanGrid grid;
 
   static FlanGridProvider? of(BuildContext context) {
     return context.dependOnInheritedWidgetOfExactType<FlanGridProvider>();
@@ -134,14 +112,6 @@ class FlanGridProvider extends InheritedWidget {
 
   @override
   bool updateShouldNotify(FlanGridProvider oldWidget) {
-    return maxWidth != oldWidget.maxWidth ||
-        columnNum != oldWidget.columnNum ||
-        center != oldWidget.center ||
-        border != oldWidget.border ||
-        square != oldWidget.square ||
-        iconSize != oldWidget.iconSize ||
-        gutter != oldWidget.gutter ||
-        direction != oldWidget.direction ||
-        clickable != oldWidget.clickable;
+    return maxWidth != oldWidget.maxWidth || grid != oldWidget.grid;
   }
 }

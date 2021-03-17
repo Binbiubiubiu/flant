@@ -25,6 +25,8 @@ export './components/progress.dart';
 export './components/row.dart';
 export './components/search.dart';
 export './components/skeleton.dart';
+export './components/step.dart';
+export './components/steps.dart';
 export './components/style.dart';
 export './components/switch.dart';
 export './components/tabbar.dart';

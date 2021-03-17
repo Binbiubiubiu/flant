@@ -19,7 +19,7 @@
 - [ ] Cascader 级联选择
 - [ ] Checkbox 复选框
 - [ ] DatetimePicker 时间选择
-- [ ] Field 输入框
+- [x] Field 输入框
 - [ ] Form 表单
 - [ ] NumberKeyboard 数字键盘
 - [ ] PasswordInput 密码输入框
@@ -38,7 +38,7 @@
 - [ ] Dialog 弹出框
 - [ ] DropdownMenu 下拉菜单
 - [x] Loading 加载
-- [x] Notify 消息通知
+- [ ] Notify 消息通知
 - [x] Overlay 遮罩层
 - [ ] PullRefresh 下拉刷新
 - [ ] ShareSheet 分享面板
@@ -59,7 +59,7 @@
 - [ ] Popover 气泡弹出框
 - [x] Progress 进度条
 - [x] Skeleton 骨架屏
-- [ ] Steps 步骤条
+- [x] Steps 步骤条
 - [ ] Sticky 粘性布局
 - [ ] Swipe 轮播
 - [x] Tag 标签

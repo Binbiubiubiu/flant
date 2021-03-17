@@ -66,10 +66,10 @@ class FlanGridItem extends RouteStatelessWidget {
 
     final int index = (parent.child as Wrap).children.indexOf(this);
 
-    final double size = 1 / parent.columnNum * parent.maxWidth;
+    final double size = 1 / parent.grid.columnNum * parent.maxWidth;
 
-    final bool surround = parent.border && parent.gutter > 0.0;
-    final Border? border = parent.border
+    final bool surround = parent.grid.border && parent.grid.gutter > 0.0;
+    final Border? border = parent.grid.border
         ? Border(
             right: const FlanHairLine(),
             bottom: const FlanHairLine(),
@@ -80,21 +80,22 @@ class FlanGridItem extends RouteStatelessWidget {
 
     return Container(
       width: size,
-      height: parent.square ? size : null,
-      padding: EdgeInsets.only(right: parent.gutter),
+      height: parent.grid.square ? size : null,
+      padding: EdgeInsets.only(right: parent.grid.gutter),
       margin: EdgeInsets.only(
-        top: index >= parent.columnNum ? parent.gutter : 0,
+        top: index >= parent.grid.columnNum ? parent.grid.gutter : 0,
       ),
       child: Semantics(
-        button: parent.clickable,
-        sortKey: parent.clickable ? const OrdinalSortKey(0.0) : null,
+        button: parent.grid.clickable,
+        sortKey: parent.grid.clickable ? const OrdinalSortKey(0.0) : null,
         child: Material(
-          type: parent.clickable ? MaterialType.button : MaterialType.canvas,
+          type:
+              parent.grid.clickable ? MaterialType.button : MaterialType.canvas,
           color: ThemeVars.gridItemContentBackgroundColor,
           child: InkWell(
             splashColor: Colors.transparent,
             highlightColor: ThemeVars.gridItemContentActiveColor,
-            onTap: parent.clickable
+            onTap: parent.grid.clickable
                 ? () {
                     route(context);
                     if (onClick != null) {
@@ -106,13 +107,13 @@ class FlanGridItem extends RouteStatelessWidget {
               padding: ThemeVars.gridItemContentPadding,
               decoration: BoxDecoration(border: border),
               child: Flex(
-                mainAxisAlignment: parent.center
+                mainAxisAlignment: parent.grid.center
                     ? MainAxisAlignment.center
                     : MainAxisAlignment.start,
-                crossAxisAlignment: parent.center
+                crossAxisAlignment: parent.grid.center
                     ? CrossAxisAlignment.center
                     : CrossAxisAlignment.start,
-                direction: parent.direction,
+                direction: parent.grid.direction,
                 children: _buildContext(context),
               ),
             ),
@@ -134,7 +135,7 @@ class FlanGridItem extends RouteStatelessWidget {
         dot: dot,
         iconName: iconName,
         iconUrl: iconUrl,
-        size: parent.iconSize ?? ThemeVars.gridItemIconSize,
+        size: parent.grid.iconSize ?? ThemeVars.gridItemIconSize,
         badge: badge,
         classPrefix: iconPrefix,
       );
