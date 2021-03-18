@@ -65,35 +65,37 @@ class FlanActionBarIcon extends RouteStatelessWidget {
     return Semantics(
       button: true,
       sortKey: const OrdinalSortKey(0),
-      child: Container(
-        color: ThemeVars.white,
+      child: ConstrainedBox(
         constraints: const BoxConstraints(
           minWidth: ThemeVars.actionBarIconWidth,
         ),
-        child: InkWell(
-          splashColor: Colors.transparent,
-          highlightColor: ThemeVars.black.withOpacity(0.1),
-          onTap: () {
-            route(context);
-            if (onClick != null) {
-              onClick!();
-            }
-          },
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: <Widget>[
-              _buildIcon(),
-              const SizedBox(height: 5.0),
-              DefaultTextStyle(
-                textAlign: TextAlign.center,
-                style: const TextStyle(
-                  color: ThemeVars.actionBarIconTextColor,
-                  fontSize: ThemeVars.actionBarIconFontSize,
-                  height: 1.0,
+        child: Material(
+          color: ThemeVars.white,
+          child: InkWell(
+            splashColor: Colors.transparent,
+            highlightColor: ThemeVars.black.withOpacity(0.1),
+            onTap: () {
+              route(context);
+              if (onClick != null) {
+                onClick!();
+              }
+            },
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: <Widget>[
+                _buildIcon(),
+                const SizedBox(height: 5.0),
+                DefaultTextStyle(
+                  textAlign: TextAlign.center,
+                  style: const TextStyle(
+                    color: ThemeVars.actionBarIconTextColor,
+                    fontSize: ThemeVars.actionBarIconFontSize,
+                    height: 1.0,
+                  ),
+                  child: child ?? Text(text),
                 ),
-                child: child ?? Text(text),
-              ),
-            ],
+              ],
+            ),
           ),
         ),
       ),
