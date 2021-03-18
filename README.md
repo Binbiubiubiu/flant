@@ -66,7 +66,7 @@
 
 ##### 导航组件
 
-- [ ] ActionBar 动作栏
+- [x] ActionBar 动作栏
 - [x] Grid 宫格
 - [ ] IndexBar 索引栏
 - [x] NavBar 导航栏
@@ -88,4 +88,3 @@
 - [ ] Coupon 优惠券
 - [ ] GoodsAction 商品导航
 - [ ] SubmitBar 提交订单栏
-- [ ] Sku 商品规格

@@ -23,19 +23,21 @@ class ThemeVars {
 
   // Gradient Colors
   static const LinearGradient gradientRed = LinearGradient(
-      begin: Alignment.centerLeft,
-      end: Alignment.centerRight,
-      colors: <Color>[
-        Color(0xffff6034),
-        Color(0xffee0a24),
-      ]);
+    begin: Alignment.centerLeft,
+    end: Alignment.centerRight,
+    colors: <Color>[
+      Color(0xffff6034),
+      Color(0xffee0a24),
+    ],
+  );
   static const LinearGradient gradientOrange = LinearGradient(
-      begin: Alignment.centerLeft,
-      end: Alignment.centerRight,
-      colors: <Color>[
-        Color(0xffffd01e),
-        Color(0xffff8917),
-      ]);
+    begin: Alignment.centerLeft,
+    end: Alignment.centerRight,
+    colors: <Color>[
+      Color(0xffffd01e),
+      Color(0xffff8917),
+    ],
+  );
 
   // Component Colors
   static const Color textColor = gray8;

@@ -29,6 +29,7 @@ class FlanButton extends RouteStatelessWidget {
     this.loadingText,
     this.loadingType = FlanLoadingType.circular,
     this.loadingSize = 20.0,
+    this.radius,
     this.onClick,
     this.onTouchStart,
     this.child,
@@ -102,6 +103,9 @@ class FlanButton extends RouteStatelessWidget {
   /// 加载图标大小
   final double loadingSize;
 
+  /// 圆角大小
+  final BorderRadius? radius;
+
   // ****************** Events ******************
   /// 点击按钮，且按钮状态不为加载或禁用时触发
   final GestureTapCallback? onClick;
@@ -133,34 +137,37 @@ class FlanButton extends RouteStatelessWidget {
 
     final Color bgColor = (plain ? null : color) ?? _themeType.backgroundColor;
 
-    Widget _btn = Material(
-      type: MaterialType.button,
-      textStyle: textStyle,
-      color: bgColor,
-      borderRadius: radius,
-      child: Ink(
-        decoration: BoxDecoration(
-          border: _themeType.border,
-          borderRadius: radius,
-          gradient: gradient,
-        ),
-        height: _btnSize.height,
-        child: InkWell(
-          borderRadius: radius,
-          splashColor: Colors.transparent,
-          highlightColor: ThemeVars.black.withOpacity(0.1),
-          onTapDown: onTouchStart,
-          onTap: disabled
-              ? null
-              : () {
-                  if (onClick != null) {
-                    onClick!();
-                  }
-                  route(context);
-                },
-          child: Padding(
-            padding: _btnSize.padding,
-            child: _buildContent(context),
+    Widget _btn = ClipRRect(
+      borderRadius: this.radius ?? radius,
+      child: Material(
+        type: MaterialType.button,
+        textStyle: textStyle,
+        color: bgColor,
+        // borderRadius: radius,
+        child: Ink(
+          decoration: BoxDecoration(
+            border: _themeType.border,
+            // borderRadius: radius,
+            gradient: color != null ? null : gradient,
+          ),
+          height: _btnSize.height,
+          child: InkWell(
+            // borderRadius: radius,
+            splashColor: Colors.transparent,
+            highlightColor: ThemeVars.black.withOpacity(0.1),
+            onTapDown: onTouchStart,
+            onTap: disabled
+                ? null
+                : () {
+                    if (onClick != null) {
+                      onClick!();
+                    }
+                    route(context);
+                  },
+            child: Padding(
+              padding: _btnSize.padding,
+              child: _buildContent(context),
+            ),
           ),
         ),
       ),
@@ -391,6 +398,7 @@ class FlanButton extends RouteStatelessWidget {
     properties.add(DiagnosticsProperty<FlanButtonIconPosition>(
         'iconPosition', iconPosition,
         defaultValue: FlanButtonIconPosition.left));
+    properties.add(DiagnosticsProperty<BorderRadius>('radius', radius));
     super.debugFillProperties(properties);
   }
 }

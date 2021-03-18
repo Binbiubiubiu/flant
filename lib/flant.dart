@@ -1,5 +1,8 @@
 library flant;
 
+export './components/action_bar.dart';
+export 'components/action_bar_button.dart';
+export 'components/action_bar_icon.dart';
 export './components/badge.dart';
 export './components/button.dart';
 export './components/cell.dart';
