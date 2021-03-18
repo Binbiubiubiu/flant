@@ -143,7 +143,7 @@ class FlanButton extends RouteStatelessWidget {
         type: MaterialType.button,
         textStyle: textStyle,
         color: bgColor,
-        // borderRadius: radius,
+        borderRadius: BorderRadius.zero,
         child: Ink(
           decoration: BoxDecoration(
             border: _themeType.border,

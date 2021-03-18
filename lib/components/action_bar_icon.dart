@@ -67,7 +67,7 @@ class FlanActionBarIcon extends RouteStatelessWidget {
       sortKey: const OrdinalSortKey(0),
       child: ConstrainedBox(
         constraints: const BoxConstraints(
-          minWidth: ThemeVars.actionBarIconWidth,
+          minWidth: ThemeVars.actionBarIconWidth - 2.0,
         ),
         child: Material(
           color: ThemeVars.white,
