@@ -27,6 +27,8 @@ class FlanCell extends RouteStatelessWidget {
     this.titleStyle,
     this.valueStyle,
     this.labelStyle,
+    this.padding,
+    this.bgColor,
     this.onClick,
     this.child,
     this.titleSlot,
@@ -91,6 +93,12 @@ class FlanCell extends RouteStatelessWidget {
   /// 描述信息额外类名
   final TextStyle? labelStyle;
 
+  /// 内边距
+  final EdgeInsets? padding;
+
+  /// 背景颜色
+  final Color? bgColor;
+
   // ****************** Events ******************
   /// 点击单元格时触发
   final GestureTapCallback? onClick;
@@ -117,12 +125,12 @@ class FlanCell extends RouteStatelessWidget {
   @override
   Widget build(BuildContext context) {
     Widget cell = Container(
-      margin: const EdgeInsets.symmetric(
-        horizontal: ThemeVars.cellHorizontalPadding,
-      ),
-      padding: EdgeInsets.symmetric(
-        vertical: _sizeStyle.paddingVertical,
-      ),
+      // margin: const EdgeInsets.symmetric(),
+      padding: padding ??
+          EdgeInsets.symmetric(
+            horizontal: ThemeVars.cellHorizontalPadding,
+            vertical: _sizeStyle.paddingVertical,
+          ),
       decoration: BoxDecoration(
         border: Border(
           bottom: border
@@ -188,7 +196,7 @@ class FlanCell extends RouteStatelessWidget {
       child: Material(
         type: _isClickable ? MaterialType.button : MaterialType.canvas,
         textStyle: _cellTextStyle,
-        color: ThemeVars.cellBackgroundColor,
+        color: bgColor ?? ThemeVars.cellBackgroundColor,
         child: cell,
       ),
     );

@@ -52,6 +52,8 @@ class FlanField<T extends dynamic> extends StatefulWidget {
     this.rightIconUrl,
     this.iconPrefix = kFlanIconsFamily,
     this.rules = const <FlanFieldRule>[],
+    this.padding,
+    this.bgColor,
     required this.onInput,
     this.onFocus,
     this.onBlur,
@@ -60,6 +62,7 @@ class FlanField<T extends dynamic> extends StatefulWidget {
     this.onClickInput,
     this.onClickLeftIcon,
     this.onClickRightIcon,
+    this.onSubmitted,
     this.labelSlot,
     this.inputSlot,
     this.leftIconSlot,
@@ -192,6 +195,12 @@ class FlanField<T extends dynamic> extends StatefulWidget {
   /// 表单校验规则，详见 Form 组件
   final List<FlanFieldRule> rules;
 
+  /// 内边距
+  final EdgeInsets? padding;
+
+  /// 背景色
+  final Color? bgColor;
+
   // ****************** Events ******************
 
   /// 输入框内容变化时触发
@@ -217,6 +226,9 @@ class FlanField<T extends dynamic> extends StatefulWidget {
 
   /// 点击右侧图标时触发
   final VoidCallback? onClickRightIcon;
+
+  /// 键盘回车键
+  final ValueChanged<T>? onSubmitted;
 
   // ****************** Slots ******************
 
@@ -265,7 +277,6 @@ class FlanFieldState<T extends dynamic> extends State<FlanField<T>> {
 
     WidgetsBinding.instance?.addPostFrameCallback((Duration timeStamp) {
       updateValue(modelvalue, trigger: widget.formatTrigger);
-      adjustTextareaSize();
       watchValue();
     });
   }
@@ -302,7 +313,6 @@ class FlanFieldState<T extends dynamic> extends State<FlanField<T>> {
     updateValue(modelvalue);
     _resetValidation();
     _validateWithTrigger(FlanFieldValidateTrigger.onChange);
-    adjustTextareaSize();
   }
 
   @override
@@ -344,6 +354,8 @@ class FlanFieldState<T extends dynamic> extends State<FlanField<T>> {
       isLink: widget.isLink,
       isRequired: widget.isRequired,
       clickable: widget.clickable,
+      padding: widget.padding,
+      bgColor: widget.bgColor,
       // titleStyle: TextStyle(),
       // valueStyle: ,
       // titleStyle: ,
@@ -486,6 +498,7 @@ class FlanFieldState<T extends dynamic> extends State<FlanField<T>> {
       final bool trigger =
           widget.clearTrigger == FlanFieldClearTrigger.always ||
               (widget.clearTrigger == FlanFieldClearTrigger.focus && focuesd);
+
       return hasValue && trigger;
     }
     return false;
@@ -523,13 +536,6 @@ class FlanFieldState<T extends dynamic> extends State<FlanField<T>> {
     if (widget.onKeypress != null) {
       widget.onKeypress!();
     }
-  }
-
-  void adjustTextareaSize() {
-    // final String input = inputValue;
-    // if(widget.type == FlanFieldType.textarea && widget.autosize!=null && input.isNotEmpty){
-    //   resizeText
-    // }
   }
 
   Widget _buildInput() {
@@ -584,6 +590,11 @@ class FlanFieldState<T extends dynamic> extends State<FlanField<T>> {
         scrollPadding: EdgeInsets.zero,
         mouseCursor: disabled ? SystemMouseCursors.forbidden : null,
         enabled: !disabled,
+        onSubmitted: (String value) {
+          if (widget.onSubmitted != null) {
+            widget.onSubmitted!(value as T);
+          }
+        },
         readOnly: widget.readonly,
         controller: editingController,
         focusNode: focusNode,
@@ -660,7 +671,7 @@ class FlanFieldState<T extends dynamic> extends State<FlanField<T>> {
 
   Widget _buildWordLimt() {
     if (widget.showWordLimit && widget.maxLength != null) {
-      final int count = modelvalue.length;
+      final int count = modelvalue.runes.length;
       return Container(
         padding: const EdgeInsets.only(top: ThemeVars.paddingBase),
         alignment: Alignment.centerRight,
@@ -725,11 +736,6 @@ class FlanFieldState<T extends dynamic> extends State<FlanField<T>> {
 
       if (widget.labelSlot != null) {
         labelContent = Wrap(
-          // alignment: <FlanFieldTextAlign, WrapAlignment>{
-          //   FlanFieldTextAlign.left: WrapAlignment.start,
-          //   FlanFieldTextAlign.center: WrapAlignment.center,
-          //   FlanFieldTextAlign.right: WrapAlignment.end,
-          // }[labelAlign]!,
           children: <Widget>[
             widget.labelSlot!,
             Text(colon),
