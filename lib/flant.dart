@@ -1,10 +1,9 @@
 library flant;
 
 export './components/action_bar.dart';
-export 'components/action_bar_button.dart';
-export 'components/action_bar_icon.dart';
 export './components/badge.dart';
 export './components/button.dart';
+export './components/card.dart';
 export './components/cell.dart';
 export './components/cell_group.dart';
 export './components/circle.dart';
@@ -38,3 +37,5 @@ export './components/tag.dart';
 export './components/toast.dart';
 export './locale/l10n.dart';
 export './styles/var.dart';
+export 'components/action_bar_button.dart';
+export 'components/action_bar_icon.dart';

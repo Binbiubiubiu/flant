@@ -26,7 +26,7 @@
 - [ ] Picker 选择器
 - [ ] Radio 单选框
 - [ ] Rate 评分
-- [ ] Search 搜索
+- [x] Search 搜索
 - [ ] Slider 滑块
 - [ ] Stepper 步进器
 - [x] Switch 开关
@@ -81,7 +81,7 @@
 - [ ] AddressEidt 地址编辑
 - [ ] AddressList 地址列表
 - [ ] Area 省市区选择
-- [ ] Card 商品卡片
+- [x] Card 商品卡片
 - [ ] ContactCard 联系人卡片
 - [ ] ContactEdit 联系人编辑
 - [ ] ContactList 联系人列表

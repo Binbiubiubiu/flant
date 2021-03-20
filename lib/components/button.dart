@@ -122,11 +122,12 @@ class FlanButton extends RouteStatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final BorderRadius radius = square
-        ? BorderRadius.zero
-        : BorderRadius.circular(
-            round ? _btnSize.height / 2.0 : ThemeVars.buttonBorderRadius,
-          );
+    final BorderRadius radius = this.radius ??
+        (square
+            ? BorderRadius.zero
+            : BorderRadius.circular(
+                round ? _btnSize.height / 2.0 : ThemeVars.buttonBorderRadius,
+              ));
 
     final TextStyle textStyle = TextStyle(
       fontSize: _btnSize.fontSize,
@@ -137,37 +138,34 @@ class FlanButton extends RouteStatelessWidget {
 
     final Color bgColor = (plain ? null : color) ?? _themeType.backgroundColor;
 
-    Widget _btn = ClipRRect(
-      borderRadius: this.radius ?? radius,
-      child: Material(
-        type: MaterialType.button,
-        textStyle: textStyle,
-        color: bgColor,
-        borderRadius: BorderRadius.zero,
-        child: Ink(
-          decoration: BoxDecoration(
-            border: _themeType.border,
-            // borderRadius: radius,
-            gradient: color != null ? null : gradient,
-          ),
-          height: _btnSize.height,
-          child: InkWell(
-            // borderRadius: radius,
-            splashColor: Colors.transparent,
-            highlightColor: ThemeVars.black.withOpacity(0.1),
-            onTapDown: onTouchStart,
-            onTap: disabled
-                ? null
-                : () {
-                    if (onClick != null) {
-                      onClick!();
-                    }
-                    route(context);
-                  },
-            child: Padding(
-              padding: _btnSize.padding,
-              child: _buildContent(context),
-            ),
+    Widget _btn = Material(
+      type: MaterialType.button,
+      textStyle: textStyle,
+      color: bgColor,
+      borderRadius: radius,
+      child: Ink(
+        decoration: BoxDecoration(
+          border: _themeType.border,
+          borderRadius: radius,
+          gradient: color != null ? null : gradient,
+        ),
+        height: _btnSize.height,
+        child: InkWell(
+          borderRadius: radius,
+          splashColor: Colors.transparent,
+          highlightColor: ThemeVars.black.withOpacity(0.1),
+          onTapDown: onTouchStart,
+          onTap: disabled
+              ? null
+              : () {
+                  if (onClick != null) {
+                    onClick!();
+                  }
+                  route(context);
+                },
+          child: Padding(
+            padding: _btnSize.padding,
+            child: _buildContent(context),
           ),
         ),
       ),
@@ -208,7 +206,7 @@ class FlanButton extends RouteStatelessWidget {
   }
 
   /// 构建图标
-  Widget _buildIcon(BuildContext context) {
+  Widget? _buildIcon(BuildContext context) {
     final double iSize = DefaultTextStyle.of(context).style.fontSize! * 1.2;
 
     if (loading) {
@@ -224,8 +222,6 @@ class FlanButton extends RouteStatelessWidget {
         classPrefix: iconPrefix,
       );
     }
-
-    return const SizedBox.shrink();
   }
 
   /// 构建内容
@@ -234,23 +230,23 @@ class FlanButton extends RouteStatelessWidget {
       _buildText(context),
     ];
 
-    final Widget sideIcon = _buildIcon(context);
+    final Widget? sideIcon = _buildIcon(context);
 
-    switch (iconPosition) {
-      case FlanButtonIconPosition.left:
-        if (_isHasText) {
-          children.insert(0, const SizedBox(width: 4.0));
-        }
-        children.insert(0, sideIcon);
-        break;
-      case FlanButtonIconPosition.right:
-        children.add(sideIcon);
-        if (_isHasText) {
-          children.add(const SizedBox(width: 4.0));
-        }
-        break;
-      default:
-        break;
+    if (sideIcon != null) {
+      switch (iconPosition) {
+        case FlanButtonIconPosition.left:
+          if (_isHasText) {
+            children.insert(0, const SizedBox(width: 4.0));
+          }
+          children.insert(0, sideIcon);
+          break;
+        case FlanButtonIconPosition.right:
+          children.add(sideIcon);
+          if (_isHasText) {
+            children.add(const SizedBox(width: 4.0));
+          }
+          break;
+      }
     }
 
     if (size == FlanButtonSize.large || block) {
