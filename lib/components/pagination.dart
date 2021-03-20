@@ -8,7 +8,7 @@ import 'package:flutter/rendering.dart';
 import '../styles/var.dart';
 
 /// Pagination 分页
-class FlanPagination extends StatelessWidget {
+class FlanPagination extends StatefulWidget {
   const FlanPagination({
     Key? key,
     required this.value,
@@ -25,11 +25,7 @@ class FlanPagination extends StatelessWidget {
     this.prevTextSlot,
     this.nextTextSlot,
     this.pageDescSlot,
-  })  : assert(pageCount >= 0),
-        assert(totalItems >= 0),
-        assert(itemsPerPage >= 0),
-        assert(showPageSize >= 0),
-        super(key: key);
+  }) : super(key: key);
 
   // ****************** Props ******************
   /// 当前页码
@@ -77,6 +73,19 @@ class FlanPagination extends StatelessWidget {
   final Widget? pageDescSlot;
 
   @override
+  _FlanPaginationState createState() => _FlanPaginationState();
+}
+
+class _FlanPaginationState extends State<FlanPagination> {
+  @override
+  void initState() {
+    WidgetsBinding.instance?.addPostFrameCallback((Duration timeStamp) {
+      select(widget.value);
+    });
+    super.initState();
+  }
+
+  @override
   Widget build(BuildContext context) {
     return DefaultTextStyle(
       style: const TextStyle(
@@ -86,27 +95,29 @@ class FlanPagination extends StatelessWidget {
         children: <Widget>[
           _PaginationItem(
             isPreOrNext: true,
-            disabled: value == 1,
-            onClick: () => select(value - 1),
-            isLast: mode == FlanPaginationMode.simple,
-            child: prevTextSlot ??
-                Text(prevText ?? FlanS.of(context).Pagination_prev),
+            disabled: widget.value == 1,
+            onClick: () => select(widget.value - 1),
+            isLast: widget.mode == FlanPaginationMode.simple,
+            child: widget.prevTextSlot ??
+                Text(widget.prevText ?? FlanS.of(context).Pagination_prev),
           ),
           ...pages
               .map((PageItem e) => _PaginationItem(
                     active: e.active,
                     onClick: () => select(e.number),
-                    child: pageBuilder != null ? pageBuilder!(e) : Text(e.text),
+                    child: widget.pageBuilder != null
+                        ? widget.pageBuilder!(e)
+                        : Text(e.text),
                   ))
               .toList(),
           _buildDesc(),
           _PaginationItem(
             isPreOrNext: true,
-            disabled: value == count,
+            disabled: widget.value == count,
             isLast: true,
-            onClick: () => select(value + 1),
-            child: nextTextSlot ??
-                Text(nextText ?? FlanS.of(context).Pagination_next),
+            onClick: () => select(widget.value + 1),
+            child: widget.nextTextSlot ??
+                Text(widget.nextText ?? FlanS.of(context).Pagination_next),
           ),
         ],
       ),
@@ -114,7 +125,7 @@ class FlanPagination extends StatelessWidget {
   }
 
   Widget _buildDesc() {
-    if (mode != FlanPaginationMode.multi) {
+    if (widget.mode != FlanPaginationMode.multi) {
       return Expanded(
         child: Container(
           height: ThemeVars.paginationHeight,
@@ -123,7 +134,7 @@ class FlanPagination extends StatelessWidget {
             style: const TextStyle(
               color: ThemeVars.paginationDescColor,
             ),
-            child: pageDescSlot ?? Text('$value/$count'),
+            child: widget.pageDescSlot ?? Text('${widget.value}/$count'),
           ),
         ),
       );
@@ -131,24 +142,25 @@ class FlanPagination extends StatelessWidget {
     return const SizedBox.shrink();
   }
 
-  void select(int page, {bool emitChange = false}) {
+  void select(int page) {
     page = math.min(count, math.max(1, page));
-    if (value != page) {
-      onChange(page);
+    if (widget.value != page) {
+      widget.onChange(page);
     }
   }
 
   int get count {
-    final int count =
-        pageCount > 0 ? pageCount : (totalItems / itemsPerPage).ceil();
+    final int count = widget.pageCount > 0
+        ? widget.pageCount
+        : (widget.totalItems / widget.itemsPerPage).ceil();
     return math.max(1, count);
   }
 
   List<PageItem> get pages {
     final List<PageItem> items = <PageItem>[];
     final int pageCount = count;
-    final int showPageSize = this.showPageSize;
-    if (mode != FlanPaginationMode.multi) {
+    final int showPageSize = this.widget.showPageSize;
+    if (widget.mode != FlanPaginationMode.multi) {
       return items;
     }
 // Default page limits
@@ -158,7 +170,7 @@ class FlanPagination extends StatelessWidget {
     // recompute if showPageSize
     if (isMaxSized) {
       // Current page is displayed in the middle of the visible ones
-      startPage = math.max(value - (showPageSize / 2).floor(), 1);
+      startPage = math.max(widget.value - (showPageSize / 2).floor(), 1);
       endPage = startPage + showPageSize - 1;
 
       // Adjust if limit is exceeded
@@ -171,12 +183,12 @@ class FlanPagination extends StatelessWidget {
     // Add page number links
     for (int number = startPage; number <= endPage; number++) {
       final PageItem page =
-          makePage(number, '$number', active: number == value);
+          makePage(number, '$number', active: number == widget.value);
       items.add(page);
     }
 
     // Add links to move between page sets
-    if (isMaxSized && showPageSize > 0 && forceEllipses) {
+    if (isMaxSized && showPageSize > 0 && widget.forceEllipses) {
       if (startPage > 1) {
         final PageItem prevPages = makePage(startPage - 1, '...');
         items.insert(0, prevPages);
@@ -193,20 +205,21 @@ class FlanPagination extends StatelessWidget {
 
   @override
   void debugFillProperties(DiagnosticPropertiesBuilder properties) {
-    properties.add(DiagnosticsProperty<int>('value', value));
-    properties.add(DiagnosticsProperty<FlanPaginationMode>('mode', mode,
+    properties.add(DiagnosticsProperty<int>('value', widget.value));
+    properties.add(DiagnosticsProperty<FlanPaginationMode>('mode', widget.mode,
         defaultValue: FlanPaginationMode.multi));
-    properties.add(DiagnosticsProperty<String>('preText', prevText));
-    properties.add(DiagnosticsProperty<String>('nextText', nextText));
-    properties
-        .add(DiagnosticsProperty<int>('pageCount', pageCount, defaultValue: 0));
-    properties.add(
-        DiagnosticsProperty<int>('totalItems', totalItems, defaultValue: 0));
-    properties.add(DiagnosticsProperty<int>('itemsPerPage', itemsPerPage,
+    properties.add(DiagnosticsProperty<String>('preText', widget.prevText));
+    properties.add(DiagnosticsProperty<String>('nextText', widget.nextText));
+    properties.add(DiagnosticsProperty<int>('pageCount', widget.pageCount,
+        defaultValue: 0));
+    properties.add(DiagnosticsProperty<int>('totalItems', widget.totalItems,
+        defaultValue: 0));
+    properties.add(DiagnosticsProperty<int>('itemsPerPage', widget.itemsPerPage,
         defaultValue: 10));
-    properties.add(DiagnosticsProperty<int>('showPageSize', showPageSize,
+    properties.add(DiagnosticsProperty<int>('showPageSize', widget.showPageSize,
         defaultValue: 5));
-    properties.add(DiagnosticsProperty<bool>('forceEllipses', forceEllipses,
+    properties.add(DiagnosticsProperty<bool>(
+        'forceEllipses', widget.forceEllipses,
         defaultValue: false));
 
     super.debugFillProperties(properties);
