@@ -70,7 +70,7 @@
 - [x] Grid 宫格
 - [ ] IndexBar 索引栏
 - [x] NavBar 导航栏
-- [ ] Pagination 分页
+- [x] Pagination 分页
 - [ ] Sidebar 侧边导航
 - [ ] Tab 标签页
 - [x] Tabbar 标签栏

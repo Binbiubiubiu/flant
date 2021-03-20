@@ -22,6 +22,7 @@ export './components/loading.dart';
 export './components/navbar.dart';
 export './components/notice_bar.dart';
 export './components/overlay.dart';
+export './components/pagination.dart';
 export './components/popup.dart';
 export './components/progress.dart';
 export './components/row.dart';
