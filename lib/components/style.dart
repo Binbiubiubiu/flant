@@ -23,8 +23,8 @@ typedef FlanTransitionBuilder = Widget Function(
 
 /// 过渡动画`Fade` 构造器
 Widget kFlanFadeTransitionBuilder(Animation<double> animation, Widget child) {
-  return FadeTransition(
-    opacity: animation,
+  return Opacity(
+    opacity: animation.value,
     child: child,
   );
 }
@@ -32,11 +32,11 @@ Widget kFlanFadeTransitionBuilder(Animation<double> animation, Widget child) {
 /// 过渡动画`Slide Up` 构造器
 Widget kFlanSlideUpTransitionBuilder(
     Animation<double> animation, Widget child) {
-  return SlideTransition(
-    position: Tween<Offset>(
+  return FractionalTranslation(
+    translation: Tween<Offset>(
       begin: const Offset(0, 1),
       end: const Offset(0, 0),
-    ).animate(animation),
+    ).evaluate(animation),
     child: child,
   );
 }
@@ -44,11 +44,11 @@ Widget kFlanSlideUpTransitionBuilder(
 /// 过渡动画`Slide Down` 构造器
 Widget kFlanSlideDownTransitionBuilder(
     Animation<double> animation, Widget child) {
-  return SlideTransition(
-    position: Tween<Offset>(
+  return FractionalTranslation(
+    translation: Tween<Offset>(
       begin: const Offset(0, -1),
       end: const Offset(0, 0),
-    ).animate(animation),
+    ).evaluate(animation),
     child: child,
   );
 }
@@ -56,11 +56,11 @@ Widget kFlanSlideDownTransitionBuilder(
 /// 过渡动画`Slide Left` 构造器
 Widget kFlanSlideLeftTransitionBuilder(
     Animation<double> animation, Widget child) {
-  return SlideTransition(
-    position: Tween<Offset>(
+  return FractionalTranslation(
+    translation: Tween<Offset>(
       begin: const Offset(-1, 0),
       end: const Offset(0, 0),
-    ).animate(animation),
+    ).evaluate(animation),
     child: child,
   );
 }
@@ -68,11 +68,11 @@ Widget kFlanSlideLeftTransitionBuilder(
 /// 过渡动画`Slide Right` 构造器
 Widget kFlanSlideRightTransitionBuilder(
     Animation<double> animation, Widget child) {
-  return SlideTransition(
-    position: Tween<Offset>(
+  return FractionalTranslation(
+    translation: Tween<Offset>(
       begin: const Offset(1, 0),
       end: const Offset(0, 0),
-    ).animate(animation),
+    ).evaluate(animation),
     child: child,
   );
 }
@@ -84,63 +84,69 @@ Widget kFlanSlideRightTransitionBuilder(
 /// - 通过类型`Visibility`的子组件`child`的`visible` 控制展示和隐藏
 class FlanTransition extends StatefulWidget {
   const FlanTransition({
+    Key? key,
     this.duration,
     this.curveBuilder = kFlanCurveBuilder,
     this.onCompleted,
     this.onDismissed,
     required this.transitionBuilder,
     required this.child,
-  });
+  }) : super(key: key);
 
   /// 过渡动画`Fade`
   const FlanTransition.fade({
+    Key? key,
     this.duration,
     this.curveBuilder = kFlanCurveBuilder,
     this.onCompleted,
     this.onDismissed,
     this.transitionBuilder = kFlanFadeTransitionBuilder,
     required this.child,
-  });
+  }) : super(key: key);
 
   /// 过渡动画`Slide Down`
   const FlanTransition.slideDown({
+    Key? key,
     this.duration,
     this.curveBuilder = kFlanCurveBuilder,
     this.onCompleted,
     this.onDismissed,
     this.transitionBuilder = kFlanSlideDownTransitionBuilder,
     required this.child,
-  });
+  }) : super(key: key);
 
   /// 过渡动画`Slide Up`
   const FlanTransition.slideUp({
+    Key? key,
     this.duration,
     this.curveBuilder = kFlanCurveBuilder,
     this.onCompleted,
     this.onDismissed,
     this.transitionBuilder = kFlanSlideUpTransitionBuilder,
     required this.child,
-  });
+  }) : super(key: key);
 
   /// 过渡动画`Slide Left`
   const FlanTransition.slideLeft({
+    Key? key,
     this.duration,
     this.curveBuilder = kFlanCurveBuilder,
     this.onCompleted,
     this.onDismissed,
     this.transitionBuilder = kFlanSlideLeftTransitionBuilder,
     required this.child,
-  });
+  }) : super(key: key);
 
   /// 过渡动画`Slide Right`
   const FlanTransition.slideRight({
+    Key? key,
     this.duration,
     this.curveBuilder = kFlanCurveBuilder,
     this.onCompleted,
     this.onDismissed,
     this.transitionBuilder = kFlanSlideRightTransitionBuilder,
     required this.child,
-  });
+  }) : super(key: key);
 
   /// 动画时间
   final Duration? duration;
@@ -176,7 +182,9 @@ class _FlanTransitionState extends State<FlanTransition>
     animationController = AnimationController(
       vsync: this,
       duration: widget.duration ?? ThemeVars.animationDurationBase,
-    )..addStatusListener(_transitionStatusChange);
+    )
+      ..addStatusListener(_transitionStatusChange)
+      ..addListener(_handleChange);
     content = widget.child;
     if (show) {
       animationController.forward();
@@ -185,10 +193,13 @@ class _FlanTransitionState extends State<FlanTransition>
     super.initState();
   }
 
+  void _handleChange() => setState(() {});
+
   @override
   void dispose() {
     animationController
       ..removeStatusListener(_transitionStatusChange)
+      ..removeListener(_handleChange)
       ..dispose();
 
     super.dispose();
