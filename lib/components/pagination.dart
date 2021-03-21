@@ -301,7 +301,7 @@ class __PaginationItemState extends State<_PaginationItem> {
   Widget build(BuildContext context) {
     const BorderSide borderSide = BorderSide(
       color: ThemeVars.borderColor,
-      width: 1.0,
+      width: 0.5,
     );
 
     return Expanded(

@@ -31,6 +31,7 @@ export './components/skeleton.dart';
 export './components/step.dart';
 export './components/steps.dart';
 export './components/style.dart';
+export './components/submit_bar.dart';
 export './components/switch.dart';
 export './components/tabbar.dart';
 export './components/tabbar_item.dart';

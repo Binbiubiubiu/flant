@@ -138,7 +138,7 @@ class FlanButton extends RouteStatelessWidget {
 
     final Color bgColor = (plain ? null : color) ?? _themeType.backgroundColor;
 
-    Widget _btn = Material(
+    final Widget _btn = Material(
       type: MaterialType.button,
       textStyle: textStyle,
       color: bgColor,
@@ -155,14 +155,12 @@ class FlanButton extends RouteStatelessWidget {
           splashColor: Colors.transparent,
           highlightColor: ThemeVars.black.withOpacity(0.1),
           onTapDown: onTouchStart,
-          onTap: disabled
-              ? null
-              : () {
-                  if (onClick != null) {
-                    onClick!();
-                  }
-                  route(context);
-                },
+          onTap: () {
+            if (onClick != null) {
+              onClick!();
+            }
+            route(context);
+          },
           child: Padding(
             padding: _btnSize.padding,
             child: _buildContent(context),
@@ -171,18 +169,17 @@ class FlanButton extends RouteStatelessWidget {
       ),
     );
 
-    if (disabled) {
-      _btn = Opacity(
-        opacity: .5,
-        child: _btn,
-      );
-    }
-
     return Semantics(
       container: true,
       button: true,
       enabled: !disabled,
-      child: _btn,
+      child: Opacity(
+        opacity: disabled ? 0.5 : 1.0,
+        child: IgnorePointer(
+          ignoring: disabled || loading,
+          child: _btn,
+        ),
+      ),
     );
   }
 
