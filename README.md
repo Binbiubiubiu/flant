@@ -87,4 +87,4 @@
 - [ ] ContactList 联系人列表
 - [ ] Coupon 优惠券
 - [ ] GoodsAction 商品导航
-- [ ] SubmitBar 提交订单栏
+- [x] SubmitBar 提交订单栏

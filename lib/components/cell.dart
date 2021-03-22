@@ -300,7 +300,7 @@ class FlanCell extends RouteStatelessWidget {
   Widget _buildValue(BuildContext context) {
     if (_hasValue) {
       final Widget value = Align(
-        alignment: Alignment.centerRight,
+        alignment: !_hasTitle ? Alignment.centerLeft : Alignment.centerRight,
         child: child ?? Text(this.value ?? ''),
       );
 

@@ -10,6 +10,7 @@ export './components/circle.dart';
 export './components/col.dart';
 export './components/collapse.dart';
 export './components/collapse_item.dart';
+export './components/contact_card.dart';
 export './components/count_down.dart';
 export './components/divider.dart';
 export './components/empty.dart';
