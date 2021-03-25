@@ -26,6 +26,7 @@ export './components/overlay.dart';
 export './components/pagination.dart';
 export './components/popup.dart';
 export './components/progress.dart';
+export './components/rate.dart';
 export './components/row.dart';
 export './components/search.dart';
 export './components/skeleton.dart';

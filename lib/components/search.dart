@@ -248,7 +248,6 @@ class _FlanSearchState extends State<FlanSearch> {
       final String text = widget.actionText ?? FlanS.of(context).cancel;
       return Semantics(
         button: true,
-        sortKey: const OrdinalSortKey(0),
         child: MouseRegion(
           cursor: SystemMouseCursors.click,
           child: Material(

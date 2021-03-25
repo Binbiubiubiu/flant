@@ -25,7 +25,7 @@
 - [ ] PasswordInput 密码输入框
 - [ ] Picker 选择器
 - [ ] Radio 单选框
-- [ ] Rate 评分
+- [x] Rate 评分
 - [x] Search 搜索
 - [ ] Slider 滑块
 - [ ] Stepper 步进器
@@ -82,7 +82,7 @@
 - [ ] AddressList 地址列表
 - [ ] Area 省市区选择
 - [x] Card 商品卡片
-- [ ] ContactCard 联系人卡片
+- [x] ContactCard 联系人卡片
 - [ ] ContactEdit 联系人编辑
 - [ ] ContactList 联系人列表
 - [ ] Coupon 优惠券
