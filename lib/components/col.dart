@@ -27,36 +27,41 @@ class FlanCol extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final FlanRowProvider? parent = FlanRowProvider.of(context);
+    final FlanRow? parent = context.findAncestorWidgetOfExactType<FlanRow>();
 
-    BoxConstraints? colSpan;
-    EdgeInsets? colOffset;
-    EdgeInsets colPadding = EdgeInsets.zero;
-    if (parent != null) {
-      final List<RowSpace> spaces = parent.spaces;
-      final int index = (parent.child as Wrap).children.indexOf(this);
+    return LayoutBuilder(
+      builder: (BuildContext context, BoxConstraints constraints) {
+        final double maxWidth = constraints.maxWidth;
+        BoxConstraints? colSpan;
+        EdgeInsets? colOffset;
+        EdgeInsets colPadding = EdgeInsets.zero;
+        if (parent != null) {
+          final List<RowSpace> spaces = parent.spaces;
+          final int index = parent.children.indexOf(this);
 
-      colPadding = EdgeInsets.only(
-        left: spaces[index].left,
-        right: spaces[index].right,
-      );
+          colPadding = EdgeInsets.only(
+            left: spaces[index].left,
+            right: spaces[index].right,
+          );
 
-      colSpan = BoxConstraints.tightFor(
-        width: parent.maxWidth * (span / 24),
-      );
+          colSpan = BoxConstraints.tightFor(
+            width: maxWidth * (span / 24),
+          );
 
-      if (offset != null) {
-        colOffset = EdgeInsets.only(left: parent.maxWidth * (offset! / 24));
-      }
-    }
+          if (offset != null) {
+            colOffset = EdgeInsets.only(left: maxWidth * (offset! / 24));
+          }
+        }
 
-    return Container(
-      constraints: colSpan,
-      margin: colOffset,
-      padding: colPadding,
-      child: Wrap(
-        children: children,
-      ),
+        return Container(
+          constraints: colSpan,
+          margin: colOffset,
+          padding: colPadding,
+          child: Wrap(
+            children: children,
+          ),
+        );
+      },
     );
   }
 

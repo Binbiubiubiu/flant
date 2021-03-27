@@ -27,11 +27,9 @@ class FlanActionBar extends StatelessWidget {
       color: ThemeVars.actionBarBackgroundColor,
       child: SafeArea(
         bottom: safeAreaInsetBottom,
-        child: FlanActionBarProvider(
-          child: Row(
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: children,
-          ),
+        child: Row(
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: children,
         ),
       ),
     );
@@ -43,21 +41,5 @@ class FlanActionBar extends StatelessWidget {
         'safeAreaInsetBottom', safeAreaInsetBottom,
         defaultValue: true));
     super.debugFillProperties(properties);
-  }
-}
-
-class FlanActionBarProvider extends InheritedWidget {
-  const FlanActionBarProvider({
-    Key? key,
-    required Row child,
-  }) : super(key: key, child: child);
-
-  static FlanActionBarProvider? of(BuildContext context) {
-    return context.dependOnInheritedWidgetOfExactType<FlanActionBarProvider>();
-  }
-
-  @override
-  bool updateShouldNotify(FlanActionBarProvider oldWidget) {
-    return false;
   }
 }

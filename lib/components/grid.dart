@@ -58,17 +58,9 @@ class FlanGrid extends StatelessWidget {
         ),
       ),
       padding: EdgeInsets.only(left: gutter),
-      child: LayoutBuilder(
-        builder: (BuildContext context, BoxConstraints constraints) {
-          return FlanGridProvider(
-            maxWidth: constraints.maxWidth,
-            grid: this,
-            child: Wrap(
-              crossAxisAlignment: WrapCrossAlignment.center,
-              children: children,
-            ),
-          );
-        },
+      child: Wrap(
+        crossAxisAlignment: WrapCrossAlignment.center,
+        children: children,
       ),
     );
   }
@@ -92,26 +84,5 @@ class FlanGrid extends StatelessWidget {
     properties.add(DiagnosticsProperty<Axis>('direction', direction,
         defaultValue: Axis.vertical));
     super.debugFillProperties(properties);
-  }
-}
-
-class FlanGridProvider extends InheritedWidget {
-  const FlanGridProvider({
-    Key? key,
-    required this.maxWidth,
-    required this.grid,
-    required Wrap child,
-  }) : super(key: key, child: child);
-
-  final double maxWidth;
-  final FlanGrid grid;
-
-  static FlanGridProvider? of(BuildContext context) {
-    return context.dependOnInheritedWidgetOfExactType<FlanGridProvider>();
-  }
-
-  @override
-  bool updateShouldNotify(FlanGridProvider oldWidget) {
-    return maxWidth != oldWidget.maxWidth || grid != oldWidget.grid;
   }
 }

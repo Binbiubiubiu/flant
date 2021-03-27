@@ -222,19 +222,19 @@ class _FlanStepState extends State<FlanStep> {
     );
   }
 
-  FlanStepsProvider get parent {
-    final FlanStepsProvider? p = FlanStepsProvider.of(context);
+  FlanSteps get parent {
+    final FlanSteps? p = context.findAncestorWidgetOfExactType<FlanSteps>();
     if (p == null) {
       throw 'Step must be a child component of Steps';
     }
     return p;
   }
 
-  List<Widget> get children => parent.config.children;
+  List<Widget> get children => parent.children;
   int get index => children.indexOf(widget);
   bool get isFirst => index == 0;
   bool get isLast => index == children.length - 1;
-  FlanSteps get parentProps => parent.config;
+  FlanSteps get parentProps => parent;
 
   _FlanStepStatus get getStatus {
     if (index < parentProps.active) {
@@ -255,7 +255,7 @@ class _FlanStepState extends State<FlanStep> {
   Color? get titleStyle =>
       isActive ? parentProps.activeColor : parentProps.inactiveColor;
 
-  void onClickStep() => parent.onClickStep(index);
+  void onClickStep() => parent.onClickSubStep(index);
 }
 
 enum _FlanStepStatus {

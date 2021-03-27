@@ -65,11 +65,12 @@ class FlanActionBarButton extends RouteStatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final Widget? parent = FlanActionBarProvider.of(context)?.child;
+    final FlanActionBar? parent =
+        context.findAncestorWidgetOfExactType<FlanActionBar>();
     if (parent == null) {
       throw 'ActionButton must be a child component of FlanActionBar';
     }
-    final int index = (parent as Row).children.indexOf(this);
+    final int index = parent.children.indexOf(this);
     final bool isFirst = !(index != 0 &&
         parent.children.elementAt(index - 1) is FlanActionBarButton);
     final bool isLast = !(index != parent.children.length - 1 &&

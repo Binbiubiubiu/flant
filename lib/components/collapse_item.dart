@@ -112,10 +112,11 @@ class FlanCollapseItem extends StatefulWidget {
   final Widget? rightIconSlot;
 
   @override
-  _FlanCollapseItemState createState() => _FlanCollapseItemState();
+  _FlanCollapseItemState<String> createState() =>
+      _FlanCollapseItemState<String>();
 }
 
-class _FlanCollapseItemState extends State<FlanCollapseItem>
+class _FlanCollapseItemState<T> extends State<FlanCollapseItem>
     with TickerProviderStateMixin {
   late AnimationController collapseAnimationController;
   late Animation<double> collapseIconAnimation;
@@ -254,9 +255,10 @@ class _FlanCollapseItemState extends State<FlanCollapseItem>
     );
   }
 
-  FlanCollapseProvider<String> get parent {
-    final FlanCollapseProvider<String>? parent =
-        FlanCollapseProvider.of<String>(context);
+  FlanCollapse get parent {
+    final FlanCollapse? parent =
+        context.findAncestorWidgetOfExactType<FlanCollapse>();
+
     if (parent == null) {
       throw 'FlanCollapseItem must be a child component of FlanCollapse';
     }
@@ -264,7 +266,7 @@ class _FlanCollapseItemState extends State<FlanCollapseItem>
     return parent;
   }
 
-  int get index => (parent.child as Column).children.indexOf(widget);
+  int get index => parent.children.indexOf(widget);
 
   String get currentName => widget.name ?? '$index';
 

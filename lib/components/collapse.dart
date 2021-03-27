@@ -6,20 +6,20 @@ import 'style.dart';
 
 /// ### FlanCollapse 折叠面板
 /// 将一组内容放置在多个折叠面板中，点击面板的标题可以展开或收缩其内容。
-class FlanCollapse<T extends dynamic> extends StatelessWidget {
+class FlanCollapse extends StatelessWidget {
   const FlanCollapse({
     Key? key,
     required this.value,
     required this.onChange,
     this.accordion = false,
     this.border = true,
-    this.children = const <FlanCollapseItem>[],
-  })  : assert(value is String || value is List<String>),
+    required this.children,
+  })   : assert(value is String || value is List<String>),
         super(key: key);
 
   // ****************** Props ******************
   /// 当前展开面板的 `name`
-  final T value;
+  final dynamic value;
 
   /// 是否开启手风琴模式
   final bool accordion;
@@ -29,7 +29,7 @@ class FlanCollapse<T extends dynamic> extends StatelessWidget {
 
   // ****************** Events ******************
 
-  final ValueChanged<T> onChange;
+  final ValueChanged<dynamic> onChange;
 
   // ****************** Slots ******************
   // 内容
@@ -44,23 +44,19 @@ class FlanCollapse<T extends dynamic> extends StatelessWidget {
           bottom: border ? const FlanHairLine() : BorderSide.none,
         ),
       ),
-      child: FlanCollapseProvider<String>(
-        toggle: toggle,
-        isExpanded: isExpanded,
-        child: Column(
-          children: children,
-        ),
+      child: Column(
+        children: children,
       ),
     );
   }
 
   void updateName(dynamic name) {
-    onChange(name as T);
+    onChange(name);
   }
 
   void toggle(String name, bool expanded) {
     if (accordion) {
-      updateName(name == value ? '' : name);
+      updateName(value == name ? '' : name);
     } else if (expanded) {
       updateName(<String>[...value as List<String>, name]);
     } else {
@@ -75,8 +71,7 @@ class FlanCollapse<T extends dynamic> extends StatelessWidget {
       throw 'FlanCollapse: value should not be Array in accordion mode';
     }
 
-    // ignore: prefer_is_not_operator
-    if (!accordion && !(value is List<String>)) {
+    if (!accordion && value is! List<String>) {
       throw 'FlanCollapse: value should be Array in non-accordion mode';
     }
 
@@ -85,34 +80,11 @@ class FlanCollapse<T extends dynamic> extends StatelessWidget {
 
   @override
   void debugFillProperties(DiagnosticPropertiesBuilder properties) {
-    properties.add(DiagnosticsProperty<T>('value', value));
+    properties.add(DiagnosticsProperty<dynamic>('value', value));
     properties.add(
         DiagnosticsProperty<bool>('accordion', accordion, defaultValue: false));
     properties
         .add(DiagnosticsProperty<bool>('border', border, defaultValue: true));
     super.debugFillProperties(properties);
-  }
-}
-
-/// FlanRow 共享信息
-class FlanCollapseProvider<T extends dynamic> extends InheritedWidget {
-  const FlanCollapseProvider({
-    required this.toggle,
-    required this.isExpanded,
-    required Column child,
-  }) : super(child: child);
-
-  final void Function(T name, bool expanded) toggle;
-  final bool Function(T name) isExpanded;
-
-  //定义一个便捷方法，方便子树中的widget获取共享数据
-  static FlanCollapseProvider<T>? of<T>(BuildContext context) {
-    return context
-        .dependOnInheritedWidgetOfExactType<FlanCollapseProvider<T>>();
-  }
-
-  @override
-  bool updateShouldNotify(covariant FlanCollapseProvider<T> oldWidget) {
-    return true;
   }
 }

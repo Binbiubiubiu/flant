@@ -53,31 +53,25 @@ class FlanTabbar<T> extends StatelessWidget {
       decoration: const BoxDecoration(
         color: ThemeVars.tabbarBackgroundColor,
       ),
-      child: FlanTabbarProvider(
-        value: value,
-        activeColor: activeColor,
-        inactiveColor: inactiveColor,
-        setActive: (dynamic value) {
-          if (value != this.value) {
-            bool canChange = true;
-            if (beforeChange != null) {
-              canChange = beforeChange!(value as T);
-            }
-
-            if (canChange) {
-              onChange(value as T);
-            }
-          }
-        },
-        child: Row(
-          children: children
-              .map((FlanTabbarItem<T> e) => Expanded(child: e))
-              .toList(),
-        ),
+      child: Row(
+        children: children,
       ),
     );
 
     return SafeArea(bottom: safeAreaInsetBottom, child: tabbar);
+  }
+
+  void setActive(T value) {
+    if (value != this.value) {
+      bool canChange = true;
+      if (beforeChange != null) {
+        canChange = beforeChange!(value);
+      }
+
+      if (canChange) {
+        onChange(value);
+      }
+    }
   }
 
   @override
@@ -93,34 +87,5 @@ class FlanTabbar<T> extends StatelessWidget {
         'safeAreaInsetBottom', safeAreaInsetBottom,
         defaultValue: false));
     super.debugFillProperties(properties);
-  }
-}
-
-class FlanTabbarProvider extends InheritedWidget {
-  const FlanTabbarProvider({
-    Key? key,
-    this.value,
-    this.activeColor,
-    this.inactiveColor,
-    required this.setActive,
-    required Row child,
-  }) : super(key: key, child: child);
-
-  final dynamic value;
-
-  final Color? activeColor;
-  final Color? inactiveColor;
-
-  final ValueChanged<dynamic> setActive;
-
-  static FlanTabbarProvider? of(BuildContext context) {
-    return context.dependOnInheritedWidgetOfExactType<FlanTabbarProvider>();
-  }
-
-  @override
-  bool updateShouldNotify(FlanTabbarProvider oldWidget) {
-    return value != oldWidget.value ||
-        activeColor != oldWidget.activeColor ||
-        inactiveColor != oldWidget.inactiveColor;
   }
 }

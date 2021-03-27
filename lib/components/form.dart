@@ -78,11 +78,8 @@ class FlanForm extends StatefulWidget {
 class FlanFormState extends State<FlanForm> {
   @override
   Widget build(BuildContext context) {
-    return FlanFormProvider(
-      form: widget,
-      child: Column(
-        children: widget.children,
-      ),
+    return Column(
+      children: widget.children,
     );
   }
 
@@ -222,24 +219,6 @@ class FlanFormState extends State<FlanForm> {
         'showErrorMessage', widget.showErrorMessage,
         defaultValue: false));
     super.debugFillProperties(properties);
-  }
-}
-
-class FlanFormProvider extends InheritedWidget {
-  const FlanFormProvider({
-    Key? key,
-    required this.form,
-    required Widget child,
-  }) : super(key: key, child: child);
-  final FlanForm form;
-
-  static FlanFormProvider? of(BuildContext context) {
-    return context.dependOnInheritedWidgetOfExactType<FlanFormProvider>();
-  }
-
-  @override
-  bool updateShouldNotify(FlanFormProvider oldWidget) {
-    return true;
   }
 }
 

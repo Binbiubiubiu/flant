@@ -69,41 +69,39 @@ class FlanSteps extends StatelessWidget {
         .map<Widget>((Widget e) => isRow ? Expanded(child: e) : e)
         .toList();
 
-    return FlanStepsProvider(
-      config: this,
-      onClickStep: (int index) {
-        if (onClickStep != null) {
-          onClickStep!(index);
-        }
-      },
-      child: Container(
-        color: ThemeVars.stepsBackgroundColor,
-        padding: isRow
-            ? const EdgeInsets.only(top: 10.0, left: 10.0, right: 10.0)
-            : const EdgeInsets.only(left: ThemeVars.paddingXl),
-        child: isRow
-            ? Container(
-                padding: const EdgeInsets.only(bottom: 22.0),
-                margin: const EdgeInsets.only(bottom: 10.0),
-                child: Stack(
-                  children: <Widget>[
-                    Row(
-                      children: content,
-                    ),
-                    Positioned(
-                      top: 0.0,
-                      right: 0.0,
-                      child: children.last,
-                    ),
-                  ],
-                ),
-              )
-            : Column(
-                mainAxisSize: MainAxisSize.min,
-                children: children,
+    return Container(
+      color: ThemeVars.stepsBackgroundColor,
+      padding: isRow
+          ? const EdgeInsets.only(top: 10.0, left: 10.0, right: 10.0)
+          : const EdgeInsets.only(left: ThemeVars.paddingXl),
+      child: isRow
+          ? Container(
+              padding: const EdgeInsets.only(bottom: 22.0),
+              margin: const EdgeInsets.only(bottom: 10.0),
+              child: Stack(
+                children: <Widget>[
+                  Row(
+                    children: content,
+                  ),
+                  Positioned(
+                    top: 0.0,
+                    right: 0.0,
+                    child: children.last,
+                  ),
+                ],
               ),
-      ),
+            )
+          : Column(
+              mainAxisSize: MainAxisSize.min,
+              children: children,
+            ),
     );
+  }
+
+  void onClickSubStep(int index) {
+    if (onClickStep != null) {
+      onClickStep!(index);
+    }
   }
 
   @override
@@ -124,26 +122,5 @@ class FlanSteps extends StatelessWidget {
     properties.add(DiagnosticsProperty<String>('finishIconUrl', finishIconUrl));
 
     super.debugFillProperties(properties);
-  }
-}
-
-class FlanStepsProvider extends InheritedWidget {
-  const FlanStepsProvider({
-    Key? key,
-    required this.config,
-    required this.onClickStep,
-    required Widget child,
-  }) : super(key: key, child: child);
-
-  final FlanSteps config;
-  final void Function(int) onClickStep;
-
-  static FlanStepsProvider? of(BuildContext context) {
-    return context.dependOnInheritedWidgetOfExactType<FlanStepsProvider>();
-  }
-
-  @override
-  bool updateShouldNotify(FlanStepsProvider oldWidget) {
-    return true;
   }
 }

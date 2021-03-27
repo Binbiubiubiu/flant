@@ -582,7 +582,7 @@ class _FlanPopupProvider extends InheritedWidget {
 
   @override
   bool updateShouldNotify(_FlanPopupProvider oldWidget) {
-    return true;
+    return onOverlayClick != oldWidget.onOverlayClick;
   }
 }
 

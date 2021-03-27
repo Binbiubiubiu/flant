@@ -184,7 +184,6 @@ class _FlanRateState extends State<FlanRate> {
     wrapKey.currentContext
         ?.findRenderObject()
         ?.visitChildren((RenderObject child) {
-      print(child.paintBounds.right);
       rects.add(child.paintBounds);
     });
     ranges.clear();
@@ -215,7 +214,6 @@ class _FlanRateState extends State<FlanRate> {
   }
 
   double _getScoreByPosition(double x) {
-    print(x);
     for (int i = ranges.length - 1; i > 0; i--) {
       if (x > ranges[i].left) {
         return ranges[i].score;

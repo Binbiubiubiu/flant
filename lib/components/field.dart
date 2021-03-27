@@ -489,7 +489,7 @@ class FlanFieldState<T extends dynamic> extends State<FlanField<T>> {
 
   bool get disabled => widget.disabled || (form != null && form!.disabled);
 
-  FlanForm? get form => FlanFormProvider.of(context)?.form;
+  FlanForm? get form => context.findAncestorWidgetOfExactType<FlanForm>();
   String get modelvalue => "${widget.value ?? ''}";
   bool get showClear {
     final bool readonly = widget.readonly || (form != null && form!.readonly);

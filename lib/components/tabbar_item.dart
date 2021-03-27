@@ -57,14 +57,14 @@ class FlanTabbarItem<T> extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final FlanTabbarProvider? parent = FlanTabbarProvider.of(context);
+    final FlanTabbar<T>? parent =
+        context.findAncestorWidgetOfExactType<FlanTabbar<T>>();
 
     if (parent == null) {
       throw 'TabbarItem must be a child component of Tabbar.';
     }
-    final int index = (parent.child as Row)
-        .children
-        .indexWhere((Widget element) => (element as Expanded).child == this);
+    final int index =
+        parent.children.indexWhere((Widget element) => element == this);
 
     final bool active = (name ?? index) == parent.value;
 
@@ -91,39 +91,42 @@ class FlanTabbarItem<T> extends StatelessWidget {
           ),
     );
 
-    return GestureDetector(
-      onTap: () {
-        parent.setActive(name ?? index);
-        if (onClick != null) {
-          onClick!();
-        }
-      },
-      child: Material(
-        textStyle: TextStyle(
-          color: color,
-          fontSize: ThemeVars.tabbarItemFontSize,
-          height: ThemeVars.tabbarItemLineHeight,
-        ),
-        color: Colors.transparent,
-        child: Ink(
-          height: ThemeVars.tabbarHeight,
-          decoration: const BoxDecoration(border: Border(top: FlanHairLine())),
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: <Widget>[
-              const SizedBox(height: ThemeVars.paddingBase),
-              FlanBadge(
-                dot: dot,
-                content: badge,
-                child: iconWidget,
-              ),
-              const SizedBox(height: ThemeVars.tabbarItemMarginBottom),
-              if (textBuilder != null)
-                textBuilder!(context, active)
-              else
-                const SizedBox.shrink(),
-            ],
+    return Expanded(
+      child: GestureDetector(
+        onTap: () {
+          parent.setActive(name ?? index as T);
+          if (onClick != null) {
+            onClick!();
+          }
+        },
+        child: Material(
+          textStyle: TextStyle(
+            color: color,
+            fontSize: ThemeVars.tabbarItemFontSize,
+            height: ThemeVars.tabbarItemLineHeight,
+          ),
+          color: Colors.transparent,
+          child: Ink(
+            height: ThemeVars.tabbarHeight,
+            decoration:
+                const BoxDecoration(border: Border(top: FlanHairLine())),
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: <Widget>[
+                const SizedBox(height: ThemeVars.paddingBase),
+                FlanBadge(
+                  dot: dot,
+                  content: badge,
+                  child: iconWidget,
+                ),
+                const SizedBox(height: ThemeVars.tabbarItemMarginBottom),
+                if (textBuilder != null)
+                  textBuilder!(context, active)
+                else
+                  const SizedBox.shrink(),
+              ],
+            ),
           ),
         ),
       ),

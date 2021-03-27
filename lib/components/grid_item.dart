@@ -59,17 +59,15 @@ class FlanGridItem extends RouteStatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final FlanGridProvider? parent = FlanGridProvider.of(context);
+    final FlanGrid? parent = context.findAncestorWidgetOfExactType<FlanGrid>();
     if (parent == null) {
       throw 'GridItem must be a child widget of Grid';
     }
 
-    final int index = (parent.child as Wrap).children.indexOf(this);
+    final int index = parent.children.indexOf(this);
 
-    final double size = 1 / parent.grid.columnNum * parent.maxWidth;
-
-    final bool surround = parent.grid.border && parent.grid.gutter > 0.0;
-    final Border? border = parent.grid.border
+    final bool surround = parent.border && parent.gutter > 0.0;
+    final Border? border = parent.border
         ? Border(
             right: const FlanHairLine(),
             bottom: const FlanHairLine(),
@@ -78,53 +76,58 @@ class FlanGridItem extends RouteStatelessWidget {
           )
         : null;
 
-    return Container(
-      width: size,
-      height: parent.grid.square ? size : null,
-      padding: EdgeInsets.only(right: parent.grid.gutter),
-      margin: EdgeInsets.only(
-        top: index >= parent.grid.columnNum ? parent.grid.gutter : 0,
-      ),
-      child: Semantics(
-        button: parent.grid.clickable,
-        sortKey: parent.grid.clickable ? const OrdinalSortKey(0.0) : null,
-        child: Material(
-          type:
-              parent.grid.clickable ? MaterialType.button : MaterialType.canvas,
-          color: ThemeVars.gridItemContentBackgroundColor,
-          child: InkWell(
-            splashColor: Colors.transparent,
-            highlightColor: ThemeVars.gridItemContentActiveColor,
-            onTap: parent.grid.clickable
-                ? () {
-                    route(context);
-                    if (onClick != null) {
-                      onClick!();
-                    }
-                  }
-                : null,
-            child: Container(
-              padding: ThemeVars.gridItemContentPadding,
-              decoration: BoxDecoration(border: border),
-              child: Flex(
-                mainAxisAlignment: parent.grid.center
-                    ? MainAxisAlignment.center
-                    : MainAxisAlignment.start,
-                crossAxisAlignment: parent.grid.center
-                    ? CrossAxisAlignment.center
-                    : CrossAxisAlignment.start,
-                direction: parent.grid.direction,
-                children: _buildContext(context),
+    return LayoutBuilder(
+      builder: (BuildContext context, BoxConstraints constraints) {
+        final double size = 1 / parent.columnNum * constraints.maxWidth;
+        return Container(
+          width: size,
+          height: parent.square ? size : null,
+          padding: EdgeInsets.only(right: parent.gutter),
+          margin: EdgeInsets.only(
+            top: index >= parent.columnNum ? parent.gutter : 0,
+          ),
+          child: Semantics(
+            button: parent.clickable,
+            sortKey: parent.clickable ? const OrdinalSortKey(0.0) : null,
+            child: Material(
+              type:
+                  parent.clickable ? MaterialType.button : MaterialType.canvas,
+              color: ThemeVars.gridItemContentBackgroundColor,
+              child: InkWell(
+                splashColor: Colors.transparent,
+                highlightColor: ThemeVars.gridItemContentActiveColor,
+                onTap: parent.clickable
+                    ? () {
+                        route(context);
+                        if (onClick != null) {
+                          onClick!();
+                        }
+                      }
+                    : null,
+                child: Container(
+                  padding: ThemeVars.gridItemContentPadding,
+                  decoration: BoxDecoration(border: border),
+                  child: Flex(
+                    mainAxisAlignment: parent.center
+                        ? MainAxisAlignment.center
+                        : MainAxisAlignment.start,
+                    crossAxisAlignment: parent.center
+                        ? CrossAxisAlignment.center
+                        : CrossAxisAlignment.start,
+                    direction: parent.direction,
+                    children: _buildContext(context),
+                  ),
+                ),
               ),
             ),
           ),
-        ),
-      ),
+        );
+      },
     );
   }
 
   Widget _buildIcon(BuildContext context) {
-    final FlanGridProvider parent = FlanGridProvider.of(context)!;
+    final FlanGrid? parent = context.findAncestorWidgetOfExactType<FlanGrid>();
 
     if (iconSlot != null) {
       return FlanBadge(dot: dot, content: badge, child: iconSlot);
@@ -135,7 +138,7 @@ class FlanGridItem extends RouteStatelessWidget {
         dot: dot,
         iconName: iconName,
         iconUrl: iconUrl,
-        size: parent.grid.iconSize ?? ThemeVars.gridItemIconSize,
+        size: parent!.iconSize ?? ThemeVars.gridItemIconSize,
         badge: badge,
         classPrefix: iconPrefix,
       );
