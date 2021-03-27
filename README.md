@@ -17,14 +17,14 @@
 
 - [ ] Calendar 日历
 - [ ] Cascader 级联选择
-- [ ] Checkbox 复选框
+- [x] Checkbox 复选框
 - [ ] DatetimePicker 时间选择
 - [x] Field 输入框
 - [ ] Form 表单
 - [ ] NumberKeyboard 数字键盘
 - [ ] PasswordInput 密码输入框
 - [ ] Picker 选择器
-- [ ] Radio 单选框
+- [x] Radio 单选框
 - [x] Rate 评分
 - [x] Search 搜索
 - [ ] Slider 滑块
