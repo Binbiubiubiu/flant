@@ -1,9 +1,12 @@
+// 🎯 Dart imports:
 import 'dart:math' as math;
 
-import 'package:flutter/material.dart';
+// 🐦 Flutter imports:
 import 'package:flutter/foundation.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
 
+// 🌎 Project imports:
 import '../styles/var.dart';
 
 /// ### FlanCountDown 倒计时

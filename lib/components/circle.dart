@@ -1,8 +1,12 @@
+// 🎯 Dart imports:
 import 'dart:math' as math;
 import 'dart:ui';
 
+// 🐦 Flutter imports:
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+
+// 🌎 Project imports:
 import '../styles/var.dart';
 
 /// 格式化百分比

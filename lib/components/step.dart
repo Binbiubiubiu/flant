@@ -1,6 +1,9 @@
-import 'package:flant/flant.dart';
+// 🐦 Flutter imports:
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+
+// 🌎 Project imports:
+import 'package:flant/flant.dart';
 import '../styles/var.dart';
 
 class FlanStep extends StatefulWidget {

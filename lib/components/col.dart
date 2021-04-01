@@ -1,6 +1,9 @@
-import 'package:flant/components/row.dart';
-import 'package:flutter/material.dart';
+// 🐦 Flutter imports:
 import 'package:flutter/foundation.dart';
+import 'package:flutter/material.dart';
+
+// 🌎 Project imports:
+import 'package:flant/components/row.dart';
 import './row.dart' show FlanRowProvider;
 
 /// ### FlanCol 列布局

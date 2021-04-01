@@ -1,13 +1,15 @@
-import 'package:flant/components/grid.dart';
-import 'package:flant/components/icon.dart';
-import 'package:flant/components/style.dart';
-import 'package:flutter/material.dart';
+// 🐦 Flutter imports:
 import 'package:flutter/foundation.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter/semantics.dart';
 
+// 🌎 Project imports:
 import '../mixins/route_mixins.dart';
 import '../styles/var.dart';
-import 'badge.dart';
+import './badge.dart';
+import './grid.dart';
+import './icon.dart';
+import './style.dart';
 
 class FlanGridItem extends RouteStatelessWidget {
   const FlanGridItem({

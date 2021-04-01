@@ -1,7 +1,9 @@
+// 🐦 Flutter imports:
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/semantics.dart';
 
+// 🌎 Project imports:
 import '../styles/var.dart';
 import 'cell.dart';
 import 'collapse.dart';

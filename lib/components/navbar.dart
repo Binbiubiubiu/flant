@@ -1,9 +1,11 @@
-import 'package:flant/components/icon.dart';
-import 'package:flant/components/style.dart';
+// 🐦 Flutter imports:
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
+// 🌎 Project imports:
 import '../styles/var.dart';
+import './icon.dart';
+import './style.dart';
 
 class FlanNavBar extends StatelessWidget implements PreferredSizeWidget {
   const FlanNavBar({

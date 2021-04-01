@@ -1,7 +1,9 @@
-import 'package:flant/components/checkbox.dart';
+// 🐦 Flutter imports:
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
+// 🌎 Project imports:
+import 'package:flant/components/checkbox.dart';
 import 'checkbox.dart';
 
 class FlanCheckboxGroup<T extends dynamic> extends StatelessWidget {

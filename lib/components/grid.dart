@@ -1,7 +1,9 @@
-import 'package:flant/components/style.dart';
-import 'package:flutter/material.dart';
+// 🐦 Flutter imports:
 import 'package:flutter/foundation.dart';
+import 'package:flutter/material.dart';
 
+// 🌎 Project imports:
+import 'package:flant/components/style.dart';
 import 'grid_item.dart';
 
 class FlanGrid extends StatelessWidget {
