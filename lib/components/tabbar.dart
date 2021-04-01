@@ -3,6 +3,8 @@ import 'package:flutter/material.dart';
 import '../styles/var.dart';
 import 'tabbar_item.dart';
 
+/// ### Tabbar 标签栏
+/// 底部导航栏，用于在不同页面之间进行切换。
 class FlanTabbar<T> extends StatelessWidget {
   const FlanTabbar({
     Key? key,

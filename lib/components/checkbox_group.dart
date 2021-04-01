@@ -66,8 +66,15 @@ class FlanCheckboxGroup<T extends dynamic> extends StatelessWidget {
   }
 
   @override
-  List<DiagnosticsNode> debugDescribeChildren() {
-    // TODO: implement debugDescribeChildren
-    return super.debugDescribeChildren();
+  void debugFillProperties(DiagnosticPropertiesBuilder properties) {
+    properties.add(DiagnosticsProperty<int>('max', max, defaultValue: 5));
+    properties.add(
+        DiagnosticsProperty<bool>('disabled', disabled, defaultValue: false));
+    properties.add(DiagnosticsProperty<Axis>('direction', direction,
+        defaultValue: Axis.vertical));
+    properties.add(DiagnosticsProperty<double>('iconSize', iconSize));
+    properties.add(DiagnosticsProperty<List<T>>('value', value));
+
+    super.debugFillProperties(properties);
   }
 }

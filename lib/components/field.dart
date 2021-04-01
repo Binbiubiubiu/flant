@@ -1,12 +1,13 @@
-import 'package:flant/components/cell.dart';
-import 'package:flant/components/form.dart';
-import 'package:flant/components/icon.dart';
-import 'package:flant/styles/icons.dart';
-import 'package:flant/styles/var.dart';
-import 'package:flutter/material.dart';
 import 'package:flutter/foundation.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter/services.dart';
+
+import '../styles/var.dart';
+import '../utils/format/number.dart';
+import 'cell.dart';
+import 'form.dart';
+import 'icon.dart';
 
 int uuid = 0;
 
@@ -290,7 +291,7 @@ class FlanFieldState<T extends dynamic> extends State<FlanField<T>> {
       }
     } else {
       if (widget.formatTrigger == FlanFieldFormatTrigger.onBlur) {
-        updateValue(_formatNumber(modelvalue));
+        updateValue(formatNumber(modelvalue));
       }
       if (widget.onBlur != null) {
         widget.onBlur!();
@@ -507,7 +508,7 @@ class FlanFieldState<T extends dynamic> extends State<FlanField<T>> {
   List<TextInputFormatter> get formatters {
     final List<TextInputFormatter> result = <TextInputFormatter>[];
     if (widget.type == FlanFieldType.number) {
-      result.add(TextInputFormatter.withFunction(_customFormat(_formatNumber)));
+      result.add(TextInputFormatter.withFunction(customFormat(formatNumber)));
     }
 
     if (widget.type == FlanFieldType.digit) {
@@ -517,7 +518,7 @@ class FlanFieldState<T extends dynamic> extends State<FlanField<T>> {
     if (widget.formatter != null &&
         widget.formatTrigger == FlanFieldFormatTrigger.onChange) {
       result.add(
-          TextInputFormatter.withFunction(_customFormat(widget.formatter!)));
+          TextInputFormatter.withFunction(customFormat(widget.formatter!)));
     }
 
     return result;
@@ -972,70 +973,4 @@ String getRuleMessage(dynamic value, FlanFieldRule rule) {
 Future<dynamic> runRuleValidator(dynamic value, FlanFieldRule rule) async {
   final dynamic returnVal = rule.validator!<dynamic, dynamic>(value, rule);
   return returnVal;
-}
-
-String _trimExtraChar(String value, String char, RegExp regExp) {
-  final int index = value.indexOf(char);
-
-  if (index == -1) {
-    return value;
-  }
-
-  if (char == '-' && index != 0) {
-    return value.substring(0, index);
-  }
-
-  return value.substring(0, index + 1) +
-      value.substring(index).replaceAll(regExp, '');
-}
-
-String _formatNumber(String value) {
-  value = _trimExtraChar(value, '.', RegExp(r'\.'));
-
-  value = _trimExtraChar(value, '-', RegExp(r'-'));
-
-  return value.replaceAll(RegExp(r'[^-0-9.]'), '');
-}
-
-TextEditingValue Function(TextEditingValue, TextEditingValue) _customFormat(
-  String Function(String) formatFunction,
-) {
-  return (
-    TextEditingValue oldValue,
-    TextEditingValue value,
-  ) {
-    final int selectionStartIndex = value.selection.start;
-    final int selectionEndIndex = value.selection.end;
-    String manipulatedText;
-    TextSelection? manipulatedSelection;
-    if (selectionStartIndex < 0 || selectionEndIndex < 0) {
-      manipulatedText = formatFunction(value.text);
-    } else {
-      final String beforeSelection =
-          formatFunction(value.text.substring(0, selectionStartIndex));
-      final String inSelection = formatFunction(
-          value.text.substring(selectionStartIndex, selectionEndIndex));
-      final String afterSelection =
-          formatFunction(value.text.substring(selectionEndIndex));
-      manipulatedText = beforeSelection + inSelection + afterSelection;
-      if (value.selection.baseOffset > value.selection.extentOffset) {
-        manipulatedSelection = value.selection.copyWith(
-          baseOffset: beforeSelection.length + inSelection.length,
-          extentOffset: beforeSelection.length,
-        );
-      } else {
-        manipulatedSelection = value.selection.copyWith(
-          baseOffset: beforeSelection.length,
-          extentOffset: beforeSelection.length + inSelection.length,
-        );
-      }
-    }
-    return TextEditingValue(
-      text: manipulatedText,
-      selection:
-          manipulatedSelection ?? const TextSelection.collapsed(offset: -1),
-      composing:
-          manipulatedText == value.text ? value.composing : TextRange.empty,
-    );
-  };
 }

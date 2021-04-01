@@ -1,3 +1,4 @@
+import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/rendering.dart';
@@ -108,6 +109,7 @@ class _FlanRateState extends State<FlanRate> {
                 ? SystemMouseCursors.basic
                 : SystemMouseCursors.click,
         child: GestureDetector(
+          dragStartBehavior: DragStartBehavior.down,
           onHorizontalDragStart: _onTouchStart,
           onHorizontalDragUpdate: _onTouchMove,
           child: Wrap(

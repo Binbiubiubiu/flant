@@ -3,6 +3,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import '../styles/var.dart';
 
+/// ### Steps 步骤条
 class FlanSteps extends StatelessWidget {
   const FlanSteps({
     Key? key,

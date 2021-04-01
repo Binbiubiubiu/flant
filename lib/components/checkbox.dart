@@ -6,6 +6,8 @@ import 'package:flutter/rendering.dart';
 import '../styles/var.dart';
 import 'icon.dart';
 
+/// ### Checkbox 复选框
+/// 用于在选中和非选中状态之间进行切换。
 class FlanCheckbox<T extends dynamic> extends StatelessWidget {
   const FlanCheckbox({
     Key? key,
@@ -109,9 +111,26 @@ class FlanCheckbox<T extends dynamic> extends StatelessWidget {
   }
 
   @override
-  List<DiagnosticsNode> debugDescribeChildren() {
-    // TODO: implement debugDescribeChildren
-    return super.debugDescribeChildren();
+  void debugFillProperties(DiagnosticPropertiesBuilder properties) {
+    properties.add(DiagnosticsProperty<T>('name', name));
+    properties
+        .add(DiagnosticsProperty<bool>('value', value, defaultValue: false));
+    properties.add(
+        DiagnosticsProperty<bool>('disabled', disabled, defaultValue: false));
+    properties.add(DiagnosticsProperty<double>('iconSize', iconSize));
+    properties
+        .add(DiagnosticsProperty<bool>('value', value, defaultValue: false));
+    properties.add(DiagnosticsProperty<Color>('checkedColor', checkedColor));
+    properties.add(DiagnosticsProperty<FlanCheckerLabelPosition>(
+        'labelPosition', labelPosition,
+        defaultValue: FlanCheckerLabelPosition.right));
+    properties.add(DiagnosticsProperty<bool>('labelDisabled', labelDisabled,
+        defaultValue: false));
+    properties.add(DiagnosticsProperty<FlanCheckerShape>('shape', shape,
+        defaultValue: FlanCheckerShape.round));
+    properties.add(
+        DiagnosticsProperty<bool>('bindGroup', bindGroup, defaultValue: true));
+    super.debugFillProperties(properties);
   }
 }
 
@@ -279,7 +298,29 @@ class FlanChecker<T> extends StatelessWidget {
 
   @override
   void debugFillProperties(DiagnosticPropertiesBuilder properties) {
-    // TODO: implement debugFillProperties
+    properties.add(DiagnosticsProperty<T>('name', name));
+    properties
+        .add(DiagnosticsProperty<bool>('value', value, defaultValue: false));
+    properties.add(
+        DiagnosticsProperty<bool>('disabled', disabled, defaultValue: false));
+    properties.add(DiagnosticsProperty<double>('iconSize', iconSize));
+    properties
+        .add(DiagnosticsProperty<bool>('value', value, defaultValue: false));
+    properties.add(DiagnosticsProperty<Color>('checkedColor', checkedColor));
+    properties.add(DiagnosticsProperty<FlanCheckerLabelPosition>(
+        'labelPosition', labelPosition,
+        defaultValue: FlanCheckerLabelPosition.right));
+    properties.add(DiagnosticsProperty<bool>('labelDisabled', labelDisabled,
+        defaultValue: false));
+    properties.add(DiagnosticsProperty<FlanCheckerShape>('shape', shape,
+        defaultValue: FlanCheckerShape.round));
+
+    properties.add(DiagnosticsProperty<String>('role', role));
+    properties
+        .add(DiagnosticsProperty<FlanCheckerParentProps>('parent', parent));
+    properties.add(
+        DiagnosticsProperty<bool>('checked', checked, defaultValue: false));
+
     super.debugFillProperties(properties);
   }
 }
