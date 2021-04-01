@@ -1,6 +1,11 @@
-import 'package:flutter_svg/flutter_svg.dart';
-import 'package:flutter/material.dart';
+// 🐦 Flutter imports:
 import 'package:flutter/foundation.dart';
+import 'package:flutter/material.dart';
+
+// 📦 Package imports:
+import 'package:flutter_svg/flutter_svg.dart';
+
+// 🌎 Project imports:
 import '../styles/var.dart';
 
 /// ### FlanEmpty 空状态

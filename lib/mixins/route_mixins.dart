@@ -1,5 +1,6 @@
-import 'package:flutter/material.dart';
+// 🐦 Flutter imports:
 import 'package:flutter/foundation.dart';
+import 'package:flutter/material.dart';
 
 /// 带有路由功能组件的抽象类
 /// {@tool snippet}

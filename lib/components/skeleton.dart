@@ -1,5 +1,8 @@
+// 🐦 Flutter imports:
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+
+// 🌎 Project imports:
 import '../styles/var.dart';
 
 const double DEFAULT_ROW_WIDTH = 1.0;

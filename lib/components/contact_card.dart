@@ -1,11 +1,14 @@
+// 🎯 Dart imports:
 import 'dart:math' as math;
 
+// 🐦 Flutter imports:
+import 'package:flutter/foundation.dart';
+import 'package:flutter/material.dart';
+
+// 🌎 Project imports:
 import 'package:flant/components/cell.dart';
 import 'package:flant/flant.dart';
 import 'package:flant/styles/icons.dart';
-import 'package:flutter/material.dart';
-import 'package:flutter/foundation.dart';
-
 import '../styles/var.dart';
 
 /// ### ContactCard 联系人卡片
