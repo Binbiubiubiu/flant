@@ -54,7 +54,7 @@
 - [x] Empty 空状态
 - [ ] ImagePreview 图片预览
 - [ ] ~~Lazyload 懒加载~~
-- [ ] List 列表
+- [x] List 列表
 - [x] NoticeBar 通知栏
 - [ ] Popover 气泡弹出框
 - [x] Progress 进度条

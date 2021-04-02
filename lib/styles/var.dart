@@ -504,10 +504,11 @@ class ThemeVars {
   static const int imagePreviewCloseIconZIndex = 1;
 
   // List
-  static const double listIconMarginRight = 5.0;
+  static const double listIconMarginRight = paddingBase;
   static const Color listTextColor = gray6;
   static const double listTextFontSize = fontSizeMd;
   static const double listTextLineHeight = 50.0;
+  static const double listLoadingIconSize = 16.0;
 
   // Loading
   static const Color loadingTextColor = gray6;
