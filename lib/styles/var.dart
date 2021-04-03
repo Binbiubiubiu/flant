@@ -601,6 +601,11 @@ class ThemeVars {
   static const Color passwordInputErrorInfoColor = red;
   static const double passwordInputDotSize = 10.0;
   static const Color passwordInputDotColor = black;
+  static const Color passwordInputCursorColor = textColor;
+  static const double passwordInputCursorWidth = 1.0;
+  static const double passwordInputCursorHeight = 0.4;
+  static const Duration passwordInputCursorAnimationDuration =
+      Duration(seconds: 1);
 
   // Picker
   static const Color pickerBackgroundColor = white;

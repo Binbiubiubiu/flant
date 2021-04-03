@@ -55,6 +55,12 @@ class _FlanOverlayState extends State<FlanOverlay> {
   }
 
   @override
+  void dispose() {
+    close();
+    super.dispose();
+  }
+
+  @override
   void didUpdateWidget(covariant FlanOverlay oldWidget) {
     if (widget.show != oldWidget.show) {
       _nextTick(() {

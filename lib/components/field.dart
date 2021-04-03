@@ -547,26 +547,35 @@ class FlanFieldState<T extends dynamic> extends State<FlanField<T>> {
     }
   }
 
+  void onClickInput() {
+    if (widget.onClickInput != null) {
+      widget.onClickInput!();
+    }
+  }
+
   Widget _buildInput() {
     final TextAlign inputAlign =
         widget.inputAlign ?? form?.inputAlign ?? TextAlign.left;
     if (widget.inputSlot != null) {
-      return Container(
-        constraints: const BoxConstraints(
-          minHeight: ThemeVars.cellLineHeight,
-        ),
-        alignment: <TextAlign, Alignment>{
-          TextAlign.left: Alignment.centerLeft,
-          TextAlign.center: Alignment.center,
-          TextAlign.right: Alignment.centerRight,
-        }[inputAlign],
-        child: DefaultTextStyle(
-          style: TextStyle(
-            color: showError
-                ? ThemeVars.fieldInputErrorTextColor
-                : ThemeVars.fieldInputTextColor,
+      return GestureDetector(
+        onTap: onClickInput,
+        child: Container(
+          constraints: const BoxConstraints(
+            minHeight: ThemeVars.cellLineHeight,
           ),
-          child: widget.inputSlot!,
+          alignment: <TextAlign, Alignment>{
+            TextAlign.left: Alignment.centerLeft,
+            TextAlign.center: Alignment.center,
+            TextAlign.right: Alignment.centerRight,
+          }[inputAlign],
+          child: DefaultTextStyle(
+            style: TextStyle(
+              color: showError
+                  ? ThemeVars.fieldInputErrorTextColor
+                  : ThemeVars.fieldInputTextColor,
+            ),
+            child: widget.inputSlot!,
+          ),
         ),
       );
     }
@@ -579,6 +588,7 @@ class FlanFieldState<T extends dynamic> extends State<FlanField<T>> {
               : widget.autosize),
       child: TextField(
         textAlign: inputAlign,
+        onTap: onClickInput,
         decoration: InputDecoration(
           border: InputBorder.none,
           contentPadding: EdgeInsets.zero,
@@ -638,18 +648,25 @@ class FlanFieldState<T extends dynamic> extends State<FlanField<T>> {
     if (widget.leftIconName != null ||
         widget.leftIconUrl != null ||
         widget.leftIconSlot != null) {
-      return Padding(
-        padding: const EdgeInsets.only(right: ThemeVars.paddingBase),
-        child: IconTheme.merge(
-          data: const IconThemeData(
-            size: ThemeVars.fieldIconSize,
+      return GestureDetector(
+        onTap: () {
+          if (widget.onClickLeftIcon != null) {
+            widget.onClickLeftIcon!();
+          }
+        },
+        child: Padding(
+          padding: const EdgeInsets.only(right: ThemeVars.paddingBase),
+          child: IconTheme.merge(
+            data: const IconThemeData(
+              size: ThemeVars.fieldIconSize,
+            ),
+            child: widget.leftIconSlot ??
+                FlanIcon(
+                  iconName: widget.leftIconName,
+                  iconUrl: widget.leftIconUrl,
+                  classPrefix: widget.iconPrefix,
+                ),
           ),
-          child: widget.leftIconSlot ??
-              FlanIcon(
-                iconName: widget.leftIconName,
-                iconUrl: widget.leftIconUrl,
-                classPrefix: widget.iconPrefix,
-              ),
         ),
       );
     }
@@ -661,17 +678,24 @@ class FlanFieldState<T extends dynamic> extends State<FlanField<T>> {
     if (widget.rightIconName != null ||
         widget.rightIconUrl != null ||
         widget.rightIconSlot != null) {
-      return IconTheme.merge(
-        data: const IconThemeData(
-          size: ThemeVars.fieldIconSize,
-          color: ThemeVars.fieldRightIconColor,
+      return GestureDetector(
+        onTap: () {
+          if (widget.onClickRightIcon != null) {
+            widget.onClickRightIcon!();
+          }
+        },
+        child: IconTheme.merge(
+          data: const IconThemeData(
+            size: ThemeVars.fieldIconSize,
+            color: ThemeVars.fieldRightIconColor,
+          ),
+          child: widget.rightIconSlot ??
+              FlanIcon(
+                iconName: widget.rightIconName,
+                iconUrl: widget.rightIconUrl,
+                classPrefix: widget.iconPrefix,
+              ),
         ),
-        child: widget.rightIconSlot ??
-            FlanIcon(
-              iconName: widget.rightIconName,
-              iconUrl: widget.rightIconUrl,
-              classPrefix: widget.iconPrefix,
-            ),
       );
     }
 
