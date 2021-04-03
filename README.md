@@ -21,8 +21,8 @@
 - [ ] DatetimePicker 时间选择
 - [x] Field 输入框
 - [ ] Form 表单
-- [ ] NumberKeyboard 数字键盘
-- [ ] PasswordInput 密码输入框
+- [x] NumberKeyboard 数字键盘
+- [x] PasswordInput 密码输入框
 - [ ] Picker 选择器
 - [x] Radio 单选框
 - [x] Rate 评分
@@ -86,5 +86,4 @@
 - [ ] ContactEdit 联系人编辑
 - [ ] ContactList 联系人列表
 - [ ] Coupon 优惠券
-- [ ] GoodsAction 商品导航
 - [x] SubmitBar 提交订单栏
