@@ -346,18 +346,20 @@ class _FlanPopupState extends State<FlanPopup> {
               : null,
           child: GestureDetector(
             onTap: widget.onClick,
-            child: Material(
+            child: ClipRRect(
               borderRadius: widget.round ? _roundRadius : null,
-              color: ThemeVars.popupBackgroundColor,
-              type: MaterialType.card,
-              child: Stack(
-                children: <Widget>[
-                  if (widget.closeable)
-                    _buildCloseIcon()
-                  else
-                    const SizedBox.shrink(),
-                  widget.child,
-                ],
+              child: Material(
+                color: ThemeVars.popupBackgroundColor,
+                type: MaterialType.card,
+                child: Stack(
+                  children: <Widget>[
+                    if (widget.closeable)
+                      _buildCloseIcon()
+                    else
+                      const SizedBox.shrink(),
+                    widget.child,
+                  ],
+                ),
               ),
             ),
           ),

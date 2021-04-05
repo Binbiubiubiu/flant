@@ -1,4 +1,10 @@
+import 'dart:math' as math;
+
 import 'package:flutter/material.dart';
+
+num range(num number, num min, num max) {
+  return math.min(math.max(number, min), max);
+}
 
 String trimExtraChar(String value, String char, RegExp regExp) {
   final int index = value.indexOf(char);

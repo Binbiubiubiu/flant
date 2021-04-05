@@ -23,12 +23,12 @@
 - [ ] Form 表单
 - [x] NumberKeyboard 数字键盘
 - [x] PasswordInput 密码输入框
-- [ ] Picker 选择器
+- [x] Picker 选择器
 - [x] Radio 单选框
 - [x] Rate 评分
 - [x] Search 搜索
 - [ ] Slider 滑块
-- [ ] Stepper 步进器
+- [x] Stepper 步进器
 - [x] Switch 开关
 - [ ] Uploader 文件上传
 
