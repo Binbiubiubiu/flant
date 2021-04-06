@@ -2,17 +2,18 @@ import 'dart:convert';
 import 'dart:math' as math;
 
 // 🐦 Flutter imports:
-import 'package:flant/components/loading.dart';
-import 'package:flant/components/style.dart';
-import 'package:flant/flant.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/physics.dart';
 import 'package:flutter/rendering.dart';
-// 🌎 Project imports:
+
+import '../locale/l10n.dart';
 import '../styles/var.dart';
 import '../utils/format/number.dart';
+// 🌎 Project imports:
+import 'loading.dart';
+import 'style.dart';
 
 const Duration DEFAULT_DURATION = Duration(milliseconds: 200);
 
@@ -67,6 +68,8 @@ class FlanPicker extends StatefulWidget {
 
   /// 是否显示加载状态
   final bool loading;
+
+  /// 是否只读
   final bool readonly;
   // /// 是否允许选项内容中渲染 HTML
   // final bool allowHtml;
@@ -136,10 +139,10 @@ class FlanPicker extends StatefulWidget {
   final Widget? columnsBottomSlot;
 
   @override
-  _FlanPickerState createState() => _FlanPickerState();
+  FlanPickerState createState() => FlanPickerState();
 }
 
-class _FlanPickerState extends State<FlanPicker> {
+class FlanPickerState extends State<FlanPicker> {
   List<dynamic> formattedColumns = <dynamic>[];
   late final String textKey;
   late final String valuesKey;

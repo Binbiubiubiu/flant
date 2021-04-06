@@ -152,7 +152,7 @@ packages:
     source: hosted
     version: "4.4.2"
   intl:
-    dependency: transitive
+    dependency: "direct main"
     description:
       name: intl
       url: "https://pub.flutter-io.cn"

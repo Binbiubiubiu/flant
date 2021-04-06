@@ -3,7 +3,7 @@
 # separate terms of service, privacy policy, and support
 # documentation.
 
-name: Dart
+name: publish_dry
 
 on:
   workflow_dispatch:
@@ -31,7 +31,7 @@ jobs:
       # 下载项目依赖
       - run: flutter pub get
 
-     # 执行测试
+      # 执行测试
       - run: flutter test
       - name: Publish Dart/Flutter package
         # You may pin to the exact commit or the version.

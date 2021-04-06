@@ -23,6 +23,7 @@ class FlanSlider<T> extends StatefulWidget {
     this.disabled = false,
     this.readonly = false,
     this.vertical = false,
+    this.onValueChange,
     this.onChange,
     this.onDragStart,
     this.onDragEnd,
@@ -69,6 +70,8 @@ class FlanSlider<T> extends StatefulWidget {
   final bool vertical;
 
   // ****************** Events ******************
+  /// 进度变化监听
+  final ValueChanged<T>? onValueChange;
 
   /// 进度变化且结束拖动后触发
   final ValueChanged<T>? onChange;
@@ -88,23 +91,16 @@ class FlanSlider<T> extends StatefulWidget {
   _FlanSliderState<T> createState() => _FlanSliderState<T>();
 }
 
-class _FlanSliderState<T> extends State<FlanSlider<T>>
-    with SingleTickerProviderStateMixin {
+class _FlanSliderState<T> extends State<FlanSlider<T>> {
   int? buttonIndex;
-  T startValue = 0.0 as T;
-  T currentValue = 0.0 as T;
+  T? startValue;
+  T? currentValue;
 
-  GlobalKey root = GlobalKey();
+  // GlobalKey root = GlobalKey();
 
   FlanSliderDragStatus dragStatus = FlanSliderDragStatus.none;
 
   Offset lastPosition = Offset.zero;
-
-  @override
-  void initState() {
-    updateValue(widget.value);
-    super.initState();
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -112,53 +108,74 @@ class _FlanSliderState<T> extends State<FlanSlider<T>>
       cursor: SystemMouseCursors.click,
       child: GestureDetector(
         behavior: HitTestBehavior.opaque,
-        onTapDown: onClick,
-        child: Padding(
-          padding: const EdgeInsets.symmetric(vertical: 8.0),
-          child: Stack(
+        onTapUp: onClick,
+        child: LayoutBuilder(
+            builder: (BuildContext context, BoxConstraints constraints) {
+          return Stack(
             children: <Widget>[
-              Container(
-                key: root,
-                width: double.infinity,
-                height: ThemeVars.sliderBarHeight,
-                decoration: BoxDecoration(
-                  color: ThemeVars.sliderInactiveBackgroundColor,
-                  borderRadius:
-                      BorderRadius.circular(ThemeVars.borderRadiusMax),
+              Padding(
+                padding: const EdgeInsets.symmetric(
+                  vertical: ThemeVars.sliderButtonHeight / 2.0,
                 ),
-                alignment: Alignment.centerLeft,
-              ),
-              FractionallySizedBox(
-                widthFactor: calcMainAxis() / 100.0,
-                child: Stack(
-                  clipBehavior: Clip.none,
-                  children: <Widget>[
-                    Container(
-                      height: ThemeVars.sliderBarHeight * 10.0,
-                      decoration: BoxDecoration(
-                        color: widget.activeColor ??
-                            ThemeVars.sliderActiveBackgroundColor,
-                        borderRadius:
-                            BorderRadius.circular(ThemeVars.borderRadiusMax),
-                      ),
+                child: Container(
+                  // key: root,
+                  width: double.infinity,
+                  height: ThemeVars.sliderBarHeight,
+                  decoration: BoxDecoration(
+                    color: ThemeVars.sliderInactiveBackgroundColor,
+                    borderRadius: BorderRadius.circular(
+                      ThemeVars.borderRadiusMax,
                     ),
-                    ...widget.range
-                        ? <Widget>[
-                            _buildButton(index: 0),
-                            _buildButton(index: 1)
-                          ]
-                        : <Widget>[_buildButton()]
-                  ],
+                  ),
+                  alignment: Alignment.centerLeft,
+                ),
+              ),
+              Positioned(
+                left: widget.vertical
+                    ? null
+                    : calcOffset() / 100 * constraints.maxWidth,
+                top: widget.vertical
+                    ? calcOffset() / 100 * constraints.maxWidth
+                    : null,
+                width: calcMainAxis() / 100.0 * constraints.maxWidth,
+                child: Opacity(
+                  opacity:
+                      widget.disabled ? ThemeVars.sliderDisabledOpacity : 1.0,
+                  child: Stack(
+                    clipBehavior: Clip.none,
+                    children: <Widget>[
+                      Padding(
+                        padding: const EdgeInsets.symmetric(
+                          vertical: ThemeVars.sliderButtonHeight / 2.0,
+                        ),
+                        child: Container(
+                          height: ThemeVars.sliderBarHeight,
+                          decoration: BoxDecoration(
+                            color: widget.activeColor ??
+                                ThemeVars.sliderActiveBackgroundColor,
+                            borderRadius: BorderRadius.circular(
+                                ThemeVars.borderRadiusMax),
+                          ),
+                        ),
+                      ),
+                      ...widget.range
+                          ? <Widget>[
+                              _buildButton(index: 0),
+                              _buildButton(index: 1)
+                            ]
+                          : <Widget>[_buildButton()]
+                    ],
+                  ),
                 ),
               ),
             ],
-          ),
-        ),
+          );
+        }),
       ),
     );
   }
 
-  bool isRange(T val) => widget.range && val is List<num>;
+  bool isRange(T? val) => widget.range && val is List<num>;
 
   double calcMainAxis() {
     if (isRange(widget.value)) {
@@ -183,7 +200,7 @@ class _FlanSliderState<T> extends State<FlanSlider<T>>
     return (value / widget.step).round() * widget.step;
   }
 
-  bool isSameValue(T newValue, T oldValue) => newValue == oldValue;
+  bool isSameValue(T? newValue, T? oldValue) => newValue == oldValue;
 
   List<double> handleOverlap(List<double> value) {
     if (value[0] > value[1]) {
@@ -192,13 +209,20 @@ class _FlanSliderState<T> extends State<FlanSlider<T>>
     return value;
   }
 
-  void updateValue(T value) {
+  void updateValue(T value, {bool end = false}) {
     if (isRange(value)) {
-      value = handleOverlap(value as List<double>).map(format) as T;
+      print(value);
+      value = handleOverlap(value as List<double>).map(format).toList() as T;
     } else {
       value = format(value as double) as T;
     }
     if (!isSameValue(value, widget.value)) {
+      if (widget.onValueChange != null) {
+        widget.onValueChange!(value);
+      }
+    }
+
+    if (end && !isSameValue(value, startValue)) {
       if (widget.onChange != null) {
         widget.onChange!(value);
       }
@@ -209,7 +233,7 @@ class _FlanSliderState<T> extends State<FlanSlider<T>>
     return context.findRenderObject()!.paintBounds;
   }
 
-  void onClick(TapDownDetails details) {
+  void onClick(TapUpDetails details) {
     if (widget.disabled || widget.readonly) {
       return;
     }
@@ -226,17 +250,16 @@ class _FlanSliderState<T> extends State<FlanSlider<T>>
       final double middle = (left + right) / 2;
 
       if (value <= middle) {
-        updateValue(<double>[value, right] as T);
+        updateValue(<double>[value, right] as T, end: true);
       } else {
-        updateValue(<double>[left, value] as T);
+        updateValue(<double>[left, value] as T, end: true);
       }
     } else {
-      updateValue(value as T);
+      updateValue(value as T, end: true);
     }
   }
 
   void onTouchStart(DragStartDetails details) {
-    print(details.globalPosition.dx);
     if (widget.disabled || widget.readonly) {
       return;
     }
@@ -252,7 +275,6 @@ class _FlanSliderState<T> extends State<FlanSlider<T>>
   }
 
   void onTouchMove(DragUpdateDetails details) {
-    // print(details);
     if (widget.disabled || widget.readonly) {
       return;
     }
@@ -266,7 +288,7 @@ class _FlanSliderState<T> extends State<FlanSlider<T>>
         : (details.globalPosition - lastPosition).dx;
     final double total = widget.vertical ? rect.height : rect.width;
     final double diff = (delta / total) * scope;
-    // print(delta);
+
     dragStatus = FlanSliderDragStatus.draging;
     if (isRange(startValue)) {
       (currentValue as List<double>)[buttonIndex!] =
@@ -274,16 +296,15 @@ class _FlanSliderState<T> extends State<FlanSlider<T>>
     } else {
       currentValue = (startValue as double) + diff as T;
     }
-    updateValue(currentValue);
+    updateValue(currentValue!);
   }
 
   void onTouchEnd() {
-    print('onTouchEnd');
     if (widget.disabled || widget.readonly) {
       return;
     }
     if (dragStatus == FlanSliderDragStatus.draging) {
-      updateValue(currentValue);
+      updateValue(currentValue!, end: true);
       if (widget.onDragEnd != null) {
         widget.onDragEnd!();
       }
@@ -299,8 +320,8 @@ class _FlanSliderState<T> extends State<FlanSlider<T>>
         : widget.value as double;
 
     return Positioned(
-      left: isLeft ? 0.0 : null,
-      right: isLeft ? null : 0.0,
+      left: isLeft ? -ThemeVars.sliderButtonWidth / 2.0 : null,
+      right: isLeft ? null : -ThemeVars.sliderButtonWidth / 2.0,
       child: Semantics(
         label: 'slider',
         slider: true,
@@ -311,6 +332,7 @@ class _FlanSliderState<T> extends State<FlanSlider<T>>
               : SystemMouseCursors.grab,
           child: GestureDetector(
             dragStartBehavior: DragStartBehavior.down,
+            behavior: HitTestBehavior.opaque,
             onPanStart: (DragStartDetails detail) {
               if (index != null) {
                 buttonIndex = index;
@@ -320,19 +342,16 @@ class _FlanSliderState<T> extends State<FlanSlider<T>>
             onPanUpdate: onTouchMove,
             onPanEnd: (DragEndDetails details) => onTouchEnd(),
             onPanCancel: onTouchEnd,
-            child: Opacity(
-              opacity: widget.disabled ? ThemeVars.sliderDisabledOpacity : 1.0,
-              child: widget.buttonSlot ??
-                  Container(
-                    width: ThemeVars.sliderButtonWidth,
-                    height: ThemeVars.sliderButtonHeight,
-                    decoration: const BoxDecoration(
-                      color: ThemeVars.sliderButtonBackgroundColor,
-                      shape: BoxShape.circle,
-                      boxShadow: ThemeVars.sliderButtonBoxShadow,
-                    ),
+            child: widget.buttonSlot ??
+                Container(
+                  width: ThemeVars.sliderButtonWidth,
+                  height: ThemeVars.sliderButtonHeight,
+                  decoration: const BoxDecoration(
+                    color: ThemeVars.sliderButtonBackgroundColor,
+                    shape: BoxShape.circle,
+                    boxShadow: ThemeVars.sliderButtonBoxShadow,
                   ),
-            ),
+                ),
           ),
         ),
       ),
