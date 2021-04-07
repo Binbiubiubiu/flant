@@ -80,6 +80,11 @@ class FlanForm extends StatefulWidget {
 
 class FlanFormState extends State<FlanForm> {
   @override
+  void initState() {
+    super.initState();
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Column(
       children: widget.children,
@@ -88,9 +93,11 @@ class FlanFormState extends State<FlanForm> {
 
   List<FlanField<dynamic>> _getFieldsByNames({List<String>? names}) {
     if (names != null) {
-      return widget.children
-          .where((FlanField<dynamic> element) => names.contains(element.name))
-          .toList();
+      final List<FlanField<dynamic>> children = <FlanField<dynamic>>[];
+      context.visitChildElements((Element element) {
+        children.add(element.widget as FlanField<dynamic>);
+      });
+      return children;
     }
     return widget.children;
   }
@@ -113,7 +120,7 @@ class FlanFormState extends State<FlanForm> {
     }
   }
 
-  Future<void> _validateAll({List<String>? names}) async {
+  Future<dynamic> _validateAll({List<String>? names}) async {
     final List<FlanFieldValidateError> errors = <FlanFieldValidateError>[];
     final List<FlanField<dynamic>> fields = _getFieldsByNames(names: names);
 
@@ -123,7 +130,6 @@ class FlanFormState extends State<FlanForm> {
         errors.add(error);
       }
     }
-
     if (errors.isNotEmpty) {
       throw errors;
     }
@@ -143,23 +149,22 @@ class FlanFormState extends State<FlanForm> {
     }
   }
 
-  Future<void> _validate<T>({T? name}) {
+  Future<dynamic> validate<T>({T? name}) {
     if (name is String) {
       return _validateField(name as String);
     }
-
     return widget.validateFirst
-        ? _validateSeq(names: name as List<String>)
-        : _validateAll(names: name as List<String>);
+        ? _validateSeq(names: name as List<String>?)
+        : _validateAll(names: name as List<String>?);
   }
 
-  void _resetValidation<T>({T? name}) {
-    final fields = _getFieldsByNames(
+  void resetValidation<T>({T? name}) {
+    final List<FlanField<dynamic>> fields = _getFieldsByNames(
       names: name is String ? <String>[name as String] : name as List<String>,
     );
 
     for (final FlanField<dynamic> field in fields) {
-      // field.resetValidation();
+      field.resetValidation();
     }
   }
 
@@ -169,20 +174,33 @@ class FlanFormState extends State<FlanForm> {
         return form;
       });
 
-  void _submit() {
+  Future<void> submit() async {
     final Map<String, dynamic> values = _getValues();
-    _validate<String>().then((_) {
+
+    try {
+      await validate<dynamic>();
       if (widget.onSubmit != null) {
         widget.onSubmit!(values);
       }
-    }).catchError((List<FlanFieldValidateError> errors) {
+    } on List<FlanFieldValidateError> catch (errors) {
       if (widget.onFailed != null) {
         widget.onFailed!(FlanFormFailDetail(values: values, errors: errors));
-        if (widget.scrollToError && errors[0].name != null) {
-          // TODO: scrollToField
-        }
       }
-    });
+
+      if (widget.scrollToError && errors[0].name != null) {
+        scrollToField(errors[0].name!);
+      }
+    }
+  }
+
+  void scrollToField(String name) {
+    for (int i = 0; i < widget.children.length; i++) {
+      final FlanField<dynamic> item = widget.children[i];
+      if (item.name == name) {
+        item.scrollToVisiable();
+        break;
+      }
+    }
   }
 
   @override

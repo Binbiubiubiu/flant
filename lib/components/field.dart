@@ -259,11 +259,25 @@ class FlanField<T extends dynamic> extends StatefulWidget {
   /// 自定义输入框最右侧的额外内容
   final Widget? extraSlot;
 
-  late final Future<FlanFieldValidateError?> Function(
-      {List<FlanFieldRule>? rules}) validate;
+  // late final Future<FlanFieldValidateError?> Function(
+  //     {List<FlanFieldRule>? rules}) validate;
+
+  FlanFieldState<T>? _state;
+
+  void resetValidation() {
+    _state?._resetValidation();
+  }
+
+  Future<FlanFieldValidateError?> validate() async {
+    return _state?.validate();
+  }
+
+  void scrollToVisiable() {
+    _state?._scrollToVisiable();
+  }
 
   @override
-  FlanFieldState<T> createState() => FlanFieldState<T>();
+  FlanFieldState<T> createState() => _state = FlanFieldState<T>();
 }
 
 class FlanFieldState<T extends dynamic> extends State<FlanField<T>> {
@@ -278,7 +292,7 @@ class FlanFieldState<T extends dynamic> extends State<FlanField<T>> {
 
   @override
   void initState() {
-    widget.validate = validate;
+    // widget.validate = validate;
     editingController = TextEditingController(text: widget.value.toString())
       ..addListener(onInput);
     focusNode = FocusNode()..addListener(onFouse);
@@ -436,6 +450,7 @@ class FlanFieldState<T extends dynamic> extends State<FlanField<T>> {
             validateFailed = true;
             validateMessage = getRuleMessage(value, rule);
           }
+          setState(() {});
         });
       }
     }
@@ -593,11 +608,8 @@ class FlanFieldState<T extends dynamic> extends State<FlanField<T>> {
           border: InputBorder.none,
           contentPadding: EdgeInsets.zero,
           hintText: widget.placeholder,
-          hintStyle: TextStyle(
-            color: showError
-                ? ThemeVars.fieldInputErrorTextColor
-                : ThemeVars.fieldPlaceholderTextColor,
-          ),
+          hintStyle:
+              const TextStyle(color: ThemeVars.fieldPlaceholderTextColor),
 
           counterText: '',
           // errorStyle: TextStyle(),
@@ -628,9 +640,7 @@ class FlanFieldState<T extends dynamic> extends State<FlanField<T>> {
         style: TextStyle(
           color: disabled
               ? ThemeVars.fieldDisabledTextColor
-              : showError
-                  ? ThemeVars.fieldInputErrorTextColor
-                  : ThemeVars.fieldInputTextColor,
+              : ThemeVars.fieldInputTextColor,
           fontSize: ThemeVars.cellFontSize,
         ),
         cursorColor: showError
@@ -803,6 +813,10 @@ class FlanFieldState<T extends dynamic> extends State<FlanField<T>> {
     });
   }
 
+  void _scrollToVisiable() {
+    Scrollable.ensureVisible(context);
+  }
+
   @override
   void debugFillProperties(DiagnosticPropertiesBuilder properties) {
     properties.add(DiagnosticsProperty<T>('value', widget.value));
@@ -930,7 +944,7 @@ class FlanFieldRule {
   final String? message;
   final String Function(dynamic, FlanFieldRule)? messageBuilder;
   final bool required;
-  final R Function<R, T extends dynamic>(T, FlanFieldRule)? validator;
+  final dynamic Function(dynamic value, FlanFieldRule rule)? validator;
   final String Function(dynamic, FlanFieldRule)? formatter;
 }
 
@@ -1003,6 +1017,6 @@ String getRuleMessage(dynamic value, FlanFieldRule rule) {
 }
 
 Future<dynamic> runRuleValidator(dynamic value, FlanFieldRule rule) async {
-  final dynamic returnVal = rule.validator!<dynamic, dynamic>(value, rule);
+  final dynamic returnVal = rule.validator!(value, rule);
   return returnVal;
 }
