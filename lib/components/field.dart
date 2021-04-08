@@ -265,7 +265,7 @@ class FlanField<T extends dynamic> extends StatefulWidget {
   FlanFieldState<T>? _state;
 
   void resetValidation() {
-    _state?._resetValidation();
+    _state?.resetValidation();
   }
 
   Future<FlanFieldValidateError?> validate() async {
@@ -288,10 +288,11 @@ class FlanFieldState<T extends dynamic> extends State<FlanField<T>> {
   late FocusNode focusNode;
   late TextEditingController editingController;
 
-  ValueNotifier<String> childFieldValue = ValueNotifier<String>('');
+  late ValueNotifier<dynamic> childFieldValue;
 
   @override
   void initState() {
+    childFieldValue = ValueNotifier<dynamic>(widget.value);
     // widget.validate = validate;
     editingController = TextEditingController(text: widget.value.toString())
       ..addListener(onInput);
@@ -318,7 +319,7 @@ class FlanFieldState<T extends dynamic> extends State<FlanField<T>> {
       if (widget.onBlur != null) {
         widget.onBlur!();
       }
-      _validateWithTrigger(FlanFieldValidateTrigger.onBlur);
+      validateWithTrigger(FlanFieldValidateTrigger.onBlur);
     }
     setState(() {});
   }
@@ -334,8 +335,8 @@ class FlanFieldState<T extends dynamic> extends State<FlanField<T>> {
 
   void watchValue() {
     updateValue(modelvalue);
-    _resetValidation();
-    _validateWithTrigger(FlanFieldValidateTrigger.onChange);
+    resetValidation();
+    validateWithTrigger(FlanFieldValidateTrigger.onChange);
   }
 
   @override
@@ -348,7 +349,7 @@ class FlanFieldState<T extends dynamic> extends State<FlanField<T>> {
 
   Future<FlanFieldValidateError?> validate({List<FlanFieldRule>? rules}) async {
     rules ??= widget.rules;
-    _resetValidation();
+    resetValidation();
     if (rules.isNotEmpty) {
       await _runRules(rules);
       if (validateFailed) {
@@ -456,7 +457,7 @@ class FlanFieldState<T extends dynamic> extends State<FlanField<T>> {
     }
   }
 
-  void _resetValidation() {
+  void resetValidation() {
     if (validateFailed) {
       setState(() {
         validateFailed = false;
@@ -465,7 +466,7 @@ class FlanFieldState<T extends dynamic> extends State<FlanField<T>> {
     }
   }
 
-  void _validateWithTrigger(FlanFieldValidateTrigger trigger) {
+  void validateWithTrigger(FlanFieldValidateTrigger trigger) {
     if (form != null && widget.rules.isNotEmpty) {
       final bool defaultTrigger = form!.validateTrigger == trigger;
       final List<FlanFieldRule> rules =
@@ -548,7 +549,9 @@ class FlanFieldState<T extends dynamic> extends State<FlanField<T>> {
   }
 
   T get formValue {
-    // TODO: childFieldvalue
+    if (childFieldValue.value != null && widget.inputSlot != null) {
+      return childFieldValue.value as T;
+    }
     return widget.value;
   }
 
@@ -912,7 +915,7 @@ class FlanFieldProvider extends InheritedWidget {
     required Widget child,
   }) : super(key: key, child: child);
 
-  final ValueNotifier<String> childFieldValue;
+  final ValueNotifier<dynamic> childFieldValue;
   final VoidCallback resetValidation;
   final void Function(FlanFieldValidateTrigger trigger) validateWithTrigger;
 
@@ -927,6 +930,9 @@ class FlanFieldProvider extends InheritedWidget {
         validateWithTrigger != oldWidget.validateWithTrigger;
   }
 }
+
+typedef FlanFieldValidator<T extends dynamic, R extends dynamic> = R Function(
+    T value, FlanFieldRule rule);
 
 class FlanFieldRule {
   FlanFieldRule({
@@ -944,7 +950,7 @@ class FlanFieldRule {
   final String? message;
   final String Function(dynamic, FlanFieldRule)? messageBuilder;
   final bool required;
-  final dynamic Function(dynamic value, FlanFieldRule rule)? validator;
+  final FlanFieldValidator? validator;
   final String Function(dynamic, FlanFieldRule)? formatter;
 }
 

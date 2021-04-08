@@ -20,7 +20,7 @@
 - [x] Checkbox 复选框
 - [ ] DatetimePicker 时间选择
 - [x] Field 输入框
-- [ ] Form 表单
+- [x] Form 表单
 - [x] NumberKeyboard 数字键盘
 - [x] PasswordInput 密码输入框
 - [x] Picker 选择器

@@ -1,4 +1,5 @@
 // 🐦 Flutter imports:
+import 'package:flant/mixins/field_mixins.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
@@ -60,7 +61,7 @@ class FlanSwitch<T> extends StatefulWidget {
 }
 
 class _FlanSwitchState<T> extends State<FlanSwitch<T>>
-    with TickerProviderStateMixin {
+    with TickerProviderStateMixin, LinkFieldMixin {
   late Animation<Color?> bgColorAnimation;
   late AnimationController bgColorAnimationController;
 
@@ -98,6 +99,12 @@ class _FlanSwitchState<T> extends State<FlanSwitch<T>>
     bgColorAnimationController.dispose();
     nodeAnimationCotroller.dispose();
     super.dispose();
+  }
+
+  @override
+  void didUpdateWidget(covariant FlanSwitch<T> oldWidget) {
+    useLinkField(widget, oldWidget);
+    super.didUpdateWidget(oldWidget);
   }
 
   void _handleChange() => setState(() {});

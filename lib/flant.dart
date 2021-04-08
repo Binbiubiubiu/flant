@@ -13,6 +13,7 @@ export './components/col.dart';
 export './components/collapse.dart';
 export './components/collapse_item.dart';
 export './components/contact_card.dart';
+export './components/contact_edit.dart';
 export './components/count_down.dart';
 export './components/date_picker.dart';
 export './components/divider.dart';

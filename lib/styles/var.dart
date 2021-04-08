@@ -302,7 +302,7 @@ class ThemeVars {
       EdgeInsets.symmetric(vertical: paddingXl, horizontal: 0);
   static const double contactEditButtonMarginBottom = paddingSm;
   static const double contactEditButtonFontSize = 16.0;
-  static const String contactEditFieldLabelWidth = '4.1em';
+  static const double contactEditFieldLabelWidth = 4.1 * 16.0;
 
   // ContactList
   static const double contactListEditIconSize = 16.0;
