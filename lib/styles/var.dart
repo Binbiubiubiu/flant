@@ -308,6 +308,7 @@ class ThemeVars {
   static const double contactListEditIconSize = 16.0;
   static const int contactListAddButtonZIndex = 999;
   static const double contactListItemPadding = paddingMd;
+  static const Color contactListItemRadioIconColor = red;
 
   // CountDown
   static const Color countDownTextColor = textColor;
