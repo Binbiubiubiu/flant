@@ -45,8 +45,14 @@ class FlanCheckboxGroup<T extends dynamic> extends StatelessWidget {
     bool? checked,
     bool skipDisabled = false,
   }) {
-    final List<FlanCheckbox<T>> checkedChildren =
-        (children as List<FlanCheckbox<T>>).where((FlanCheckbox<T> item) {
+    final List<FlanCheckbox<T>> checkedChildren = children
+        .whereType<FlanCheckbox<T>>()
+        .toList()
+        .where((FlanCheckbox<T> item) {
+      if (item is! FlanCheckbox<T>) {
+        return false;
+      }
+
       if (!item.bindGroup) {
         return false;
       }

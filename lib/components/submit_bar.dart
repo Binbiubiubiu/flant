@@ -7,6 +7,7 @@ import 'package:flant/components/button.dart';
 import 'package:flant/flant.dart';
 import '../styles/var.dart';
 
+/// ### SubmitBar 提交订单栏
 class FlanSubmitBar extends StatelessWidget {
   const FlanSubmitBar({
     Key? key,
@@ -248,5 +249,34 @@ class FlanSubmitBar extends StatelessWidget {
     }
 
     return const SizedBox.shrink();
+  }
+
+  @override
+  void debugFillProperties(DiagnosticPropertiesBuilder properties) {
+    properties.add(DiagnosticsProperty<int>('price', price));
+    properties.add(DiagnosticsProperty<int>('decimalLength', decimalLength,
+        defaultValue: 2));
+    properties.add(DiagnosticsProperty<String>('label', label));
+    properties.add(DiagnosticsProperty<String>('suffixLabel', suffixLabel));
+    properties.add(DiagnosticsProperty<TextAlign>('textAlign', textAlign,
+        defaultValue: TextAlign.right));
+    properties.add(DiagnosticsProperty<String>('buttonText', buttonText));
+    properties.add(DiagnosticsProperty<FlanButtonType>('buttonType', buttonType,
+        defaultValue: FlanButtonType.danger));
+    properties.add(DiagnosticsProperty<Color>('buttonColor', buttonColor));
+    properties.add(DiagnosticsProperty<String>('tip', tip));
+    properties.add(DiagnosticsProperty<int>('tipIconName', tipIconName));
+    properties.add(DiagnosticsProperty<String>('tipIconUrl', tipIconUrl));
+    properties.add(
+        DiagnosticsProperty<String>('currency', currency, defaultValue: '¥'));
+    properties.add(
+        DiagnosticsProperty<bool>('disabled', disabled, defaultValue: false));
+    properties.add(
+        DiagnosticsProperty<bool>('loading', loading, defaultValue: false));
+    properties.add(DiagnosticsProperty<bool>(
+        'safeAreaInsetBottom', safeAreaInsetBottom,
+        defaultValue: false));
+
+    super.debugFillProperties(properties);
   }
 }

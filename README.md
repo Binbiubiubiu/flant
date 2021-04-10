@@ -71,7 +71,7 @@
 - [ ] IndexBar 索引栏
 - [x] NavBar 导航栏
 - [x] Pagination 分页
-- [ ] Sidebar 侧边导航
+- [x] Sidebar 侧边导航
 - [ ] Tab 标签页
 - [x] Tabbar 标签栏
 - [ ] TreeSelect 分类选择
@@ -79,11 +79,11 @@
 ##### 业务组件
 
 - [ ] AddressEidt 地址编辑
-- [ ] AddressList 地址列表
+- [x] AddressList 地址列表
 - [ ] Area 省市区选择
 - [x] Card 商品卡片
 - [x] ContactCard 联系人卡片
 - [x] ContactEdit 联系人编辑
-- [ ] ContactList 联系人列表
+- [x] ContactList 联系人列表
 - [ ] Coupon 优惠券
 - [x] SubmitBar 提交订单栏

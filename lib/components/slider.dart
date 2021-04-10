@@ -362,7 +362,29 @@ class _FlanSliderState<T> extends State<FlanSlider<T>> {
 
   @override
   void debugFillProperties(DiagnosticPropertiesBuilder properties) {
-    // TODO: implement debugFillProperties
+    properties.add(DiagnosticsProperty<T>('value', widget.value));
+    properties.add(
+        DiagnosticsProperty<double>('max', widget.max, defaultValue: 100.0));
+    properties
+        .add(DiagnosticsProperty<double>('min', widget.min, defaultValue: 0.0));
+    properties.add(
+        DiagnosticsProperty<double>('step', widget.step, defaultValue: 1.0));
+    properties.add(DiagnosticsProperty<double>('barHeight', widget.barHeight));
+    properties
+        .add(DiagnosticsProperty<double>('buttonSize', widget.buttonSize));
+    properties
+        .add(DiagnosticsProperty<Color>('activeColor', widget.activeColor));
+    properties
+        .add(DiagnosticsProperty<Color>('inActiveColor', widget.inActiveColor));
+    properties.add(
+        DiagnosticsProperty<bool>('range', widget.range, defaultValue: false));
+    properties.add(DiagnosticsProperty<bool>('disabled', widget.disabled,
+        defaultValue: false));
+    properties.add(DiagnosticsProperty<bool>('readonly', widget.readonly,
+        defaultValue: false));
+    properties.add(DiagnosticsProperty<bool>('vertical', widget.vertical,
+        defaultValue: false));
+
     super.debugFillProperties(properties);
   }
 }

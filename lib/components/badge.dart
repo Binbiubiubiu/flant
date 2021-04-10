@@ -45,14 +45,13 @@ class FlanBadge extends StatelessWidget {
     if (child != null) {
       return Stack(
         clipBehavior: Clip.none,
-        fit: StackFit.loose,
         children: <Widget>[
           child ?? const SizedBox.shrink(),
           Positioned(
             top: 0.0,
             right: 0.0,
-            child: SizedOverflowBox(
-              size: const Size(0.0, 0.0),
+            child: FractionalTranslation(
+              translation: const Offset(0.5, -0.5),
               child: _buildBadge(),
             ),
           ),
