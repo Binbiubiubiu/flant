@@ -156,6 +156,9 @@ class FlanPickerState extends State<FlanPicker> {
     valuesKey = widget.columnsFieldNames?.values ?? 'values';
     childrenKey = widget.columnsFieldNames?.children ?? 'children';
     format();
+    children = formattedColumns
+        .map((dynamic e) => GlobalKey<_FlanPickerColumnState>())
+        .toList();
     super.initState();
   }
 
@@ -260,10 +263,6 @@ class FlanPickerState extends State<FlanPicker> {
     } else {
       formattedColumns = widget.columns;
     }
-    children = formattedColumns
-        .map((dynamic e) => GlobalKey<_FlanPickerColumnState>())
-        .toList();
-    setState(() {});
   }
 
   Widget _buildToolbar() {
@@ -393,6 +392,7 @@ class FlanPickerState extends State<FlanPicker> {
       return Expanded(
         child: FlanPickerColumn(
           key: children[columnIndex],
+          dataType: dataType,
           optionBuilder: widget.optionBuilder,
           readonly: widget.readonly,
           textKey: textKey,
@@ -627,6 +627,7 @@ class FlanPickerColumn extends StatefulWidget {
   const FlanPickerColumn({
     Key? key,
     this.readonly = false,
+    required this.dataType,
     // this.allowHtml = false,
     required this.textKey,
     required this.itemHeight,
@@ -640,6 +641,7 @@ class FlanPickerColumn extends StatefulWidget {
 
   // ****************** Props ******************
   final bool readonly;
+  final FlanPickerDataType dataType;
 
   // final bool allowHtml;
   final String textKey;
@@ -688,6 +690,7 @@ class _FlanPickerColumnState extends State<FlanPickerColumn> {
 
   @override
   void didUpdateWidget(covariant FlanPickerColumn oldWidget) {
+    print('didUpdateWidget');
     if (widget.initialOptions != oldWidget.initialOptions) {
       setOptions(widget.initialOptions);
     }
@@ -711,13 +714,14 @@ class _FlanPickerColumnState extends State<FlanPickerColumn> {
         },
         child: NotificationListener<ScrollEndNotification>(
           onNotification: (ScrollEndNotification notification) {
-            moving = false;
+            setIndex(
+              getIndexByOffset(
+                scrollController.position.pixels,
+                widget.itemHeight,
+              ),
+              emitChange: true,
+            );
 
-            /// 点击忽略
-            if (notification.dragDetails?.velocity == Velocity.zero ||
-                !mounted) {
-              return true;
-            }
             stopMomentum();
             return true;
           },
@@ -725,7 +729,7 @@ class _FlanPickerColumnState extends State<FlanPickerColumn> {
             controller: scrollController,
             physics: _PickerScrollPhysics(
               itemDimension: widget.itemHeight,
-              setIndex: setIndex,
+              adjustIndex: adjustIndex,
             ),
             slivers: <Widget>[
               SliverPadding(
@@ -806,7 +810,7 @@ class _FlanPickerColumnState extends State<FlanPickerColumn> {
       duration: DEFAULT_DURATION,
       curve: Curves.linear,
     );
-    setIndex(index, emitChange: true);
+    // setIndex(index, emitChange: true);
   }
 
   String getOptionText(dynamic option) {
@@ -817,36 +821,37 @@ class _FlanPickerColumnState extends State<FlanPickerColumn> {
     return option as String;
   }
 
-  int setIndex(
+  void setIndex(
     int index, {
     bool emitChange = false,
     bool jumpToIndex = false,
   }) {
     index = adjustIndex(index);
 
-    final double offset = index * widget.itemHeight;
+    // final double offset = index * widget.itemHeight;
     void trigger() {
       if (index != this.index) {
         this.index = index;
         if (emitChange) {
           widget.onChange(index);
         }
+        // setState(() {});
       }
     }
 
-    if (offset != scrollController.position.pixels) {
-      if (moving) {
-        transitionEndTrigger = trigger;
-      } else {
-        trigger();
-      }
+    // if (offset != scrollController.position.pixels) {
+    if (moving) {
+      transitionEndTrigger = trigger;
+    } else {
+      trigger();
     }
+    // }
 
     if (jumpToIndex) {
       _jumpToIndex(index);
     }
 
-    return index;
+    // return index;
     // setState(() {});
   }
 
@@ -867,13 +872,15 @@ class _FlanPickerColumnState extends State<FlanPickerColumn> {
   void setOptions(List<dynamic> options) {
     if (jsonEncode(options) != jsonEncode(this.options)) {
       this.options = options;
-      setIndex(widget.defaultIndex, jumpToIndex: true);
+      final int index = widget.dataType == FlanPickerDataType.cascade
+          ? widget.defaultIndex
+          : this.index;
+      setIndex(index, jumpToIndex: true);
     }
   }
 
   void stopMomentum() {
     moving = false;
-
     if (transitionEndTrigger != null) {
       transitionEndTrigger!();
       transitionEndTrigger = null;
@@ -949,22 +956,18 @@ class __TitleButtonState extends State<_TitleButton> {
 class _PickerScrollPhysics extends ScrollPhysics {
   const _PickerScrollPhysics({
     required this.itemDimension,
-    required this.setIndex,
+    required this.adjustIndex,
     ScrollPhysics? parent,
   }) : super(parent: parent);
 
   final double itemDimension;
-  final int Function(
-    int index, {
-    bool emitChange,
-    bool jumpToIndex,
-  }) setIndex;
+  final int Function(int index) adjustIndex;
 
   @override
   _PickerScrollPhysics applyTo(ScrollPhysics? ancestor) {
     return _PickerScrollPhysics(
       itemDimension: itemDimension,
-      setIndex: setIndex,
+      adjustIndex: adjustIndex,
       parent: buildParent(ancestor),
     );
   }
@@ -978,12 +981,12 @@ class _PickerScrollPhysics extends ScrollPhysics {
     if (pixals >= position.maxScrollExtent) {
       return position.maxScrollExtent;
     }
-    return setIndex(getIndexByOffset(pixals, itemDimension), emitChange: true) *
-        itemDimension;
+    return adjustIndex(getIndexByOffset(pixals, itemDimension)) * itemDimension;
   }
 
   Simulation? updateOffset(ScrollMetrics position, double velocity) {
     final double target = _getTargetPixels(position, velocity);
+
     if (target != position.pixels) {
       return ScrollSpringSimulation(
         spring,
@@ -1017,9 +1020,9 @@ class _PickerScrollPhysics extends ScrollPhysics {
         tolerance: tolerance,
       );
     }
-    if (velocity.abs() < tolerance.velocity) {
-      return updateOffset(position, velocity);
-    }
+    // if (velocity.abs() < tolerance.velocity) {
+    //   return updateOffset(position, velocity);
+    // }
     if (velocity > 0.0 && position.pixels >= position.maxScrollExtent)
       return null;
     if (velocity < 0.0 && position.pixels <= position.minScrollExtent)

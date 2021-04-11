@@ -1,12 +1,16 @@
 // 🐦 Flutter imports:
 
 import 'package:flant/utils/format/number.dart';
+import 'package:flant/utils/format/string.dart';
+import 'package:flant/utils/widget.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
 import 'picker.dart';
 
-String kDefaultDateTimeFormate(String type, String value) => value;
+String kDefaultDateTimeFormate(
+        FlanDateTimePickerColumnType type, String value) =>
+    value;
 
 final int kCurrentYear = DateTime.now().year;
 
@@ -43,8 +47,8 @@ class FlanDatePicker extends StatefulWidget {
     this.optionBuilder,
     this.columnsTopSlot,
     this.columnsBottomSlot,
-  })  : minDate = minDate ?? DateTime(kCurrentYear - 10, 0, 1),
-        maxDate = maxDate ?? DateTime(kCurrentYear + 10, 11, 31),
+  })  : minDate = minDate ?? DateTime(kCurrentYear - 10, 1, 1),
+        maxDate = maxDate ?? DateTime(kCurrentYear + 10, 12, 31),
         super(key: key);
 
   // ****************** Props ******************
@@ -79,13 +83,15 @@ class FlanDatePicker extends StatefulWidget {
   // final Duration swipeDuration;
 
   /// 选项过滤函数
-  final List<String> Function(String type, List<String> values)? filter;
+  final List<String> Function(
+      FlanDateTimePickerColumnType type, List<String> values)? filter;
 
   /// 选项过滤函数 `year`、`month`、`day`、`hour`、`minute`
   final List<FlanDateTimePickerColumnType>? columnsOrder;
 
   /// 选项格式化函数
-  final String Function(String type, String value) formatter;
+  final String Function(FlanDateTimePickerColumnType type, String value)
+      formatter;
 
   /// 显示时间
   final DateTime? value;
@@ -101,16 +107,16 @@ class FlanDatePicker extends StatefulWidget {
 
   // ****************** Events ******************
   /// 点击完成按钮时触发
-  final void Function(dynamic value, dynamic index)? onConfirm;
+  final ValueChanged<DateTime?>? onConfirm;
 
   /// 点击取消按钮时触发
-  final void Function(dynamic value, dynamic index)? onCancel;
+  final VoidCallback? onCancel;
 
   /// 选项改变时触发(动画结束)
-  final void Function(dynamic value, dynamic index)? onChange;
+  final ValueChanged<DateTime?>? onChange;
 
   /// 值发生改变
-  final void Function(dynamic value, dynamic index)? onValueChange;
+  final ValueChanged<DateTime?>? onValueChange;
 
   // ****************** Slots ******************
   /// 自定义整个顶部栏的内容
@@ -140,28 +146,330 @@ class FlanDatePicker extends StatefulWidget {
 
 class _FlanDatePickerState extends State<FlanDatePicker> {
   GlobalKey<FlanPickerState> picker = GlobalKey<FlanPickerState>();
-  DateTime? currentDate;
+  late ValueNotifier<DateTime?> currentDate;
+  late List<Map<String, dynamic>> columns;
 
   @override
   void initState() {
-    currentDate = formatValue(widget.value);
+    currentDate = ValueNotifier<DateTime?>(_formatValue(widget.value))
+      ..addListener(_onValueChange);
+
+    columns = getColumns();
+    nextTick((Duration timestamp) {
+      _updateColumnValue();
+      nextTick((Duration timestamp) {
+        _updateInnerValue();
+      });
+    });
     super.initState();
   }
 
   @override
-  Widget build(BuildContext context) {
-    return Container();
+  void dispose() {
+    currentDate.removeListener(_onValueChange);
+    super.dispose();
   }
 
-  DateTime? formatValue(DateTime? value) {
+  @override
+  void didUpdateWidget(covariant FlanDatePicker oldWidget) {
+    final List<Map<String, dynamic>> newColumns = getColumns();
+    if (newColumns != columns) {
+      columns = newColumns;
+      _updateColumnValue();
+    }
+    if (widget.filter != oldWidget.filter ||
+        widget.minDate != oldWidget.minDate ||
+        widget.maxDate != oldWidget.maxDate) {
+      _updateInnerValue();
+    }
+
+    if (widget.value != oldWidget.value) {
+      final DateTime? value = _formatValue(widget.value);
+      if (value != null &&
+          value.millisecondsSinceEpoch !=
+              currentDate.value?.millisecondsSinceEpoch) {
+        currentDate.value = value;
+        // _updateColumnValue();
+      }
+    }
+    super.didUpdateWidget(oldWidget);
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return FlanPicker(
+      child: widget.child,
+      titleSlot: widget.titleSlot,
+      cancelSlot: widget.cancelSlot,
+      confirmSlot: widget.confirmSlot,
+      columnsTopSlot: widget.columnsTopSlot,
+      columnsBottomSlot: widget.columnsBottomSlot,
+      columns: columns,
+      key: picker,
+      onChange: (dynamic value, dynamic index) {
+        _onChange();
+      },
+      onCancel: (dynamic value, dynamic index) {
+        _onCancel();
+      },
+      onConfirm: (dynamic value, dynamic index) {
+        _onConfirm();
+      },
+      title: widget.title,
+      loading: widget.loading,
+      readonly: widget.readonly,
+      cancelButtonText: widget.cancelButtonText,
+      confirmButtonText: widget.confirmButtonText,
+      itemHeight: widget.itemHeight,
+      showToolbar: widget.showToolbar,
+      visibleItemCount: widget.visibleItemCount,
+    );
+  }
+
+  void _onValueChange() {
+    if (widget.onValueChange != null) {
+      widget.onValueChange!(currentDate.value);
+    }
+  }
+
+  void _updateColumnValue() {
+    final DateTime value = currentDate.value ?? widget.minDate;
+    final List<String> values =
+        originColumns.map((FlanDateTimePickerColumn column) {
+      switch (column.type) {
+        case FlanDateTimePickerColumnType.year:
+          return widget.formatter(
+              FlanDateTimePickerColumnType.year, '${value.year}');
+        case FlanDateTimePickerColumnType.month:
+          return widget.formatter(
+              FlanDateTimePickerColumnType.month, padZero(value.month));
+        case FlanDateTimePickerColumnType.day:
+          return widget.formatter(
+              FlanDateTimePickerColumnType.day, padZero(value.day));
+        case FlanDateTimePickerColumnType.hour:
+          return widget.formatter(
+              FlanDateTimePickerColumnType.hour, padZero(value.hour));
+        case FlanDateTimePickerColumnType.minute:
+          return widget.formatter(
+              FlanDateTimePickerColumnType.minute, padZero(value.minute));
+        default:
+          return '';
+      }
+    }).toList();
+    // print(values);
+    nextTick((Duration timestamp) {
+      picker.currentState?.setValues(values);
+    });
+  }
+
+  void _updateInnerValue() {
+    final List<int>? indexes = picker.currentState?.getIndexes();
+    int getValue(FlanDateTimePickerColumnType type) {
+      int index = 0;
+      for (int columnIndex = 0;
+          columnIndex < originColumns.length;
+          columnIndex++) {
+        final FlanDateTimePickerColumn column = originColumns[columnIndex];
+
+        if (type == column.type) {
+          index = columnIndex;
+        }
+      }
+      final List<String> values = originColumns[index].values;
+      return int.tryParse(values[indexes![index]])!;
+    }
+
+    int year;
+    int month;
+    int day;
+    if (widget.type == FlanDateTimePickerType.monthDay) {
+      year = (currentDate.value ?? widget.minDate).year;
+      month = getValue(FlanDateTimePickerColumnType.month);
+      day = getValue(FlanDateTimePickerColumnType.day);
+    } else {
+      year = getValue(FlanDateTimePickerColumnType.year);
+      month = getValue(FlanDateTimePickerColumnType.month);
+      day = widget.type == FlanDateTimePickerType.yearMonth
+          ? 1
+          : getValue(FlanDateTimePickerColumnType.day);
+    }
+
+    final int maxDay = getMonthEndDay(year, month);
+    day = day > maxDay ? maxDay : day;
+
+    int hour = 0;
+    int minute = 0;
+
+    if (widget.type == FlanDateTimePickerType.datehour) {
+      hour = getValue(FlanDateTimePickerColumnType.hour);
+    }
+
+    if (widget.type == FlanDateTimePickerType.datetime) {
+      hour = getValue(FlanDateTimePickerColumnType.hour);
+      minute = getValue(FlanDateTimePickerColumnType.minute);
+    }
+
+    final DateTime value = DateTime(year, month, day, hour, minute);
+    currentDate.value = _formatValue(value);
+  }
+
+  void _onConfirm() {
+    if (widget.onValueChange != null) {
+      widget.onValueChange!(currentDate.value);
+    }
+    if (widget.onConfirm != null) {
+      widget.onConfirm!(currentDate.value);
+    }
+  }
+
+  void _onCancel() {
+    if (widget.onCancel != null) {
+      widget.onCancel!();
+    }
+  }
+
+  void _onChange() {
+    _updateInnerValue();
+    // nextTick((Duration timestamp){
+    //    nextTick((Duration timestamp){
+    if (widget.onChange != null) {
+      widget.onChange!(currentDate.value);
+    }
+    // });
+    // });
+  }
+
+  DateTime? _formatValue(DateTime? value) {
     if (value != null) {
       final int timestamp = range(
         value.millisecondsSinceEpoch,
         widget.minDate.millisecondsSinceEpoch,
         widget.maxDate.millisecondsSinceEpoch,
       ) as int;
-      return DateTime(timestamp);
+      return DateTime.fromMillisecondsSinceEpoch(timestamp);
     }
+  }
+
+  List<int> getBoundary(String type, DateTime value) {
+    final DateTime boundary = type == 'max' ? widget.maxDate : widget.minDate;
+    final int year = boundary.year;
+    int month = 1;
+    int date = 1;
+    int hour = 0;
+    int minute = 0;
+    if (type == 'max') {
+      month = 12;
+      date = getMonthEndDay(value.year, value.month);
+      hour = 23;
+      minute = 59;
+    }
+
+    if (value.year == year) {
+      month = boundary.month;
+      if (value.month == month) {
+        date = boundary.day;
+        if (value.day == date) {
+          hour = boundary.hour;
+          if (value.hour == hour) {
+            minute = boundary.minute;
+          }
+        }
+      }
+    }
+    return <int>[
+      year,
+      month,
+      date,
+      hour,
+      minute,
+    ];
+  }
+
+  List<FlanDateTimePickerRange> get ranges {
+    final List<int> maxValues =
+        getBoundary('max', currentDate.value ?? widget.maxDate);
+    final List<int> minValues =
+        getBoundary('min', currentDate.value ?? widget.minDate);
+    List<FlanDateTimePickerRange> result = <FlanDateTimePickerRange>[
+      FlanDateTimePickerRange(
+        type: FlanDateTimePickerColumnType.year,
+        range: <int>[minValues[0], maxValues[0]],
+      ),
+      FlanDateTimePickerRange(
+        type: FlanDateTimePickerColumnType.month,
+        range: <int>[minValues[1], maxValues[1]],
+      ),
+      FlanDateTimePickerRange(
+        type: FlanDateTimePickerColumnType.day,
+        range: <int>[minValues[2], maxValues[2]],
+      ),
+      FlanDateTimePickerRange(
+        type: FlanDateTimePickerColumnType.hour,
+        range: <int>[minValues[3], maxValues[3]],
+      ),
+      FlanDateTimePickerRange(
+        type: FlanDateTimePickerColumnType.minute,
+        range: <int>[minValues[4], maxValues[4]],
+      ),
+    ];
+
+    switch (widget.type) {
+      case FlanDateTimePickerType.date:
+        result = result.sublist(0, 3);
+        break;
+      // case FlanDateTimePickerType.time:
+      //   break;
+      case FlanDateTimePickerType.datehour:
+        result = result.sublist(0, 4);
+        break;
+      case FlanDateTimePickerType.datetime:
+        break;
+      case FlanDateTimePickerType.monthDay:
+        result = result.sublist(1, 3);
+        break;
+      case FlanDateTimePickerType.yearMonth:
+        result = result.sublist(0, 2);
+        break;
+    }
+
+    if (widget.columnsOrder != null) {
+      final List<FlanDateTimePickerColumnType> columnsOrder = result
+          .map((FlanDateTimePickerRange column) => column.type)
+          .toList()
+            ..insertAll(0, widget.columnsOrder!);
+      print(columnsOrder);
+      result.sort(
+        (FlanDateTimePickerRange a, FlanDateTimePickerRange b) =>
+            columnsOrder.indexOf(a.type) - columnsOrder.indexOf(b.type),
+      );
+    }
+    return result;
+  }
+
+  List<FlanDateTimePickerColumn> get originColumns {
+    return ranges.map((FlanDateTimePickerRange item) {
+      final FlanDateTimePickerColumnType type = item.type;
+      final List<int> rangeArr = item.range;
+      List<String> values = times(rangeArr[1] - rangeArr[0] + 1,
+          (int index) => padZero(rangeArr[0] + index));
+      if (widget.filter != null) {
+        values = widget.filter!(type, values);
+      }
+      return FlanDateTimePickerColumn(
+        type: type,
+        values: values,
+      );
+    }).toList();
+  }
+
+  List<Map<String, dynamic>> getColumns() {
+    return originColumns.map((FlanDateTimePickerColumn column) {
+      return <String, dynamic>{
+        'values': column.values
+            .map((String value) => widget.formatter(column.type!, value))
+            .toList(),
+      };
+    }).toList();
   }
 
   @override
@@ -189,22 +497,17 @@ class _FlanDatePickerState extends State<FlanDatePicker> {
         defaultValue: 6));
 
     properties.add(DiagnosticsProperty<
-        List<String> Function(
-            String type, List<String> values)>('filter', widget.filter));
+        List<String> Function(FlanDateTimePickerColumnType type,
+            List<String> values)>('filter', widget.filter));
     properties.add(DiagnosticsProperty<List<FlanDateTimePickerColumnType>>(
         'columnsOrder', widget.columnsOrder));
-    properties.add(
-        DiagnosticsProperty<String Function(String type, String value)>(
-            'formatter', widget.formatter,
-            defaultValue: kDefaultDateTimeFormate));
+    properties.add(DiagnosticsProperty<
+            String Function(FlanDateTimePickerColumnType type, String value)>(
+        'formatter', widget.formatter,
+        defaultValue: kDefaultDateTimeFormate));
 
     super.debugFillProperties(properties);
   }
-}
-
-enum _BoundaryType {
-  max,
-  min,
 }
 
 enum FlanDateTimePickerColumnType {
@@ -217,8 +520,37 @@ enum FlanDateTimePickerColumnType {
 
 enum FlanDateTimePickerType {
   date,
-  time,
+  // time,
   datetime,
+  datehour,
   monthDay,
   yearMonth,
+}
+
+class FlanDateTimePickerRange {
+  const FlanDateTimePickerRange({
+    required this.type,
+    required this.range,
+  });
+
+  final FlanDateTimePickerColumnType type;
+  final List<int> range;
+}
+
+class FlanDateTimePickerColumn {
+  const FlanDateTimePickerColumn({
+    this.type,
+    required this.values,
+  });
+
+  final FlanDateTimePickerColumnType? type;
+  final List<String> values;
+}
+
+List<T> times<T>(int n, T Function(int index) iteratee) {
+  return List<T>.generate(n, (int index) => iteratee(index));
+}
+
+int getMonthEndDay(int year, int month) {
+  return 32 - DateTime(year, month, 32).day;
 }

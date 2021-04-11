@@ -5,16 +5,22 @@ import 'package:flutter/material.dart';
 // 🌎 Project imports:
 import '../styles/var.dart';
 
-class FlanSwipeCell extends StatelessWidget {
-  const FlanSwipeCell({
+class FlanIndexAnchor extends StatelessWidget {
+  const FlanIndexAnchor({
     Key? key,
+    required this.index,
+    this.child,
   }) : super(key: key);
 
   // ****************** Props ******************
 
+  final String index;
+
   // ****************** Events ******************
 
   // ****************** Slots ******************
+  /// 内容
+  final Widget? child;
 
   @override
   Widget build(BuildContext context) {
@@ -25,7 +31,8 @@ class FlanSwipeCell extends StatelessWidget {
 
   @override
   void debugFillProperties(DiagnosticPropertiesBuilder properties) {
-    // TODO: implement debugFillProperties
+    properties.add(DiagnosticsProperty<String>('index', index));
+
     super.debugFillProperties(properties);
   }
 }

@@ -27,19 +27,17 @@ String formatNumber(
   bool allowMinus = true,
 }) {
   if (allowDot) {
-    value = trimExtraChar(value, '.', RegExp(r'\.', dotAll: true));
+    value = trimExtraChar(value, '.', RegExp(r'\.'));
   } else {
     value = value.split('.')[0];
   }
 
   if (allowMinus) {
-    value = trimExtraChar(value, '-', RegExp(r'-', dotAll: true));
+    value = trimExtraChar(value, '-', RegExp(r'-'));
   } else {
     value = value.replaceAll(RegExp(r'-'), '');
   }
-  final RegExp regExp = allowDot
-      ? RegExp(r'[^-0-9.]', dotAll: true)
-      : RegExp(r'[^-0-9]', dotAll: true);
+  final RegExp regExp = allowDot ? RegExp(r'[^-0-9.]') : RegExp(r'[^-0-9]');
 
   return value.replaceAll(regExp, '');
 }

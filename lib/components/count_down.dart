@@ -8,6 +8,7 @@ import 'package:flutter/scheduler.dart';
 
 // 🌎 Project imports:
 import '../styles/var.dart';
+import '../utils/format/string.dart';
 
 /// ### FlanCountDown 倒计时
 /// 用于实时展示倒计时数值，支持毫秒精度。
@@ -242,16 +243,6 @@ class CurrentTime {
   final int minutes;
   final int seconds;
   final int milliseconds;
-}
-
-String padZero(int num, {int targetLength = 2}) {
-  String str = '$num';
-
-  while (str.length < targetLength) {
-    str = '0' + str;
-  }
-
-  return str;
 }
 
 String parseFormat(String format, CurrentTime currentTime) {
