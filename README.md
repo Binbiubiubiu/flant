@@ -18,7 +18,7 @@
 - [ ] Calendar 日历
 - [ ] Cascader 级联选择
 - [x] Checkbox 复选框
-- [ ] DatetimePicker 时间选择
+- [x] DatetimePicker 时间选择
 - [x] Field 输入框
 - [x] Form 表单
 - [x] NumberKeyboard 数字键盘
@@ -74,7 +74,7 @@
 - [x] Sidebar 侧边导航
 - [ ] Tab 标签页
 - [x] Tabbar 标签栏
-- [ ] TreeSelect 分类选择
+- [x] TreeSelect 分类选择
 
 ##### 业务组件
 

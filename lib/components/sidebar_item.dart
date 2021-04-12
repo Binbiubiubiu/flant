@@ -17,6 +17,7 @@ class FlanSidebarItem extends RouteStatelessWidget {
     this.dot = false,
     this.badge,
     this.disabled = false,
+    this.padding,
     this.onClick,
     this.titleSlot,
     String? toName,
@@ -36,6 +37,9 @@ class FlanSidebarItem extends RouteStatelessWidget {
 
   /// 是否禁用该项
   final bool disabled;
+
+  /// 内边距
+  final EdgeInsets? padding;
 
   // ****************** Events ******************
   /// 点击时触发
@@ -59,6 +63,7 @@ class FlanSidebarItem extends RouteStatelessWidget {
     return _SideBarItemButton(
       selected: selected,
       disabled: disabled,
+      padding: padding,
       onClick: () {
         if (disabled) {
           return;
@@ -89,12 +94,16 @@ class _SideBarItemButton extends StatefulWidget {
     Key? key,
     this.selected = false,
     this.disabled = false,
+    this.padding,
     this.onClick,
     required this.child,
   }) : super(key: key);
 
   final bool selected;
   final bool disabled;
+
+  /// 内边距
+  final EdgeInsets? padding;
 
   final VoidCallback? onClick;
 
@@ -153,7 +162,7 @@ class _SideBarItemButtonState extends State<_SideBarItemButton> {
                 child: Container(
                   color: bgColor,
                   alignment: Alignment.centerLeft,
-                  padding: ThemeVars.sidebarPadding,
+                  padding: widget.padding ?? ThemeVars.sidebarPadding,
                   child: widget.child,
                 ),
               ),

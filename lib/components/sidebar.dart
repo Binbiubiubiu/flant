@@ -1,10 +1,8 @@
 // 🐦 Flutter imports:
-import 'package:flant/components/sidebar_item.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
 // 🌎 Project imports:
-import 'package:flant/components/button.dart';
 import 'package:flant/flant.dart';
 import '../styles/var.dart';
 
@@ -14,6 +12,7 @@ class FlanSidebar extends StatelessWidget {
   const FlanSidebar({
     Key? key,
     this.value = 0,
+    this.backgroundColor,
     this.onValueChange,
     this.onChange,
     this.children = const <Widget>[],
@@ -22,6 +21,9 @@ class FlanSidebar extends StatelessWidget {
   // ****************** Props ******************
   /// 当前导航项的索引
   final int value;
+
+  /// 背景色
+  final Color? backgroundColor;
 
   // ****************** Events ******************
   /// 导航值变化监听
@@ -36,8 +38,9 @@ class FlanSidebar extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return SizedBox(
+    return Container(
       width: ThemeVars.sidebarWidth,
+      color: backgroundColor,
       child: ListView(
         shrinkWrap: true,
         children: children,

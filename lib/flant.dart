@@ -60,5 +60,6 @@ export './components/tabbar_item.dart';
 export './components/tag.dart';
 export './components/time_picker.dart';
 export './components/toast.dart';
+export './components/tree-select.dart';
 export './locale/l10n.dart';
 export './styles/var.dart';
