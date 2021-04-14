@@ -301,42 +301,45 @@ class __FlanTreeSelectSubItemState extends State<_FlanTreeSelectSubItem> {
     return MouseRegion(
       key: ValueKey<String>(widget.item.id),
       cursor: widget.item.disabled
-          ? SystemMouseCursors.click
-          : SystemMouseCursors.forbidden,
-      child: GestureDetector(
-        onTap: widget.onClick,
-        onTapDown: (TapDownDetails e) => doActive(),
-        onTapCancel: () => doDisActive(),
-        onTapUp: (TapUpDetails e) => doDisActive(),
-        child: Container(
-          height: ThemeVars.treeSelectItemHeight,
-          decoration: BoxDecoration(color: bgColor),
-          child: Row(
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: <Widget>[
-              const SizedBox(width: ThemeVars.paddingMd),
-              Expanded(
-                child: Text(
-                  widget.item.text,
-                  maxLines: 1,
-                  overflow: TextOverflow.ellipsis,
-                  style: TextStyle(
-                    color: textColor,
-                    fontWeight: ThemeVars.fontWeightBold,
-                    // height: ThemeVars.treeSelectItemHeight /
-                    //     ThemeVars.treeSelectFontSize,
+          ? SystemMouseCursors.forbidden
+          : SystemMouseCursors.click,
+      child: IgnorePointer(
+        ignoring: widget.item.disabled,
+        child: GestureDetector(
+          onTap: widget.onClick,
+          onTapDown: (TapDownDetails e) => doActive(),
+          onTapCancel: () => doDisActive(),
+          onTapUp: (TapUpDetails e) => doDisActive(),
+          child: Container(
+            height: ThemeVars.treeSelectItemHeight,
+            decoration: BoxDecoration(color: bgColor),
+            child: Row(
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: <Widget>[
+                const SizedBox(width: ThemeVars.paddingMd),
+                Expanded(
+                  child: Text(
+                    widget.item.text,
+                    maxLines: 1,
+                    overflow: TextOverflow.ellipsis,
+                    style: TextStyle(
+                      color: textColor,
+                      fontWeight: ThemeVars.fontWeightBold,
+                      // height: ThemeVars.treeSelectItemHeight /
+                      //     ThemeVars.treeSelectFontSize,
+                    ),
                   ),
                 ),
-              ),
-              Visibility(
-                visible: widget.active,
-                child: Container(
-                  width: 32.0,
-                  padding: const EdgeInsets.only(right: ThemeVars.paddingMd),
-                  child: widget.activeIcon,
+                Visibility(
+                  visible: widget.active,
+                  child: Container(
+                    width: 32.0,
+                    padding: const EdgeInsets.only(right: ThemeVars.paddingMd),
+                    child: widget.activeIcon,
+                  ),
                 ),
-              ),
-            ],
+              ],
+            ),
           ),
         ),
       ),
