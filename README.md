@@ -41,7 +41,7 @@
 - [ ] Notify 消息通知
 - [x] Overlay 遮罩层
 - [ ] PullRefresh 下拉刷新
-- [ ] ShareSheet 分享面板
+- [x] ShareSheet 分享面板
 - [ ] SwipeCell 滑动单元格
 
 ##### 展示组件

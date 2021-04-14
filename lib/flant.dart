@@ -45,6 +45,7 @@ export './components/rate.dart';
 export './components/row.dart';
 export './components/search.dart';
 export './components/share_sheet.dart';
+export './components/share_sheet.dart';
 export './components/sidebar.dart';
 export './components/sidebar_item.dart';
 export './components/skeleton.dart';

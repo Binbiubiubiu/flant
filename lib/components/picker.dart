@@ -27,8 +27,8 @@ bool isOptionDisabled(dynamic option) {
   return option is Map && option['disabled'] == true;
 }
 
-int getIndexByOffset(double offset, double itemHeight) =>
-    (offset / itemHeight).round();
+double getIndexByOffset(double offset, double itemHeight) =>
+    offset / itemHeight;
 
 /// Picker 选择器
 /// 提供多个选项集合供用户选择，支持单列选择和多列级联，通常与弹出层组件配合使用。
@@ -718,7 +718,7 @@ class _FlanPickerColumnState extends State<FlanPickerColumn> {
               getIndexByOffset(
                 scrollController.position.pixels,
                 widget.itemHeight,
-              ),
+              ).round(),
               emitChange: true,
             );
 
@@ -972,63 +972,31 @@ class _PickerScrollPhysics extends ScrollPhysics {
     );
   }
 
-  double _getTargetPixels(ScrollMetrics position, double velocity) {
-    final double pixals = position.pixels + velocity * 0.08;
-    if (pixals < position.minScrollExtent) {
-      return position.minScrollExtent;
+  double _getTargetPixels(
+      ScrollMetrics position, Tolerance tolerance, double velocity) {
+    double page = getIndexByOffset(position.pixels, itemDimension).toDouble();
+
+    if (velocity < -tolerance.velocity) {
+      page -= 0.5;
+    } else if (velocity > tolerance.velocity) {
+      page += 0.5;
     }
-
-    if (pixals >= position.maxScrollExtent) {
-      return position.maxScrollExtent;
-    }
-    return adjustIndex(getIndexByOffset(pixals, itemDimension)) * itemDimension;
-  }
-
-  Simulation? updateOffset(ScrollMetrics position, double velocity) {
-    final double target = _getTargetPixels(position, velocity);
-
-    if (target != position.pixels) {
-      return ScrollSpringSimulation(
-        spring,
-        position.pixels,
-        target,
-        velocity,
-        tolerance: tolerance,
-      );
-    }
-
-    return null;
+    return adjustIndex(page.round()) * itemDimension;
   }
 
   @override
   Simulation? createBallisticSimulation(
       ScrollMetrics position, double velocity) {
+    if ((velocity <= 0.0 && position.pixels <= position.minScrollExtent) ||
+        (velocity >= 0.0 && position.pixels >= position.maxScrollExtent))
+      return super.createBallisticSimulation(position, velocity);
     final Tolerance tolerance = this.tolerance;
-
-    if (position.outOfRange) {
-      double? end;
-      if (position.pixels > position.maxScrollExtent)
-        end = position.maxScrollExtent;
-      if (position.pixels < position.minScrollExtent)
-        end = position.minScrollExtent;
-      assert(end != null);
-      return ScrollSpringSimulation(
-        spring,
-        position.pixels,
-        end!,
-        math.min(0.0, velocity),
-        tolerance: tolerance,
-      );
+    final double target = _getTargetPixels(position, tolerance, velocity);
+    if (target != position.pixels) {
+      return ScrollSpringSimulation(spring, position.pixels, target, velocity,
+          tolerance: tolerance);
     }
-    // if (velocity.abs() < tolerance.velocity) {
-    //   return updateOffset(position, velocity);
-    // }
-    if (velocity > 0.0 && position.pixels >= position.maxScrollExtent)
-      return null;
-    if (velocity < 0.0 && position.pixels <= position.minScrollExtent)
-      return null;
-
-    return updateOffset(position, velocity);
+    return null;
   }
 
   @override

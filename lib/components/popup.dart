@@ -166,6 +166,9 @@ class _FlanPopupState extends State<FlanPopup> {
     if (!oldWidget.show && widget.show) {
       openPopup();
     }
+    if (opened && oldWidget.show && !widget.show) {
+      Navigator.of(context).pop();
+    }
     super.didUpdateWidget(oldWidget);
   }
 
@@ -177,8 +180,8 @@ class _FlanPopupState extends State<FlanPopup> {
   Alignment get _popupAlign {
     return <FlanPopupPosition, Alignment>{
       FlanPopupPosition.center: Alignment.center,
-      FlanPopupPosition.bottom: Alignment.bottomLeft,
-      FlanPopupPosition.top: Alignment.topLeft,
+      FlanPopupPosition.bottom: Alignment.bottomCenter,
+      FlanPopupPosition.top: Alignment.topCenter,
       FlanPopupPosition.left: Alignment.centerLeft,
       FlanPopupPosition.right: Alignment.centerRight,
     }[widget.position]!;
@@ -232,14 +235,12 @@ class _FlanPopupState extends State<FlanPopup> {
       Navigator.of(context, rootNavigator: true)
           .push<dynamic>(_FlanPopupRoute<dynamic>(
             pageBuilder: (
-              BuildContext buildContext,
+              BuildContext context,
               Animation<double> animation,
               Animation<double> secondaryAnimation,
             ) {
-              Widget dialog = _buildPopupContent();
-              if (widget.safeAreaInsetBottom) {
-                dialog = SafeArea(child: dialog);
-              }
+              final Widget dialog = _buildPopupContent(context);
+
               return dialog;
             },
             popupPosition: _popupAlign,
@@ -326,41 +327,45 @@ class _FlanPopupState extends State<FlanPopup> {
     }
   }
 
-  Widget _buildPopupContent() {
-    return MediaQuery.removeViewInsets(
-      removeLeft: true,
-      removeTop: true,
-      removeRight: true,
-      removeBottom: true,
-      context: context,
-      child: Align(
-        alignment: _popupAlign,
-        child: SizedBox(
-          width: widget.position == FlanPopupPosition.top ||
-                  widget.position == FlanPopupPosition.bottom
-              ? MediaQuery.of(context).size.width
-              : null,
-          height: widget.position == FlanPopupPosition.left ||
-                  widget.position == FlanPopupPosition.right
-              ? MediaQuery.of(context).size.height
-              : null,
-          child: GestureDetector(
-            onTap: widget.onClick,
-            child: ClipRRect(
+  Widget _buildPopupContent(BuildContext context) {
+    final bool isTop = widget.position == FlanPopupPosition.top;
+    final bool isBottom = widget.position == FlanPopupPosition.bottom;
+    final bool isLeft = widget.position == FlanPopupPosition.left;
+    final bool isRight = widget.position == FlanPopupPosition.right;
+
+    final MediaQueryData win = MediaQuery.of(context);
+    final Size size = win.size;
+    final EdgeInsets padding = win.padding;
+
+    final double winMaxWidth = size.width;
+    final double winMaxHeight = size.height;
+
+    return Align(
+      alignment: _popupAlign,
+      child: Material(
+        type: MaterialType.card,
+        color: Colors.transparent,
+        child: GestureDetector(
+          onTap: widget.onClick,
+          child: Container(
+            decoration: BoxDecoration(
               borderRadius: widget.round ? _roundRadius : BorderRadius.zero,
-              child: Material(
-                color: ThemeVars.popupBackgroundColor,
-                type: MaterialType.card,
-                child: Stack(
-                  children: <Widget>[
-                    if (widget.closeable)
-                      _buildCloseIcon()
-                    else
-                      const SizedBox.shrink(),
-                    widget.child,
-                  ],
-                ),
-              ),
+              color: ThemeVars.popupBackgroundColor,
+            ),
+            width: isTop || isBottom ? winMaxWidth : null,
+            height: isLeft || isRight ? winMaxHeight : null,
+            padding: widget.safeAreaInsetBottom
+                ? EdgeInsets.only(bottom: padding.bottom)
+                : null,
+            child: Stack(
+              clipBehavior: Clip.hardEdge,
+              children: <Widget>[
+                if (widget.closeable)
+                  _buildCloseIcon()
+                else
+                  const SizedBox.shrink(),
+                widget.child,
+              ],
             ),
           ),
         ),
