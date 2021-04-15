@@ -167,7 +167,9 @@ class _FlanPopupState extends State<FlanPopup> {
       openPopup();
     }
     if (opened && oldWidget.show && !widget.show) {
-      Navigator.of(context).pop();
+      Navigator.of(context).maybePop(<Symbol, FlanPopupCloseFromType>{
+        FLANPOPUP_CLOSE_FROM: FlanPopupCloseFromType.overlay,
+      });
     }
     super.didUpdateWidget(oldWidget);
   }
@@ -342,30 +344,30 @@ class _FlanPopupState extends State<FlanPopup> {
 
     return Align(
       alignment: _popupAlign,
-      child: Material(
-        type: MaterialType.card,
-        color: Colors.transparent,
-        child: GestureDetector(
-          onTap: widget.onClick,
-          child: Container(
-            decoration: BoxDecoration(
-              borderRadius: widget.round ? _roundRadius : BorderRadius.zero,
+      child: ClipRRect(
+        borderRadius: widget.round ? _roundRadius : BorderRadius.zero,
+        child: Material(
+          type: MaterialType.card,
+          color: Colors.transparent,
+          child: GestureDetector(
+            onTap: widget.onClick,
+            child: Container(
               color: ThemeVars.popupBackgroundColor,
-            ),
-            width: isTop || isBottom ? winMaxWidth : null,
-            height: isLeft || isRight ? winMaxHeight : null,
-            padding: widget.safeAreaInsetBottom
-                ? EdgeInsets.only(bottom: padding.bottom)
-                : null,
-            child: Stack(
-              clipBehavior: Clip.hardEdge,
-              children: <Widget>[
-                if (widget.closeable)
-                  _buildCloseIcon()
-                else
-                  const SizedBox.shrink(),
-                widget.child,
-              ],
+              width: isTop || isBottom ? winMaxWidth : null,
+              height: isLeft || isRight ? winMaxHeight : null,
+              padding: widget.safeAreaInsetBottom
+                  ? EdgeInsets.only(bottom: padding.bottom)
+                  : null,
+              child: Stack(
+                clipBehavior: Clip.hardEdge,
+                children: <Widget>[
+                  if (widget.closeable)
+                    _buildCloseIcon()
+                  else
+                    const SizedBox.shrink(),
+                  widget.child,
+                ],
+              ),
             ),
           ),
         ),
@@ -655,10 +657,7 @@ class __FlanPopupCloseIconState extends State<_FlanPopupCloseIcon> {
     return Semantics(
       button: true,
       enabled: widget.onPress != null,
-      sortKey: const OrdinalSortKey(0.0),
-      child: InkResponse(
-        splashColor: Colors.transparent,
-        highlightColor: Colors.transparent,
+      child: GestureDetector(
         onTap: () {
           if (widget.onPress != null) {
             widget.onPress!();

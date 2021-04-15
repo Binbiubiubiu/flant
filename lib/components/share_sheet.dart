@@ -136,7 +136,7 @@ class FlanShareSheet<T extends dynamic> extends StatelessWidget {
 
     return FlanPopup(
       show: show,
-      onChange: onShowChange,
+      onChange: _onUpdateShow,
       position: FlanPopupPosition.bottom,
       round: true,
       overlay: overlay,
@@ -220,8 +220,7 @@ class FlanShareSheet<T extends dynamic> extends StatelessWidget {
     );
   }
 
-  Widget _buildOptions(List<FlanShareSheetOption> options,
-      {bool border = false}) {
+  Widget _buildOptions(List<FlanShareSheetOption> options) {
     return SingleChildScrollView(
       scrollDirection: Axis.horizontal,
       padding: const EdgeInsets.only(
@@ -241,7 +240,7 @@ class FlanShareSheet<T extends dynamic> extends StatelessWidget {
 
   List<Widget> _buildRows() {
     if (options[0] is List<FlanShareSheetOption>) {
-      List<Widget> content = <Widget>[];
+      final List<Widget> content = <Widget>[];
       for (int i = 0; i < options.length; i++) {
         if (i != 0) {
           content.add(const Divider(

@@ -87,7 +87,7 @@ class ThemeVars {
   static const double borderRadiusMax = 999.0;
 
   // ActionSheet
-  static const String actionSheetMaxHeight = '80%';
+  static const double actionSheetMaxHeight = .8;
   static const double actionSheetHeaderHeight = 48.0;
   static const double actionSheetHeaderFontSize = fontSizeLg;
   static const Color actionSheetDescriptionColor = gray6;

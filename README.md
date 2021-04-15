@@ -34,7 +34,7 @@
 
 ##### 反馈组件
 
-- [ ] ActionSheet 动作面板
+- [x] ActionSheet 动作面板
 - [ ] Dialog 弹出框
 - [ ] DropdownMenu 下拉菜单
 - [x] Loading 加载
