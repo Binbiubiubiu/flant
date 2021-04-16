@@ -521,7 +521,8 @@ class FlanPickerState extends State<FlanPicker> {
   }
 
   // get column instance by index
-  _FlanPickerColumnState? getChild(int index) => children[index].currentState;
+  _FlanPickerColumnState? getChild(int index) =>
+      children.length > index ? children[index].currentState : null;
 
   // get column value by index
   dynamic? getColumnValue(int index) {
@@ -690,7 +691,6 @@ class _FlanPickerColumnState extends State<FlanPickerColumn> {
 
   @override
   void didUpdateWidget(covariant FlanPickerColumn oldWidget) {
-    print('didUpdateWidget');
     if (widget.initialOptions != oldWidget.initialOptions) {
       setOptions(widget.initialOptions);
     }
@@ -859,7 +859,7 @@ class _FlanPickerColumnState extends State<FlanPickerColumn> {
     scrollController.jumpTo(widget.itemHeight * index);
   }
 
-  dynamic getValue() => options[index];
+  dynamic? getValue() => options.length > index ? options[index] : null;
   void setValue(String value) {
     for (int i = 0; i < options.length; i++) {
       if (getOptionText(options[i]) == value) {
