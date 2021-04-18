@@ -35,7 +35,7 @@
 ##### 反馈组件
 
 - [x] ActionSheet 动作面板
-- [ ] Dialog 弹出框
+- [x] Dialog 弹出框
 - [ ] DropdownMenu 下拉菜单
 - [x] Loading 加载
 - [ ] Notify 消息通知
@@ -80,7 +80,7 @@
 
 - [ ] AddressEidt 地址编辑
 - [x] AddressList 地址列表
-- [ ] Area 省市区选择
+- [x] Area 省市区选择
 - [x] Card 商品卡片
 - [x] ContactCard 联系人卡片
 - [x] ContactEdit 联系人编辑

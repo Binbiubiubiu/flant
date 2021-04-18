@@ -109,22 +109,33 @@ class FlanIcon extends StatelessWidget {
     final bool isNetWork = RegExp('^https?:\/\/').hasMatch(iconUrl!);
 
     if (isNetWork) {
-      return Image.network(
-        iconUrl!,
-        color: color, //?? textStyle.color,
-        width: iconSize,
-        height: iconSize,
-        fit: BoxFit.contain,
+      return ImageIcon(
+        NetworkImage(iconUrl!),
+        size: iconSize,
+        color: color,
       );
+      // Image.network(
+      //   iconUrl!,
+      //   color: color, //?? textStyle.color,
+      //   width: iconSize,
+      //   height: iconSize,
+      //   fit: BoxFit.contain,
+      // );
     }
 
-    return Image.asset(
-      iconUrl!,
-      color: color, //?? textStyle.color,
-      width: iconSize,
-      height: iconSize,
-      fit: BoxFit.contain,
+    return ImageIcon(
+      AssetImage(iconUrl!),
+      size: iconSize,
+      color: color,
     );
+
+    // return Image.asset(
+    //   iconUrl!,
+    //   color: color, //?? textStyle.color,
+    //   width: iconSize,
+    //   height: iconSize,
+    //   fit: BoxFit.contain,
+    // );
   }
 
   @override

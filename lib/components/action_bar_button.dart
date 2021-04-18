@@ -20,6 +20,7 @@ class FlanActionBarButton extends RouteStatelessWidget {
     this.iconUrl,
     this.disabled = false,
     this.loading = false,
+    this.height,
     this.onClick,
     this.child,
     String? toName,
@@ -57,6 +58,9 @@ class FlanActionBarButton extends RouteStatelessWidget {
   /// 是否显示为加载状态
   final bool loading;
 
+  /// 高度
+  final double? height;
+
   // ****************** Events ******************
 
   /// 点击事件
@@ -70,6 +74,7 @@ class FlanActionBarButton extends RouteStatelessWidget {
   Widget build(BuildContext context) {
     final FlanActionBar? parent =
         context.findAncestorWidgetOfExactType<FlanActionBar>();
+
     if (parent == null) {
       throw 'ActionButton must be a child component of FlanActionBar';
     }
@@ -86,7 +91,7 @@ class FlanActionBarButton extends RouteStatelessWidget {
           right: isLast ? 5.0 : 0.0,
         ),
         child: SizedBox(
-          height: ThemeVars.actionBarButtonHeight,
+          height: height ?? ThemeVars.actionBarButtonHeight,
           child: FlanButton(
             radius: BorderRadius.horizontal(
               left: isFirst

@@ -46,6 +46,8 @@ class FlanPopup extends StatefulWidget {
     this.transitionAppearBuilder,
     this.transitionAppear = false,
     this.safeAreaInsetBottom = false,
+    this.backgroundColor,
+    this.borderRadius,
     this.onClick,
     this.onClickOverlay,
     this.onClickCloseIcon,
@@ -115,6 +117,12 @@ class FlanPopup extends StatefulWidget {
 
   /// 是否开启底部安全区适配
   final bool safeAreaInsetBottom;
+
+  /// 背景色
+  final Color? backgroundColor;
+
+  /// 圆角
+  final BorderRadius? borderRadius;
 
   // ****************** Events ******************
   /// 弹窗变化回调
@@ -190,6 +198,10 @@ class _FlanPopupState extends State<FlanPopup> {
   }
 
   BorderRadius get _roundRadius {
+    if (widget.borderRadius != null) {
+      return widget.borderRadius!;
+    }
+
     const ui.Radius radius = Radius.circular(ThemeVars.popupRoundBorderRadius);
     switch (widget.position) {
       case FlanPopupPosition.top:
@@ -352,7 +364,7 @@ class _FlanPopupState extends State<FlanPopup> {
           child: GestureDetector(
             onTap: widget.onClick,
             child: Container(
-              color: ThemeVars.popupBackgroundColor,
+              color: widget.backgroundColor ?? ThemeVars.popupBackgroundColor,
               width: isTop || isBottom ? winMaxWidth : null,
               height: isLeft || isRight ? winMaxHeight : null,
               padding: widget.safeAreaInsetBottom

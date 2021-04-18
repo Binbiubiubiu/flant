@@ -9,7 +9,7 @@ import '../styles/var.dart';
 class FlanActionBar extends StatelessWidget {
   const FlanActionBar({
     Key? key,
-    this.safeAreaInsetBottom = true,
+    this.safeAreaInsetBottom = false,
     this.children = const <Widget>[],
   }) : super(key: key);
 
@@ -30,6 +30,9 @@ class FlanActionBar extends StatelessWidget {
       color: ThemeVars.actionBarBackgroundColor,
       child: SafeArea(
         bottom: safeAreaInsetBottom,
+        top: false,
+        left: false,
+        right: false,
         child: Row(
           crossAxisAlignment: CrossAxisAlignment.center,
           children: children,

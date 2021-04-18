@@ -29,6 +29,8 @@ class FlanButton extends RouteStatelessWidget {
     this.hairline = false,
     this.disabled = false,
     this.loading = false,
+    this.border = true,
+    this.textColor,
     this.loadingText,
     this.loadingType = FlanLoadingType.circular,
     this.loadingSize = 20.0,
@@ -97,6 +99,9 @@ class FlanButton extends RouteStatelessWidget {
   /// 是否显示为加载状态
   final bool loading;
 
+  /// 是否有边框
+  final bool border;
+
   /// 加载状态提示文字
   final String? loadingText;
 
@@ -108,6 +113,9 @@ class FlanButton extends RouteStatelessWidget {
 
   /// 圆角大小
   final BorderRadius? radius;
+
+  /// 文字颜色
+  final Color? textColor;
 
   // ****************** Events ******************
   /// 点击按钮，且按钮状态不为加载或禁用时触发
@@ -136,7 +144,7 @@ class FlanButton extends RouteStatelessWidget {
       fontSize: _btnSize.fontSize,
       // height: ThemeVars.buttonDefaultLineHeight /
       //     ThemeVars.buttonDefaultFontSize,
-      color: _themeType.color,
+      color: textColor ?? _themeType.color,
     );
 
     final Color bgColor = (plain ? null : color) ?? _themeType.backgroundColor;
@@ -188,8 +196,8 @@ class FlanButton extends RouteStatelessWidget {
 
   // 构建按钮文本
   Widget _buildText(BuildContext context) {
-    if (loading && loadingText != null) {
-      return Text(loadingText!);
+    if (loading) {
+      return Text(loadingText ?? '');
     }
 
     return child ?? Text(text ?? '');
@@ -201,7 +209,7 @@ class FlanButton extends RouteStatelessWidget {
         FlanLoading(
           size: loadingSize,
           type: loadingType,
-          color: _themeType.color,
+          color: textColor ?? _themeType.color,
         );
   }
 
@@ -284,10 +292,12 @@ class FlanButton extends RouteStatelessWidget {
       backgroundColor:
           plain ? ThemeVars.buttonPlainBackgroundColor : backgroundColor,
       color: plain ? borderColor : color,
-      border: Border.all(
-        width: hairline ? 0.5 : ThemeVars.buttonBorderWidth,
-        color: borderColor,
-      ),
+      border: this.border
+          ? Border.all(
+              width: hairline ? 0.5 : ThemeVars.buttonBorderWidth,
+              color: borderColor,
+            )
+          : null,
     );
   }
 
@@ -404,12 +414,12 @@ class _FlanButtonTheme {
   _FlanButtonTheme({
     required this.color,
     required this.backgroundColor,
-    required this.border,
+    this.border,
   }) : super();
 
   final Color backgroundColor;
   final Color color;
-  final Border border;
+  final Border? border;
 }
 
 /// 按钮大小样式类

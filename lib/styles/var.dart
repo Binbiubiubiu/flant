@@ -356,7 +356,7 @@ class ThemeVars {
 
   // Dialog
   static const double dialogWidth = 320.0;
-  static const String dialogSmallScreenWidth = '90%';
+  static const double dialogSmallScreenWidth = .9;
   static const double dialogFontSize = fontSizeLg;
   static const Duration dialogTransition = animationDurationBase;
   static const double dialogBorderRadius = 16.0;
@@ -369,7 +369,7 @@ class ThemeVars {
   static const double dialogMessagePadding = paddingLg;
   static const double dialogMessageFontSize = fontSizeMd;
   static const double dialogMessageLineHeight = lineHeightMd;
-  static const String dialogMessageMaxHeight = '60vh';
+  static const double dialogMessageMaxHeight = .6;
   static const Color dialogHasTitleMessageTextColor = gray7;
   static const double dialogHasTitleMessagePaddingTop = paddingXs;
   static const double dialogButtonHeight = 48.0;

@@ -21,6 +21,7 @@ export './components/contact_edit.dart';
 export './components/contact_list.dart';
 export './components/count_down.dart';
 export './components/date_picker.dart';
+export './components/dialog.dart';
 export './components/divider.dart';
 export './components/empty.dart';
 export './components/field.dart';
