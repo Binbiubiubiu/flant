@@ -67,7 +67,7 @@ class FlanButton extends RouteStatelessWidget {
   final Gradient? gradient;
 
   /// 左侧图标名称
-  final int? iconName;
+  final IconData? iconName;
 
   /// 左侧图片链接
   final String? iconUrl;
@@ -292,7 +292,7 @@ class FlanButton extends RouteStatelessWidget {
       backgroundColor:
           plain ? ThemeVars.buttonPlainBackgroundColor : backgroundColor,
       color: plain ? borderColor : color,
-      border: this.border
+      border: border
           ? Border.all(
               width: hairline ? 0.5 : ThemeVars.buttonBorderWidth,
               color: borderColor,
@@ -378,7 +378,7 @@ class FlanButton extends RouteStatelessWidget {
   @override
   void debugFillProperties(DiagnosticPropertiesBuilder properties) {
     properties.add(DiagnosticsProperty<String>('text', text, defaultValue: ''));
-    properties.add(DiagnosticsProperty<int>('iconName', iconName));
+    properties.add(DiagnosticsProperty<IconData>('iconName', iconName));
     properties.add(DiagnosticsProperty<String>('iconUrl', iconUrl));
     properties.add(DiagnosticsProperty<Color>('color', color));
     properties

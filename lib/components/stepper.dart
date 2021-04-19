@@ -1,11 +1,14 @@
+// 🎯 Dart imports:
 import 'dart:async';
 import 'dart:math' as math;
 
+// 🐦 Flutter imports:
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter/services.dart';
 
+// 🌎 Project imports:
 import '../styles/var.dart';
 import '../utils/format/number.dart';
 import 'icon.dart';
@@ -528,7 +531,7 @@ class _StepperButton extends StatefulWidget {
   final VoidCallback onTap;
   final VoidCallback onLongPressStart;
   final VoidCallback onLongPressEnd;
-  final int iconName;
+  final IconData iconName;
   final BorderRadius borderRadius;
 
   @override

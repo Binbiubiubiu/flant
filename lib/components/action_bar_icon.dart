@@ -4,11 +4,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter/semantics.dart';
 
 // 🌎 Project imports:
-import 'package:flant/components/badge.dart';
-import 'package:flant/components/icon.dart';
-import 'package:flant/mixins/route_mixins.dart';
-import 'package:flant/styles/icons.dart';
+import '../mixins/route_mixins.dart';
 import '../styles/var.dart';
+import 'badge.dart';
+import 'icon.dart';
 
 /// ### ActionBarIcon 动作栏图标按钮
 class FlanActionBarIcon extends RouteStatelessWidget {
@@ -38,7 +37,7 @@ class FlanActionBarIcon extends RouteStatelessWidget {
   final String text;
 
   /// 图标名称
-  final int? iconName;
+  final IconData? iconName;
 
   /// 图标链接
   final String? iconUrl;
@@ -127,7 +126,7 @@ class FlanActionBarIcon extends RouteStatelessWidget {
   @override
   void debugFillProperties(DiagnosticPropertiesBuilder properties) {
     properties.add(DiagnosticsProperty<String>('text', text));
-    properties.add(DiagnosticsProperty<int>('iconName', iconName));
+    properties.add(DiagnosticsProperty<IconData>('iconName', iconName));
     properties.add(DiagnosticsProperty<String>('iconUrl', iconUrl));
     properties.add(DiagnosticsProperty<Color>('color', color));
     properties.add(DiagnosticsProperty<bool>('dot', dot, defaultValue: false));

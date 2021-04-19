@@ -1,12 +1,12 @@
 // 🐦 Flutter imports:
-import 'package:flant/components/loading.dart';
-import 'package:flant/components/popup.dart';
-import 'package:flant/components/style.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 
 // 🌎 Project imports:
+import 'package:flant/components/loading.dart';
+import 'package:flant/components/popup.dart';
+import 'package:flant/components/style.dart';
 import '../styles/var.dart';
 import 'icon.dart';
 
@@ -66,7 +66,7 @@ class FlanActionSheet extends StatelessWidget {
   final bool closeable;
 
   /// 关闭图标名称
-  final int closeIconName;
+  final IconData closeIconName;
 
   /// 关闭图片链接
   final String? closeIconUrl;
@@ -347,7 +347,7 @@ class FlanActionSheet extends StatelessWidget {
         defaultValue: ''));
     properties.add(
         DiagnosticsProperty<bool>('closeable', closeable, defaultValue: true));
-    properties.add(DiagnosticsProperty<int>('closeIconName', closeIconName,
+    properties.add(DiagnosticsProperty<IconData>('closeIconName', closeIconName,
         defaultValue: FlanIcons.cross));
     properties.add(DiagnosticsProperty<String>('closeIconUrl', closeIconUrl));
     properties.add(DiagnosticsProperty<Duration>('duration', duration));
@@ -504,7 +504,7 @@ class _FlanPopupCloseIcon extends StatefulWidget {
   }) : super(key: key);
 
   /// 图标属性
-  final int? closeIconName;
+  final IconData? closeIconName;
 
   /// 图标链接
   final String? closeIconUrl;

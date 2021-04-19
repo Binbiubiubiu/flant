@@ -10,7 +10,6 @@ import 'package:flant/components/form.dart';
 import 'package:flant/components/icon.dart';
 import 'package:flant/styles/icons.dart';
 import 'package:flant/styles/var.dart';
-
 import '../styles/var.dart';
 import '../utils/format/number.dart';
 import 'cell.dart';
@@ -187,13 +186,13 @@ class FlanField<T extends dynamic> extends StatefulWidget {
   final int? rows;
 
   /// 左侧图标名称
-  final int? leftIconName;
+  final IconData? leftIconName;
 
   /// 左侧图片链接
   final String? leftIconUrl;
 
   /// 右侧图片链接
-  final int? rightIconName;
+  final IconData? rightIconName;
 
   /// 右侧图片链接
   final String? rightIconUrl;
@@ -888,13 +887,13 @@ class FlanFieldState<T extends dynamic> extends State<FlanField<T>> {
 
     properties
         .add(DiagnosticsProperty<BoxConstraints>('autosize', widget.autosize));
-    properties
-        .add(DiagnosticsProperty<int>('leftIconName', widget.leftIconName));
+    properties.add(
+        DiagnosticsProperty<IconData>('leftIconName', widget.leftIconName));
     properties
         .add(DiagnosticsProperty<String>('leftIconUrl', widget.leftIconUrl));
 
-    properties
-        .add(DiagnosticsProperty<int>('rightIconName', widget.rightIconName));
+    properties.add(
+        DiagnosticsProperty<IconData>('rightIconName', widget.rightIconName));
     properties
         .add(DiagnosticsProperty<String>('rightIconUrl', widget.rightIconUrl));
     properties.add(DiagnosticsProperty<String>('iconPrefix', widget.iconPrefix,

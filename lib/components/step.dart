@@ -160,7 +160,7 @@ class _FlanStepState extends State<FlanStep> {
         return widget.activeIconSlot!;
       }
 
-      final int? defaultIcon = parentProps.activeIconName == null &&
+      final IconData? defaultIcon = parentProps.activeIconName == null &&
               parentProps.activeIconUrl == null
           ? FlanIcons.checked
           : null;

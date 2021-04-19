@@ -1,13 +1,13 @@
 // 🐦 Flutter imports:
-import 'package:flant/components/icon.dart';
-import 'package:flant/components/sidebar.dart';
-import 'package:flant/components/sidebar_item.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 
 // 🌎 Project imports:
+import 'package:flant/components/icon.dart';
+import 'package:flant/components/sidebar.dart';
+import 'package:flant/components/sidebar_item.dart';
 import '../styles/var.dart';
 
 /// ### TreeSelect 分类选择
@@ -45,7 +45,7 @@ class FlanTreeSelect extends StatelessWidget {
   final List<String> activeId;
 
   /// 自定义右侧栏选中状态的图标名字
-  final int selectedIconName;
+  final IconData selectedIconName;
 
   /// 自定义右侧栏选中状态的图标访问地址
   final String? selectedIconUrl;
@@ -194,7 +194,7 @@ class FlanTreeSelect extends StatelessWidget {
         DiagnosticsProperty<double>('height', height, defaultValue: 300.0));
     properties.add(DiagnosticsProperty<List<String>>('activeId', activeId,
         defaultValue: const <String>[]));
-    properties.add(DiagnosticsProperty<int>(
+    properties.add(DiagnosticsProperty<IconData>(
         'selectedIconName', selectedIconName,
         defaultValue: FlanIcons.success));
     properties

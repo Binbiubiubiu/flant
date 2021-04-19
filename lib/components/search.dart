@@ -2,7 +2,6 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
-import 'package:flutter/semantics.dart';
 
 // 🌎 Project imports:
 import '../locale/l10n.dart';
@@ -53,7 +52,7 @@ class FlanSearch extends StatefulWidget {
   final String? label;
 
   /// 右侧图标名称
-  final int? rightIconName;
+  final IconData? rightIconName;
 
   /// 右侧图标链接
   final String? rightIconUrl;
@@ -100,7 +99,7 @@ class FlanSearch extends StatefulWidget {
   final TextAlign inputAlign;
 
   /// 左侧图标名称
-  final int leftIconName;
+  final IconData leftIconName;
 
   /// 左侧图标链接
   final String? leftIconUrl;
@@ -299,8 +298,8 @@ class _FlanSearchState extends State<FlanSearch> {
   @override
   void debugFillProperties(DiagnosticPropertiesBuilder properties) {
     properties.add(DiagnosticsProperty<String>('label', widget.label));
-    properties
-        .add(DiagnosticsProperty<int>('rightIconName', widget.rightIconName));
+    properties.add(
+        DiagnosticsProperty<IconData>('rightIconName', widget.rightIconName));
     properties
         .add(DiagnosticsProperty<String>('rightIconUrl', widget.rightIconUrl));
     properties.add(DiagnosticsProperty<String>('value', widget.value));
@@ -327,7 +326,8 @@ class _FlanSearchState extends State<FlanSearch> {
         defaultValue: FlanSearchShape.square));
     properties.add(DiagnosticsProperty<bool>('clearable', widget.clearable,
         defaultValue: true));
-    properties.add(DiagnosticsProperty<int>('leftIconName', widget.leftIconName,
+    properties.add(DiagnosticsProperty<IconData>(
+        'leftIconName', widget.leftIconName,
         defaultValue: FlanIcons.search));
     properties
         .add(DiagnosticsProperty<String>('leftIconUrl', widget.leftIconUrl));

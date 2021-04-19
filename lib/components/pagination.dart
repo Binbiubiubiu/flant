@@ -162,7 +162,7 @@ class _FlanPaginationState extends State<FlanPagination> {
   List<PageItem> get pages {
     final List<PageItem> items = <PageItem>[];
     final int pageCount = count;
-    final int showPageSize = this.widget.showPageSize;
+    final int showPageSize = widget.showPageSize;
     if (widget.mode != FlanPaginationMode.multi) {
       return items;
     }

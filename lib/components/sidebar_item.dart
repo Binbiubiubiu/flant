@@ -1,13 +1,12 @@
 // 🐦 Flutter imports:
-import 'package:flant/components/sidebar.dart';
-import 'package:flant/mixins/route_mixins.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/rendering.dart';
 
 // 🌎 Project imports:
-import 'package:flant/components/button.dart';
+import 'package:flant/components/sidebar.dart';
 import 'package:flant/flant.dart';
-import 'package:flutter/rendering.dart';
+import 'package:flant/mixins/route_mixins.dart';
 import '../styles/var.dart';
 
 class FlanSidebarItem extends RouteStatelessWidget {

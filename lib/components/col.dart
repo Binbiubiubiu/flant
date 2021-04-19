@@ -4,7 +4,6 @@ import 'package:flutter/material.dart';
 
 // 🌎 Project imports:
 import 'package:flant/components/row.dart';
-import './row.dart' show FlanRowProvider;
 
 /// ### FlanCol 列布局
 class FlanCol extends StatelessWidget {

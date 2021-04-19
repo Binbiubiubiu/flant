@@ -16,7 +16,7 @@ void showToast(
   FlanToastType type = FlanToastType.text,
   FlanToastPosition position = FlanToastPosition.middle,
   String message = '',
-  int? iconName,
+  IconData? iconName,
   String? iconUrl,
   String iconPrefix = kFlanIconsFamily,
   bool overlay = false,
@@ -93,7 +93,7 @@ class FlanToast extends StatelessWidget {
   final String message;
 
   /// 自定义图标，支持传入图标名称
-  final int? iconName;
+  final IconData? iconName;
 
   /// 自定义图标，支持传入图片链接
   final String? iconUrl;
@@ -205,7 +205,7 @@ class FlanToast extends StatelessWidget {
         type == FlanToastType.fail;
 
     if (hasIcon) {
-      int? name = iconName;
+      IconData? name = iconName;
       if (type == FlanToastType.success) {
         name = FlanIcons.success;
       }

@@ -2,9 +2,6 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
-// 🌎 Project imports:
-import '../styles/var.dart';
-
 class FlanIndexAnchor extends StatelessWidget {
   const FlanIndexAnchor({
     Key? key,

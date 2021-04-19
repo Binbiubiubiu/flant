@@ -1,16 +1,12 @@
-// 🎯 Dart imports:
-import 'dart:math' as math;
-
 // 🐦 Flutter imports:
-import 'package:flant/components/form.dart';
-import 'package:flant/utils/format/validate.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
 // 🌎 Project imports:
 import 'package:flant/components/cell.dart';
+import 'package:flant/components/form.dart';
 import 'package:flant/flant.dart';
-import 'package:flant/styles/icons.dart';
+import 'package:flant/utils/format/validate.dart';
 import '../styles/var.dart';
 
 FlanContactEditInfo kDefaultContact = FlanContactEditInfo(
@@ -204,7 +200,7 @@ class _FlanContactEditState extends State<FlanContactEdit> {
       return Padding(
         padding: const EdgeInsets.only(top: 10.0),
         child: FlanCell(
-          padding: EdgeInsets.symmetric(
+          padding: const EdgeInsets.symmetric(
             horizontal: ThemeVars.cellHorizontalPadding,
             vertical: 9.0,
           ),

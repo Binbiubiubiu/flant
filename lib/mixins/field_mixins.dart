@@ -1,5 +1,8 @@
-import 'package:flant/components/field.dart';
+// 🐦 Flutter imports:
 import 'package:flutter/material.dart';
+
+// 🌎 Project imports:
+import 'package:flant/components/field.dart';
 
 @optionalTypeArgs
 mixin LinkFieldMixin<T extends StatefulWidget> on State<T> {

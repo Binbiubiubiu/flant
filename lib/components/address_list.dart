@@ -1,9 +1,9 @@
 // 🐦 Flutter imports:
-import 'package:flant/flant.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
 // 🌎 Project imports:
+import 'package:flant/flant.dart';
 import '../styles/var.dart';
 import 'icon.dart';
 
@@ -93,7 +93,7 @@ class FlanAddressList extends StatelessWidget {
             padding: ThemeVars.addressListDisabledTextPadding,
             child: Text(
               this.disabledText,
-              style: TextStyle(
+              style: const TextStyle(
                 fontSize: ThemeVars.addressListDisabledTextFontSize,
                 color: ThemeVars.addressListDisabledTextColor,
                 height: ThemeVars.addressListDisabledTextLineHeight /
@@ -379,7 +379,7 @@ class FlanAddressListItem extends StatelessWidget {
 
     if (switchable && !disabled) {
       return Row(
-        children: [
+        children: <Widget>[
           FlanRadio<String>(
             name: address.id,
             iconSize: 18.0,

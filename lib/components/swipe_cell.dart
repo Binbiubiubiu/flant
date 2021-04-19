@@ -2,9 +2,6 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
-// 🌎 Project imports:
-import '../styles/var.dart';
-
 class FlanSwipeCell extends StatelessWidget {
   const FlanSwipeCell({
     Key? key,
@@ -25,7 +22,6 @@ class FlanSwipeCell extends StatelessWidget {
 
   @override
   void debugFillProperties(DiagnosticPropertiesBuilder properties) {
-    // TODO: implement debugFillProperties
     super.debugFillProperties(properties);
   }
 }

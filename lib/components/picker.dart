@@ -1,5 +1,5 @@
+// 🎯 Dart imports:
 import 'dart:convert';
-import 'dart:math' as math;
 
 // 🐦 Flutter imports:
 import 'package:flutter/foundation.dart';
@@ -8,10 +8,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter/physics.dart';
 import 'package:flutter/rendering.dart';
 
+// 🌎 Project imports:
 import '../locale/l10n.dart';
 import '../styles/var.dart';
 import '../utils/format/number.dart';
-// 🌎 Project imports:
 import 'loading.dart';
 import 'style.dart';
 

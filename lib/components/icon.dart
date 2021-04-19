@@ -49,7 +49,7 @@ class FlanIcon extends StatelessWidget {
 
   // ****************** Props ******************
   /// 图标名称
-  final int? iconName;
+  final IconData? iconName;
 
   /// 图片链接
   final String? iconUrl;
@@ -100,7 +100,7 @@ class FlanIcon extends StatelessWidget {
 
     if (iconName != null) {
       return Icon(
-        IconData(iconName!, fontFamily: classPrefix),
+        iconName,
         color: color ?? iconTheme.color,
         size: iconSize,
       );
@@ -114,13 +114,6 @@ class FlanIcon extends StatelessWidget {
         size: iconSize,
         color: color,
       );
-      // Image.network(
-      //   iconUrl!,
-      //   color: color, //?? textStyle.color,
-      //   width: iconSize,
-      //   height: iconSize,
-      //   fit: BoxFit.contain,
-      // );
     }
 
     return ImageIcon(
@@ -128,24 +121,15 @@ class FlanIcon extends StatelessWidget {
       size: iconSize,
       color: color,
     );
-
-    // return Image.asset(
-    //   iconUrl!,
-    //   color: color, //?? textStyle.color,
-    //   width: iconSize,
-    //   height: iconSize,
-    //   fit: BoxFit.contain,
-    // );
   }
 
   @override
   void debugFillProperties(DiagnosticPropertiesBuilder properties) {
-    properties.add(DiagnosticsProperty<int>('iconName', iconName));
+    properties.add(DiagnosticsProperty<IconData>('iconName', iconName));
     properties.add(DiagnosticsProperty<String>('iconUrl', iconUrl));
     properties.add(DiagnosticsProperty<bool>('dot', dot));
     properties.add(DiagnosticsProperty<double>('size', size));
     properties.add(DiagnosticsProperty<Color>('color', color));
-    properties.add(DiagnosticsProperty<String>('classPrefix', classPrefix));
     properties.add(DiagnosticsProperty<String>('badge', badge));
     super.debugFillProperties(properties);
   }

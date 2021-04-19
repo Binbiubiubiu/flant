@@ -34,7 +34,7 @@ class FlanGridItem extends RouteStatelessWidget {
   final String? text;
 
   /// 列元素宽度
-  final int? iconName;
+  final IconData? iconName;
 
   final String? iconUrl;
 
@@ -182,7 +182,7 @@ class FlanGridItem extends RouteStatelessWidget {
   @override
   void debugFillProperties(DiagnosticPropertiesBuilder properties) {
     properties.add(DiagnosticsProperty<String>('text', text));
-    properties.add(DiagnosticsProperty<int>('iconName', iconName));
+    properties.add(DiagnosticsProperty<IconData>('iconName', iconName));
     properties.add(DiagnosticsProperty<String>('iconUrl', iconUrl));
     properties.add(DiagnosticsProperty<String>('iconPrefix', iconPrefix));
     properties.add(DiagnosticsProperty<bool>('dot', dot, defaultValue: false));

@@ -57,13 +57,13 @@ class FlanRate extends StatefulWidget {
   final Color? disabledColor;
 
   /// 选中图标名称
-  final int iconName;
+  final IconData iconName;
 
   /// 选中图标链接
   final String? iconUrl;
 
   /// 未选中的图标名称
-  final int voidIconName;
+  final IconData voidIconName;
 
   /// 未选中的图标链接
   final String? voidIconUrl;

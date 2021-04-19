@@ -2,9 +2,6 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
-// 🌎 Project imports:
-import '../styles/var.dart';
-
 /// ### IndexBar 索引栏
 class FlanIndexBar extends StatelessWidget {
   const FlanIndexBar({

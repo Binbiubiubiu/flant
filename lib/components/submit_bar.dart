@@ -64,7 +64,7 @@ class FlanSubmitBar extends StatelessWidget {
   final String? tip;
 
   /// 提示文案左侧的图标名称
-  final int? tipIconName;
+  final IconData? tipIconName;
 
   /// 提示文案左侧的图标链接
   final String? tipIconUrl;
@@ -265,7 +265,7 @@ class FlanSubmitBar extends StatelessWidget {
         defaultValue: FlanButtonType.danger));
     properties.add(DiagnosticsProperty<Color>('buttonColor', buttonColor));
     properties.add(DiagnosticsProperty<String>('tip', tip));
-    properties.add(DiagnosticsProperty<int>('tipIconName', tipIconName));
+    properties.add(DiagnosticsProperty<IconData>('tipIconName', tipIconName));
     properties.add(DiagnosticsProperty<String>('tipIconUrl', tipIconUrl));
     properties.add(
         DiagnosticsProperty<String>('currency', currency, defaultValue: '¥'));

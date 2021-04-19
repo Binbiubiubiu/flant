@@ -57,7 +57,7 @@ class FlanCell extends RouteStatelessWidget {
   final FlanCellSize size;
 
   /// 左侧图标名称
-  final int? iconName;
+  final IconData? iconName;
 
   /// 左侧图片链接
   final String? iconUrl;
@@ -387,7 +387,7 @@ class FlanCell extends RouteStatelessWidget {
     }
 
     if (isLink) {
-      final int iconName = <FlanCellArrowDirection, int>{
+      final IconData iconName = <FlanCellArrowDirection, IconData>{
         FlanCellArrowDirection.down: FlanIcons.arrow_down,
         FlanCellArrowDirection.up: FlanIcons.arrow_up,
         FlanCellArrowDirection.left: FlanIcons.arrow_left,
@@ -421,7 +421,7 @@ class FlanCell extends RouteStatelessWidget {
     properties.add(DiagnosticsProperty<String>('value', value));
     properties.add(DiagnosticsProperty<FlanCellSize>('size', size,
         defaultValue: FlanCellSize.normal));
-    properties.add(DiagnosticsProperty<int>('iconName', iconName));
+    properties.add(DiagnosticsProperty<IconData>('iconName', iconName));
     properties.add(DiagnosticsProperty<String>('iconUrl', iconUrl));
     properties.add(DiagnosticsProperty<String>('iconPrefix', iconPrefix));
     properties

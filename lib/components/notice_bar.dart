@@ -47,7 +47,7 @@ class FlanNoticeBar extends StatefulWidget {
   final Color? color;
 
   /// 左侧图标名称
-  final int? leftIconName;
+  final IconData? leftIconName;
 
   /// 左侧图片链接
   final String? leftIconUrl;
@@ -274,7 +274,7 @@ class _FlanNoticeBarState extends State<FlanNoticeBar>
       return widget.rightIconSlot!;
     }
 
-    if (rightIconName > 0) {
+    if (rightIconName != null) {
       return Container(
         constraints: const BoxConstraints(
           minWidth: ThemeVars.noticeBarIconMinWidth,
@@ -301,7 +301,7 @@ class _FlanNoticeBarState extends State<FlanNoticeBar>
     }
   }
 
-  int get rightIconName {
+  IconData? get rightIconName {
     if (widget.mode == FlanNoticeBarMode.closeable) {
       return FlanIcons.cross;
     }
@@ -309,8 +309,6 @@ class _FlanNoticeBarState extends State<FlanNoticeBar>
     if (widget.mode == FlanNoticeBarMode.link) {
       return FlanIcons.arrow;
     }
-
-    return 0;
   }
 
   @override
@@ -318,8 +316,8 @@ class _FlanNoticeBarState extends State<FlanNoticeBar>
     properties.add(DiagnosticsProperty<String>('text', widget.text));
     properties.add(DiagnosticsProperty<FlanNoticeBarMode>('mode', widget.mode));
     properties.add(DiagnosticsProperty<Color>('color', widget.color));
-    properties
-        .add(DiagnosticsProperty<int>('leftIconName', widget.leftIconName));
+    properties.add(
+        DiagnosticsProperty<IconData>('leftIconName', widget.leftIconName));
     properties
         .add(DiagnosticsProperty<String>('leftIconUrl', widget.leftIconUrl));
     properties.add(DiagnosticsProperty<bool>('wrapable', widget.wrapable,

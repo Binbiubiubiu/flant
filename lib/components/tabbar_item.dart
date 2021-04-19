@@ -31,7 +31,7 @@ class FlanTabbarItem<T> extends StatelessWidget {
   final T? name;
 
   /// 图标名称
-  final int? iconName;
+  final IconData? iconName;
 
   /// 图片链接
   final String? iconUrl;
@@ -138,7 +138,7 @@ class FlanTabbarItem<T> extends StatelessWidget {
   @override
   void debugFillProperties(DiagnosticPropertiesBuilder properties) {
     properties.add(DiagnosticsProperty<T>('name', name));
-    properties.add(DiagnosticsProperty<int>('iconName', iconName));
+    properties.add(DiagnosticsProperty<IconData>('iconName', iconName));
     properties.add(DiagnosticsProperty<String>('iconUrl', iconUrl));
     properties.add(DiagnosticsProperty<String>('iconPrefix', iconPrefix,
         defaultValue: kFlanIconsFamily));

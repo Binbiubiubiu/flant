@@ -38,19 +38,19 @@ class FlanSteps extends StatelessWidget {
   final Color? inactiveColor;
 
   /// 激活状态底部图标名称
-  final int? activeIconName;
+  final IconData? activeIconName;
 
   /// 激活状态底部图标访问链接
   final String? activeIconUrl;
 
   /// 未激活状态底部图标名称
-  final int? inactiveIconName;
+  final IconData? inactiveIconName;
 
   /// 未激活状态底部图标访问链接
   final String? inactiveIconUrl;
 
   /// 已完成步骤对应的底部图标名称，优先级高于 `inactiveIcon`
-  final int? finishIconName;
+  final IconData? finishIconName;
 
   /// 已完成步骤对应的底部图标访问链接，优先级高于 `inactiveIcon`
   final String? finishIconUrl;
@@ -115,14 +115,16 @@ class FlanSteps extends StatelessWidget {
         defaultValue: Axis.horizontal));
     properties.add(DiagnosticsProperty<Color>('activeColor', activeColor));
     properties.add(DiagnosticsProperty<Color>('inactiveColor', inactiveColor));
-    properties.add(DiagnosticsProperty<int>('activeIconName', activeIconName));
+    properties
+        .add(DiagnosticsProperty<IconData>('activeIconName', activeIconName));
     properties.add(DiagnosticsProperty<String>('activeIconUrl', activeIconUrl));
 
-    properties
-        .add(DiagnosticsProperty<int>('inactiveIconName', inactiveIconName));
+    properties.add(
+        DiagnosticsProperty<IconData>('inactiveIconName', inactiveIconName));
     properties
         .add(DiagnosticsProperty<String>('inactiveIconUrl', inactiveIconUrl));
-    properties.add(DiagnosticsProperty<int>('finishIconName', finishIconName));
+    properties
+        .add(DiagnosticsProperty<IconData>('finishIconName', finishIconName));
     properties.add(DiagnosticsProperty<String>('finishIconUrl', finishIconUrl));
 
     super.debugFillProperties(properties);

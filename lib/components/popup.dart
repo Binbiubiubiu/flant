@@ -98,7 +98,7 @@ class FlanPopup extends StatefulWidget {
   final bool closeable;
 
   /// 关闭图标名称
-  final int closeIconName;
+  final IconData closeIconName;
 
   /// 关闭图片链接
   final String? closeIconUrl;
@@ -449,7 +449,7 @@ class _FlanPopupState extends State<FlanPopup> {
         defaultValue: true));
     properties.add(DiagnosticsProperty<bool>('closeable', widget.closeable,
         defaultValue: false));
-    properties.add(DiagnosticsProperty<int>(
+    properties.add(DiagnosticsProperty<IconData>(
         'closeIconName', widget.closeIconName,
         defaultValue: FlanIcons.cross));
     properties
@@ -637,7 +637,7 @@ class _FlanPopupCloseIcon extends StatefulWidget {
   }) : super(key: key);
 
   /// 图标属性
-  final int? closeIconName;
+  final IconData? closeIconName;
 
   /// 图标链接
   final String? closeIconUrl;

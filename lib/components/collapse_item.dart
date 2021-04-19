@@ -53,7 +53,7 @@ class FlanCollapseItem extends StatefulWidget {
   final FlanCellSize size;
 
   /// 左侧图标名称
-  final int? iconName;
+  final IconData? iconName;
 
   /// 左侧图片链接
   final String? iconUrl;
@@ -282,7 +282,7 @@ class _FlanCollapseItemState<T> extends State<FlanCollapseItem>
     properties.add(DiagnosticsProperty<String>('value', widget.value));
     properties.add(DiagnosticsProperty<FlanCellSize>('size', widget.size,
         defaultValue: FlanCellSize.normal));
-    properties.add(DiagnosticsProperty<int>('iconName', widget.iconName));
+    properties.add(DiagnosticsProperty<IconData>('iconName', widget.iconName));
     properties.add(DiagnosticsProperty<String>('iconUrl', widget.iconUrl));
     properties
         .add(DiagnosticsProperty<String>('iconPrefix', widget.iconPrefix));

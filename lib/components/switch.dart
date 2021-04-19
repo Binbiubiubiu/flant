@@ -1,10 +1,10 @@
 // 🐦 Flutter imports:
-import 'package:flant/mixins/field_mixins.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
 // 🌎 Project imports:
 import 'package:flant/components/loading.dart';
+import 'package:flant/mixins/field_mixins.dart';
 import '../styles/var.dart';
 
 /// ### FlanSwitch

@@ -288,8 +288,6 @@ class FlanChecker<T> extends StatelessWidget {
 
   bool get _disabled => _parentProps?.disabled ?? disabled;
 
-  Axis? get _direction => _parentProps?.direction;
-
   Color? get iconColor {
     final Color? checkedColor = this.checkedColor ?? _parentProps?.checkedColor;
     if (checkedColor != null && checked && !_disabled) {

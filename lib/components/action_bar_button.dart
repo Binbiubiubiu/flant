@@ -3,10 +3,10 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
 // 🌎 Project imports:
-import 'package:flant/components/action_bar.dart';
-import 'package:flant/components/button.dart';
-import 'package:flant/mixins/route_mixins.dart';
+import '../mixins/route_mixins.dart';
 import '../styles/var.dart';
+import 'action_bar.dart';
+import 'button.dart';
 
 /// ### ActionBarButton 动作栏按钮
 class FlanActionBarButton extends RouteStatelessWidget {
@@ -47,7 +47,7 @@ class FlanActionBarButton extends RouteStatelessWidget {
   final FlanButtonType type;
 
   /// 图标名称
-  final int? iconName;
+  final IconData? iconName;
 
   /// 图标访问链接
   final String? iconUrl;
@@ -140,7 +140,7 @@ class FlanActionBarButton extends RouteStatelessWidget {
     properties.add(DiagnosticsProperty<Gradient>('gradient', gradient));
     properties.add(DiagnosticsProperty<FlanButtonType>('type', type,
         defaultValue: FlanButtonType.normal));
-    properties.add(DiagnosticsProperty<int>('iconName', iconName));
+    properties.add(DiagnosticsProperty<IconData>('iconName', iconName));
     properties.add(DiagnosticsProperty<String>('iconUrl', iconUrl));
     properties.add(
         DiagnosticsProperty<bool>('disabled', disabled, defaultValue: false));

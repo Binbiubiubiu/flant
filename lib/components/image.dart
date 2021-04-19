@@ -65,13 +65,13 @@ class FlanImage extends StatelessWidget {
   final bool showLoading;
 
   /// 失败时提示的图标名称
-  final int errorIconName;
+  final IconData errorIconName;
 
   /// 失败时提示的图片链接
   final String? errorIconUrl;
 
   /// 加载时提示的图标名称
-  final int loadingIconName;
+  final IconData loadingIconName;
 
   /// 加载时提示的图片链接
   final String? loadingIconUrl;
@@ -242,10 +242,11 @@ class FlanImage extends StatelessWidget {
         DiagnosticsProperty<bool>('showError', showError, defaultValue: true));
     properties.add(DiagnosticsProperty<bool>('showLoading', showLoading,
         defaultValue: true));
-    properties.add(DiagnosticsProperty<int>('errorIconName', errorIconName,
+    properties.add(DiagnosticsProperty<IconData>('errorIconName', errorIconName,
         defaultValue: FlanIcons.photo_fail));
     properties.add(DiagnosticsProperty<String>('errorIconUrl', errorIconUrl));
-    properties.add(DiagnosticsProperty<int>('loadingIconName', loadingIconName,
+    properties.add(DiagnosticsProperty<IconData>(
+        'loadingIconName', loadingIconName,
         defaultValue: FlanIcons.photo));
     properties
         .add(DiagnosticsProperty<String>('loadingIconUrl', loadingIconUrl));
