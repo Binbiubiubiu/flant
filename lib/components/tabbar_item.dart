@@ -18,7 +18,6 @@ class FlanTabbarItem<T> extends StatelessWidget {
     this.name,
     this.iconName,
     this.iconUrl,
-    this.iconPrefix = kFlanIconsFamily,
     this.dot = false,
     this.badge,
     this.textBuilder,
@@ -35,9 +34,6 @@ class FlanTabbarItem<T> extends StatelessWidget {
 
   /// 图片链接
   final String? iconUrl;
-
-  /// 图标类名前缀
-  final String iconPrefix;
 
   /// 是否显示图标右上角小红点
   final bool dot;
@@ -89,7 +85,6 @@ class FlanTabbarItem<T> extends StatelessWidget {
           FlanIcon(
             iconName: iconName,
             iconUrl: iconUrl,
-            classPrefix: iconPrefix,
           ),
     );
 
@@ -140,8 +135,6 @@ class FlanTabbarItem<T> extends StatelessWidget {
     properties.add(DiagnosticsProperty<T>('name', name));
     properties.add(DiagnosticsProperty<IconData>('iconName', iconName));
     properties.add(DiagnosticsProperty<String>('iconUrl', iconUrl));
-    properties.add(DiagnosticsProperty<String>('iconPrefix', iconPrefix,
-        defaultValue: kFlanIconsFamily));
     properties.add(DiagnosticsProperty<bool>('dot', dot, defaultValue: false));
     properties.add(DiagnosticsProperty<String>('badge', badge));
     super.debugFillProperties(properties);

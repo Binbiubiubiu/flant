@@ -58,7 +58,6 @@ class FlanField<T extends dynamic> extends StatefulWidget {
     this.leftIconUrl,
     this.rightIconName,
     this.rightIconUrl,
-    this.iconPrefix = kFlanIconsFamily,
     this.rules = const <FlanFieldRule>[],
     this.padding,
     this.bgColor,
@@ -196,9 +195,6 @@ class FlanField<T extends dynamic> extends StatefulWidget {
 
   /// 右侧图片链接
   final String? rightIconUrl;
-
-  /// 图标类名前缀，同 Icon 组件的 class-prefix 属性
-  final String iconPrefix;
 
   /// 表单校验规则，详见 Form 组件
   final List<FlanFieldRule> rules;
@@ -676,7 +672,6 @@ class FlanFieldState<T extends dynamic> extends State<FlanField<T>> {
                 FlanIcon(
                   iconName: widget.leftIconName,
                   iconUrl: widget.leftIconUrl,
-                  classPrefix: widget.iconPrefix,
                 ),
           ),
         ),
@@ -705,7 +700,6 @@ class FlanFieldState<T extends dynamic> extends State<FlanField<T>> {
               FlanIcon(
                 iconName: widget.rightIconName,
                 iconUrl: widget.rightIconUrl,
-                classPrefix: widget.iconPrefix,
               ),
         ),
       );
@@ -896,8 +890,6 @@ class FlanFieldState<T extends dynamic> extends State<FlanField<T>> {
         DiagnosticsProperty<IconData>('rightIconName', widget.rightIconName));
     properties
         .add(DiagnosticsProperty<String>('rightIconUrl', widget.rightIconUrl));
-    properties.add(DiagnosticsProperty<String>('iconPrefix', widget.iconPrefix,
-        defaultValue: kFlanIconsFamily));
     properties
         .add(DiagnosticsProperty<List<FlanFieldRule>>('rules', widget.rules));
 

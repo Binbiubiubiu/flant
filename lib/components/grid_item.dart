@@ -17,7 +17,6 @@ class FlanGridItem extends RouteStatelessWidget {
     this.text,
     this.iconName,
     this.iconUrl,
-    this.iconPrefix = kFlanIconsFamily,
     this.dot = false,
     this.badge,
     this.onClick,
@@ -37,8 +36,6 @@ class FlanGridItem extends RouteStatelessWidget {
   final IconData? iconName;
 
   final String? iconUrl;
-
-  final String iconPrefix;
 
   final bool dot;
 
@@ -142,7 +139,6 @@ class FlanGridItem extends RouteStatelessWidget {
         iconUrl: iconUrl,
         size: parent!.iconSize ?? ThemeVars.gridItemIconSize,
         badge: badge,
-        classPrefix: iconPrefix,
       );
     }
     return const SizedBox.shrink();
@@ -184,7 +180,6 @@ class FlanGridItem extends RouteStatelessWidget {
     properties.add(DiagnosticsProperty<String>('text', text));
     properties.add(DiagnosticsProperty<IconData>('iconName', iconName));
     properties.add(DiagnosticsProperty<String>('iconUrl', iconUrl));
-    properties.add(DiagnosticsProperty<String>('iconPrefix', iconPrefix));
     properties.add(DiagnosticsProperty<bool>('dot', dot, defaultValue: false));
     properties.add(DiagnosticsProperty<String>('badge', badge));
     super.debugFillProperties(properties);

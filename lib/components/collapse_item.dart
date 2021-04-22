@@ -19,7 +19,6 @@ class FlanCollapseItem extends StatefulWidget {
     this.size = FlanCellSize.normal,
     this.iconName,
     this.iconUrl,
-    this.iconPrefix = kFlanIconsFamily,
     this.border = true,
     this.clickable = false,
     this.isLink = true,
@@ -57,9 +56,6 @@ class FlanCollapseItem extends StatefulWidget {
 
   /// 左侧图片链接
   final String? iconUrl;
-
-  /// 图标类名前缀，同 Icon 组件的 class-prefix 属性
-  final String iconPrefix;
 
   /// 是否显示内边框
   final bool border;
@@ -202,7 +198,6 @@ class _FlanCollapseItemState<T> extends State<FlanCollapseItem>
         size: widget.size,
         iconName: widget.iconName,
         iconUrl: widget.iconUrl,
-        iconPrefix: widget.iconPrefix,
         clickable: widget.clickable,
         isLink: widget.isLink,
         isRequired: widget.isRequired,
@@ -284,8 +279,6 @@ class _FlanCollapseItemState<T> extends State<FlanCollapseItem>
         defaultValue: FlanCellSize.normal));
     properties.add(DiagnosticsProperty<IconData>('iconName', widget.iconName));
     properties.add(DiagnosticsProperty<String>('iconUrl', widget.iconUrl));
-    properties
-        .add(DiagnosticsProperty<String>('iconPrefix', widget.iconPrefix));
     properties.add(
         DiagnosticsProperty<bool>('border', widget.border, defaultValue: true));
     properties.add(DiagnosticsProperty<bool>('clickable', widget.clickable,

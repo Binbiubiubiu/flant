@@ -1,9 +1,11 @@
 // 🐦 Flutter imports:
+import 'package:flant/styles/theme.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
 // 🌎 Project imports:
 import '../mixins/route_mixins.dart';
+import '../styles/button_theme.dart';
 import '../styles/var.dart';
 import 'icon.dart';
 import 'loading.dart';
@@ -15,12 +17,11 @@ class FlanButton extends RouteStatelessWidget {
     Key? key,
     this.type = FlanButtonType.normal,
     this.size = FlanButtonSize.normal,
-    this.text,
+    this.text = '',
     this.color,
     this.gradient,
     this.iconName,
     this.iconUrl,
-    this.iconPrefix = kFlanIconsFamily,
     this.iconPosition = FlanButtonIconPosition.left,
     this.block = false,
     this.plain = false,
@@ -31,9 +32,9 @@ class FlanButton extends RouteStatelessWidget {
     this.loading = false,
     this.border = true,
     this.textColor,
-    this.loadingText,
+    this.loadingText = '',
     this.loadingType = FlanLoadingType.circular,
-    this.loadingSize = 20.0,
+    this.loadingSize,
     this.radius,
     this.onClick,
     this.onTouchStart,
@@ -42,8 +43,7 @@ class FlanButton extends RouteStatelessWidget {
     String? toName,
     PageRoute<Object?>? toRoute,
     bool replace = false,
-  })  : assert(loadingSize > 0.0),
-        super(
+  }) : super(
           key: key,
           toName: toName,
           toRoute: toRoute,
@@ -58,7 +58,7 @@ class FlanButton extends RouteStatelessWidget {
   final FlanButtonSize size;
 
   /// 按钮文字
-  final String? text;
+  final String text;
 
   /// 按钮颜色，
   final Color? color;
@@ -71,9 +71,6 @@ class FlanButton extends RouteStatelessWidget {
 
   /// 左侧图片链接
   final String? iconUrl;
-
-  /// 图标类名前缀，同 Icon 组件的 class-prefix 属性
-  final String iconPrefix;
 
   /// 图标展示位置，可选值为 `right`
   final FlanButtonIconPosition iconPosition;
@@ -103,13 +100,13 @@ class FlanButton extends RouteStatelessWidget {
   final bool border;
 
   /// 加载状态提示文字
-  final String? loadingText;
+  final String loadingText;
 
   /// 加载图标类型，可选值为 `spinner`
   final FlanLoadingType loadingType;
 
   /// 加载图标大小
-  final double loadingSize;
+  final double? loadingSize;
 
   /// 圆角大小
   final BorderRadius? radius;
@@ -133,11 +130,16 @@ class FlanButton extends RouteStatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final FlanButtonThemeData themeData = FlanTheme.of(context).buttonTheme;
+
+    final _FlanButtonSize _btnSize = _getBtnSize(themeData);
+    final _FlanButtonTheme _themeType = getThemeType(themeData);
+
     final BorderRadius radius = this.radius ??
         (square
             ? BorderRadius.zero
             : BorderRadius.circular(
-                round ? _btnSize.height / 2.0 : ThemeVars.buttonBorderRadius,
+                round ? _btnSize.height / 2.0 : themeData.borderRadius,
               ));
 
     final TextStyle textStyle = TextStyle(
@@ -174,7 +176,7 @@ class FlanButton extends RouteStatelessWidget {
           },
           child: Padding(
             padding: _btnSize.padding,
-            child: _buildContent(context),
+            child: _buildContent(themeData, _themeType),
           ),
         ),
       ),
@@ -195,30 +197,26 @@ class FlanButton extends RouteStatelessWidget {
   }
 
   // 构建按钮文本
-  Widget _buildText(BuildContext context) {
+  Widget _buildText() {
     if (loading) {
-      return Text(loadingText ?? '');
+      return Text(loadingText);
     }
 
-    return child ?? Text(text ?? '');
-  }
-
-  /// loading 图标
-  Widget _buildLoadingIcon(BuildContext context) {
-    return loadingSlot ??
-        FlanLoading(
-          size: loadingSize,
-          type: loadingType,
-          color: textColor ?? _themeType.color,
-        );
+    return child ?? Text(text);
   }
 
   /// 构建图标
-  Widget? _buildIcon(BuildContext context) {
-    final double iSize = DefaultTextStyle.of(context).style.fontSize! * 1.2;
-
+  Widget? _buildIcon(
+    FlanButtonThemeData themeData,
+    _FlanButtonTheme _themeType,
+  ) {
     if (loading) {
-      return _buildLoadingIcon(context);
+      return loadingSlot ??
+          FlanLoading(
+            size: loadingSize ?? themeData.loadingIconSize,
+            type: loadingType,
+            color: textColor ?? _themeType.color,
+          );
     }
 
     if (iconName != null || iconUrl != null) {
@@ -226,19 +224,21 @@ class FlanButton extends RouteStatelessWidget {
         iconName: iconName,
         iconUrl: iconUrl,
         color: _themeType.color,
-        size: iSize,
-        classPrefix: iconPrefix,
+        size: themeData.iconSize,
       );
     }
   }
 
   /// 构建内容
-  Widget _buildContent(BuildContext context) {
+  Widget _buildContent(
+    FlanButtonThemeData themeData,
+    _FlanButtonTheme _themeType,
+  ) {
     final List<Widget> children = <Widget>[
-      _buildText(context),
+      _buildText(),
     ];
 
-    final Widget? sideIcon = _buildIcon(context);
+    final Widget? sideIcon = _buildIcon(themeData, _themeType);
 
     if (sideIcon != null) {
       switch (iconPosition) {
@@ -249,10 +249,10 @@ class FlanButton extends RouteStatelessWidget {
           children.insert(0, sideIcon);
           break;
         case FlanButtonIconPosition.right:
-          children.add(sideIcon);
           if (_isHasText) {
             children.add(const SizedBox(width: 4.0));
           }
+          children.add(sideIcon);
           break;
       }
     }
@@ -274,7 +274,8 @@ class FlanButton extends RouteStatelessWidget {
   }
 
   /// 计算按钮样式
-  _FlanButtonTheme _computedThemeType({
+  _FlanButtonTheme _computedThemeType(
+    FlanButtonThemeData themeData, {
     required Color backgroundColor,
     required Color color,
     required Color borderColor,
@@ -288,89 +289,95 @@ class FlanButton extends RouteStatelessWidget {
       borderColor = Colors.transparent;
       color = Colors.white;
     }
+
+    BorderSide borderSide = BorderSide.none;
+    if (border) {
+      borderSide = BorderSide(
+        width: hairline ? 0.5 : themeData.borderWidth,
+        color: borderColor,
+      );
+    }
+
     return _FlanButtonTheme(
-      backgroundColor:
-          plain ? ThemeVars.buttonPlainBackgroundColor : backgroundColor,
+      backgroundColor: plain ? themeData.plainBackgroundColor : backgroundColor,
       color: plain ? borderColor : color,
-      border: border
-          ? Border.all(
-              width: hairline ? 0.5 : ThemeVars.buttonBorderWidth,
-              color: borderColor,
-            )
-          : null,
+      border: Border.fromBorderSide(borderSide),
     );
   }
 
-  // bool get isBtnEnable => !this.disabled && this.onPressed != null;
   /// 按钮是否有内容
-  bool get _isHasText => (text != null && text!.isNotEmpty) || child != null;
+  bool get _isHasText => text.isNotEmpty || child != null;
 
   /// 按钮大小集合
-  _FlanButtonSize get _btnSize {
+  _FlanButtonSize _getBtnSize(FlanButtonThemeData themeData) {
     switch (size) {
       case FlanButtonSize.large:
         return _FlanButtonSize(
-          fontSize: ThemeVars.buttonDefaultFontSize,
-          height: ThemeVars.buttonLargeHeight,
-          padding: const EdgeInsets.symmetric(horizontal: 15.0),
+          fontSize: themeData.defaultFontSize,
+          height: themeData.largeHeight,
+          padding: EdgeInsets.zero, //themeData.normalPadding,
         );
 
       case FlanButtonSize.normal:
         return _FlanButtonSize(
-          fontSize: ThemeVars.buttonNormalFontSize,
-          height: ThemeVars.buttonDefaultHeight,
-          padding: const EdgeInsets.symmetric(horizontal: 15.0),
+          fontSize: themeData.normalFontSize,
+          height: themeData.defaultHeight,
+          padding: themeData.normalPadding,
         );
 
       case FlanButtonSize.small:
         return _FlanButtonSize(
-          fontSize: ThemeVars.buttonSmallFontSize,
-          height: ThemeVars.buttonSmallHeight,
-          padding: const EdgeInsets.symmetric(horizontal: ThemeVars.paddingSm),
+          fontSize: themeData.smallFontSize,
+          height: themeData.smallHeight,
+          padding: themeData.smallPadding,
         );
 
       case FlanButtonSize.mini:
         return _FlanButtonSize(
-          fontSize: ThemeVars.buttonMiniFontSize,
-          height: ThemeVars.buttonMiniHeight,
-          padding:
-              const EdgeInsets.symmetric(horizontal: ThemeVars.paddingBase),
+          fontSize: themeData.miniFontSize,
+          height: themeData.miniHeight,
+          padding: themeData.miniPadding,
         );
     }
   }
 
   /// 按钮样式集合
-  _FlanButtonTheme get _themeType {
+  _FlanButtonTheme getThemeType(FlanButtonThemeData themeData) {
     switch (type) {
       case FlanButtonType.primary:
         return _computedThemeType(
-          backgroundColor: ThemeVars.buttonPrimaryBackgroundColor,
-          color: ThemeVars.buttonPrimaryColor,
-          borderColor: ThemeVars.buttonPrimaryBorderColor,
+          themeData,
+          backgroundColor: themeData.primaryBackgroundColor,
+          color: themeData.primaryColor,
+          borderColor: themeData.primaryBorderColor,
         );
       case FlanButtonType.success:
         return _computedThemeType(
-          backgroundColor: ThemeVars.buttonSuccessBackgroundColor,
-          color: ThemeVars.buttonSuccessColor,
-          borderColor: ThemeVars.buttonSuccessBorderColor,
+          themeData,
+          backgroundColor: themeData.successBackgroundColor,
+          color: themeData.successColor,
+          borderColor: themeData.successBorderColor,
         );
       case FlanButtonType.danger:
         return _computedThemeType(
-          backgroundColor: ThemeVars.buttonDangerBackgroundColor,
-          color: ThemeVars.buttonDangerColor,
-          borderColor: ThemeVars.buttonDangerBorderColor,
+          themeData,
+          backgroundColor: themeData.dangerBackgroundColor,
+          color: themeData.dangerColor,
+          borderColor: themeData.dangerBorderColor,
         );
       case FlanButtonType.warning:
         return _computedThemeType(
-          backgroundColor: ThemeVars.buttonWarningBackgroundColor,
-          color: ThemeVars.buttonWarningColor,
-          borderColor: ThemeVars.buttonWarningBorderColor,
+          themeData,
+          backgroundColor: themeData.warningBackgroundColor,
+          color: themeData.warningColor,
+          borderColor: themeData.warningBorderColor,
         );
       case FlanButtonType.normal:
         return _computedThemeType(
-          backgroundColor: ThemeVars.buttonDefaultBackgroundColor,
-          color: ThemeVars.buttonDefaultColor,
-          borderColor: ThemeVars.buttonDefaultBorderColor,
+          themeData,
+          backgroundColor: themeData.defaultBackgroundColor,
+          color: themeData.defaultColor,
+          borderColor: themeData.defaultBorderColor,
         );
     }
   }

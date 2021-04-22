@@ -3,7 +3,6 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
 // 🌎 Project imports:
-import '../styles/icons.dart';
 import 'badge.dart';
 
 export '../styles/icons.dart';
@@ -18,7 +17,6 @@ class FlanIcon extends StatelessWidget {
     this.dot = false,
     this.size,
     this.color,
-    this.classPrefix = kFlanIconsFamily,
     this.badge,
     this.onClick,
   }) : super(key: key);
@@ -29,7 +27,6 @@ class FlanIcon extends StatelessWidget {
     this.dot = false,
     this.size,
     this.color,
-    this.classPrefix = kFlanIconsFamily,
     this.badge,
     this.onClick,
   })  : iconUrl = null,
@@ -41,7 +38,6 @@ class FlanIcon extends StatelessWidget {
     this.dot = false,
     this.size,
     this.color,
-    this.classPrefix = kFlanIconsFamily,
     this.badge,
     this.onClick,
   })  : iconName = null,
@@ -65,9 +61,6 @@ class FlanIcon extends StatelessWidget {
 
   /// 图标大小
   final double? size;
-
-  /// 类名前缀，用于使用自定义图标
-  final String classPrefix;
 
   // ****************** Events ******************
   /// 点击图标时触发

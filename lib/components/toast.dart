@@ -18,7 +18,6 @@ void showToast(
   String message = '',
   IconData? iconName,
   String? iconUrl,
-  String iconPrefix = kFlanIconsFamily,
   bool overlay = false,
   bool forbidClick = false,
   bool closeOnClick = false,
@@ -38,7 +37,6 @@ void showToast(
         message: message,
         iconName: iconName,
         iconUrl: iconUrl,
-        iconPrefix: iconPrefix,
         overlay: overlay,
         forbidClick: forbidClick,
         closeOnClick: closeOnClick,
@@ -66,7 +64,6 @@ class FlanToast extends StatelessWidget {
     this.message = '',
     this.iconName,
     this.iconUrl,
-    this.iconPrefix = kFlanIconsFamily,
     this.overlay = false,
     this.forbidClick = false,
     this.closeOnClick = false,
@@ -97,9 +94,6 @@ class FlanToast extends StatelessWidget {
 
   /// 自定义图标，支持传入图片链接
   final String? iconUrl;
-
-  /// 图标类名前缀，同 Icon 组件的 class-prefix 属性
-  final String iconPrefix;
 
   /// 是否显示背景遮罩层
   final bool overlay;
@@ -218,7 +212,6 @@ class FlanToast extends StatelessWidget {
         iconName: name,
         iconUrl: iconUrl,
         size: ThemeVars.toastIconSize,
-        classPrefix: iconPrefix,
         color: iconUrl != null ? null : ThemeVars.toastTextColor,
       );
     }

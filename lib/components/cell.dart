@@ -18,7 +18,6 @@ class FlanCell extends RouteStatelessWidget {
     this.size = FlanCellSize.normal,
     this.iconName,
     this.iconUrl,
-    this.iconPrefix = kFlanIconsFamily,
     this.border = false,
     this.clickable = false,
     this.isLink = false,
@@ -61,9 +60,6 @@ class FlanCell extends RouteStatelessWidget {
 
   /// 左侧图片链接
   final String? iconUrl;
-
-  /// 图标类名前缀，同 Icon 组件的 class-prefix 属性
-  final String iconPrefix;
 
   /// 是否显示内边框
   final bool border;
@@ -357,7 +353,6 @@ class FlanCell extends RouteStatelessWidget {
           iconUrl: iconUrl,
           size: ThemeVars.cellIconSize,
           color: disabled ? ThemeVars.collapseItemTitleDisabledColor : null,
-          classPrefix: iconPrefix,
         ),
       );
     }
@@ -407,7 +402,6 @@ class FlanCell extends RouteStatelessWidget {
           color: disabled
               ? ThemeVars.collapseItemTitleDisabledColor
               : ThemeVars.cellRightIconColor,
-          classPrefix: iconPrefix,
         ),
       );
     }
@@ -423,7 +417,6 @@ class FlanCell extends RouteStatelessWidget {
         defaultValue: FlanCellSize.normal));
     properties.add(DiagnosticsProperty<IconData>('iconName', iconName));
     properties.add(DiagnosticsProperty<String>('iconUrl', iconUrl));
-    properties.add(DiagnosticsProperty<String>('iconPrefix', iconPrefix));
     properties
         .add(DiagnosticsProperty<bool>('border', border, defaultValue: true));
     properties.add(

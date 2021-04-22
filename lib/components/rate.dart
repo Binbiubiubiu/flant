@@ -25,7 +25,6 @@ class FlanRate extends StatefulWidget {
     this.iconUrl,
     this.voidIconName = FlanIcons.star_o,
     this.voidIconUrl,
-    this.iconPrefix = kFlanIconsFamily,
     this.allowHalf = false,
     this.readonly = false,
     this.disabled = false,
@@ -67,9 +66,6 @@ class FlanRate extends StatefulWidget {
 
   /// 未选中的图标链接
   final String? voidIconUrl;
-
-  /// 图标类名前缀
-  final String iconPrefix;
 
   /// 是否允许半选
   final bool allowHalf;
@@ -146,7 +142,6 @@ class _FlanRateState extends State<FlanRate> {
                 : isFull
                     ? (widget.color ?? ThemeVars.rateIconFullColor)
                     : (widget.voidColor ?? ThemeVars.rateIconVoidColor),
-            classPrefix: widget.iconPrefix,
             onClick: () {
               _select(score);
             },
@@ -167,7 +162,6 @@ class _FlanRateState extends State<FlanRate> {
                       : isVoid
                           ? (widget.voidColor ?? ThemeVars.rateIconVoidColor)
                           : (widget.color ?? ThemeVars.rateIconFullColor),
-                  classPrefix: widget.iconPrefix,
                   onClick: () {
                     _select(score - 0.5);
                   },
