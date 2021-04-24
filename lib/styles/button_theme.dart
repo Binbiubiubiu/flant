@@ -126,7 +126,7 @@ class FlanButtonThemeData with Diagnosticable {
       roundBorderRadius: roundBorderRadius ?? FlanThemeVars.borderRadiusMax.rpx,
       plainBackgroundColor: plainBackgroundColor ?? FlanThemeVars.white,
       disabledOpacity: disabledOpacity ?? FlanThemeVars.disabledOpacity,
-      iconSize: iconSize ?? (FlanThemeVars.fontSizeXs * 1.2).rpx,
+      iconSize: iconSize ?? (FlanThemeVars.fontSizeLg * 1.2).rpx,
       loadingIconSize: loadingIconSize ?? 20.0.rpx,
     );
   }
@@ -462,5 +462,95 @@ class FlanButtonThemeData with Diagnosticable {
         other.disabledOpacity == disabledOpacity &&
         other.iconSize == iconSize &&
         other.loadingIconSize == loadingIconSize;
+  }
+
+  @override
+  void debugFillProperties(DiagnosticPropertiesBuilder properties) {
+    properties.add(DiagnosticsProperty<double>('miniHeight', miniHeight,
+        defaultValue: null));
+    properties.add(DiagnosticsProperty<EdgeInsets>('miniPadding', miniPadding,
+        defaultValue: null));
+    properties.add(DiagnosticsProperty<double>('miniFontSize', miniFontSize,
+        defaultValue: null));
+    properties.add(DiagnosticsProperty<double>('smallHeight', smallHeight,
+        defaultValue: null));
+    properties.add(DiagnosticsProperty<EdgeInsets>('smallPadding', smallPadding,
+        defaultValue: null));
+    properties.add(DiagnosticsProperty<double>('smallFontSize', smallFontSize,
+        defaultValue: null));
+    properties.add(DiagnosticsProperty<EdgeInsets>(
+        'normalPadding', normalPadding,
+        defaultValue: null));
+    properties.add(DiagnosticsProperty<double>('normalFontSize', normalFontSize,
+        defaultValue: null));
+    properties.add(DiagnosticsProperty<double>('largeHeight', largeHeight,
+        defaultValue: null));
+    properties.add(DiagnosticsProperty<double>('defaultHeight', defaultHeight,
+        defaultValue: null));
+    properties.add(DiagnosticsProperty<double>(
+        'defaultLineHeight', defaultLineHeight,
+        defaultValue: null));
+    properties.add(DiagnosticsProperty<double>(
+        'defaultFontSize', defaultFontSize,
+        defaultValue: null));
+    properties.add(DiagnosticsProperty<Color>('defaultColor', defaultColor,
+        defaultValue: null));
+    properties.add(DiagnosticsProperty<Color>(
+        'defaultBackgroundColor', defaultBackgroundColor,
+        defaultValue: null));
+    properties.add(DiagnosticsProperty<Color>(
+        'defaultBorderColor', defaultBorderColor,
+        defaultValue: null));
+    properties.add(DiagnosticsProperty<Color>('primaryColor', primaryColor,
+        defaultValue: null));
+    properties.add(DiagnosticsProperty<Color>(
+        'primaryBackgroundColor', primaryBackgroundColor,
+        defaultValue: null));
+    properties.add(DiagnosticsProperty<Color>(
+        'primaryBorderColor', primaryBorderColor,
+        defaultValue: null));
+    properties.add(DiagnosticsProperty<Color>('successColor', successColor,
+        defaultValue: null));
+    properties.add(DiagnosticsProperty<Color>(
+        'successBackgroundColor', successBackgroundColor,
+        defaultValue: null));
+    properties.add(DiagnosticsProperty<Color>(
+        'successBorderColor', successBorderColor,
+        defaultValue: null));
+    properties.add(DiagnosticsProperty<Color>('dangerColor', dangerColor,
+        defaultValue: null));
+    properties.add(DiagnosticsProperty<Color>(
+        'dangerBackgroundColor', dangerBackgroundColor,
+        defaultValue: null));
+    properties.add(DiagnosticsProperty<Color>(
+        'dangerBorderColor', dangerBorderColor,
+        defaultValue: null));
+    properties.add(DiagnosticsProperty<Color>('warningColor', warningColor,
+        defaultValue: null));
+    properties.add(DiagnosticsProperty<Color>(
+        'warningBackgroundColor', warningBackgroundColor,
+        defaultValue: null));
+    properties.add(DiagnosticsProperty<Color>(
+        'warningBorderColor', warningBorderColor,
+        defaultValue: null));
+    properties.add(DiagnosticsProperty<double>('borderWidth', borderWidth,
+        defaultValue: null));
+    properties.add(DiagnosticsProperty<double>('borderRadius', borderRadius,
+        defaultValue: null));
+    properties.add(DiagnosticsProperty<double>(
+        'roundBorderRadius', roundBorderRadius,
+        defaultValue: null));
+    properties.add(DiagnosticsProperty<Color>(
+        'plainBackgroundColor', plainBackgroundColor,
+        defaultValue: null));
+    properties.add(DiagnosticsProperty<double>(
+        'disabledOpacity', disabledOpacity,
+        defaultValue: null));
+    properties.add(
+        DiagnosticsProperty<double>('iconSize', iconSize, defaultValue: null));
+    properties.add(DiagnosticsProperty<double>(
+        'loadingIconSize', loadingIconSize,
+        defaultValue: null));
+    super.debugFillProperties(properties);
   }
 }

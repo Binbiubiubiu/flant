@@ -18,7 +18,7 @@ class FlanGridItem extends RouteStatelessWidget {
     this.iconName,
     this.iconUrl,
     this.dot = false,
-    this.badge,
+    this.badge = '',
     this.onClick,
     this.child,
     this.iconSlot,
@@ -39,7 +39,7 @@ class FlanGridItem extends RouteStatelessWidget {
 
   final bool dot;
 
-  final String? badge;
+  final String badge;
 
   // ****************** Events ******************
 

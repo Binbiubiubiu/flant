@@ -3,14 +3,17 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
 // 🌎 Project imports:
+import '../styles/badge_theme.dart';
+import '../styles/theme.dart';
 import '../styles/var.dart';
+import '../utils/widget.dart';
 
 /// ### FlanImage 图片
 /// 增强版的 img 标签，提供多种图片填充模式，支持图片懒加载、加载中提示、加载失败提示。
 class FlanBadge extends StatelessWidget {
   const FlanBadge({
     Key? key,
-    this.content,
+    this.content = '',
     this.dot = false,
     this.max,
     this.color,
@@ -20,7 +23,7 @@ class FlanBadge extends StatelessWidget {
 
   // ****************** Props ******************
   /// 徽标内容
-  final String? content;
+  final String content;
 
   /// 徽标背景颜色
   final Color? color;
@@ -42,51 +45,46 @@ class FlanBadge extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final FlanBadgeThemeData themeData = FlanTheme.of(context).badgeTheme;
+
     if (child != null) {
       return Stack(
-        clipBehavior: Clip.none,
-        children: <Widget>[
-          child ?? const SizedBox.shrink(),
+        children: <Widget?>[
+          child,
           Positioned(
             top: 0.0,
             right: 0.0,
             child: FractionalTranslation(
               translation: const Offset(0.5, -0.5),
-              child: _buildBadge(),
+              child: _buildBadge(themeData),
             ),
           ),
-        ],
+        ].noNull,
       );
     }
 
-    return _buildBadge();
+    return _buildBadge(themeData) ?? const SizedBox.shrink();
   }
 
   /// 是否有内容
   bool get _hasContent {
-    return contentSlot != null || (content != null && content!.isNotEmpty);
+    return contentSlot != null || content.isNotEmpty;
   }
 
   /// 构建内容
-  Widget _buildContent() {
+  Widget? _buildContent(FlanBadgeThemeData themeData) {
     if (!dot && _hasContent) {
       if (contentSlot != null) {
-        return LayoutBuilder(
-          builder: (BuildContext context, BoxConstraints constraints) {
-            final TextStyle style = DefaultTextStyle.of(context).style;
-
-            return IconTheme(
-              data: IconThemeData(
-                color: style.color,
-                size: style.fontSize,
-              ),
-              child: contentSlot ?? const SizedBox.shrink(),
-            );
-          },
+        return IconTheme(
+          data: IconThemeData(
+            color: themeData.color,
+            size: themeData.fontSize,
+          ),
+          child: contentSlot!,
         );
       }
 
-      String text = content!;
+      String text = content;
       final double? contentNumber = double.tryParse(text);
       if (max != null && contentNumber != null && contentNumber > max!) {
         text = '$max+';
@@ -97,81 +95,74 @@ class FlanBadge extends StatelessWidget {
         textAlign: TextAlign.center,
       );
     }
-
-    return const SizedBox.shrink();
   }
 
   /// 构建点样式徽标
-  Widget _buildDotBadge() {
+  Widget _buildDotBadge(FlanBadgeThemeData themeData) {
     return Container(
-      width: ThemeVars.badgeDotSize,
-      height: ThemeVars.badgeDotSize,
-      constraints: const BoxConstraints(
-        minWidth: 0,
-      ),
-      padding: ThemeVars.badgePadding,
+      width: themeData.dotSize,
+      height: themeData.dotSize,
+      constraints: const BoxConstraints(minWidth: 0),
+      padding: themeData.padding,
       decoration: BoxDecoration(
-        color: color ?? ThemeVars.badgeDotColor,
+        color: color ?? themeData.dotColor,
         border: Border.all(
-          color: ThemeVars.white,
-          width: ThemeVars.badgeBorderWidth,
+          color: FlanThemeVars.white,
+          width: themeData.borderWidth,
         ),
-        borderRadius: const BorderRadius.all(
-          Radius.circular(ThemeVars.badgeDotSize),
+        borderRadius: BorderRadius.all(
+          Radius.circular(themeData.dotSize),
         ),
       ),
-      child: _buildContent(),
+      child: _buildContent(themeData),
     );
   }
 
   /// 构建内容
-  Widget _buildContentBadge() {
+  Widget _buildContentBadge(FlanBadgeThemeData themeData) {
     return Container(
-      constraints: const BoxConstraints(
-        minWidth: ThemeVars.badgeSize,
+      constraints: BoxConstraints(
+        minWidth: themeData.size,
       ),
       alignment: Alignment.center,
-      padding: ThemeVars.badgePadding,
+      padding: themeData.padding,
       decoration: BoxDecoration(
-        color: color ?? ThemeVars.badgeBackgroundColor,
+        color: color ?? themeData.backgroundColor,
         border: Border.all(
-          color: ThemeVars.white,
-          width: ThemeVars.badgeBorderWidth,
+          color: FlanThemeVars.white,
+          width: themeData.borderWidth,
         ),
         borderRadius: const BorderRadius.all(
-          Radius.circular(ThemeVars.borderRadiusMax),
+          Radius.circular(FlanThemeVars.borderRadiusMax),
         ),
       ),
-      child: _buildContent(),
+      child: _buildContent(themeData),
     );
   }
 
   /// 构建徽标
-  Widget _buildBadge() {
+  Widget? _buildBadge(FlanBadgeThemeData themeData) {
     if (_hasContent || dot) {
-      return Material(
-        color: Colors.transparent,
-        textStyle: const TextStyle(
+      return DefaultTextStyle(
+        style: TextStyle(
           height: 1.2,
-          fontSize: ThemeVars.badgeFontSize,
-          fontWeight: ThemeVars.badgeFontWeight,
-          color: ThemeVars.badgeColor,
+          fontSize: themeData.fontSize,
+          fontWeight: themeData.fontWeight,
+          fontFamily: themeData.fontFamily,
+          color: themeData.color,
         ),
-        child: Row(
-          mainAxisSize: MainAxisSize.min,
-          children: <Widget>[
-            if (dot) _buildDotBadge() else _buildContentBadge(),
-          ],
+        child: UnconstrainedBox(
+          child:
+              dot ? _buildDotBadge(themeData) : _buildContentBadge(themeData),
         ),
       );
     }
-
-    return const SizedBox.shrink();
   }
 
   @override
   void debugFillProperties(DiagnosticPropertiesBuilder properties) {
-    properties.add(DiagnosticsProperty<String>('content', content));
+    properties
+        .add(DiagnosticsProperty<String>('content', content, defaultValue: ''));
     properties.add(DiagnosticsProperty<bool>('dot', dot, defaultValue: false));
     properties.add(DiagnosticsProperty<int>('max', max));
     properties.add(DiagnosticsProperty<Color>('color', color));

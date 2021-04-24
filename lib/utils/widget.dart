@@ -10,3 +10,7 @@ void nextTick(void Function(Duration timestamp) callback) {
 extension FlanSizeExtension on num {
   double get rpx => FlanTheme.rpx(this);
 }
+
+extension FlanListExtension on List<Widget?> {
+  List<Widget> get noNull => whereType<Widget>().toList();
+}

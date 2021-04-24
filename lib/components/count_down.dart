@@ -7,6 +7,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
 
 // 🌎 Project imports:
+import '../styles/count_down_theme.dart';
+import '../styles/theme.dart';
 import '../styles/var.dart';
 import '../utils/format/string.dart';
 
@@ -108,10 +110,12 @@ class FlanCountDownState extends State<FlanCountDown>
 
   @override
   Widget build(BuildContext context) {
-    const TextStyle textStyle = TextStyle(
-      fontSize: ThemeVars.countDownFontSize,
-      color: ThemeVars.countDownTextColor,
-      height: ThemeVars.countDownLineHeight / ThemeVars.countDownFontSize,
+    final FlanCountDownThemeData themeData =
+        FlanTheme.of(context).countDownTheme;
+    final TextStyle textStyle = TextStyle(
+      fontSize: themeData.fontSize,
+      color: themeData.textColor,
+      height: themeData.lineHeight / themeData.fontSize,
     );
 
     return DefaultTextStyle(

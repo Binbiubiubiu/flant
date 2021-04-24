@@ -17,7 +17,7 @@ class FlanIcon extends StatelessWidget {
     this.dot = false,
     this.size,
     this.color,
-    this.badge,
+    this.badge = '',
     this.onClick,
   }) : super(key: key);
 
@@ -27,7 +27,7 @@ class FlanIcon extends StatelessWidget {
     this.dot = false,
     this.size,
     this.color,
-    this.badge,
+    this.badge = '',
     this.onClick,
   })  : iconUrl = null,
         super(key: key);
@@ -38,7 +38,7 @@ class FlanIcon extends StatelessWidget {
     this.dot = false,
     this.size,
     this.color,
-    this.badge,
+    this.badge = '',
     this.onClick,
   })  : iconName = null,
         super(key: key);
@@ -54,7 +54,7 @@ class FlanIcon extends StatelessWidget {
   final bool dot;
 
   /// 图标右上角徽标的内容
-  final String? badge;
+  final String badge;
 
   /// 图标颜色
   final Color? color;

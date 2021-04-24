@@ -3,7 +3,10 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
 // 🌎 Project imports:
+import '../styles/tag_theme.dart';
+import '../styles/theme.dart';
 import '../styles/var.dart';
+import '../utils/widget.dart';
 import 'icon.dart';
 
 /// ### FlanCircle 环形进度条
@@ -64,42 +67,52 @@ class FlanTag extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final FlanTagThemeData themeData = FlanTheme.of(context).tagTheme;
+
     if (closeable) {
       return AnimatedOpacity(
         opacity: show ? 1.0 : 0.0,
-        duration: ThemeVars.animationDurationBase,
+        duration: FlanThemeVars.animationDurationBase,
         curve: show
-            ? ThemeVars.animationTimingFunctionLeave
-            : ThemeVars.animationTimingFunctionEnter,
-        child: _buildTag(),
+            ? FlanThemeVars.animationTimingFunctionLeave
+            : FlanThemeVars.animationTimingFunctionEnter,
+        child: _buildTag(themeData),
       );
     }
 
-    return _buildTag();
+    return _buildTag(themeData);
   }
 
   /// 计算标签不同size的padding
-  EdgeInsets get _tagPadding {
-    return <FlanTagSize, EdgeInsets>{
-      FlanTagSize.normal: ThemeVars.tagPadding,
-      FlanTagSize.medium: ThemeVars.tagMediumPadding,
-      FlanTagSize.large: ThemeVars.tagLargePadding,
-    }[size]!;
+  EdgeInsets _getTagPadding(FlanTagThemeData themeData) {
+    switch (size) {
+      case FlanTagSize.normal:
+        return themeData.padding;
+      case FlanTagSize.medium:
+        return themeData.mediumPadding;
+      case FlanTagSize.large:
+        return themeData.largePadding;
+    }
   }
 
   /// 计算标签不同type的主题色
-  Color get _themeColor {
-    return <FlanTagType, Color>{
-      FlanTagType.normal: ThemeVars.tagDefaultColor,
-      FlanTagType.danger: ThemeVars.tagDangerColor,
-      FlanTagType.primary: ThemeVars.tagPrimaryColor,
-      FlanTagType.success: ThemeVars.tagSuccessColor,
-      FlanTagType.warning: ThemeVars.tagWarningColor
-    }[type]!;
+  Color _getThemeColor(FlanTagThemeData themeData) {
+    switch (type) {
+      case FlanTagType.normal:
+        return themeData.defaultColor;
+      case FlanTagType.primary:
+        return themeData.primaryColor;
+      case FlanTagType.success:
+        return themeData.successColor;
+      case FlanTagType.warning:
+        return themeData.warningColor;
+      case FlanTagType.danger:
+        return themeData.dangerColor;
+    }
   }
 
   /// 计算标签文字颜色
-  Color get _textColor {
+  Color _getTextColor(FlanTagThemeData themeData) {
     if (textColor != null) {
       return textColor!;
     }
@@ -107,87 +120,80 @@ class FlanTag extends StatelessWidget {
       return color!;
     }
 
-    return plain ? _themeColor : ThemeVars.tagTextColor;
+    return plain ? _getThemeColor(themeData) : themeData.textColor;
   }
 
   /// 计算标签背景颜色
-  Color get _backgroundColor =>
-      plain ? ThemeVars.tagPlainBackgroundColor : (color ?? _themeColor);
+  Color _getBackgroundColor(FlanTagThemeData themeData) => plain
+      ? themeData.plainBackgroundColor
+      : (color ?? _getThemeColor(themeData));
 
   /// 计算标签字体大小
-  double get _textSize => size == FlanTagSize.large
-      ? ThemeVars.tagLargeFontSize
-      : ThemeVars.tagFontSize;
+  double _getTextSize(FlanTagThemeData themeData) =>
+      size == FlanTagSize.large ? themeData.largeFontSize : themeData.fontSize;
 
   /// 计算标签圆角大小
-  BorderRadius get _borderRadius {
+  BorderRadius _getBorderRadius(FlanTagThemeData themeData) {
     if (mark) {
-      return const BorderRadius.only(
-        topRight: Radius.circular(ThemeVars.tagRoundBorderRadius),
-        bottomRight: Radius.circular(ThemeVars.tagRoundBorderRadius),
+      return BorderRadius.only(
+        topRight: Radius.circular(themeData.roundBorderRadius),
+        bottomRight: Radius.circular(themeData.roundBorderRadius),
       );
     }
 
     if (round) {
-      return BorderRadius.circular(ThemeVars.tagRoundBorderRadius);
+      return BorderRadius.circular(themeData.roundBorderRadius);
     }
 
     if (size == FlanTagSize.large) {
-      return BorderRadius.circular(ThemeVars.tagLargeBorderRadius);
+      return BorderRadius.circular(themeData.largeBorderRadius);
     }
 
-    return BorderRadius.circular(ThemeVars.tagBorderRadius);
+    return BorderRadius.circular(themeData.borderRadius);
   }
 
   /// 构建标签
-  Widget _buildTag() {
-    return Material(
-      textStyle: TextStyle(
-        color: _textColor,
-        fontSize: _textSize,
-        // height: ThemeVars.tagLineHeight / ThemeVars.tagFontSize,
+  Widget _buildTag(FlanTagThemeData themeData) {
+    final Color textColor = _getTextColor(themeData);
+    final Color bgColor = _getBackgroundColor(themeData);
+    final double fontSize = _getTextSize(themeData);
+
+    return Container(
+      decoration: BoxDecoration(
+        border: Border.fromBorderSide(plain
+            ? BorderSide(width: 1.0, color: _getTextColor(themeData))
+            : BorderSide.none),
+        color: bgColor,
       ),
-      shape: RoundedRectangleBorder(
-        side:
-            plain ? BorderSide(width: 1.0, color: _textColor) : BorderSide.none,
-        borderRadius: _borderRadius,
-      ),
-      color: _backgroundColor,
-      child: Padding(
-        padding: _tagPadding,
+      padding: _getTagPadding(themeData),
+      child: DefaultTextStyle(
+        style: TextStyle(
+          color: textColor,
+          fontSize: fontSize,
+          // height: themeData.lineHeight / themeData.fontSize,
+        ),
         child: Wrap(
           alignment: WrapAlignment.center,
           runAlignment: WrapAlignment.center,
           crossAxisAlignment: WrapCrossAlignment.center,
-          children: <Widget>[
-            child ?? const SizedBox.shrink(),
-            _buildCloseIcon(),
-          ],
+          children: <Widget?>[
+            child,
+            if (closeable)
+              Padding(
+                padding: const EdgeInsets.only(left: 2.0),
+                child: FlanIcon.name(
+                  FlanIcons.cross,
+                  onClick: onClose,
+                  size: fontSize,
+                  color: textColor,
+                ),
+              )
+            else
+              null,
+          ].noNull,
         ),
       ),
     );
-  }
-
-  ///构建关闭图标
-  Widget _buildCloseIcon() {
-    if (closeable) {
-      return LayoutBuilder(
-        builder: (BuildContext context, BoxConstraints constraints) {
-          final TextStyle tagStyle = DefaultTextStyle.of(context).style;
-          return Padding(
-            padding: const EdgeInsets.only(left: 2.0),
-            child: FlanIcon.name(
-              FlanIcons.cross,
-              onClick: onClose,
-              size: tagStyle.fontSize,
-              color: tagStyle.color,
-            ),
-          );
-        },
-      );
-    }
-
-    return const SizedBox.shrink();
   }
 
   @override

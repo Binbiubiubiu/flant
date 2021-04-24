@@ -14,7 +14,7 @@ class FlanSidebarItem extends RouteStatelessWidget {
     Key? key,
     this.title = '',
     this.dot = false,
-    this.badge,
+    this.badge = '',
     this.disabled = false,
     this.padding,
     this.onClick,
@@ -32,7 +32,7 @@ class FlanSidebarItem extends RouteStatelessWidget {
   final bool dot;
 
   /// 图标右上角徽标的内容
-  final String? badge;
+  final String badge;
 
   /// 是否禁用该项
   final bool disabled;

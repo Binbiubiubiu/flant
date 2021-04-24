@@ -173,7 +173,7 @@ class _FlanCollapseItemState<T> extends State<FlanCollapseItem>
       excludeSemantics: true,
       toggled: expanded,
       child: FlanCell(
-        disabled: widget.disabled,
+        // disabled: widget.disabled,
         rightIconSlot: RotationTransition(
           turns: collapseIconAnimation,
           child:

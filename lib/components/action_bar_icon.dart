@@ -18,7 +18,7 @@ class FlanActionBarIcon extends RouteStatelessWidget {
     this.iconUrl,
     this.color,
     this.dot = false,
-    this.badge,
+    this.badge = '',
     this.onClick,
     this.child,
     this.iconSlot,
@@ -49,7 +49,7 @@ class FlanActionBarIcon extends RouteStatelessWidget {
   final bool dot;
 
   /// 图标右上角徽标的内容
-  final String? badge;
+  final String badge;
 
   // ****************** Events ******************
 

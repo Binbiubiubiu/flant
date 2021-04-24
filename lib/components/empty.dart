@@ -1,4 +1,5 @@
 // 🐦 Flutter imports:
+import 'package:flant/styles/empty_theme.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
@@ -6,7 +7,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
 // 🌎 Project imports:
-import '../styles/var.dart';
+import '../styles/theme.dart';
+import '../utils/widget.dart';
 
 /// ### FlanEmpty 空状态
 /// 空状态时的占位提示
@@ -49,24 +51,25 @@ class FlanEmpty extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final FlanEmptyThemeData themeData = FlanTheme.of(context).emptyTheme;
     return FractionallySizedBox(
       widthFactor: 1.0,
       child: Padding(
-        padding: ThemeVars.emptyPadding,
+        padding: themeData.padding,
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           crossAxisAlignment: CrossAxisAlignment.center,
-          children: <Widget>[
-            _buildImage(context),
-            _buildDescription(context),
-            _buildBottom(context),
-          ],
+          children: <Widget?>[
+            _buildImage(themeData),
+            _buildDescription(themeData),
+            _buildBottom(themeData),
+          ].noNull,
         ),
       ),
     );
   }
 
-  Widget _buildImage(BuildContext context) {
+  Widget _buildImage(FlanEmptyThemeData themeData) {
     if (imageSlot != null) {
       return imageSlot!;
     }
@@ -77,46 +80,45 @@ class FlanEmpty extends StatelessWidget {
 
     return Image.network(
       imageUrl ?? imageTypeUrl,
-      width: imageSize ?? ThemeVars.emptyImageSize,
-      height: imageSize ?? ThemeVars.emptyImageSize,
+      width: imageSize ?? themeData.imageSize,
+      height: imageSize ?? themeData.imageSize,
     );
   }
 
-  Widget _buildDescription(BuildContext context) {
+  Widget _buildDescription(FlanEmptyThemeData themeData) {
     final Widget text = descriptionSlot ?? Text(description ?? '');
 
     return Container(
-      margin: const EdgeInsets.only(top: ThemeVars.emptyDescriptionMarginTop),
-      padding: ThemeVars.emptyDescriptionPadding,
+      margin: EdgeInsets.only(top: themeData.descriptionMarginTop),
+      padding: themeData.descriptionPadding,
       child: DefaultTextStyle(
-        style: const TextStyle(
-          color: ThemeVars.emptyDescriptionColor,
-          fontSize: ThemeVars.emptyDescriptionFontSize,
-          height: ThemeVars.emptyDescriptionLineHeight /
-              ThemeVars.emptyDescriptionFontSize,
+        style: TextStyle(
+          color: themeData.descriptionColor,
+          fontSize: themeData.descriptionFontSize,
+          height:
+              themeData.descriptionLineHeight / themeData.descriptionFontSize,
         ),
         child: text,
       ),
     );
   }
 
-  Widget _buildBottom(BuildContext context) {
+  Widget? _buildBottom(FlanEmptyThemeData themeData) {
     if (child != null) {
       return Padding(
-        padding: const EdgeInsets.only(top: ThemeVars.emptyBottomMarginTop),
+        padding: EdgeInsets.only(top: themeData.bottomMarginTop),
         child: child,
       );
     }
-    return const SizedBox.shrink();
   }
 
   String get imageTypeUrl {
-    final String? url = <FlanEmptyImageType, String>{
+    final String url = <FlanEmptyImageType, String>{
       FlanEmptyImageType.normal: 'default',
       FlanEmptyImageType.error: 'error',
       FlanEmptyImageType.network: 'network',
       FlanEmptyImageType.search: 'search',
-    }[imageType];
+    }[imageType]!;
     return 'https://img01.yzcdn.cn/vant/empty-image-$url.png';
   }
 

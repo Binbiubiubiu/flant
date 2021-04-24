@@ -1,12 +1,15 @@
 // 🐦 Flutter imports:
-import 'package:flant/styles/theme.dart';
+import 'package:flant/components/common/active_response.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/src/rendering/mouse_cursor.dart';
 
 // 🌎 Project imports:
 import '../mixins/route_mixins.dart';
 import '../styles/button_theme.dart';
+import '../styles/theme.dart';
 import '../styles/var.dart';
+import '../utils/widget.dart';
 import 'icon.dart';
 import 'loading.dart';
 
@@ -37,7 +40,6 @@ class FlanButton extends RouteStatelessWidget {
     this.loadingSize,
     this.radius,
     this.onClick,
-    this.onTouchStart,
     this.child,
     this.loadingSlot,
     String? toName,
@@ -118,9 +120,6 @@ class FlanButton extends RouteStatelessWidget {
   /// 点击按钮，且按钮状态不为加载或禁用时触发
   final GestureTapCallback? onClick;
 
-  /// 开始触摸按钮时触发
-  final GestureTapDownCallback? onTouchStart;
-
   // ****************** Slots ******************
   /// 按钮内容
   final Widget? child;
@@ -133,7 +132,7 @@ class FlanButton extends RouteStatelessWidget {
     final FlanButtonThemeData themeData = FlanTheme.of(context).buttonTheme;
 
     final _FlanButtonSize _btnSize = _getBtnSize(themeData);
-    final _FlanButtonTheme _themeType = getThemeType(themeData);
+    final _FlanButtonTheme _themeType = _getThemeType(themeData);
 
     final BorderRadius radius = this.radius ??
         (square
@@ -151,34 +150,54 @@ class FlanButton extends RouteStatelessWidget {
 
     final Color bgColor = (plain ? null : color) ?? _themeType.backgroundColor;
 
-    final Widget _btn = Material(
-      type: MaterialType.button,
-      textStyle: textStyle,
-      color: bgColor,
-      borderRadius: radius,
-      child: Ink(
-        decoration: BoxDecoration(
-          border: _themeType.border,
-          borderRadius: radius,
-          gradient: color != null ? null : gradient,
-        ),
-        height: _btnSize.height,
-        child: InkWell(
-          borderRadius: radius,
-          splashColor: Colors.transparent,
-          highlightColor: ThemeVars.black.withOpacity(0.1),
-          onTapDown: onTouchStart,
-          onTap: () {
-            if (onClick != null) {
-              onClick!();
-            }
-            route(context);
-          },
-          child: Padding(
-            padding: _btnSize.padding,
-            child: _buildContent(themeData, _themeType),
-          ),
-        ),
+    final Widget? sideIcon = _buildIcon(themeData, _themeType);
+
+    final Widget _btn = DefaultTextStyle(
+      style: textStyle,
+      child: FlanActiveResponse(
+        disabled: disabled || loading,
+        cursorBuilder: (SystemMouseCursor cursor) =>
+            loading ? SystemMouseCursors.basic : cursor,
+        onClick: () {
+          if (onClick != null) {
+            onClick!();
+          }
+          route(context);
+        },
+        builder: (BuildContext contenxt, bool active) {
+          return Container(
+            decoration: BoxDecoration(
+              border: _themeType.border,
+              borderRadius: radius,
+              gradient: color != null ? null : gradient,
+              color: bgColor,
+            ),
+            height: _btnSize.height,
+            child: Stack(
+              alignment: Alignment.center,
+              children: <Widget>[
+                Padding(
+                  padding: _btnSize.padding,
+                  child: _buildContent(sideIcon),
+                ),
+                Positioned.fill(
+                  child: RepaintBoundary(
+                    child: IgnorePointer(
+                      ignoring: true,
+                      child: Container(
+                        decoration: BoxDecoration(
+                          borderRadius: radius,
+                          color:
+                              ThemeVars.black.withOpacity(active ? 0.1 : 0.0),
+                        ),
+                      ),
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          );
+        },
       ),
     );
 
@@ -188,21 +207,9 @@ class FlanButton extends RouteStatelessWidget {
       enabled: !disabled,
       child: Opacity(
         opacity: disabled ? 0.5 : 1.0,
-        child: IgnorePointer(
-          ignoring: disabled || loading,
-          child: _btn,
-        ),
+        child: _btn,
       ),
     );
-  }
-
-  // 构建按钮文本
-  Widget _buildText() {
-    if (loading) {
-      return Text(loadingText);
-    }
-
-    return child ?? Text(text);
   }
 
   /// 构建图标
@@ -230,27 +237,22 @@ class FlanButton extends RouteStatelessWidget {
   }
 
   /// 构建内容
-  Widget _buildContent(
-    FlanButtonThemeData themeData,
-    _FlanButtonTheme _themeType,
-  ) {
+  Widget _buildContent(Widget? sideIcon) {
     final List<Widget> children = <Widget>[
-      _buildText(),
+      if (loading) Text(loadingText) else child ?? Text(text),
     ];
-
-    final Widget? sideIcon = _buildIcon(themeData, _themeType);
 
     if (sideIcon != null) {
       switch (iconPosition) {
         case FlanButtonIconPosition.left:
           if (_isHasText) {
-            children.insert(0, const SizedBox(width: 4.0));
+            children.insert(0, SizedBox(width: 4.0.rpx));
           }
           children.insert(0, sideIcon);
           break;
         case FlanButtonIconPosition.right:
           if (_isHasText) {
-            children.add(const SizedBox(width: 4.0));
+            children.add(SizedBox(width: 4.0.rpx));
           }
           children.add(sideIcon);
           break;
@@ -342,7 +344,7 @@ class FlanButton extends RouteStatelessWidget {
   }
 
   /// 按钮样式集合
-  _FlanButtonTheme getThemeType(FlanButtonThemeData themeData) {
+  _FlanButtonTheme _getThemeType(FlanButtonThemeData themeData) {
     switch (type) {
       case FlanButtonType.primary:
         return _computedThemeType(
@@ -406,8 +408,7 @@ class FlanButton extends RouteStatelessWidget {
         defaultValue: FlanButtonType.normal));
     properties.add(DiagnosticsProperty<FlanButtonSize>('size', size,
         defaultValue: FlanButtonSize.normal));
-    properties.add(DiagnosticsProperty<double>('loadingSize', loadingSize,
-        defaultValue: 10.0));
+    properties.add(DiagnosticsProperty<double>('loadingSize', loadingSize));
     properties.add(DiagnosticsProperty<FlanButtonIconPosition>(
         'iconPosition', iconPosition,
         defaultValue: FlanButtonIconPosition.left));

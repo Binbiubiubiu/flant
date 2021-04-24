@@ -3,6 +3,8 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
 // 🌎 Project imports:
+import '../styles/cell_group_theme.dart';
+import '../styles/theme.dart';
 import '../styles/var.dart';
 import 'cell.dart';
 
@@ -34,32 +36,20 @@ class FlanCellGroup extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final List<Widget> cells = <Widget>[];
-    if (children.isNotEmpty) {
-      const Divider line = Divider(
-        height: 0.5,
-        indent: ThemeVars.cellHorizontalPadding,
-        endIndent: ThemeVars.cellHorizontalPadding,
-      );
-      for (int i = 0; i < children.length; i++) {
-        if (i > 0) {
-          cells.add(line);
-        }
-        cells.add(children[i]);
-      }
-    }
+    final FlanCellGroupThemeData themeData =
+        FlanTheme.of(context).cellGroupTheme;
 
     Widget group = Container(
-      decoration: const BoxDecoration(
-        color: ThemeVars.cellGroupBackgroundColor,
-        border: Border(
-          bottom: BorderSide(width: 0.5, color: ThemeVars.cellBorderColor),
-          top: BorderSide(width: 0.5, color: ThemeVars.cellBorderColor),
+      decoration: BoxDecoration(
+        color: themeData.backgroundColor,
+        border: const Border(
+          bottom: BorderSide(width: 0.5, color: FlanThemeVars.cellBorderColor),
+          top: BorderSide(width: 0.5, color: FlanThemeVars.cellBorderColor),
         ),
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
-        children: cells,
+        children: children,
       ),
     );
 
@@ -67,7 +57,7 @@ class FlanCellGroup extends StatelessWidget {
       group = Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: <Widget>[
-          _buildTitle(),
+          _buildTitle(themeData),
           group,
         ],
       );
@@ -85,15 +75,14 @@ class FlanCellGroup extends StatelessWidget {
   bool get _hasTitle => title != null || titleSlot != null;
 
   /// 构建标题
-  Widget _buildTitle() {
+  Widget _buildTitle(FlanCellGroupThemeData themeData) {
     return Padding(
-      padding: ThemeVars.cellGroupTitlePadding,
+      padding: themeData.titlePadding,
       child: DefaultTextStyle(
-        style: const TextStyle(
-          color: ThemeVars.cellGroupTitleColor,
-          fontSize: ThemeVars.cellGroupTitleFontSize,
-          height: ThemeVars.cellGroupTitleLineHeight /
-              ThemeVars.cellGroupTitleFontSize,
+        style: TextStyle(
+          color: themeData.titleColor,
+          fontSize: themeData.titleFontSize,
+          height: themeData.titleLineHeight / themeData.titleFontSize,
         ),
         child: titleSlot ?? Text(title ?? ''),
       ),

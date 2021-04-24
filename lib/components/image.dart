@@ -3,7 +3,9 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
 // 🌎 Project imports:
-import '../styles/var.dart';
+import '../styles/image_theme.dart';
+import '../styles/theme.dart';
+import '../utils/widget.dart';
 import 'icon.dart';
 
 /// ### FlanImage 图片
@@ -98,12 +100,14 @@ class FlanImage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final FlanImageThemeData themeData = FlanTheme.of(context).imageTheme;
+
     Widget image = Column(
       mainAxisSize: MainAxisSize.min,
-      children: <Widget>[
-        _buildImage(),
-        child ?? const SizedBox.shrink(),
-      ],
+      children: <Widget?>[
+        _buildImage(themeData),
+        child,
+      ].noNull,
     );
 
     if (round) {
@@ -124,84 +128,42 @@ class FlanImage extends StatelessWidget {
   }
 
   /// 构建图片Loading图标
-  Widget _buildLoadingIcon() {
-    return DefaultTextStyle(
-      style: const TextStyle(
-        color: ThemeVars.imagePlaceholderTextColor,
-        fontSize: ThemeVars.imagePlaceholderFontSize,
-      ),
+  Widget _buildLoadingIcon(FlanImageThemeData themeData) {
+    return _FlanImagePlaceHolder(
       child: IconTheme(
-        data: const IconThemeData(
-          color: ThemeVars.imageLoadingIconColor,
-          size: ThemeVars.imageLoadingIconSize,
+        data: IconThemeData(
+          color: themeData.loadingIconColor,
+          size: themeData.loadingIconSize,
         ),
-        child: Container(
-          width: width,
-          height: height,
-          color: ThemeVars.imagePlaceholderBackgroundColor,
-          child: Center(
-            child: loadingSlot ??
-                FlanIcon(
-                  iconName: loadingIconName,
-                  iconUrl: loadingIconUrl,
-                ),
-          ),
-        ),
+        child: loadingSlot ??
+            FlanIcon(
+              iconName: loadingIconName,
+              iconUrl: loadingIconUrl,
+            ),
       ),
     );
   }
 
-  /// 图片加载回调
-  Widget onImageLoad(
-      BuildContext context, Widget child, ImageChunkEvent? loadingProgress) {
-    if (src != null && src!.isNotEmpty && loadingProgress == null) {
-      return child;
-    }
-
-    if (showLoading) {
-      return _buildLoadingIcon();
-    }
-
-    return const SizedBox.shrink();
-  }
-
-  /// 图片加载错误回调
-  Widget _onImageError(
-      BuildContext context, Object error, StackTrace? stackTrace) {
-    if (!showError) {
-      return const SizedBox.shrink();
-    }
-
-    return DefaultTextStyle(
-      style: const TextStyle(
-        color: ThemeVars.imagePlaceholderTextColor,
-        fontSize: ThemeVars.imagePlaceholderFontSize,
-      ),
+  Widget _buildErrorIcon(FlanImageThemeData themeData) {
+    return _FlanImagePlaceHolder(
       child: IconTheme(
-        data: const IconThemeData(
-          color: ThemeVars.imageErrorIconColor,
-          size: ThemeVars.imageErrorIconSize,
+        data: IconThemeData(
+          color: themeData.errorIconColor,
+          size: themeData.errorIconSize,
         ),
-        child: Container(
-          width: width,
-          height: height,
-          color: ThemeVars.imagePlaceholderBackgroundColor,
-          child: Center(
-            child: errorSlot ??
-                FlanIcon(
-                  iconName: errorIconName,
-                  iconUrl: errorIconUrl,
-                ),
-          ),
-        ),
+        child: errorSlot ??
+            FlanIcon(
+              iconName: errorIconName,
+              iconUrl: errorIconUrl,
+            ),
       ),
     );
   }
 
   /// 构建图片内容
-  Widget _buildImage() {
+  Widget _buildImage(FlanImageThemeData themeData) {
     if (src == null) {
-      return _buildLoadingIcon();
+      return _buildLoadingIcon(themeData);
     }
 
     final bool isNetwork = RegExp('^https?:\/\/').hasMatch(src!);
@@ -211,8 +173,22 @@ class FlanImage extends StatelessWidget {
         src!,
         width: width,
         height: height,
-        loadingBuilder: onImageLoad,
-        errorBuilder: _onImageError,
+        loadingBuilder: (BuildContext context, Widget child,
+            ImageChunkEvent? loadingProgress) {
+          if (src != null && src!.isNotEmpty && loadingProgress == null) {
+            return child;
+          }
+
+          return showLoading
+              ? _buildLoadingIcon(themeData)
+              : const SizedBox.shrink();
+        },
+        errorBuilder:
+            (BuildContext context, Object error, StackTrace? stackTrace) {
+          return showError
+              ? _buildErrorIcon(themeData)
+              : const SizedBox.shrink();
+        },
         fit: fit,
       );
     }
@@ -251,5 +227,34 @@ class FlanImage extends StatelessWidget {
     properties
         .add(DiagnosticsProperty<String>('loadingIconUrl', loadingIconUrl));
     super.debugFillProperties(properties);
+  }
+}
+
+class _FlanImagePlaceHolder extends StatelessWidget {
+  const _FlanImagePlaceHolder({
+    Key? key,
+    required this.child,
+  }) : super(key: key);
+
+  final Widget child;
+
+  @override
+  Widget build(BuildContext context) {
+    final FlanImageThemeData themeData = FlanTheme.of(context).imageTheme;
+    final FlanImage? image = context.findAncestorWidgetOfExactType<FlanImage>();
+
+    return DefaultTextStyle(
+      style: TextStyle(
+        color: themeData.placeholderTextColor,
+        fontSize: themeData.placeholderFontSize,
+      ),
+      child: Container(
+        width: image?.width,
+        height: image?.height,
+        color: themeData.placeholderBackgroundColor,
+        alignment: Alignment.center,
+        child: child,
+      ),
+    );
   }
 }

@@ -19,7 +19,7 @@ class FlanTabbarItem<T> extends StatelessWidget {
     this.iconName,
     this.iconUrl,
     this.dot = false,
-    this.badge,
+    this.badge = '',
     this.textBuilder,
     this.iconBuilder,
     this.onClick,
@@ -39,7 +39,7 @@ class FlanTabbarItem<T> extends StatelessWidget {
   final bool dot;
 
   /// 图标右上角徽标的内容
-  final String? badge;
+  final String badge;
 
   // ****************** Events ******************
 
