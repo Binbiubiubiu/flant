@@ -130,6 +130,35 @@ class FlanCell extends RouteStatelessWidget {
           horizontal: themeData.horizontalPadding,
           vertical: paddingVertical,
         );
+    final Color bgColor = this.bgColor ?? themeData.backgroundColor;
+
+    final Widget requiredIcon = Positioned(
+      top: paddingVertical,
+      left: FlanThemeVars.paddingXs,
+      child: Visibility(
+        visible: isRequired,
+        child: Text(
+          '*',
+          style: TextStyle(
+            color: themeData.requiredColor,
+            height: 1.2,
+          ),
+        ),
+      ),
+    );
+
+    final Widget bottomBorder = Positioned(
+      left: FlanThemeVars.paddingMd,
+      right: FlanThemeVars.paddingMd,
+      bottom: 0.0,
+      child: Visibility(
+        visible: border,
+        child: Container(
+          height: 0.5,
+          color: themeData.borderColor,
+        ),
+      ),
+    );
 
     final Widget content = Row(
       crossAxisAlignment:
@@ -143,53 +172,36 @@ class FlanCell extends RouteStatelessWidget {
       ].noNull,
     );
 
-    final Widget cell = Stack(
-      children: <Widget>[
-        FlanActiveResponse(
-          builder: (BuildContext contenxt, bool active) {
-            return Container(
-              color: active
-                  ? FlanThemeVars.black.withOpacity(0.1)
-                  : bgColor ?? themeData.backgroundColor,
-              padding: cellPadding,
-              child: content,
-            );
-          },
-          onClick: () {
-            if (onClick != null) {
-              onClick!();
-            }
-            route(context);
-          },
-        ),
-        Positioned(
-          left: FlanThemeVars.paddingMd,
-          right: FlanThemeVars.paddingMd,
-          bottom: 0.0,
-          child: Visibility(
-            visible: border,
-            child: Container(
-              height: 0.5,
-              color: FlanThemeVars.borderColor,
-            ),
+    Widget buildCell(Color bgColor) {
+      return Stack(
+        children: <Widget>[
+          Container(
+            color: bgColor,
+            padding: cellPadding,
+            child: content,
           ),
-        ),
-        Positioned(
-          top: paddingVertical,
-          left: FlanThemeVars.paddingXs,
-          child: Visibility(
-            visible: isRequired,
-            child: Text(
-              '*',
-              style: TextStyle(
-                color: themeData.requiredColor,
-                height: 1.2,
-              ),
-            ),
-          ),
-        ),
-      ],
-    );
+          bottomBorder,
+          requiredIcon,
+        ],
+      );
+    }
+
+    Widget cell;
+    if (_isClickable) {
+      cell = FlanActiveResponse(
+        builder: (BuildContext contenxt, bool active) {
+          return buildCell(active ? themeData.activeColor : bgColor);
+        },
+        onClick: () {
+          if (onClick != null) {
+            onClick!();
+          }
+          route(context);
+        },
+      );
+    } else {
+      cell = buildCell(bgColor);
+    }
 
     return Semantics(
       container: true,
@@ -207,8 +219,6 @@ class FlanCell extends RouteStatelessWidget {
 
   /// 是否可以点击
   bool get _isClickable => isLink || clickable;
-
-  // double get _iconLineHeight => _sizeStyle.titleFontSize * 1.36;
 
   /// 单元格内边距
   double _getPaddingVertical(FlanCellThemeData themeData) {
@@ -264,10 +274,12 @@ class FlanCell extends RouteStatelessWidget {
   Widget? _buildLabel(FlanCellThemeData themeData) {
     final bool showLabel = labelSlot != null || label != null;
     if (showLabel) {
+      final double fontSize = _getLabelFontSize(themeData);
       return DefaultTextStyle.merge(
         style: TextStyle(
           color: themeData.labelColor,
-          fontSize: _getLabelFontSize(themeData),
+          fontSize: fontSize,
+          // height: themeData.labelLineHeight/fontSize,
         ).merge(labelStyle),
         child: Padding(
           padding: EdgeInsets.only(top: themeData.labelMarginTop),
@@ -288,11 +300,11 @@ class FlanCell extends RouteStatelessWidget {
       );
 
       final TextStyle vStyle = TextStyle(
-        color: !hasTitle ? FlanThemeVars.textColor : themeData.valueColor,
+        color: hasTitle ? themeData.valueColor : null,
       ).merge(valueStyle);
 
       return Expanded(
-        child: DefaultTextStyle(
+        child: DefaultTextStyle.merge(
           style: vStyle,
           child: value,
         ),

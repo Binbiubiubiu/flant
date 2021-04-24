@@ -69,18 +69,14 @@ class FlanTag extends StatelessWidget {
   Widget build(BuildContext context) {
     final FlanTagThemeData themeData = FlanTheme.of(context).tagTheme;
 
-    if (closeable) {
-      return AnimatedOpacity(
-        opacity: show ? 1.0 : 0.0,
-        duration: FlanThemeVars.animationDurationBase,
-        curve: show
-            ? FlanThemeVars.animationTimingFunctionLeave
-            : FlanThemeVars.animationTimingFunctionEnter,
-        child: _buildTag(themeData),
-      );
-    }
-
-    return _buildTag(themeData);
+    return AnimatedOpacity(
+      opacity: show ? 1.0 : 0.0,
+      duration: FlanThemeVars.animationDurationBase,
+      curve: show
+          ? FlanThemeVars.animationTimingFunctionLeave
+          : FlanThemeVars.animationTimingFunctionEnter,
+      child: _buildTag(themeData),
+    );
   }
 
   /// 计算标签不同size的padding
@@ -164,6 +160,7 @@ class FlanTag extends StatelessWidget {
             ? BorderSide(width: 1.0, color: _getTextColor(themeData))
             : BorderSide.none),
         color: bgColor,
+        borderRadius: _getBorderRadius(themeData),
       ),
       padding: _getTagPadding(themeData),
       child: DefaultTextStyle(

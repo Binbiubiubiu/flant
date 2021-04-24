@@ -27,6 +27,7 @@ class FlanImage extends StatelessWidget {
     this.errorIconUrl,
     this.loadingIconName = FlanIcons.photo,
     this.loadingIconUrl,
+    this.iconSize,
     this.onClick,
     this.onLoad,
     this.onError,
@@ -77,6 +78,9 @@ class FlanImage extends StatelessWidget {
 
   /// 加载时提示的图片链接
   final String? loadingIconUrl;
+
+  /// 加载图标和失败图标的大小
+  final double? iconSize;
 
   // ****************** Events ******************
   /// 点击图片时触发
@@ -137,6 +141,8 @@ class FlanImage extends StatelessWidget {
         ),
         child: loadingSlot ??
             FlanIcon(
+              size: iconSize ?? themeData.loadingIconSize,
+              color: themeData.loadingIconColor,
               iconName: loadingIconName,
               iconUrl: loadingIconUrl,
             ),
@@ -153,6 +159,8 @@ class FlanImage extends StatelessWidget {
         ),
         child: errorSlot ??
             FlanIcon(
+              size: iconSize ?? themeData.errorIconSize,
+              color: themeData.errorIconColor,
               iconName: errorIconName,
               iconUrl: errorIconUrl,
             ),
@@ -226,6 +234,7 @@ class FlanImage extends StatelessWidget {
         defaultValue: FlanIcons.photo));
     properties
         .add(DiagnosticsProperty<String>('loadingIconUrl', loadingIconUrl));
+    properties.add(DiagnosticsProperty<double>('iconSize', iconSize));
     super.debugFillProperties(properties);
   }
 }

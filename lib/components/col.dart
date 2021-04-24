@@ -11,7 +11,7 @@ class FlanCol extends StatelessWidget {
     Key? key,
     this.offset,
     this.span = 0.0,
-    this.children = const <Widget>[],
+    this.child,
   }) : super(key: key);
 
   // ****************** Props ******************
@@ -25,45 +25,37 @@ class FlanCol extends StatelessWidget {
 
   // ****************** Slots ******************
   // 内容
-  final List<Widget> children;
+  final Widget? child;
 
   @override
   Widget build(BuildContext context) {
     final FlanRow? parent = context.findAncestorWidgetOfExactType<FlanRow>();
+    final double maxWidth = FlanRowProvider.of(context)?.maxWidth ?? 0.0;
 
-    return LayoutBuilder(
-      builder: (BuildContext context, BoxConstraints constraints) {
-        final double maxWidth = constraints.maxWidth;
-        BoxConstraints? colSpan;
-        EdgeInsets? colOffset;
-        EdgeInsets colPadding = EdgeInsets.zero;
-        if (parent != null) {
-          final List<RowSpace> spaces = parent.spaces;
-          final int index = parent.children.indexOf(this);
+    BoxConstraints? colSpan;
+    EdgeInsets? colOffset;
+    EdgeInsets colPadding = EdgeInsets.zero;
+    if (parent != null) {
+      final List<RowSpace> spaces = parent.spaces;
+      final int index = parent.children.indexOf(this);
 
-          colPadding = EdgeInsets.only(
-            left: spaces[index].left,
-            right: spaces[index].right,
-          );
+      colPadding = EdgeInsets.only(
+        left: spaces[index].left,
+        right: spaces[index].right,
+      );
+      colSpan = BoxConstraints.tightFor(
+        width: maxWidth * (span / 24),
+      );
 
-          colSpan = BoxConstraints.tightFor(
-            width: maxWidth * (span / 24),
-          );
-
-          if (offset != null) {
-            colOffset = EdgeInsets.only(left: maxWidth * (offset! / 24));
-          }
-        }
-
-        return Container(
-          constraints: colSpan,
-          margin: colOffset,
-          padding: colPadding,
-          child: Wrap(
-            children: children,
-          ),
-        );
-      },
+      if (offset != null) {
+        colOffset = EdgeInsets.only(left: maxWidth * (offset! / 24));
+      }
+    }
+    return Container(
+      constraints: colSpan,
+      margin: colOffset,
+      padding: colPadding,
+      child: child,
     );
   }
 

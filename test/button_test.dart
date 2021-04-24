@@ -74,10 +74,11 @@ void main() {
         ),
       ),
     );
-    final Finder ink = find.byType(Ink);
-    expect(ink, findsOneWidget);
+    final Finder ink = find.byType(Container);
+
+    expect(ink, findsWidgets);
     final BoxDecoration boxDecoration =
-        tester.widget<Ink>(ink).decoration as BoxDecoration;
+        tester.firstWidget<Container>(ink).decoration as BoxDecoration;
     expect(boxDecoration.gradient, gradient);
   });
 
@@ -99,7 +100,7 @@ void main() {
 
   testWidgets('hould render loading slot correctly',
       (WidgetTester tester) async {
-    const IconData icon = IconData(0xF0C8, fontFamily: kFlanIconsFamily);
+    // const IconData icon = IconData(0xF0C8, fontFamily: kFlanIconsFamily);
     await tester.pumpWidget(
       const MaterialApp(
         home: Material(

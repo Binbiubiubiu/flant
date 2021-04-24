@@ -17,6 +17,8 @@ class FlanBadge extends StatelessWidget {
     this.dot = false,
     this.max,
     this.color,
+    this.offset = const <double>[0.0, 0.0],
+    this.showZero = true,
     this.child,
     this.contentSlot,
   }) : super(key: key);
@@ -34,6 +36,12 @@ class FlanBadge extends StatelessWidget {
   /// 最大值，超过最大值会显示 `{max}+`，仅当 content 为数字时有效
   final int? max;
 
+  /// 设置徽标的偏移量，数组的两项分别对应水平和垂直方向的偏移量
+  final List<double> offset;
+
+  /// 当 content 为数字 0 时，是否展示徽标
+  final bool showZero;
+
   // ****************** Events ******************
 
   // ****************** Slots ******************
@@ -46,14 +54,15 @@ class FlanBadge extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final FlanBadgeThemeData themeData = FlanTheme.of(context).badgeTheme;
-
+    print(offset.length);
     if (child != null) {
       return Stack(
+        overflow: Overflow.visible,
         children: <Widget?>[
           child,
           Positioned(
-            top: 0.0,
-            right: 0.0,
+            top: offset[0],
+            right: -offset[1],
             child: FractionalTranslation(
               translation: const Offset(0.5, -0.5),
               child: _buildBadge(themeData),
@@ -63,12 +72,18 @@ class FlanBadge extends StatelessWidget {
       );
     }
 
-    return _buildBadge(themeData) ?? const SizedBox.shrink();
+    return Transform.translate(
+      offset: Offset(offset[0], offset[1]),
+      child: _buildBadge(themeData) ?? const SizedBox.shrink(),
+    );
   }
 
   /// 是否有内容
   bool get _hasContent {
-    return contentSlot != null || content.isNotEmpty;
+    if (contentSlot != null) {
+      return true;
+    }
+    return content.isNotEmpty && (showZero || content.trim() != '0');
   }
 
   /// 构建内容
@@ -166,6 +181,10 @@ class FlanBadge extends StatelessWidget {
     properties.add(DiagnosticsProperty<bool>('dot', dot, defaultValue: false));
     properties.add(DiagnosticsProperty<int>('max', max));
     properties.add(DiagnosticsProperty<Color>('color', color));
+    properties.add(DiagnosticsProperty<List<double>>('offset', offset,
+        defaultValue: const <double>[0.0, 0.0]));
+    properties.add(
+        DiagnosticsProperty<bool>('showZero', showZero, defaultValue: true));
     super.debugFillProperties(properties);
   }
 }
