@@ -78,6 +78,7 @@ class FlanCountDownState extends State<FlanCountDown>
   @override
   void dispose() {
     pause();
+    WidgetsBinding.instance?.removeObserver(this);
     super.dispose();
   }
 
@@ -88,7 +89,7 @@ class FlanCountDownState extends State<FlanCountDown>
         if (deactivated) {
           counting = true;
           deactivated = false;
-          setState(() {});
+          // setState(() {});
           tick();
         }
         break;
@@ -96,7 +97,7 @@ class FlanCountDownState extends State<FlanCountDown>
         if (counting) {
           pause();
           deactivated = true;
-          setState(() {});
+          // setState(() {});
         }
         break;
       case AppLifecycleState.paused:
@@ -231,7 +232,7 @@ class FlanCountDownState extends State<FlanCountDown>
   }
 }
 
-class CurrentTime {
+class CurrentTime with Diagnosticable {
   const CurrentTime({
     this.days = 0,
     this.hours = 0,
@@ -247,6 +248,37 @@ class CurrentTime {
   final int minutes;
   final int seconds;
   final int milliseconds;
+
+  @override
+  int get hashCode {
+    final List<Object?> values = <Object?>[
+      days,
+      hours,
+      total,
+      minutes,
+      seconds,
+      milliseconds,
+    ];
+
+    return hashList(values);
+  }
+
+  @override
+  bool operator ==(Object other) {
+    if (identical(this, other)) {
+      return true;
+    }
+    if (other.runtimeType != runtimeType) {
+      return false;
+    }
+    return other is CurrentTime &&
+        other.days == days &&
+        other.hours == hours &&
+        other.total == total &&
+        other.minutes == minutes &&
+        other.seconds == seconds &&
+        other.milliseconds == milliseconds;
+  }
 }
 
 String parseFormat(String format, CurrentTime currentTime) {
