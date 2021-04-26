@@ -3,9 +3,9 @@ import 'dart:ui';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
-import '../utils/widget.dart';
-import 'theme.dart';
-import 'var.dart';
+import '../../utils/widget.dart';
+import '../theme.dart';
+import '../var.dart';
 
 class FlanCountDownTheme extends InheritedTheme {
   const FlanCountDownTheme({
@@ -60,10 +60,11 @@ class FlanCountDownThemeData with Diagnosticable {
     double? fontSize,
     double? lineHeight,
   }) {
+    final double _fontSize = fontSize ?? FlanThemeVars.fontSizeMd.rpx;
     return FlanCountDownThemeData.raw(
       textColor: textColor ?? FlanThemeVars.textColor,
-      fontSize: fontSize ?? FlanThemeVars.fontSizeMd.rpx,
-      lineHeight: lineHeight ?? FlanThemeVars.lineHeightMd.rpx,
+      fontSize: _fontSize,
+      lineHeight: (lineHeight ?? FlanThemeVars.lineHeightMd.rpx) / _fontSize,
     );
   }
 

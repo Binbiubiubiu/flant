@@ -3,9 +3,9 @@ import 'dart:ui';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
-import '../utils/widget.dart';
-import 'theme.dart';
-import 'var.dart';
+import '../../utils/widget.dart';
+import '../theme.dart';
+import '../var.dart';
 
 class FlanTagTheme extends InheritedTheme {
   const FlanTagTheme({
@@ -72,14 +72,15 @@ class FlanTagThemeData with Diagnosticable {
     Color? defaultColor,
     Color? plainBackgroundColor,
   }) {
+    final double _fontSize = fontSize ?? FlanThemeVars.fontSizeSm.rpx;
     return FlanTagThemeData.raw(
       padding: padding ??
           EdgeInsets.symmetric(
               vertical: 0, horizontal: FlanThemeVars.paddingBase.rpx),
       textColor: textColor ?? FlanThemeVars.white,
-      fontSize: fontSize ?? FlanThemeVars.fontSizeSm.rpx,
+      fontSize: _fontSize,
       borderRadius: borderRadius ?? 2.0.rpx,
-      lineHeight: lineHeight ?? 16.0.rpx,
+      lineHeight: (lineHeight ?? 16.0.rpx) / _fontSize,
       mediumPadding: mediumPadding ??
           EdgeInsets.symmetric(vertical: 2.0, horizontal: 6.0.rpx),
       largePadding: largePadding ??

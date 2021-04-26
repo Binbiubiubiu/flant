@@ -1,15 +1,18 @@
+import 'package:flant/styles/components/collapse_theme.dart';
+import 'package:flant/styles/components/progress_theme.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
-import 'badge_theme.dart';
-import 'button_theme.dart';
-import 'cell_group_theme.dart';
-import 'cell_theme.dart';
-import 'count_down_theme.dart';
-import 'divider_theme.dart';
-import 'empty_theme.dart';
-import 'image_theme.dart';
-import 'tag_theme.dart';
+import 'components/badge_theme.dart';
+import 'components/button_theme.dart';
+import 'components/cell_group_theme.dart';
+import 'components/cell_theme.dart';
+import 'components/circle_theme.dart';
+import 'components/count_down_theme.dart';
+import 'components/divider_theme.dart';
+import 'components/empty_theme.dart';
+import 'components/image_theme.dart';
+import 'components/tag_theme.dart';
 
 class FlanTheme extends StatelessWidget {
   const FlanTheme({
@@ -68,10 +71,13 @@ class FlanThemeData with Diagnosticable {
     FlanButtonThemeData? buttonTheme,
     FlanCellThemeData? cellTheme,
     FlanCellGroupThemeData? cellGroupTheme,
+    FlanCircleThemeData? circleTheme,
+    FlanCollapseThemeData? collapseTheme,
     FlanCountDownThemeData? countDownTheme,
     FlanDividerThemeData? dividerTheme,
     FlanEmptyThemeData? emptyTheme,
     FlanImageThemeData? imageTheme,
+    FlanProgressThemeData? progressTheme,
     FlanTagThemeData? tagTheme,
   }) {
     return FlanThemeData.raw(
@@ -79,10 +85,13 @@ class FlanThemeData with Diagnosticable {
       buttonTheme: buttonTheme ?? FlanButtonThemeData(),
       cellTheme: cellTheme ?? FlanCellThemeData(),
       cellGroupTheme: cellGroupTheme ?? FlanCellGroupThemeData(),
+      circleTheme: circleTheme ?? FlanCircleThemeData(),
+      collapseTheme: collapseTheme ?? FlanCollapseThemeData(),
       countDownTheme: countDownTheme ?? FlanCountDownThemeData(),
       dividerTheme: dividerTheme ?? FlanDividerThemeData(),
       emptyTheme: emptyTheme ?? FlanEmptyThemeData(),
       imageTheme: imageTheme ?? FlanImageThemeData(),
+      progressTheme: progressTheme ?? FlanProgressThemeData(),
       tagTheme: tagTheme ?? FlanTagThemeData(),
     );
   }
@@ -92,10 +101,13 @@ class FlanThemeData with Diagnosticable {
     required this.buttonTheme,
     required this.cellTheme,
     required this.cellGroupTheme,
+    required this.circleTheme,
+    required this.collapseTheme,
     required this.countDownTheme,
     required this.dividerTheme,
     required this.emptyTheme,
     required this.imageTheme,
+    required this.progressTheme,
     required this.tagTheme,
   });
 
@@ -113,6 +125,12 @@ class FlanThemeData with Diagnosticable {
   /// 单元格组样式
   final FlanCellGroupThemeData cellGroupTheme;
 
+  /// Circle 环形进度条
+  final FlanCircleThemeData circleTheme;
+
+  /// Collapse 折叠面板
+  final FlanCollapseThemeData collapseTheme;
+
   /// 倒计时样式
   final FlanCountDownThemeData countDownTheme;
 
@@ -125,6 +143,9 @@ class FlanThemeData with Diagnosticable {
   /// 图片样式
   final FlanImageThemeData imageTheme;
 
+// Progress 进度条
+  final FlanProgressThemeData progressTheme;
+
   // 标签样式
   final FlanTagThemeData tagTheme;
 
@@ -135,12 +156,17 @@ class FlanThemeData with Diagnosticable {
       cellTheme: FlanCellThemeData.lerp(a.cellTheme, b.cellTheme, t),
       cellGroupTheme:
           FlanCellGroupThemeData.lerp(a.cellGroupTheme, b.cellGroupTheme, t),
+      circleTheme: FlanCircleThemeData.lerp(a.circleTheme, b.circleTheme, t),
+      collapseTheme:
+          FlanCollapseThemeData.lerp(a.collapseTheme, b.collapseTheme, t),
       countDownTheme:
           FlanCountDownThemeData.lerp(a.countDownTheme, b.countDownTheme, t),
       dividerTheme:
           FlanDividerThemeData.lerp(a.dividerTheme, b.dividerTheme, t),
       emptyTheme: FlanEmptyThemeData.lerp(a.emptyTheme, b.emptyTheme, t),
       imageTheme: FlanImageThemeData.lerp(a.imageTheme, b.imageTheme, t),
+      progressTheme:
+          FlanProgressThemeData.lerp(a.progressTheme, b.progressTheme, t),
       tagTheme: FlanTagThemeData.lerp(a.tagTheme, b.tagTheme, t),
     );
   }

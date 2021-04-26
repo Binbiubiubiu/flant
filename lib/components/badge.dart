@@ -3,7 +3,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
 // 🌎 Project imports:
-import '../styles/badge_theme.dart';
+import '../styles/components/badge_theme.dart';
 import '../styles/theme.dart';
 import '../styles/var.dart';
 import '../utils/widget.dart';
@@ -54,10 +54,10 @@ class FlanBadge extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final FlanBadgeThemeData themeData = FlanTheme.of(context).badgeTheme;
-    print(offset.length);
+
     if (child != null) {
       return Stack(
-        overflow: Overflow.visible,
+        clipBehavior: Clip.none,
         children: <Widget?>[
           child,
           Positioned(

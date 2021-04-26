@@ -3,7 +3,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
 // 🌎 Project imports:
-import '../styles/image_theme.dart';
+import '../styles/components/image_theme.dart';
 import '../styles/theme.dart';
 import '../utils/widget.dart';
 import 'icon.dart';

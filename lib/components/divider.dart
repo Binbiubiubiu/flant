@@ -2,7 +2,7 @@
 import 'dart:ui';
 
 // 🐦 Flutter imports:
-import 'package:flant/styles/divider_theme.dart';
+import 'package:flant/styles/components/divider_theme.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
@@ -52,7 +52,7 @@ class FlanDivider extends StatelessWidget {
         style: TextStyle(
           color: style?.color ?? themeData.textColor,
           fontSize: themeData.fontSize,
-          height: themeData.lineHeight / themeData.fontSize,
+          height: themeData.lineHeight,
         ),
         child: LayoutBuilder(
           builder: (BuildContext context, BoxConstraints constraints) {

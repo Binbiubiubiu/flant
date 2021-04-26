@@ -3,9 +3,9 @@ import 'dart:ui';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
-import '../utils/widget.dart';
-import 'theme.dart';
-import 'var.dart';
+import '../../utils/widget.dart';
+import '../theme.dart';
+import '../var.dart';
 
 class FlanCellTheme extends InheritedTheme {
   const FlanCellTheme({
@@ -75,9 +75,11 @@ class FlanCellThemeData with Diagnosticable {
     double? largeTitleFontSize,
     double? largeLabelFontSize,
   }) {
+    final double _fontSize = fontSize ?? FlanThemeVars.fontSizeMd.rpx;
+    final double _labelFontSize = labelFontSize ?? FlanThemeVars.fontSizeSm.rpx;
     return FlanCellThemeData.raw(
-      fontSize: fontSize ?? FlanThemeVars.fontSizeMd.rpx,
-      lineHeight: lineHeight ?? 24.0.rpx,
+      fontSize: _fontSize,
+      lineHeight: (lineHeight ?? 24.0.rpx) / _fontSize,
       verticalPadding: verticalPadding ?? 10.0.rpx,
       horizontalPadding: horizontalPadding ?? FlanThemeVars.paddingMd.rpx,
       textColor: textColor ?? FlanThemeVars.textColor,
@@ -86,8 +88,9 @@ class FlanCellThemeData with Diagnosticable {
       activeColor: activeColor ?? FlanThemeVars.activeColor,
       requiredColor: requiredColor ?? FlanThemeVars.red,
       labelColor: labelColor ?? FlanThemeVars.gray6,
-      labelFontSize: labelFontSize ?? FlanThemeVars.fontSizeSm.rpx,
-      labelLineHeight: labelLineHeight ?? FlanThemeVars.lineHeightSm.rpx,
+      labelFontSize: _labelFontSize,
+      labelLineHeight:
+          (labelLineHeight ?? FlanThemeVars.lineHeightSm.rpx) / _labelFontSize,
       labelMarginTop: labelMarginTop ?? FlanThemeVars.paddingBase.rpx,
       valueColor: valueColor ?? FlanThemeVars.gray6,
       iconSize: iconSize ?? 16.0.rpx,

@@ -3,6 +3,8 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
 // 🌎 Project imports:
+import '../styles/components/progress_theme.dart';
+import '../styles/theme.dart';
 import '../styles/var.dart';
 
 /// ### FlanEmpty 空状态
@@ -64,8 +66,10 @@ class FlanProgress extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final FlanProgressThemeData themeData = FlanTheme.of(context).progressTheme;
+
     return SizedBox(
-      height: strokeWidth ?? ThemeVars.progressHeight,
+      height: strokeWidth ?? themeData.height,
       child: LayoutBuilder(
         builder: (BuildContext context, BoxConstraints constraints) {
           final double current = constraints.maxWidth * percentage / 100.0;
@@ -75,8 +79,8 @@ class FlanProgress extends StatelessWidget {
               Container(
                 height: constraints.maxHeight,
                 decoration: BoxDecoration(
-                  color: trackColor ?? ThemeVars.progressBackgroundColor,
-                  borderRadius: BorderRadius.circular(ThemeVars.progressHeight),
+                  color: trackColor ?? themeData.backgroundColor,
+                  borderRadius: BorderRadius.circular(themeData.height),
                 ),
                 width: constraints.maxWidth,
               ),
@@ -84,15 +88,15 @@ class FlanProgress extends StatelessWidget {
                 height: constraints.maxHeight,
                 decoration: BoxDecoration(
                   gradient: gradient,
-                  color: background ?? ThemeVars.progressColor,
-                  borderRadius: BorderRadius.circular(ThemeVars.progressHeight),
+                  color: background ?? themeData.color,
+                  borderRadius: BorderRadius.circular(themeData.height),
                 ),
                 width: current,
               ),
               Positioned(
                 top: constraints.maxHeight / 2,
                 left: current,
-                child: _buildPivot(context),
+                child: _buildPivot(themeData),
               ),
             ],
           );
@@ -101,44 +105,38 @@ class FlanProgress extends StatelessWidget {
     );
   }
 
-  Widget _buildPivot(BuildContext context) {
-    dynamic fomatNumber(double n) => n.toInt() == n ? n.toInt() : n;
+  Widget _buildPivot(FlanProgressThemeData themeData) {
+    num fomatNumber(double n) => n.toInt() == n ? n.toInt() : n;
 
     final String text = pivotText ?? '${fomatNumber(percentage)}%';
     final bool show = showPivot && text.isNotEmpty;
 
-    if (show) {
-      return FractionalTranslation(
+    return Offstage(
+      offstage: !show,
+      child: FractionalTranslation(
         translation: const Offset(-0.5, -0.5),
         child: Container(
-          height: ThemeVars.progressPivotLineHeight *
-              ThemeVars.progressPivotFontSize,
+          height: themeData.pivotLineHeight * themeData.pivotFontSize,
           alignment: Alignment.center,
-          constraints: const BoxConstraints(
-            minWidth: 3 * ThemeVars.progressPivotFontSize,
+          constraints: BoxConstraints(
+            minWidth: 3 * themeData.pivotFontSize,
           ),
-          padding: ThemeVars.progressPivotPadding,
+          padding: themeData.pivotPadding,
           decoration: BoxDecoration(
-            color: pivotColor ??
-                background ??
-                ThemeVars.progressPivotBackgroundColor,
-            borderRadius:
-                BorderRadius.circular(ThemeVars.progressPivotFontSize),
+            color: pivotColor ?? background ?? themeData.pivotBackgroundColor,
+            borderRadius: BorderRadius.circular(themeData.pivotFontSize),
           ),
           child: Text(
             text,
             style: TextStyle(
-              // height: ThemeVars.progressPivotLineHeight,
-              fontSize: ThemeVars.progressPivotFontSize,
-              color: textColor ?? ThemeVars.progressPivotTextColor,
+              // height: themeData.ivotLineHeight,
+              fontSize: themeData.pivotFontSize,
+              color: textColor ?? themeData.pivotTextColor,
             ),
-            textAlign: TextAlign.center,
           ),
         ),
-      );
-    }
-
-    return const SizedBox.shrink();
+      ),
+    );
   }
 
   Color? get background => inactive ? const Color(0xffcacaca) : color;

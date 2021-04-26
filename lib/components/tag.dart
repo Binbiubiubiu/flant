@@ -3,7 +3,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
 // 🌎 Project imports:
-import '../styles/tag_theme.dart';
+import '../styles/components/tag_theme.dart';
 import '../styles/theme.dart';
 import '../styles/var.dart';
 import '../utils/widget.dart';
@@ -167,7 +167,7 @@ class FlanTag extends StatelessWidget {
         style: TextStyle(
           color: textColor,
           fontSize: fontSize,
-          // height: themeData.lineHeight / themeData.fontSize,
+          // height: themeData.lineHeight ,
         ),
         child: Wrap(
           alignment: WrapAlignment.center,

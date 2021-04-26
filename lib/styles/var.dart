@@ -274,6 +274,9 @@ class ThemeVars {
   static const Color checkboxDisabledBackgroundColor = borderColor;
 
   // Circle
+  static const double circleSize = 100.0;
+  static const Color circleColor = blue;
+  static const Color circleLayerColor = white;
   static const Color circleTextColor = textColor;
   static const FontWeight circleTextFontWeight = fontWeightBold;
   static const double circleTextFontSize = fontSizeMd;

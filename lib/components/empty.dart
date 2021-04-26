@@ -1,5 +1,5 @@
 // 🐦 Flutter imports:
-import 'package:flant/styles/empty_theme.dart';
+
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
@@ -7,6 +7,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
 // 🌎 Project imports:
+import '../styles/components/empty_theme.dart';
 import '../styles/theme.dart';
 import '../utils/widget.dart';
 
@@ -95,8 +96,7 @@ class FlanEmpty extends StatelessWidget {
         style: TextStyle(
           color: themeData.descriptionColor,
           fontSize: themeData.descriptionFontSize,
-          height:
-              themeData.descriptionLineHeight / themeData.descriptionFontSize,
+          height: themeData.descriptionLineHeight,
         ),
         child: text,
       ),

@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 
 // 🌎 Project imports:
 import '../mixins/route_mixins.dart';
-import '../styles/cell_theme.dart';
+import '../styles/components/cell_theme.dart';
 import '../styles/theme.dart';
 import '../styles/var.dart';
 import '../utils/widget.dart';
@@ -210,7 +210,7 @@ class FlanCell extends RouteStatelessWidget {
         style: TextStyle(
           color: themeData.textColor,
           fontSize: themeData.fontSize,
-          // height: themeData.lineHeight / this._sizeStyle.titleFontSize,
+          // height: themeData.lineHeight ,
         ),
         child: cell,
       ),
@@ -279,7 +279,7 @@ class FlanCell extends RouteStatelessWidget {
         style: TextStyle(
           color: themeData.labelColor,
           fontSize: fontSize,
-          // height: themeData.labelLineHeight/fontSize,
+          // height: themeData.labelLineHeight,
         ).merge(labelStyle),
         child: Padding(
           padding: EdgeInsets.only(top: themeData.labelMarginTop),

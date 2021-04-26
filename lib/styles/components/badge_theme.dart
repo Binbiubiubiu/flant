@@ -3,9 +3,9 @@ import 'dart:ui';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
-import '../utils/widget.dart';
-import 'theme.dart';
-import 'var.dart';
+import '../../utils/widget.dart';
+import '../theme.dart';
+import '../var.dart';
 
 class FlanBadgeTheme extends InheritedTheme {
   const FlanBadgeTheme({
@@ -161,6 +161,7 @@ class FlanBadgeThemeData with Diagnosticable {
       backgroundColor: Color.lerp(a?.backgroundColor, b?.backgroundColor, t)!,
       dotColor: Color.lerp(a?.dotColor, b?.dotColor, t)!,
       dotSize: lerpDouble(a?.dotSize, b?.dotSize, t)!,
+      fontFamily: b?.fontFamily,
     );
   }
 

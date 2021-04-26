@@ -3,9 +3,9 @@ import 'dart:ui';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
-import '../utils/widget.dart';
-import 'theme.dart';
-import 'var.dart';
+import '../../utils/widget.dart';
+import '../theme.dart';
+import '../var.dart';
 
 class FlanDividerTheme extends InheritedTheme {
   const FlanDividerTheme({
@@ -64,13 +64,14 @@ class FlanDividerThemeData with Diagnosticable {
     double? contentLeftWidthPercent,
     double? contentRightWidthPercent,
   }) {
+    final double _fontSize = fontSize ?? FlanThemeVars.fontSizeMd.rpx;
     return FlanDividerThemeData.raw(
       margin: margin ??
           EdgeInsets.symmetric(
               vertical: FlanThemeVars.paddingMd.rpx, horizontal: 0),
       textColor: textColor ?? FlanThemeVars.gray6,
-      fontSize: fontSize ?? FlanThemeVars.fontSizeMd.rpx,
-      lineHeight: lineHeight ?? 24.0.rpx,
+      fontSize: _fontSize,
+      lineHeight: (lineHeight ?? 24.0.rpx) / _fontSize,
       borderColor: borderColor ?? FlanThemeVars.borderColor,
       contentPadding: contentPadding ?? FlanThemeVars.paddingMd.rpx,
       contentLeftWidthPercent: contentLeftWidthPercent ?? 0.1,

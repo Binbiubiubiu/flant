@@ -3,10 +3,13 @@ import 'dart:math' as math;
 import 'dart:ui';
 
 // 🐦 Flutter imports:
+import 'package:flant/utils/widget.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
 // 🌎 Project imports:
+import '../styles/components/circle_theme.dart';
+import '../styles/theme.dart';
 import '../styles/var.dart';
 
 /// 格式化百分比
@@ -19,21 +22,20 @@ class FlanCircle extends StatefulWidget {
     Key? key,
     this.currentRate = 0.0,
     this.rate = 100.0,
-    this.size = 100.0,
-    this.color = Colors.blue,
+    this.size,
+    this.color,
     this.gradient,
-    this.layerColor = Colors.white,
+    this.layerColor,
     this.fill,
     this.speed = 0.0,
     this.text,
     this.strokeWidth = 4.0,
     this.strokeLineCap = StrokeCap.round,
     this.clockwise = true,
-    required this.onChange,
+    this.onChange,
     this.child,
   })  : assert(currentRate >= 0.0 && currentRate <= 100.0),
         assert(rate >= 0.0 && rate <= 100.0),
-        assert(size >= 0.0),
         assert(speed >= 0.0),
         assert(strokeWidth > 0.0),
         super(key: key);
@@ -46,16 +48,16 @@ class FlanCircle extends StatefulWidget {
   final double rate;
 
   /// 圆环直径
-  final double size;
+  final double? size;
 
   /// 进度条颜色
-  final Color color;
+  final Color? color;
 
   /// 进度条颜色，传入对象格式可以定义渐变色
   final Gradient? gradient;
 
   /// final Color layerColor;
-  final Color layerColor;
+  final Color? layerColor;
 
   ///填充颜色
   final Color? fill;
@@ -79,7 +81,7 @@ class FlanCircle extends StatefulWidget {
 
   // ****************** Slots ******************
   final Widget? child;
-  final ValueChanged<double> onChange;
+  final ValueChanged<double>? onChange;
 
   @override
   _FlanCircleState createState() => _FlanCircleState();
@@ -106,7 +108,7 @@ class _FlanCircleState extends State<FlanCircle>
   @override
   void didUpdateWidget(covariant FlanCircle oldWidget) {
     if (widget.rate != oldWidget.rate) {
-      WidgetsBinding.instance?.addPostFrameCallback((Duration timeStamp) {
+      nextTick((Duration timeStamp) {
         _watchRate(widget.rate, oldWidget.rate);
       });
     }
@@ -125,7 +127,9 @@ class _FlanCircleState extends State<FlanCircle>
           lerpDouble(0, endRate - startRate, _animationController.value)! +
               startRate;
 
-      widget.onChange(_formatRate(rate).roundToDouble());
+      if (widget.onChange != null) {
+        widget.onChange!(_formatRate(rate).roundToDouble());
+      }
 
       if (endRate > startRate ? rate >= endRate : rate <= endRate) {
         _animationController.removeListener(animate);
@@ -142,60 +146,60 @@ class _FlanCircleState extends State<FlanCircle>
         ..addListener(animate)
         ..forward();
     } else {
-      widget.onChange(endRate);
+      if (widget.onChange != null) {
+        widget.onChange!(endRate);
+      }
     }
   }
 
   @override
   Widget build(BuildContext context) {
-    return Material(
-      textStyle: const TextStyle(
-        fontWeight: ThemeVars.circleTextFontWeight,
-        fontSize: ThemeVars.circleTextFontSize,
-        height: ThemeVars.circleTextLineHeight / ThemeVars.circleTextFontSize,
-        color: ThemeVars.circleTextColor,
-      ),
-      type: MaterialType.canvas,
-      child: Row(
-        mainAxisSize: MainAxisSize.min,
-        children: <Widget>[
-          Stack(
-            children: <Widget>[
-              CustomPaint(
-                key: const ValueKey<String>('layer'),
-                size: Size.square(widget.size),
-                painter: _FlanDividerCirclePainter(
-                  rate: 100.0,
-                  color: widget.layerColor,
-                  strokeWidth: widget.strokeWidth,
-                  strokeLineCap: widget.strokeLineCap,
-                  fill: widget.fill,
-                ),
-              ),
-              CustomPaint(
-                key: const ValueKey<String>('hover'),
-                size: Size.square(widget.size),
-                painter: _FlanDividerCirclePainter(
-                  rate: widget.currentRate,
-                  color: widget.color,
-                  gradient: widget.gradient,
-                  strokeWidth: widget.strokeWidth,
-                  strokeLineCap: widget.strokeLineCap,
-                  clockwise: widget.clockwise,
-                ),
-                child: SizedBox(
-                  width: widget.size,
-                  height: widget.size,
-                  child: Center(
-                    child: widget.child ??
-                        Text(widget.text ?? '${widget.currentRate}%'),
-                  ),
-                ),
-              ),
-            ],
+    final FlanCircleThemeData themeData = FlanTheme.of(context).circleTheme;
+    return Stack(
+      children: <Widget>[
+        Positioned.fill(
+          child: CustomPaint(
+            key: const ValueKey<String>('layer'),
+            painter: _FlanDividerCirclePainter(
+              rate: 100.0,
+              color: widget.layerColor ?? themeData.layerColor,
+              strokeWidth: widget.strokeWidth,
+              strokeLineCap: widget.strokeLineCap,
+              fill: widget.fill,
+            ),
           ),
-        ],
-      ),
+        ),
+        CustomPaint(
+          key: const ValueKey<String>('hover'),
+          painter: _FlanDividerCirclePainter(
+            rate: widget.currentRate,
+            color: widget.color ?? themeData.color,
+            gradient: widget.gradient,
+            strokeWidth: widget.strokeWidth,
+            strokeLineCap: widget.strokeLineCap,
+            clockwise: widget.clockwise,
+          ),
+          child: Container(
+            width: widget.size ?? themeData.size,
+            height: widget.size ?? themeData.size,
+            alignment: Alignment.center,
+            padding: const EdgeInsets.symmetric(
+              vertical: 0.0,
+              horizontal: FlanThemeVars.paddingBase,
+            ),
+            child: DefaultTextStyle(
+              style: TextStyle(
+                fontWeight: themeData.textFontWeight,
+                fontSize: themeData.textFontSize,
+                height: themeData.textLineHeight,
+                color: themeData.textColor,
+              ),
+              child:
+                  widget.child ?? Text(widget.text ?? '${widget.currentRate}%'),
+            ),
+          ),
+        ),
+      ],
     );
   }
 
@@ -211,19 +215,16 @@ class _FlanCircleState extends State<FlanCircle>
         defaultValue: 0.0));
     properties.add(
         DiagnosticsProperty<double>('speed', widget.speed, defaultValue: 0.0));
-    properties.add(
-        DiagnosticsProperty<double>('size', widget.size, defaultValue: 100.0));
+    properties.add(DiagnosticsProperty<double>('size', widget.size));
     properties.add(DiagnosticsProperty<Color>('fill', widget.fill,
         defaultValue: Colors.transparent));
 
     properties.add(
         DiagnosticsProperty<double>('rate', widget.rate, defaultValue: 100.0));
 
-    properties.add(DiagnosticsProperty<Color>('layerColor', widget.layerColor,
-        defaultValue: Colors.white));
+    properties.add(DiagnosticsProperty<Color>('layerColor', widget.layerColor));
 
-    properties.add(DiagnosticsProperty<Color>('color', widget.color,
-        defaultValue: Colors.blue));
+    properties.add(DiagnosticsProperty<Color>('color', widget.color));
 
     properties.add(DiagnosticsProperty<Gradient>('gradient', widget.gradient));
 

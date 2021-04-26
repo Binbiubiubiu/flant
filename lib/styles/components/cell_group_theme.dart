@@ -3,9 +3,9 @@ import 'dart:ui';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
-import '../utils/widget.dart';
-import 'theme.dart';
-import 'var.dart';
+import '../../utils/widget.dart';
+import '../theme.dart';
+import '../var.dart';
 
 class FlanCellGroupTheme extends InheritedTheme {
   const FlanCellGroupTheme({
@@ -62,17 +62,19 @@ class FlanCellGroupThemeData with Diagnosticable {
     double? titleFontSize,
     double? titleLineHeight,
   }) {
+    final double _titleFontSize = titleFontSize ?? FlanThemeVars.fontSizeMd.rpx;
     return FlanCellGroupThemeData.raw(
       backgroundColor: backgroundColor ?? FlanThemeVars.white,
       titleColor: titleColor ?? FlanThemeVars.gray6,
       titlePadding: titlePadding ??
-          EdgeInsets.only(
-              top: FlanThemeVars.paddingMd,
-              left: FlanThemeVars.paddingMd,
-              right: FlanThemeVars.paddingMd,
-              bottom: FlanThemeVars.paddingXs),
+          const EdgeInsets.only(
+            top: FlanThemeVars.paddingMd,
+            left: FlanThemeVars.paddingMd,
+            right: FlanThemeVars.paddingMd,
+            bottom: FlanThemeVars.paddingXs,
+          ),
       titleFontSize: titleFontSize ?? FlanThemeVars.fontSizeMd.rpx,
-      titleLineHeight: titleLineHeight ?? 16.0.rpx,
+      titleLineHeight: (titleLineHeight ?? 16.0.rpx) / _titleFontSize,
     );
   }
 

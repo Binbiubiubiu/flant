@@ -3,9 +3,9 @@ import 'dart:ui';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
-import '../utils/widget.dart';
-import 'theme.dart';
-import 'var.dart';
+import '../../utils/widget.dart';
+import '../theme.dart';
+import '../var.dart';
 
 class FlanEmptyTheme extends InheritedTheme {
   const FlanEmptyTheme({
@@ -64,6 +64,8 @@ class FlanEmptyThemeData with Diagnosticable {
     double? descriptionLineHeight,
     double? bottomMarginTop,
   }) {
+    final double _descriptionFontSize =
+        descriptionFontSize ?? FlanThemeVars.fontSizeMd.rpx;
     return FlanEmptyThemeData.raw(
       padding: padding ??
           EdgeInsets.symmetric(
@@ -71,11 +73,12 @@ class FlanEmptyThemeData with Diagnosticable {
       imageSize: imageSize ?? 160.0.rpx,
       descriptionMarginTop: descriptionMarginTop ?? FlanThemeVars.paddingMd.rpx,
       descriptionPadding: descriptionPadding ??
-          EdgeInsets.symmetric(vertical: 0, horizontal: 60.0),
+          const EdgeInsets.symmetric(vertical: 0, horizontal: 60.0),
       descriptionColor: descriptionColor ?? FlanThemeVars.gray6,
-      descriptionFontSize: descriptionFontSize ?? FlanThemeVars.fontSizeMd.rpx,
+      descriptionFontSize: _descriptionFontSize,
       descriptionLineHeight:
-          descriptionLineHeight ?? FlanThemeVars.lineHeightMd.rpx,
+          (descriptionLineHeight ?? FlanThemeVars.lineHeightMd.rpx) /
+              _descriptionFontSize,
       bottomMarginTop: bottomMarginTop ?? 24.0.rpx,
     );
   }

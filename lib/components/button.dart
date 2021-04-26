@@ -6,7 +6,7 @@ import 'package:flutter/src/rendering/mouse_cursor.dart';
 
 // 🌎 Project imports:
 import '../mixins/route_mixins.dart';
-import '../styles/button_theme.dart';
+import '../styles/components/button_theme.dart';
 import '../styles/theme.dart';
 import '../styles/var.dart';
 import '../utils/widget.dart';

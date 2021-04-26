@@ -3,7 +3,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
 // 🌎 Project imports:
-import '../styles/cell_group_theme.dart';
+import '../styles/components/cell_group_theme.dart';
 import '../styles/theme.dart';
 import '../styles/var.dart';
 import 'cell.dart';
@@ -82,7 +82,7 @@ class FlanCellGroup extends StatelessWidget {
         style: TextStyle(
           color: themeData.titleColor,
           fontSize: themeData.titleFontSize,
-          height: themeData.titleLineHeight / themeData.titleFontSize,
+          height: themeData.titleLineHeight,
         ),
         child: titleSlot ?? Text(title ?? ''),
       ),

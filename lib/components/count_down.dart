@@ -7,7 +7,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
 
 // 🌎 Project imports:
-import '../styles/count_down_theme.dart';
+import '../styles/components/count_down_theme.dart';
 import '../styles/theme.dart';
 import '../styles/var.dart';
 import '../utils/format/string.dart';
@@ -116,7 +116,7 @@ class FlanCountDownState extends State<FlanCountDown>
     final TextStyle textStyle = TextStyle(
       fontSize: themeData.fontSize,
       color: themeData.textColor,
-      height: themeData.lineHeight / themeData.fontSize,
+      height: themeData.lineHeight,
     );
 
     return DefaultTextStyle(
@@ -232,7 +232,7 @@ class FlanCountDownState extends State<FlanCountDown>
   }
 }
 
-class CurrentTime with Diagnosticable {
+class CurrentTime {
   const CurrentTime({
     this.days = 0,
     this.hours = 0,
