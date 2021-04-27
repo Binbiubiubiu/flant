@@ -1,9 +1,13 @@
 // 🐦 Flutter imports:
+
+import 'package:flant/utils/widget.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/semantics.dart';
 
 // 🌎 Project imports:
+import '../styles/components/cell_theme.dart';
+import '../styles/components/collapse_theme.dart';
+import '../styles/theme.dart';
 import '../styles/var.dart';
 import 'cell.dart';
 import 'collapse.dart';
@@ -30,6 +34,7 @@ class FlanCollapseItem extends StatefulWidget {
     this.labelStyle,
     this.name,
     this.disabled = false,
+    this.readonly = false,
     this.child,
     this.valueSlot,
     this.iconSlot,
@@ -90,6 +95,9 @@ class FlanCollapseItem extends StatefulWidget {
   /// 是否禁用面板
   final bool disabled;
 
+  /// 是否为只读状态，只读状态下无法操作面板
+  final bool readonly;
+
   // ****************** Event ******************
 
   // ****************** Slots ******************
@@ -120,86 +128,94 @@ class _FlanCollapseItemState<T> extends State<FlanCollapseItem>
   late Animation<double> collapseIconAnimation;
   late Animation<double> collapseWrapperAnimation;
 
+  FlanCollapseThemeData? _themeData;
+  double? maxHeight = 0.0;
+  late int _index;
+
   GlobalKey wrapKey = GlobalKey();
 
   @override
   void initState() {
-    collapseAnimationController = AnimationController(
-      duration: ThemeVars.collapseItemTransitionDuration,
-      vsync: this,
-    )..addListener(_handleAnimationChange);
-    collapseIconAnimation = collapseAnimationController
-        .drive(CurveTween(curve: Curves.linear))
-        .drive(Tween<double>(begin: 0.0, end: -0.5));
-    collapseWrapperAnimation = collapseAnimationController;
+    _index = _parent.children.indexOf(widget);
 
-    WidgetsBinding.instance?.addPostFrameCallback((Duration timeStamp) {
-      final double? height = wrapKey.currentContext?.size?.height;
-      collapseWrapperAnimation = Tween<double>(begin: 0.0, end: height)
-          .animate(collapseWrapperAnimation);
-
-      collapseAnimationController.value = expanded ? 1.0 : 0.0;
+    nextTick(() {
+      maxHeight = wrapKey.currentContext?.size?.height;
+      collapseWrapperAnimation = collapseAnimationController
+          .drive(Tween<double>(begin: 0.0, end: maxHeight));
+      setState(() {});
     });
 
     super.initState();
   }
 
   @override
-  void didUpdateWidget(FlanCollapseItem oldWidget) {
-    super.didUpdateWidget(oldWidget);
+  void didChangeDependencies() {
+    final FlanCollapseThemeData ctd = FlanTheme.of(context).collapseTheme;
+    if (ctd != _themeData) {
+      _themeData = ctd;
+      collapseAnimationController = AnimationController(
+        value: _expanded ? 1.0 : 0.0,
+        duration: _themeData?.itemTransitionDuration,
+        vsync: this,
+      );
+      collapseIconAnimation = collapseAnimationController
+          .drive(Tween<double>(begin: 0.0, end: -0.5));
 
-    if (expanded) {
+      collapseWrapperAnimation = collapseAnimationController
+          .drive(Tween<double>(begin: 0.0, end: maxHeight));
+    }
+    super.didChangeDependencies();
+  }
+
+  @override
+  void didUpdateWidget(FlanCollapseItem oldWidget) {
+    if (_expanded) {
       collapseAnimationController.forward();
     } else {
       collapseAnimationController.reverse();
     }
+    super.didUpdateWidget(oldWidget);
   }
-
-  void _handleAnimationChange() => setState(() {});
 
   @override
   void dispose() {
-    collapseAnimationController
-      ..removeListener(_handleAnimationChange)
-      ..dispose();
+    collapseAnimationController.dispose();
     super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
-    final Semantics title = Semantics(
+    final Widget title = Semantics(
       button: true,
-      sortKey: OrdinalSortKey(widget.disabled ? -1 : 0),
       excludeSemantics: true,
-      toggled: expanded,
+      toggled: _expanded,
       child: FlanCell(
-        // disabled: widget.disabled,
-        rightIconSlot: RotationTransition(
-          turns: collapseIconAnimation,
-          child:
-              widget.rightIconSlot ?? const FlanIcon.name(FlanIcons.arrow_down),
-        ), // this.widget.rightIconSlot,
-        onClick: () {
-          if (expanded) {
-            collapseAnimationController.reverse();
-          } else {
-            collapseAnimationController.forward();
-          }
-
-          parent.toggle(currentName, !expanded);
-        },
+        rightIconSlot: Padding(
+          padding: const EdgeInsets.only(left: FlanThemeVars.paddingBase),
+          child: widget.rightIconSlot ??
+              RotationTransition(
+                turns: collapseIconAnimation,
+                child: _CollapseRightIcon(
+                  color: widget.disabled
+                      ? _themeData?.itemTitleDisabledColor
+                      : null,
+                ),
+              ),
+        ),
+        onClick: _onClick,
         iconSlot: widget.iconSlot,
         titleSlot: widget.titleSlot,
         child: widget.valueSlot,
-        border: expanded && widget.border,
+        border: _expanded && widget.border,
         title: widget.title,
         value: widget.value,
         label: widget.label,
         size: widget.size,
         iconName: widget.iconName,
         iconUrl: widget.iconUrl,
-        clickable: widget.clickable,
-        isLink: widget.isLink,
+        disabled: widget.disabled,
+        clickable: widget.clickable && !widget.readonly,
+        isLink: widget.isLink && !widget.readonly,
         isRequired: widget.isRequired,
         center: widget.center,
         arrowDirection: widget.arrowDirection,
@@ -209,28 +225,20 @@ class _FlanCollapseItemState<T> extends State<FlanCollapseItem>
       ),
     );
 
-    final SizedBox content = SizedBox(
-      width: double.infinity,
-      height: collapseWrapperAnimation.value,
-      child: SingleChildScrollView(
-        primary: false,
-        physics: const NeverScrollableScrollPhysics(),
-        child: UnconstrainedBox(
-          alignment: Alignment.topCenter,
-          constrainedAxis: Axis.horizontal,
-          child: Container(
-            key: wrapKey,
-            color: ThemeVars.collapseItemContentBackgroundColor,
-            padding: ThemeVars.collapseItemContentPadding,
-            child: DefaultTextStyle(
-              style: const TextStyle(
-                color: ThemeVars.collapseItemContentTextColor,
-                fontSize: ThemeVars.collapseItemContentFontSize,
-                height: ThemeVars.collapseItemContentLineHeight,
-              ),
-              child: widget.child ?? const SizedBox.shrink(),
-            ),
-          ),
+    final Widget content = _AnimatedContentSize(
+      maxHeight: maxHeight!,
+      listenable: collapseAnimationController,
+      child: DefaultTextStyle(
+        style: TextStyle(
+          color: _themeData?.itemContentTextColor,
+          fontSize: _themeData?.itemContentFontSize,
+          height: _themeData?.itemContentLineHeight,
+        ),
+        child: Container(
+          key: wrapKey,
+          color: _themeData?.itemContentBackgroundColor,
+          padding: _themeData?.itemContentPadding,
+          child: widget.child,
         ),
       ),
     );
@@ -238,12 +246,12 @@ class _FlanCollapseItemState<T> extends State<FlanCollapseItem>
     return Column(
       children: <Widget>[
         Visibility(
-          visible: index > 0 && widget.border,
-          child: Divider(
+          visible: _index > 0 && widget.border,
+          child: const Divider(
             height: 0.5,
-            indent: ThemeVars.collapseItemContentPadding.left,
-            endIndent: ThemeVars.collapseItemContentPadding.right,
-            color: ThemeVars.cellBorderColor,
+            indent: FlanThemeVars.paddingMd,
+            endIndent: FlanThemeVars.paddingMd,
+            color: FlanThemeVars.borderColor,
           ),
         ),
         title,
@@ -252,22 +260,35 @@ class _FlanCollapseItemState<T> extends State<FlanCollapseItem>
     );
   }
 
-  FlanCollapse get parent {
+  void _onClick() {
+    if (widget.disabled || widget.readonly) {
+      return;
+    }
+
+    if (_expanded) {
+      collapseAnimationController.reverse();
+    } else {
+      collapseAnimationController.forward();
+    }
+    _parent.toggle(_currentName, !_expanded);
+  }
+
+  void toggle([bool? newValue]) {
+    _parent.toggle(_currentName, newValue ?? !_expanded);
+  }
+
+  bool get _expanded => _parent.isExpanded(_currentName);
+  String get _currentName => widget.name ?? '$_index';
+
+  FlanCollapse get _parent {
     final FlanCollapse? parent =
         context.findAncestorWidgetOfExactType<FlanCollapse>();
 
     if (parent == null) {
       throw 'FlanCollapseItem must be a child component of FlanCollapse';
     }
-
     return parent;
   }
-
-  int get index => parent.children.indexOf(widget);
-
-  String get currentName => widget.name ?? '$index';
-
-  bool get expanded => parent.isExpanded(currentName);
 
   @override
   void debugFillProperties(DiagnosticPropertiesBuilder properties) {
@@ -289,6 +310,8 @@ class _FlanCollapseItemState<T> extends State<FlanCollapseItem>
         defaultValue: false));
     properties.add(DiagnosticsProperty<bool>('disabled', widget.disabled,
         defaultValue: false));
+    properties.add(DiagnosticsProperty<bool>('readonly', widget.readonly,
+        defaultValue: false));
     properties.add(DiagnosticsProperty<bool>('center', widget.center,
         defaultValue: false));
     properties.add(DiagnosticsProperty<FlanCellArrowDirection>(
@@ -306,18 +329,60 @@ class _FlanCollapseItemState<T> extends State<FlanCollapseItem>
   }
 }
 
-class _FlanCollapseContent extends StatefulWidget {
-  const _FlanCollapseContent({Key? key}) : super(key: key);
+class _AnimatedContentSize extends AnimatedWidget {
+  const _AnimatedContentSize({
+    Key? key,
+    required Animation<double> listenable,
+    required this.maxHeight,
+    this.child,
+  }) : super(key: key, listenable: listenable);
 
-  @override
-  __FlanCollapseContentState createState() => __FlanCollapseContentState();
-}
+  final double maxHeight;
 
-class __FlanCollapseContentState extends State<_FlanCollapseContent> {
+  final Widget? child;
+
   @override
   Widget build(BuildContext context) {
+    return SizedBox(
+      width: double.infinity,
+      height: Tween<double>(begin: 0.0, end: maxHeight)
+          .evaluate(listenable as Animation<double>),
+      child: SingleChildScrollView(
+        primary: false,
+        physics: const NeverScrollableScrollPhysics(),
+        child: UnconstrainedBox(
+          alignment: Alignment.topCenter,
+          constrainedAxis: Axis.horizontal,
+          child: child,
+        ),
+      ),
+    );
+  }
+}
+
+class _CollapseRightIcon extends StatelessWidget {
+  const _CollapseRightIcon({
+    Key? key,
+    this.color,
+  }) : super(key: key);
+
+  final Color? color;
+
+  @override
+  Widget build(BuildContext context) {
+    final FlanCellThemeData themeData = FlanTheme.of(context).cellTheme;
+
     return Container(
-      child: const SizedBox(),
+      constraints: BoxConstraints(
+        minWidth: themeData.fontSize,
+        minHeight: themeData.fontSize * 1.34,
+      ),
+      alignment: Alignment.center,
+      child: FlanIcon(
+        iconName: FlanIcons.arrow_down,
+        size: themeData.iconSize,
+        color: color,
+      ),
     );
   }
 }

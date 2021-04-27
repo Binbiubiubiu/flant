@@ -9,7 +9,6 @@ import 'package:flutter/scheduler.dart';
 // 🌎 Project imports:
 import '../styles/components/count_down_theme.dart';
 import '../styles/theme.dart';
-import '../styles/var.dart';
 import '../utils/format/string.dart';
 
 /// ### FlanCountDown 倒计时

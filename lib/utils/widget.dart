@@ -3,8 +3,10 @@ import 'package:flutter/material.dart';
 
 import '../styles/theme.dart';
 
-void nextTick(void Function(Duration timestamp) callback) {
-  WidgetsBinding.instance?.addPostFrameCallback(callback);
+void nextTick(VoidCallback callback) {
+  WidgetsBinding.instance?.addPostFrameCallback((Duration timestamp) {
+    callback();
+  });
 }
 
 extension FlanSizeExtension on num {

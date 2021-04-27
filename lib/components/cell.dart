@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 // 🌎 Project imports:
 import '../mixins/route_mixins.dart';
 import '../styles/components/cell_theme.dart';
+import '../styles/components/collapse_theme.dart';
 import '../styles/theme.dart';
 import '../styles/var.dart';
 import '../utils/widget.dart';
@@ -33,6 +34,7 @@ class FlanCell extends RouteStatelessWidget {
     this.labelStyle,
     this.padding,
     this.bgColor,
+    this.disabled = false,
     this.onClick,
     this.child,
     this.titleSlot,
@@ -120,9 +122,14 @@ class FlanCell extends RouteStatelessWidget {
   /// 自定义单元格最右侧的额外内容
   final Widget? extraSlots;
 
+  /// 是否禁用
+  final bool disabled;
+
   @override
   Widget build(BuildContext context) {
     final FlanCellThemeData themeData = FlanTheme.of(context).cellTheme;
+    final FlanCollapseThemeData collapseThemeData =
+        FlanTheme.of(context).collapseTheme;
     final double paddingVertical = _getPaddingVertical(themeData);
 
     final EdgeInsets cellPadding = padding ??
@@ -165,9 +172,9 @@ class FlanCell extends RouteStatelessWidget {
           center ? CrossAxisAlignment.center : CrossAxisAlignment.start,
       children: <Widget?>[
         _buildLeftIcon(themeData),
-        _buildTitle(themeData),
+        _buildTitle(themeData, collapseThemeData),
         _buildValue(themeData),
-        _buildRigthIcon(themeData),
+        _buildRigthIcon(themeData, collapseThemeData),
         extraSlots,
       ].noNull,
     );
@@ -189,6 +196,7 @@ class FlanCell extends RouteStatelessWidget {
     Widget cell;
     if (_isClickable) {
       cell = FlanActiveResponse(
+        disabled: disabled,
         builder: (BuildContext contenxt, bool active) {
           return buildCell(active ? themeData.activeColor : bgColor);
         },
@@ -249,10 +257,16 @@ class FlanCell extends RouteStatelessWidget {
   }
 
   /// 构建标题
-  Widget? _buildTitle(FlanCellThemeData themeData) {
+  Widget? _buildTitle(
+    FlanCellThemeData themeData,
+    FlanCollapseThemeData collapseThemeData,
+  ) {
     if (titleSlot != null || title != null) {
       final Widget title = DefaultTextStyle.merge(
         style: TextStyle(
+          color: disabled
+              ? collapseThemeData.itemTitleDisabledColor
+              : themeData.textColor,
           fontSize: _getTitleFontSize(themeData),
         ).merge(titleStyle),
         child: titleSlot ?? Text(this.title!),
@@ -332,7 +346,10 @@ class FlanCell extends RouteStatelessWidget {
   }
 
   /// 构建右侧图标
-  Widget? _buildRigthIcon(FlanCellThemeData themeData) {
+  Widget? _buildRigthIcon(
+    FlanCellThemeData themeData,
+    FlanCollapseThemeData collapseThemeData,
+  ) {
     if (rightIconSlot != null) {
       return rightIconSlot;
     }
@@ -344,7 +361,9 @@ class FlanCell extends RouteStatelessWidget {
         child: FlanIcon(
           iconName: _arrowIcon,
           size: themeData.iconSize,
-          color: themeData.rightIconColor,
+          color: disabled
+              ? collapseThemeData.itemTitleDisabledColor
+              : themeData.rightIconColor,
         ),
       );
     }
@@ -407,6 +426,8 @@ class FlanCell extends RouteStatelessWidget {
     properties.add(DiagnosticsProperty<TextStyle>('labelStyle', labelStyle));
     properties.add(DiagnosticsProperty<FlanCellSize>('size', size,
         defaultValue: FlanCellSize.normal));
+    properties.add(
+        DiagnosticsProperty<bool>('disabled', disabled, defaultValue: false));
     super.debugFillProperties(properties);
   }
 }
@@ -423,17 +444,4 @@ enum FlanCellArrowDirection {
   down,
   left,
   right,
-}
-
-/// 单元格样式类
-class _FlanCellSizeStyle {
-  const _FlanCellSizeStyle({
-    required this.paddingVertical,
-    required this.titleFontSize,
-    required this.labelFontSize,
-  });
-
-  final double paddingVertical;
-  final double titleFontSize;
-  final double labelFontSize;
 }

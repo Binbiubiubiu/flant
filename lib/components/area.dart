@@ -122,7 +122,7 @@ class _FlanAreaState extends State<FlanArea> {
 
   @override
   void initState() {
-    nextTick((Duration timestamp) {
+    nextTick(() {
       setValues();
     });
     super.initState();

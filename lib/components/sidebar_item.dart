@@ -84,6 +84,14 @@ class FlanSidebarItem extends RouteStatelessWidget {
 
   @override
   void debugFillProperties(DiagnosticPropertiesBuilder properties) {
+    properties
+        .add(DiagnosticsProperty<String>('title', title, defaultValue: ''));
+    properties.add(DiagnosticsProperty<bool>('dot', dot, defaultValue: false));
+    properties
+        .add(DiagnosticsProperty<String>('badge', badge, defaultValue: ''));
+    properties.add(
+        DiagnosticsProperty<bool>('disabled', disabled, defaultValue: false));
+    properties.add(DiagnosticsProperty<EdgeInsets>('padding', padding));
     super.debugFillProperties(properties);
   }
 }

@@ -157,9 +157,9 @@ class _FlanDatePickerState extends State<FlanDatePicker> {
       ..addListener(_onValueChange);
 
     columns = getColumns();
-    nextTick((Duration timestamp) {
+    nextTick(() {
       _updateColumnValue();
-      nextTick((Duration timestamp) {
+      nextTick(() {
         _updateInnerValue();
       });
     });
@@ -259,7 +259,7 @@ class _FlanDatePickerState extends State<FlanDatePicker> {
       }
     }).toList();
     // print(values);
-    nextTick((Duration timestamp) {
+    nextTick(() {
       picker.currentState?.setValues(values);
     });
   }

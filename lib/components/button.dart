@@ -2,7 +2,7 @@
 import 'package:flant/components/common/active_response.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/src/rendering/mouse_cursor.dart';
+import 'package:flutter/rendering.dart';
 
 // 🌎 Project imports:
 import '../mixins/route_mixins.dart';

@@ -186,3 +186,58 @@ class FlanThemeData with Diagnosticable {
     return other is FlanThemeData && other.buttonTheme == buttonTheme;
   }
 }
+
+class FlanThemeDataTween extends Tween<FlanThemeData> {
+  FlanThemeDataTween({FlanThemeData? begin, FlanThemeData? end})
+      : super(begin: begin, end: end);
+
+  @override
+  FlanThemeData lerp(double t) => FlanThemeData.lerp(begin!, end!, t);
+}
+
+class FlanAnimatedTheme extends ImplicitlyAnimatedWidget {
+  const FlanAnimatedTheme({
+    Key? key,
+    required this.data,
+    Curve curve = Curves.linear,
+    Duration duration = kThemeAnimationDuration,
+    VoidCallback? onEnd,
+    required this.child,
+  }) : super(key: key, curve: curve, duration: duration, onEnd: onEnd);
+
+  final FlanThemeData data;
+
+  final Widget child;
+
+  @override
+  _AnimatedThemeState createState() => _AnimatedThemeState();
+}
+
+class _AnimatedThemeState extends AnimatedWidgetBaseState<AnimatedTheme> {
+  FlanThemeDataTween? _data;
+
+  @override
+  void forEachTween(TweenVisitor<dynamic> visitor) {
+    _data = visitor(
+            _data,
+            widget.data,
+            (dynamic value) =>
+                FlanThemeDataTween(begin: value as FlanThemeData))!
+        as FlanThemeDataTween;
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return FlanTheme(
+      child: widget.child,
+      data: _data!.evaluate(animation),
+    );
+  }
+
+  @override
+  void debugFillProperties(DiagnosticPropertiesBuilder description) {
+    super.debugFillProperties(description);
+    description.add(DiagnosticsProperty<FlanThemeDataTween>('data', _data,
+        showName: false, defaultValue: null));
+  }
+}

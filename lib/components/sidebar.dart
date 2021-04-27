@@ -64,6 +64,9 @@ class FlanSidebar extends StatelessWidget {
 
   @override
   void debugFillProperties(DiagnosticPropertiesBuilder properties) {
+    properties.add(DiagnosticsProperty<int>('value', value, defaultValue: 0));
+    properties
+        .add(DiagnosticsProperty<Color>('backgroundColor', backgroundColor));
     super.debugFillProperties(properties);
   }
 }

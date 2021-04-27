@@ -153,7 +153,7 @@ class _FlanTimePickerState extends State<FlanTimePicker> {
     currentDate = ValueNotifier<String>(_formatValue(value: widget.value))
       ..addListener(_onValueChange);
     columns = getColumns();
-    nextTick((Duration timestamp) {
+    nextTick(() {
       _updateColumnValue();
       _updateInnerValue();
     });

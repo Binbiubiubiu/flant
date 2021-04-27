@@ -108,7 +108,7 @@ class _FlanCircleState extends State<FlanCircle>
   @override
   void didUpdateWidget(covariant FlanCircle oldWidget) {
     if (widget.rate != oldWidget.rate) {
-      nextTick((Duration timeStamp) {
+      nextTick(() {
         _watchRate(widget.rate, oldWidget.rate);
       });
     }

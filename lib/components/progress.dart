@@ -5,7 +5,6 @@ import 'package:flutter/material.dart';
 // 🌎 Project imports:
 import '../styles/components/progress_theme.dart';
 import '../styles/theme.dart';
-import '../styles/var.dart';
 
 /// ### FlanEmpty 空状态
 /// 空状态时的占位提示
