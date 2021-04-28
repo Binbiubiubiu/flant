@@ -1,9 +1,13 @@
+// 🎯 Dart imports:
 import 'dart:io';
 
+// 🐦 Flutter imports:
 import 'package:flutter/material.dart';
 
+// 📦 Package imports:
 import 'package:flutter_test/flutter_test.dart';
 
+// 🌎 Project imports:
 import 'package:flant/flant.dart';
 
 void main() {
@@ -32,7 +36,7 @@ void main() {
     expect(icon, findsOneWidget);
     final NetworkImage image =
         tester.widget<ImageIcon>(icon).image as NetworkImage;
-    expect(image.url, 'https://b.yzcdn.cn/vant/icon-demo-1126.png');
+    expect(image.url, equals('https://b.yzcdn.cn/vant/icon-demo-1126.png'));
   });
 
   // testWidgets('should render icon with local image correctly',
@@ -46,7 +50,7 @@ void main() {
   //   final Finder icon = find.byType(ImageIcon);
   //   expect(icon, findsOneWidget);
   //   final AssetImage image = tester.widget<ImageIcon>(icon).image as AssetImage;
-  //   expect(image.assetName, '/assets/icon.jpg');
+  //   expect(image.assetName, equals('/assets/icon.jpg'));
   // });
 
   testWidgets('should render dot correctly', (WidgetTester tester) async {
@@ -87,6 +91,6 @@ void main() {
       ),
     ));
 
-    expect(tester.getSize(find.byType(Icon)), const Size(20.0, 20.0));
+    expect(tester.getSize(find.byType(Icon)), equals(const Size(20.0, 20.0)));
   });
 }

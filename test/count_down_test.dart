@@ -16,16 +16,15 @@ void main() {
         child: FlanCountDown(
           time: 1,
           onFinish: () {
-            print('onFi');
             i++;
           },
         ),
       ),
     );
     await tester.pumpWidget(app);
-    expect(i, 0);
-    await tester.pumpFrames(app, const Duration(milliseconds: 50));
-    expect(i, 1);
+    expect(i, equals(0));
+    await tester.pumpAndSettle(const Duration(milliseconds: 50));
+    expect(i, equals(1));
   });
 
   testWidgets('should emit finish event when finished and millisecond is true',
@@ -42,9 +41,9 @@ void main() {
       ),
     );
     await tester.pumpWidget(app);
-    expect(i, 0);
-    await tester.pumpFrames(app, const Duration(milliseconds: 50));
-    expect(i, 1);
+    expect(i, equals(0));
+    await tester.pumpAndSettle(const Duration(milliseconds: 50));
+    expect(i, equals(1));
   });
 
   testWidgets('should re-render after some time when millisecond is false',
@@ -61,9 +60,9 @@ void main() {
     await tester.pumpWidget(app);
 
     final String? preStr = tester.widget<Text>(find.byType(Text)).data;
-    await tester.pumpFrames(app, const Duration(milliseconds: 50));
+    await tester.pumpAndSettle(const Duration(milliseconds: 50));
     final String? laterStr = tester.widget<Text>(find.byType(Text)).data;
-    expect(preStr != laterStr, true);
+    expect(preStr, isNot(laterStr));
   });
 
   testWidgets('should not start counting when auto-start prop is false',
@@ -77,8 +76,9 @@ void main() {
         ),
       ),
     );
-    await tester.pumpFrames(app, const Duration(milliseconds: 50));
-    expect(tester.widget<Text>(find.byType(Text)).data, '100');
+    await tester.pumpWidget(app);
+    await tester.pumpAndSettle(const Duration(milliseconds: 50));
+    expect(tester.widget<Text>(find.byType(Text)).data, equals('100'));
   });
 
   testWidgets('should start counting after calling the start method',
@@ -97,9 +97,9 @@ void main() {
     await tester.pumpWidget(app);
     final String? pre = tester.widget<Text>(textFinder).data;
     tester.firstState<FlanCountDownState>(find.byType(FlanCountDown)).start();
-    await tester.pumpFrames(app, const Duration(milliseconds: 50));
+    await tester.pumpAndSettle(const Duration(milliseconds: 50));
     final String? later = tester.widget<Text>(textFinder).data;
-    expect(pre != later, true);
+    expect(pre, isNot(later));
   });
 
   testWidgets('should pause counting after calling the pause method',
@@ -117,9 +117,9 @@ void main() {
     await tester.pumpWidget(app);
     final String? pre = tester.widget<Text>(textFinder).data;
     tester.firstState<FlanCountDownState>(find.byType(FlanCountDown)).pause();
-    await tester.pumpFrames(app, const Duration(milliseconds: 50));
+    await tester.pumpAndSettle(const Duration(milliseconds: 50));
     final String? later = tester.widget<Text>(textFinder).data;
-    expect(pre == later, true);
+    expect(pre, equals(later));
   });
 
   testWidgets('should reset time after calling the reset method',
@@ -141,11 +141,11 @@ void main() {
     await tester.pumpWidget(app);
     final String? pre = tester.widget<Text>(textFinder).data;
     tester.firstState<FlanCountDownState>(countDownFinder).start();
-    await tester.pumpFrames(app, const Duration(milliseconds: 50));
+    await tester.pumpAndSettle(const Duration(milliseconds: 50));
     tester.firstState<FlanCountDownState>(countDownFinder).reset();
-    await tester.pump();
+    await tester.pumpAndSettle();
     final String? later = tester.widget<Text>(textFinder).data;
-    expect(pre == later, true);
+    expect(pre, equals(later));
   });
 
   testWidgets('should format complete time correctly',
@@ -162,7 +162,7 @@ void main() {
     await tester.pumpWidget(app);
 
     final String? text = tester.widget<Text>(find.byType(Text)).data;
-    expect(text, '01-05-59-59-999');
+    expect(text, equals('01-05-59-59-999'));
   });
 
   testWidgets('should format incomplete time correctly',
@@ -180,7 +180,7 @@ void main() {
 
     final String? text = tester.widget<Text>(find.byType(Text)).data;
 
-    expect(text, '29-59-59-999');
+    expect(text, equals('29-59-59-999'));
   });
 
   testWidgets('should format SS milliseconds correctly',
@@ -197,7 +197,7 @@ void main() {
     await tester.pumpWidget(app);
 
     final String? text = tester.widget<Text>(find.byType(Text)).data;
-    expect(text, '01-50');
+    expect(text, equals('01-50'));
   });
 
   testWidgets('should format S milliseconds correctly',
@@ -214,7 +214,7 @@ void main() {
     await tester.pumpWidget(app);
 
     final String? text = tester.widget<Text>(find.byType(Text)).data;
-    expect(text, '01-5');
+    expect(text, equals('01-5'));
   });
 
   // testWidgets('should pause counting when deactivated',
@@ -232,7 +232,7 @@ void main() {
   //   final String? pre = tester.widget<Text>(textFinder).data;
   //   await tester.pumpFrames(app, const Duration(milliseconds: 50));
   //   final String? later = tester.widget<Text>(textFinder).data;
-  //   expect(pre, later);
+  //   expect(pre, equals(later));
   // });
 
   testWidgets('should emit change event when counting',
@@ -250,8 +250,8 @@ void main() {
       ),
     );
     await tester.pumpWidget(app);
-    expect(v, null);
+    expect(v, isNull);
     await tester.pumpFrames(app, const Duration(milliseconds: 50));
-    expect(v, const CurrentTime());
+    expect(v, equals(const CurrentTime()));
   });
 }

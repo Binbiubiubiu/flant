@@ -3,11 +3,11 @@ import 'dart:math' as math;
 import 'dart:ui';
 
 // 🐦 Flutter imports:
-import 'package:flant/utils/widget.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
 // 🌎 Project imports:
+import 'package:flant/utils/widget.dart';
 import '../styles/components/circle_theme.dart';
 import '../styles/theme.dart';
 import '../styles/var.dart';

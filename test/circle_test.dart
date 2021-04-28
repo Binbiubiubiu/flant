@@ -23,9 +23,9 @@ void main() {
       ),
     );
     await tester.pumpWidget(app);
-    expect(flag, false);
+    expect(flag, isFalse);
     await tester.pumpFrames(app, const Duration(milliseconds: 50));
-    expect(flag, false);
+    expect(flag, isFalse);
   });
 
   testWidgets('should change circle size when using size prop',
@@ -39,7 +39,9 @@ void main() {
     );
     await tester.pumpWidget(app);
     expect(
-        tester.getSize(find.byType(Container).first), const Size(100.0, 100.0));
+      tester.getSize(find.byType(Container).first),
+      equals(const Size(100.0, 100.0)),
+    );
   });
 
   testWidgets('should change stroke linecap when using stroke-linecap prop',

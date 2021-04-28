@@ -20,8 +20,7 @@ void main() {
       ),
     );
     await tester.tap(find.byType(FlanButton));
-    await tester.pump();
-    expect(a, 2);
+    expect(a, equals(2));
   });
 
   testWidgets('should not emit click event when disabled',
@@ -38,8 +37,7 @@ void main() {
       ),
     );
     await tester.tap(find.byType(FlanButton));
-    await tester.pump();
-    expect(a, 1);
+    expect(a, equals(1));
   });
 
   testWidgets('should not emit click event when loading',
@@ -56,8 +54,7 @@ void main() {
       ),
     );
     await tester.tap(find.byType(FlanButton));
-    await tester.pump();
-    expect(a, 1);
+    expect(a, equals(1));
   });
 
   testWidgets('should hide border when color is gradient',
@@ -79,7 +76,7 @@ void main() {
     expect(ink, findsWidgets);
     final BoxDecoration boxDecoration =
         tester.firstWidget<Container>(ink).decoration as BoxDecoration;
-    expect(boxDecoration.gradient, gradient);
+    expect(boxDecoration.gradient, equals(gradient));
   });
 
   testWidgets('should change icon class prefix when using icon-prefix prop',
@@ -129,7 +126,10 @@ void main() {
     );
 
     expect(find.byType(FlanLoading), findsOneWidget);
-    expect(tester.getSize(find.byType(FlanLoading)), const Size(10.0, 10.0));
+    expect(
+      tester.getSize(find.byType(FlanLoading)),
+      equals(const Size(10.0, 10.0)),
+    );
   });
 
   testWidgets(

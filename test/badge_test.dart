@@ -95,8 +95,8 @@ void main() {
       ),
     );
     final Positioned dot = tester.firstWidget(find.byType(Positioned));
-    expect(dot.top, 2.0 * 2);
-    expect(dot.right, -4.0 * 2);
+    expect(dot.top, equals(2.0 * 2));
+    expect(dot.right, equals(-4.0 * 2));
   });
 
   testWidgets(
@@ -114,7 +114,7 @@ void main() {
     );
     final Transform dot = tester.firstWidget(find.byType(Transform));
 
-    expect(dot.transform, Matrix4.translationValues(2.0, 4.0, 0.0));
+    expect(dot.transform, equals(Matrix4.translationValues(2.0, 4.0, 0.0)));
   });
 
   testWidgets('should not render zero when show-zero is false',

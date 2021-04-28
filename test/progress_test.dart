@@ -47,10 +47,9 @@ void main() {
         ),
       ),
     );
-    expect(
-        (tester.firstWidget<Container>(find.byType(Container)).decoration
-                as BoxDecoration)
-            .color,
-        Colors.green);
+    final BoxDecoration decoration = tester
+        .firstWidget<Container>(find.byType(Container))
+        .decoration as BoxDecoration;
+    expect(decoration.color, equals(Colors.green));
   });
 }

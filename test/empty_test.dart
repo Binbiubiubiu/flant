@@ -1,9 +1,11 @@
+// 🎯 Dart imports:
 import 'dart:io';
+
 // 🐦 Flutter imports:
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/flutter_svg.dart';
 
 // 📦 Package imports:
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 // 🌎 Project imports:
@@ -85,6 +87,6 @@ void main() {
       ),
     );
     expect(find.byType(FlanEmpty), findsOneWidget);
-    expect(tester.getSize(find.byType(Image)), const Size(50.0, 50.0));
+    expect(tester.getSize(find.byType(Image)), equals(const Size(50.0, 50.0)));
   });
 }

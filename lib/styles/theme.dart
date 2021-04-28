@@ -1,8 +1,10 @@
-import 'package:flant/styles/components/collapse_theme.dart';
-import 'package:flant/styles/components/progress_theme.dart';
+// 🐦 Flutter imports:
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
+// 🌎 Project imports:
+import 'package:flant/styles/components/collapse_theme.dart';
+import 'package:flant/styles/components/progress_theme.dart';
 import 'components/badge_theme.dart';
 import 'components/button_theme.dart';
 import 'components/cell_group_theme.dart';

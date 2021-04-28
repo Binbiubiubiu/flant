@@ -27,7 +27,7 @@ void main() {
     final Finder closeBtn = find.byIcon(FlanIcons.cross);
     expect(closeBtn, findsOneWidget);
     await tester.tap(closeBtn);
-    expect(a, 2);
+    expect(a, equals(2));
   });
 
   testWidgets('should hide tag when the show prop is false',
@@ -41,8 +41,9 @@ void main() {
         ),
       ),
     );
-    expect(tester.widget<AnimatedOpacity>(find.byType(AnimatedOpacity)).opacity,
-        0.0);
+    final AnimatedOpacity animatedOpacity =
+        tester.widget<AnimatedOpacity>(find.byType(AnimatedOpacity));
+    expect(animatedOpacity.opacity, 0.0);
   });
 
   testWidgets('should not trigger click event when not clicking the close icon',
@@ -62,10 +63,10 @@ void main() {
       ),
     );
     await tester.tap(find.byType(FlanTag));
-    expect(a, 1);
+    expect(a, equals(1));
 
     await tester.tap(find.byIcon(FlanIcons.cross));
-    expect(a, 2);
+    expect(a, equals(2));
   });
 
   testWidgets('should render border-color correctly',
@@ -82,17 +83,14 @@ void main() {
         ),
       ),
     );
-    expect(
-        tester
-            .renderObject<RenderParagraph>(find.text('Custom text'))
-            .text
-            .style
-            ?.color,
-        Colors.blue);
-    expect(
-        (tester.firstWidget<Container>(find.byType(Container)).decoration
-                as BoxDecoration)
-            .color,
-        Colors.white);
+    TextStyle? textStyle = tester
+        .renderObject<RenderParagraph>(find.text('Custom text'))
+        .text
+        .style;
+    expect(textStyle?.color, equals(Colors.blue));
+    final BoxDecoration decoration = tester
+        .firstWidget<Container>(find.byType(Container))
+        .decoration as BoxDecoration;
+    expect(decoration.color, equals(Colors.white));
   });
 }
