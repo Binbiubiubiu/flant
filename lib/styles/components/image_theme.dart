@@ -136,16 +136,15 @@ class FlanImageThemeData with Diagnosticable {
       FlanImageThemeData? a, FlanImageThemeData? b, double t) {
     return FlanImageThemeData(
       placeholderTextColor:
-          Color.lerp(a?.placeholderTextColor, b?.placeholderTextColor, t)!,
+          Color.lerp(a?.placeholderTextColor, b?.placeholderTextColor, t),
       placeholderFontSize:
-          lerpDouble(a?.placeholderFontSize, b?.placeholderFontSize, t)!,
+          lerpDouble(a?.placeholderFontSize, b?.placeholderFontSize, t),
       placeholderBackgroundColor: Color.lerp(
-          a?.placeholderBackgroundColor, b?.placeholderBackgroundColor, t)!,
-      loadingIconSize: lerpDouble(a?.loadingIconSize, b?.loadingIconSize, t)!,
-      loadingIconColor:
-          Color.lerp(a?.loadingIconColor, b?.loadingIconColor, t)!,
-      errorIconSize: lerpDouble(a?.errorIconSize, b?.errorIconSize, t)!,
-      errorIconColor: Color.lerp(a?.errorIconColor, b?.errorIconColor, t)!,
+          a?.placeholderBackgroundColor, b?.placeholderBackgroundColor, t),
+      loadingIconSize: lerpDouble(a?.loadingIconSize, b?.loadingIconSize, t),
+      loadingIconColor: Color.lerp(a?.loadingIconColor, b?.loadingIconColor, t),
+      errorIconSize: lerpDouble(a?.errorIconSize, b?.errorIconSize, t),
+      errorIconColor: Color.lerp(a?.errorIconColor, b?.errorIconColor, t),
     );
   }
 

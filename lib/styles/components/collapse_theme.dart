@@ -144,18 +144,20 @@ class FlanCollapseThemeData with Diagnosticable {
   static FlanCollapseThemeData lerp(
       FlanCollapseThemeData? a, FlanCollapseThemeData? b, double t) {
     return FlanCollapseThemeData(
+      // itemTransitionDuration:
+      //     lerpDuration(a?.itemTransitionDuration, b?.itemTransitionDuration, t),
       itemContentPadding:
-          EdgeInsets.lerp(a?.itemContentPadding, b?.itemContentPadding, t)!,
+          EdgeInsets.lerp(a?.itemContentPadding, b?.itemContentPadding, t),
       itemContentFontSize:
-          lerpDouble(a?.itemContentFontSize, b?.itemContentFontSize, t)!,
+          lerpDouble(a?.itemContentFontSize, b?.itemContentFontSize, t),
       itemContentLineHeight:
-          lerpDouble(a?.itemContentLineHeight, b?.itemContentLineHeight, t)!,
+          lerpDouble(a?.itemContentLineHeight, b?.itemContentLineHeight, t),
       itemContentTextColor:
-          Color.lerp(a?.itemContentTextColor, b?.itemContentTextColor, t)!,
+          Color.lerp(a?.itemContentTextColor, b?.itemContentTextColor, t),
       itemContentBackgroundColor: Color.lerp(
-          a?.itemContentBackgroundColor, b?.itemContentBackgroundColor, t)!,
+          a?.itemContentBackgroundColor, b?.itemContentBackgroundColor, t),
       itemTitleDisabledColor:
-          Color.lerp(a?.itemTitleDisabledColor, b?.itemTitleDisabledColor, t)!,
+          Color.lerp(a?.itemTitleDisabledColor, b?.itemTitleDisabledColor, t),
     );
   }
 

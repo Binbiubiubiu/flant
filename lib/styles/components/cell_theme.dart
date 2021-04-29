@@ -220,29 +220,29 @@ class FlanCellThemeData with Diagnosticable {
   static FlanCellThemeData lerp(
       FlanCellThemeData? a, FlanCellThemeData? b, double t) {
     return FlanCellThemeData(
-      fontSize: lerpDouble(a?.fontSize, b?.fontSize, t)!,
-      lineHeight: lerpDouble(a?.lineHeight, b?.lineHeight, t)!,
-      verticalPadding: lerpDouble(a?.verticalPadding, b?.verticalPadding, t)!,
+      fontSize: lerpDouble(a?.fontSize, b?.fontSize, t),
+      lineHeight: lerpDouble(a?.lineHeight, b?.lineHeight, t),
+      verticalPadding: lerpDouble(a?.verticalPadding, b?.verticalPadding, t),
       horizontalPadding:
-          lerpDouble(a?.horizontalPadding, b?.horizontalPadding, t)!,
-      textColor: Color.lerp(a?.textColor, b?.textColor, t)!,
-      backgroundColor: Color.lerp(a?.backgroundColor, b?.backgroundColor, t)!,
-      borderColor: Color.lerp(a?.borderColor, b?.borderColor, t)!,
-      activeColor: Color.lerp(a?.activeColor, b?.activeColor, t)!,
-      requiredColor: Color.lerp(a?.requiredColor, b?.requiredColor, t)!,
-      labelColor: Color.lerp(a?.labelColor, b?.labelColor, t)!,
-      labelFontSize: lerpDouble(a?.labelFontSize, b?.labelFontSize, t)!,
-      labelLineHeight: lerpDouble(a?.labelLineHeight, b?.labelLineHeight, t)!,
-      labelMarginTop: lerpDouble(a?.labelMarginTop, b?.labelMarginTop, t)!,
-      valueColor: Color.lerp(a?.valueColor, b?.valueColor, t)!,
-      iconSize: lerpDouble(a?.iconSize, b?.iconSize, t)!,
-      rightIconColor: Color.lerp(a?.rightIconColor, b?.rightIconColor, t)!,
+          lerpDouble(a?.horizontalPadding, b?.horizontalPadding, t),
+      textColor: Color.lerp(a?.textColor, b?.textColor, t),
+      backgroundColor: Color.lerp(a?.backgroundColor, b?.backgroundColor, t),
+      borderColor: Color.lerp(a?.borderColor, b?.borderColor, t),
+      activeColor: Color.lerp(a?.activeColor, b?.activeColor, t),
+      requiredColor: Color.lerp(a?.requiredColor, b?.requiredColor, t),
+      labelColor: Color.lerp(a?.labelColor, b?.labelColor, t),
+      labelFontSize: lerpDouble(a?.labelFontSize, b?.labelFontSize, t),
+      labelLineHeight: lerpDouble(a?.labelLineHeight, b?.labelLineHeight, t),
+      labelMarginTop: lerpDouble(a?.labelMarginTop, b?.labelMarginTop, t),
+      valueColor: Color.lerp(a?.valueColor, b?.valueColor, t),
+      iconSize: lerpDouble(a?.iconSize, b?.iconSize, t),
+      rightIconColor: Color.lerp(a?.rightIconColor, b?.rightIconColor, t),
       largeVerticalPadding:
-          lerpDouble(a?.largeVerticalPadding, b?.largeVerticalPadding, t)!,
+          lerpDouble(a?.largeVerticalPadding, b?.largeVerticalPadding, t),
       largeTitleFontSize:
-          lerpDouble(a?.largeTitleFontSize, b?.largeTitleFontSize, t)!,
+          lerpDouble(a?.largeTitleFontSize, b?.largeTitleFontSize, t),
       largeLabelFontSize:
-          lerpDouble(a?.largeLabelFontSize, b?.largeLabelFontSize, t)!,
+          lerpDouble(a?.largeLabelFontSize, b?.largeLabelFontSize, t),
     );
   }
 

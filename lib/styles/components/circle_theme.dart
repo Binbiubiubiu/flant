@@ -135,13 +135,13 @@ class FlanCircleThemeData with Diagnosticable {
   static FlanCircleThemeData lerp(
       FlanCircleThemeData? a, FlanCircleThemeData? b, double t) {
     return FlanCircleThemeData(
-      size: lerpDouble(a?.size, b?.size, t)!,
-      color: Color.lerp(a?.color, b?.color, t)!,
-      layerColor: Color.lerp(a?.layerColor, b?.layerColor, t)!,
-      textColor: Color.lerp(a?.textColor, b?.textColor, t)!,
-      textFontWeight: FontWeight.lerp(a?.textFontWeight, b?.textFontWeight, t)!,
-      textFontSize: lerpDouble(a?.textFontSize, b?.textFontSize, t)!,
-      textLineHeight: lerpDouble(a?.textLineHeight, b?.textLineHeight, t)!,
+      size: lerpDouble(a?.size, b?.size, t),
+      color: Color.lerp(a?.color, b?.color, t),
+      layerColor: Color.lerp(a?.layerColor, b?.layerColor, t),
+      textColor: Color.lerp(a?.textColor, b?.textColor, t),
+      textFontWeight: FontWeight.lerp(a?.textFontWeight, b?.textFontWeight, t),
+      textFontSize: lerpDouble(a?.textFontSize, b?.textFontSize, t),
+      textLineHeight: lerpDouble(a?.textLineHeight, b?.textLineHeight, t),
     );
   }
 

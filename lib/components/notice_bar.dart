@@ -2,12 +2,14 @@
 import 'dart:async';
 
 // 🐦 Flutter imports:
+import 'package:flant/styles/components/notice_bar_theme.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
 
 // 🌎 Project imports:
-import '../styles/var.dart';
+import '../styles/theme.dart';
+import '../utils/widget.dart';
 import 'icon.dart';
 
 /// ### NoticeBar 通知栏
@@ -22,7 +24,7 @@ class FlanNoticeBar extends StatefulWidget {
     this.leftIconUrl,
     this.wrapable = false,
     this.background,
-    this.scrollable = false,
+    this.scrollable,
     this.delay = 1.0,
     this.speed = 50.0,
     this.onClick,
@@ -31,7 +33,7 @@ class FlanNoticeBar extends StatefulWidget {
     this.child,
     this.leftIconSlot,
     this.rightIconSlot,
-  })  : assert(delay > 0.0),
+  })  : assert(delay >= 0.0),
         assert(speed > 0.0),
         super(key: key);
 
@@ -59,7 +61,7 @@ class FlanNoticeBar extends StatefulWidget {
   final Color? background;
 
   /// 是否开启滚动播放，内容长度溢出时默认开启
-  final bool scrollable;
+  final bool? scrollable;
 
   /// 动画延迟时间 (s)
   final double delay;
@@ -100,14 +102,13 @@ class _FlanNoticeBarState extends State<FlanNoticeBar>
   late AnimationController controller;
   late Animation<Offset> animation;
 
-  late Timer startTimer;
+  Timer? startTimer;
 
-  GlobalKey wrapRef = GlobalKey();
+  GlobalKey textRef = GlobalKey();
   GlobalKey contentRef = GlobalKey();
 
-  void _handelChange() => setState(() {});
-  void _handleAnimationStatusChange(AnimationStatus status) {
-    if (status == AnimationStatus.completed) {
+  void _handleAnimationStatusChange() {
+    if (1.0 - controller.value < 0.001) {
       if (widget.onReplay != null) {
         widget.onReplay!();
       }
@@ -117,21 +118,20 @@ class _FlanNoticeBarState extends State<FlanNoticeBar>
   @override
   void initState() {
     controller = AnimationController(vsync: this)
-      ..addStatusListener(_handleAnimationStatusChange)
-      ..addListener(_handelChange);
-    animation =
-        Tween<Offset>(begin: Offset.zero, end: Offset.zero).animate(controller);
-    startTimer = Timer(const Duration(seconds: 1), () {});
-    WidgetsBinding.instance
-        ?.addPostFrameCallback((Duration duration) => start());
+      ..addListener(_handleAnimationStatusChange);
+    animation = Tween<Offset>(
+      begin: Offset.zero,
+      end: Offset.zero,
+    ).animate(controller);
+
+    nextTick(start);
     super.initState();
   }
 
   @override
   void dispose() {
     controller
-      ..removeStatusListener(_handleAnimationStatusChange)
-      ..removeListener(_handelChange)
+      ..removeListener(_handleAnimationStatusChange)
       ..dispose();
 
     super.dispose();
@@ -149,28 +149,31 @@ class _FlanNoticeBarState extends State<FlanNoticeBar>
   void start() {
     final Duration ms = Duration(milliseconds: (widget.delay * 1000).toInt());
 
-    startTimer.cancel();
+    startTimer?.cancel();
 
     startTimer = Timer(ms, () {
-      if (!mounted || !widget.scrollable) {
+      if (textRef.currentContext == null ||
+          contentRef.currentContext == null ||
+          widget.scrollable == false) {
         return;
       }
 
-      final double wrapRefWidth =
-          wrapRef.currentContext!.findRenderObject()!.paintBounds.size.width;
+      final double textRefWidth = textRef.currentContext?.size?.width ?? 0.0;
       final double contentRefWidth =
-          contentRef.currentContext!.findRenderObject()!.paintBounds.size.width;
-      // debugPrint(
-      //     "wrapRefWidth:$wrapRefWidth --- contentRefWidth:$contentRefWidth");
-      if (widget.scrollable || contentRefWidth > wrapRefWidth) {
+          contentRef.currentContext?.size?.width ?? 0.0;
+
+      if (widget.scrollable == true || contentRefWidth < textRefWidth) {
+        final double fullWidth = contentRefWidth + textRefWidth;
+        print('contentRefWidth:$contentRefWidth');
+        print('textRefWidth$textRefWidth');
         controller
-          ..value = wrapRefWidth / (wrapRefWidth + contentRefWidth)
-          ..duration = Duration(seconds: wrapRefWidth ~/ widget.speed);
-        animation = Tween<Offset>(
-          begin: Offset(wrapRefWidth, 0.0),
-          end: Offset(-contentRefWidth, 0.0),
-        ).animate(
-          CurvedAnimation(parent: controller, curve: Curves.linear),
+          ..value = contentRefWidth / fullWidth
+          ..duration = Duration(seconds: fullWidth ~/ widget.speed);
+        animation = controller.drive(
+          Tween<Offset>(
+            begin: Offset(contentRefWidth, 0.0),
+            end: Offset(-textRefWidth, 0.0),
+          ),
         );
         controller.repeat();
       }
@@ -179,31 +182,31 @@ class _FlanNoticeBarState extends State<FlanNoticeBar>
 
   @override
   Widget build(BuildContext context) {
-    final Material noticeBar = Material(
-      color: widget.background ?? ThemeVars.noticeBarBackgroundColor,
-      textStyle: TextStyle(
-        color: widget.color ?? ThemeVars.noticeBarTextColor,
-        height: ThemeVars.noticeBarLineHeight / ThemeVars.noticeBarFontSize,
+    final FlanNoticeBarThemeData themeData =
+        FlanTheme.of(context).noticeBarTheme;
+
+    final Widget noticeBar = DefaultTextStyle(
+      style: TextStyle(
+        color: widget.color ?? themeData.textColor,
+        // height: themeData.lineHeight / themeData.fontSize,
       ),
-      child: Ink(
+      child: Container(
+        color: widget.background ?? themeData.backgroundColor,
         // height: this.widget.wrapable ? null : ThemeVars.noticeBarHeight,
-        padding: widget.wrapable
-            ? ThemeVars.noticeBarWrapablePadding
-            : ThemeVars.noticeBarPadding,
-        child: ConstrainedBox(
-          constraints: BoxConstraints(
-            maxHeight:
-                widget.wrapable ? double.infinity : ThemeVars.noticeBarHeight,
-            minHeight: widget.wrapable ? 0.0 : ThemeVars.noticeBarHeight,
-          ),
-          child: Row(
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: <Widget>[
-              _buildLeftIcon(context),
-              Expanded(child: _buildMarquee(context)),
-              _buildRightIcon(context)
-            ],
-          ),
+        padding:
+            widget.wrapable ? themeData.wrapablePadding : themeData.padding,
+
+        constraints: BoxConstraints(
+          maxHeight: widget.wrapable ? double.infinity : themeData.height,
+          minHeight: widget.wrapable ? 0.0 : themeData.height,
+        ),
+        child: Row(
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: <Widget?>[
+            _buildLeftIcon(themeData),
+            Expanded(child: _buildMarquee(context)),
+            _buildRightIcon(themeData)
+          ].noNull,
         ),
       ),
     );
@@ -221,19 +224,32 @@ class _FlanNoticeBarState extends State<FlanNoticeBar>
   }
 
   Widget _buildMarquee(BuildContext context) {
-    final bool ellipsis = !widget.scrollable && !widget.wrapable;
+    final bool ellipsis = widget.scrollable == false && !widget.wrapable;
     Widget marquee = widget.child ??
         Text(
           widget.text,
+          key: textRef,
           softWrap: widget.wrapable,
-          overflow: ellipsis ? TextOverflow.ellipsis : TextOverflow.clip,
+          maxLines: widget.wrapable ? null : 1,
+          overflow: ellipsis ? TextOverflow.ellipsis : TextOverflow.visible,
         );
-    if (widget.scrollable) {
+
+    if (widget.scrollable != false) {
       marquee = ClipRect(
-        key: wrapRef,
-        child: Transform.translate(
-          offset: animation.value,
-          child: marquee,
+        child: SingleChildScrollView(
+          scrollDirection: Axis.horizontal,
+          primary: false,
+          physics: const NeverScrollableScrollPhysics(),
+          child: AnimatedBuilder(
+            animation: animation,
+            builder: (BuildContext context, Widget? child) {
+              return Transform.translate(
+                offset: animation.value,
+                child: child,
+              );
+            },
+            child: marquee,
+          ),
         ),
       );
     }
@@ -246,50 +262,56 @@ class _FlanNoticeBarState extends State<FlanNoticeBar>
     );
   }
 
-  Widget _buildLeftIcon(BuildContext context) {
+  Widget _buildIcon(
+    FlanNoticeBarThemeData themeData, {
+    Alignment align = Alignment.centerLeft,
+    Widget? child,
+  }) {
+    return Container(
+      constraints: BoxConstraints(
+        minWidth: themeData.iconMinWidth,
+      ),
+      alignment: align,
+      child: child,
+    );
+  }
+
+  Widget? _buildLeftIcon(FlanNoticeBarThemeData themeData) {
     if (widget.leftIconSlot != null) {
       return widget.leftIconSlot!;
     }
 
     if (widget.leftIconName != null || widget.leftIconUrl != null) {
-      return Container(
-        constraints: const BoxConstraints(
-          minWidth: ThemeVars.noticeBarIconMinWidth,
-        ),
-        alignment: Alignment.centerLeft,
+      return _buildIcon(
+        themeData,
+        align: Alignment.centerLeft,
         child: FlanIcon(
-          size: ThemeVars.noticeBarIconSize,
+          size: themeData.iconSize,
           iconName: widget.leftIconName,
           iconUrl: widget.leftIconUrl,
-          color: widget.color ?? ThemeVars.noticeBarTextColor,
+          color: widget.color ?? themeData.textColor,
         ),
       );
     }
-
-    return const SizedBox.shrink();
   }
 
-  Widget _buildRightIcon(BuildContext context) {
+  Widget? _buildRightIcon(FlanNoticeBarThemeData themeData) {
     if (widget.rightIconSlot != null) {
       return widget.rightIconSlot!;
     }
 
     if (rightIconName != null) {
-      return Container(
-        constraints: const BoxConstraints(
-          minWidth: ThemeVars.noticeBarIconMinWidth,
-        ),
-        alignment: Alignment.centerRight,
+      return _buildIcon(
+        themeData,
+        align: Alignment.centerRight,
         child: FlanIcon(
-          size: ThemeVars.noticeBarIconSize,
+          size: themeData.iconSize,
           iconName: rightIconName,
           onClick: onClickRightIcon,
-          color: widget.color ?? ThemeVars.noticeBarTextColor,
+          color: widget.color ?? themeData.textColor,
         ),
       );
     }
-
-    return const SizedBox.shrink();
   }
 
   void onClickRightIcon() {

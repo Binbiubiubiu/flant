@@ -145,16 +145,16 @@ class FlanDividerThemeData with Diagnosticable {
   static FlanDividerThemeData lerp(
       FlanDividerThemeData? a, FlanDividerThemeData? b, double t) {
     return FlanDividerThemeData(
-      margin: EdgeInsets.lerp(a?.margin, b?.margin, t)!,
-      textColor: Color.lerp(a?.textColor, b?.textColor, t)!,
-      fontSize: lerpDouble(a?.fontSize, b?.fontSize, t)!,
-      lineHeight: lerpDouble(a?.lineHeight, b?.lineHeight, t)!,
-      borderColor: Color.lerp(a?.borderColor, b?.borderColor, t)!,
-      contentPadding: lerpDouble(a?.contentPadding, b?.contentPadding, t)!,
-      contentLeftWidthPercent: lerpDouble(
-          a?.contentLeftWidthPercent, b?.contentLeftWidthPercent, t)!,
+      margin: EdgeInsets.lerp(a?.margin, b?.margin, t),
+      textColor: Color.lerp(a?.textColor, b?.textColor, t),
+      fontSize: lerpDouble(a?.fontSize, b?.fontSize, t),
+      lineHeight: lerpDouble(a?.lineHeight, b?.lineHeight, t),
+      borderColor: Color.lerp(a?.borderColor, b?.borderColor, t),
+      contentPadding: lerpDouble(a?.contentPadding, b?.contentPadding, t),
+      contentLeftWidthPercent:
+          lerpDouble(a?.contentLeftWidthPercent, b?.contentLeftWidthPercent, t),
       contentRightWidthPercent: lerpDouble(
-          a?.contentRightWidthPercent, b?.contentRightWidthPercent, t)!,
+          a?.contentRightWidthPercent, b?.contentRightWidthPercent, t),
     );
   }
 

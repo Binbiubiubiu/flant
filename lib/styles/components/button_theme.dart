@@ -330,53 +330,53 @@ class FlanButtonThemeData with Diagnosticable {
   static FlanButtonThemeData lerp(
       FlanButtonThemeData? a, FlanButtonThemeData? b, double t) {
     return FlanButtonThemeData(
-      miniHeight: lerpDouble(a?.miniHeight, b?.miniHeight, t)!,
-      miniPadding: EdgeInsets.lerp(a?.miniPadding, b?.miniPadding, t)!,
-      miniFontSize: lerpDouble(a?.miniFontSize, b?.miniFontSize, t)!,
-      smallHeight: lerpDouble(a?.smallHeight, b?.smallHeight, t)!,
-      smallPadding: EdgeInsets.lerp(a?.smallPadding, b?.smallPadding, t)!,
-      smallFontSize: lerpDouble(a?.smallFontSize, b?.smallFontSize, t)!,
-      normalPadding: EdgeInsets.lerp(a?.normalPadding, b?.normalPadding, t)!,
-      normalFontSize: lerpDouble(a?.normalFontSize, b?.normalFontSize, t)!,
-      largeHeight: lerpDouble(a?.largeHeight, b?.largeHeight, t)!,
-      defaultHeight: lerpDouble(a?.defaultHeight, b?.defaultHeight, t)!,
+      miniHeight: lerpDouble(a?.miniHeight, b?.miniHeight, t),
+      miniPadding: EdgeInsets.lerp(a?.miniPadding, b?.miniPadding, t),
+      miniFontSize: lerpDouble(a?.miniFontSize, b?.miniFontSize, t),
+      smallHeight: lerpDouble(a?.smallHeight, b?.smallHeight, t),
+      smallPadding: EdgeInsets.lerp(a?.smallPadding, b?.smallPadding, t),
+      smallFontSize: lerpDouble(a?.smallFontSize, b?.smallFontSize, t),
+      normalPadding: EdgeInsets.lerp(a?.normalPadding, b?.normalPadding, t),
+      normalFontSize: lerpDouble(a?.normalFontSize, b?.normalFontSize, t),
+      largeHeight: lerpDouble(a?.largeHeight, b?.largeHeight, t),
+      defaultHeight: lerpDouble(a?.defaultHeight, b?.defaultHeight, t),
       defaultLineHeight:
-          lerpDouble(a?.defaultLineHeight, b?.defaultLineHeight, t)!,
-      defaultFontSize: lerpDouble(a?.defaultFontSize, b?.defaultFontSize, t)!,
-      defaultColor: Color.lerp(a?.defaultColor, b?.defaultColor, t)!,
+          lerpDouble(a?.defaultLineHeight, b?.defaultLineHeight, t),
+      defaultFontSize: lerpDouble(a?.defaultFontSize, b?.defaultFontSize, t),
+      defaultColor: Color.lerp(a?.defaultColor, b?.defaultColor, t),
       defaultBackgroundColor:
-          Color.lerp(a?.defaultBackgroundColor, b?.defaultBackgroundColor, t)!,
+          Color.lerp(a?.defaultBackgroundColor, b?.defaultBackgroundColor, t),
       defaultBorderColor:
-          Color.lerp(a?.defaultBorderColor, b?.defaultBorderColor, t)!,
-      primaryColor: Color.lerp(a?.primaryColor, b?.primaryColor, t)!,
+          Color.lerp(a?.defaultBorderColor, b?.defaultBorderColor, t),
+      primaryColor: Color.lerp(a?.primaryColor, b?.primaryColor, t),
       primaryBackgroundColor:
-          Color.lerp(a?.primaryBackgroundColor, b?.primaryBackgroundColor, t)!,
+          Color.lerp(a?.primaryBackgroundColor, b?.primaryBackgroundColor, t),
       primaryBorderColor:
-          Color.lerp(a?.primaryBorderColor, b?.primaryBorderColor, t)!,
-      successColor: Color.lerp(a?.successColor, b?.successColor, t)!,
+          Color.lerp(a?.primaryBorderColor, b?.primaryBorderColor, t),
+      successColor: Color.lerp(a?.successColor, b?.successColor, t),
       successBackgroundColor:
-          Color.lerp(a?.successBackgroundColor, b?.successBackgroundColor, t)!,
+          Color.lerp(a?.successBackgroundColor, b?.successBackgroundColor, t),
       successBorderColor:
-          Color.lerp(a?.successBorderColor, b?.successBorderColor, t)!,
-      dangerColor: Color.lerp(a?.dangerColor, b?.dangerColor, t)!,
+          Color.lerp(a?.successBorderColor, b?.successBorderColor, t),
+      dangerColor: Color.lerp(a?.dangerColor, b?.dangerColor, t),
       dangerBackgroundColor:
-          Color.lerp(a?.dangerBackgroundColor, b?.dangerBackgroundColor, t)!,
+          Color.lerp(a?.dangerBackgroundColor, b?.dangerBackgroundColor, t),
       dangerBorderColor:
-          Color.lerp(a?.dangerBorderColor, b?.dangerBorderColor, t)!,
-      warningColor: Color.lerp(a?.warningColor, b?.warningColor, t)!,
+          Color.lerp(a?.dangerBorderColor, b?.dangerBorderColor, t),
+      warningColor: Color.lerp(a?.warningColor, b?.warningColor, t),
       warningBackgroundColor:
-          Color.lerp(a?.warningBackgroundColor, b?.warningBackgroundColor, t)!,
+          Color.lerp(a?.warningBackgroundColor, b?.warningBackgroundColor, t),
       warningBorderColor:
-          Color.lerp(a?.warningBorderColor, b?.warningBorderColor, t)!,
-      borderWidth: lerpDouble(a?.borderWidth, b?.borderWidth, t)!,
-      borderRadius: lerpDouble(a?.borderRadius, b?.borderRadius, t)!,
+          Color.lerp(a?.warningBorderColor, b?.warningBorderColor, t),
+      borderWidth: lerpDouble(a?.borderWidth, b?.borderWidth, t),
+      borderRadius: lerpDouble(a?.borderRadius, b?.borderRadius, t),
       roundBorderRadius:
-          lerpDouble(a?.roundBorderRadius, b?.roundBorderRadius, t)!,
+          lerpDouble(a?.roundBorderRadius, b?.roundBorderRadius, t),
       plainBackgroundColor:
-          Color.lerp(a?.plainBackgroundColor, b?.plainBackgroundColor, t)!,
-      disabledOpacity: lerpDouble(a?.disabledOpacity, b?.disabledOpacity, t)!,
-      iconSize: lerpDouble(a?.iconSize, b?.iconSize, t)!,
-      loadingIconSize: lerpDouble(a?.loadingIconSize, b?.loadingIconSize, t)!,
+          Color.lerp(a?.plainBackgroundColor, b?.plainBackgroundColor, t),
+      disabledOpacity: lerpDouble(a?.disabledOpacity, b?.disabledOpacity, t),
+      iconSize: lerpDouble(a?.iconSize, b?.iconSize, t),
+      loadingIconSize: lerpDouble(a?.loadingIconSize, b?.loadingIconSize, t),
     );
   }
 

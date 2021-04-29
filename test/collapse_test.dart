@@ -190,7 +190,7 @@ void main() {
     expect(tester.getSize(content).height, equals(0.0));
     await tester.tap(find.byType(FlanCell).at(1));
     await tester.pumpAndSettle();
-    expect(tester.getSize(content).height, isNot(0.0));
+    expect(tester.getSize(content).height, isNot(equals(0.0)));
   });
 
   testWidgets('should toggle collapse after calling the toggle method',

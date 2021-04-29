@@ -2,11 +2,15 @@
 import 'dart:math' as math;
 
 // 🐦 Flutter imports:
+import 'package:flant/styles/components/loading_theme.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
 // 🌎 Project imports:
+import '../styles/components/loading_theme.dart';
+import '../styles/theme.dart';
 import '../styles/var.dart';
+import '../utils/widget.dart';
 
 /// ### FlanImage 加载
 /// 加载图标，用于表示加载中的过渡状态。
@@ -49,38 +53,43 @@ class FlanLoading extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final FlanLoadingThemeData themeData = FlanTheme.of(context).loadingTheme;
+
     final SizedBox icon = SizedBox(
-      width: size ?? ThemeVars.loadingSpinnerSize,
-      height: size ?? ThemeVars.loadingSpinnerSize,
+      width: size ?? themeData.spinnerSize,
+      height: size ?? themeData.spinnerSize,
       child: type == FlanLoadingType.spinner
-          ? _FlanLoadingSpinner(color: color ?? ThemeVars.loadingSpinnerColor)
-          : _FlanLoadingCirclar(color: color ?? ThemeVars.loadingSpinnerColor),
+          ? _FlanLoadingSpinner(
+              color: color ?? themeData.spinnerColor,
+              duration: themeData.spinnerAnimationDuration,
+            )
+          : _FlanLoadingCirclar(color: color ?? themeData.spinnerColor),
     );
 
     if (vertical) {
       return Wrap(
         direction: Axis.vertical,
         crossAxisAlignment: WrapCrossAlignment.center,
-        // runSpacing: ThemeVars.paddingXs,
-        children: <Widget>[
+        // runSpacing: FlanThemeVars.paddingXs,
+        children: <Widget?>[
           icon,
-          buildText(context),
-        ],
+          buildText(themeData),
+        ].noNull,
       );
     }
 
     return Wrap(
       direction: Axis.horizontal,
       crossAxisAlignment: WrapCrossAlignment.center,
-      // spacing: ThemeVars.paddingXs,
-      children: <Widget>[
+      // spacing: FlanThemeVars.paddingXs,
+      children: <Widget?>[
         icon,
-        buildText(context),
-      ],
+        buildText(themeData),
+      ].noNull,
     );
   }
 
-  Widget buildText(BuildContext context) {
+  Widget? buildText(FlanLoadingThemeData themeData) {
     if (child != null) {
       return Padding(
         padding: EdgeInsets.only(
@@ -89,28 +98,25 @@ class FlanLoading extends StatelessWidget {
         ),
         child: DefaultTextStyle(
           style: TextStyle(
-            fontSize: textSize ?? ThemeVars.loadingTextFontSize,
-            color: textColor ?? color ?? ThemeVars.loadingTextColor,
+            fontSize: textSize ?? themeData.textFontSize,
+            color: textColor ?? color ?? themeData.textColor,
           ),
-          child: child ?? const SizedBox.shrink(),
+          child: child!,
         ),
       );
     }
-    return const SizedBox.shrink();
   }
 
   @override
   void debugFillProperties(DiagnosticPropertiesBuilder properties) {
-    properties.add(DiagnosticsProperty<Color>('color', color,
-        defaultValue: ThemeVars.loadingSpinnerColor));
+    properties.add(DiagnosticsProperty<Color>('color', color));
     properties.add(DiagnosticsProperty<FlanLoadingType>('type', type,
         defaultValue: FlanLoadingType.circular));
     properties
         .add(DiagnosticsProperty<double>('size', size, defaultValue: 30.0));
     properties.add(
         DiagnosticsProperty<double>('textSize', textSize, defaultValue: 14.0));
-    properties.add(DiagnosticsProperty<Color>('textColor', textColor,
-        defaultValue: ThemeVars.loadingTextColor));
+    properties.add(DiagnosticsProperty<Color>('textColor', textColor));
     properties.add(
         DiagnosticsProperty<bool>('vertical', vertical, defaultValue: false));
     super.debugFillProperties(properties);
@@ -157,8 +163,7 @@ class __FlanLoadingCirclarState extends State<_FlanLoadingCirclar>
         tween: Tween<double>(begin: 90.0, end: 90.0),
         weight: .5,
       ),
-    ]).animate(curveAnimation)
-      ..addListener(_handleChange);
+    ]).animate(curveAnimation);
 
     offsetAnimation = TweenSequence<double>(<TweenSequenceItem<double>>[
       TweenSequenceItem<double>(
@@ -177,22 +182,26 @@ class __FlanLoadingCirclarState extends State<_FlanLoadingCirclar>
 
   @override
   void dispose() {
-    lengthAnimation.removeListener(_handleChange);
     controller.dispose();
 
     super.dispose();
   }
 
-  void _handleChange() => setState(() {});
-
   @override
   Widget build(BuildContext context) {
-    return CustomPaint(
-      painter: _FlanLoadingCirclarPainter(
-        length: lengthAnimation.value,
-        offset: offsetAnimation.value,
-        color: widget.color ?? ThemeVars.loadingSpinnerColor,
-      ),
+    final FlanLoadingThemeData themeData = FlanTheme.of(context).loadingTheme;
+
+    return AnimatedBuilder(
+      animation: controller,
+      builder: (BuildContext context, Widget? child) {
+        return CustomPaint(
+          painter: _FlanLoadingCirclarPainter(
+            length: lengthAnimation.value,
+            offset: offsetAnimation.value,
+            color: widget.color ?? themeData.spinnerColor,
+          ),
+        );
+      },
     );
   }
 }
@@ -245,9 +254,11 @@ class _FlanLoadingSpinner extends StatefulWidget {
   const _FlanLoadingSpinner({
     Key? key,
     required this.color,
+    required this.duration,
   }) : super(key: key);
 
   final Color color;
+  final Duration duration;
 
   @override
   __FlanLoadingSpinnerState createState() => __FlanLoadingSpinnerState();
@@ -262,12 +273,11 @@ class __FlanLoadingSpinnerState extends State<_FlanLoadingSpinner>
   void initState() {
     controller = AnimationController(
       value: 0.0,
-      duration: ThemeVars.loadingSpinnerAnimationDuration,
+      duration: widget.duration,
       vsync: this,
     );
 
-    animation = IntTween(begin: 0, end: 11).animate(controller)
-      ..addListener(_handleChange);
+    animation = IntTween(begin: 0, end: 11).animate(controller);
 
     controller.repeat();
     super.initState();
@@ -275,21 +285,24 @@ class __FlanLoadingSpinnerState extends State<_FlanLoadingSpinner>
 
   @override
   void dispose() {
-    animation.removeListener(_handleChange);
     controller.dispose();
 
     super.dispose();
   }
 
-  void _handleChange() => setState(() {});
-
-  Matrix4 get transform => Matrix4.rotationZ(animation.value * math.pi / 6);
-
   @override
   Widget build(BuildContext context) {
-    return Transform(
-      transform: transform,
-      alignment: Alignment.center,
+    return AnimatedBuilder(
+      animation: animation,
+      builder: (BuildContext context, Widget? child) {
+        final Matrix4 transform =
+            Matrix4.rotationZ(animation.value * math.pi / 6);
+        return Transform(
+          transform: transform,
+          alignment: Alignment.center,
+          child: child,
+        );
+      },
       child: CustomPaint(
         size: const Size.square(30.0),
         painter: _FlanLoadingSpinnerPainter(color: widget.color),
@@ -300,8 +313,8 @@ class __FlanLoadingSpinnerState extends State<_FlanLoadingSpinner>
 
 class _FlanLoadingSpinnerPainter extends CustomPainter {
   _FlanLoadingSpinnerPainter({
-    this.color = ThemeVars.loadingSpinnerColor,
-  })  : _paint = Paint()
+    required this.color,
+  })   : _paint = Paint()
           ..strokeWidth = 2.0
           ..strokeCap = StrokeCap.round
           ..style = PaintingStyle.stroke,

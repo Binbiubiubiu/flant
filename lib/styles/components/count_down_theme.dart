@@ -107,9 +107,9 @@ class FlanCountDownThemeData with Diagnosticable {
   static FlanCountDownThemeData lerp(
       FlanCountDownThemeData? a, FlanCountDownThemeData? b, double t) {
     return FlanCountDownThemeData(
-      textColor: Color.lerp(a?.textColor, b?.textColor, t)!,
-      fontSize: lerpDouble(a?.fontSize, b?.fontSize, t)!,
-      lineHeight: lerpDouble(a?.lineHeight, b?.lineHeight, t)!,
+      textColor: Color.lerp(a?.textColor, b?.textColor, t),
+      fontSize: lerpDouble(a?.fontSize, b?.fontSize, t),
+      lineHeight: lerpDouble(a?.lineHeight, b?.lineHeight, t),
     );
   }
 

@@ -14,6 +14,8 @@ import 'components/count_down_theme.dart';
 import 'components/divider_theme.dart';
 import 'components/empty_theme.dart';
 import 'components/image_theme.dart';
+import 'components/loading_theme.dart';
+import 'components/notice_bar_theme.dart';
 import 'components/tag_theme.dart';
 
 class FlanTheme extends StatelessWidget {
@@ -81,6 +83,8 @@ class FlanThemeData with Diagnosticable {
     FlanImageThemeData? imageTheme,
     FlanProgressThemeData? progressTheme,
     FlanTagThemeData? tagTheme,
+    FlanLoadingThemeData? loadingTheme,
+    FlanNoticeBarThemeData? noticeBarTheme,
   }) {
     return FlanThemeData.raw(
       badgeTheme: badgeTheme ?? FlanBadgeThemeData(),
@@ -95,6 +99,8 @@ class FlanThemeData with Diagnosticable {
       imageTheme: imageTheme ?? FlanImageThemeData(),
       progressTheme: progressTheme ?? FlanProgressThemeData(),
       tagTheme: tagTheme ?? FlanTagThemeData(),
+      loadingTheme: loadingTheme ?? FlanLoadingThemeData(),
+      noticeBarTheme: noticeBarTheme ?? FlanNoticeBarThemeData(),
     );
   }
 
@@ -111,20 +117,22 @@ class FlanThemeData with Diagnosticable {
     required this.imageTheme,
     required this.progressTheme,
     required this.tagTheme,
+    required this.loadingTheme,
+    required this.noticeBarTheme,
   });
 
   factory FlanThemeData.fallback() => FlanThemeData();
 
-  /// 徽标样式
+  /// Badge 徽标
   final FlanBadgeThemeData badgeTheme;
 
-  /// 按钮样式
+  /// Button 按钮
   final FlanButtonThemeData buttonTheme;
 
-  /// 单元格样式
+  /// Cell 单元格
   final FlanCellThemeData cellTheme;
 
-  /// 单元格组样式
+  /// CellGroup 单元格组
   final FlanCellGroupThemeData cellGroupTheme;
 
   /// Circle 环形进度条
@@ -133,22 +141,28 @@ class FlanThemeData with Diagnosticable {
   /// Collapse 折叠面板
   final FlanCollapseThemeData collapseTheme;
 
-  /// 倒计时样式
+  /// CountDown 倒计时
   final FlanCountDownThemeData countDownTheme;
 
-  /// 空状态样式
+  /// Empty 空状态
   final FlanEmptyThemeData emptyTheme;
 
-  /// 分割线样式
+  /// Divider 分割线
   final FlanDividerThemeData dividerTheme;
 
-  /// 图片样式
+  /// Image 图片
   final FlanImageThemeData imageTheme;
 
-// Progress 进度条
+  /// Loading 加载
+  final FlanLoadingThemeData loadingTheme;
+
+  /// NoticeBar 通知栏
+  final FlanNoticeBarThemeData noticeBarTheme;
+
+  /// Progress 进度条
   final FlanProgressThemeData progressTheme;
 
-  // 标签样式
+  // Tag 标签
   final FlanTagThemeData tagTheme;
 
   static FlanThemeData lerp(FlanThemeData a, FlanThemeData b, double t) {
@@ -170,6 +184,10 @@ class FlanThemeData with Diagnosticable {
       progressTheme:
           FlanProgressThemeData.lerp(a.progressTheme, b.progressTheme, t),
       tagTheme: FlanTagThemeData.lerp(a.tagTheme, b.tagTheme, t),
+      loadingTheme:
+          FlanLoadingThemeData.lerp(a.loadingTheme, b.loadingTheme, t),
+      noticeBarTheme:
+          FlanNoticeBarThemeData.lerp(a.noticeBarTheme, b.noticeBarTheme, t),
     );
   }
 

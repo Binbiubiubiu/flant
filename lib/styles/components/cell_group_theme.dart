@@ -127,11 +127,11 @@ class FlanCellGroupThemeData with Diagnosticable {
   static FlanCellGroupThemeData lerp(
       FlanCellGroupThemeData? a, FlanCellGroupThemeData? b, double t) {
     return FlanCellGroupThemeData(
-      backgroundColor: Color.lerp(a?.backgroundColor, b?.backgroundColor, t)!,
-      titleColor: Color.lerp(a?.titleColor, b?.titleColor, t)!,
-      titlePadding: EdgeInsets.lerp(a?.titlePadding, b?.titlePadding, t)!,
-      titleFontSize: lerpDouble(a?.titleFontSize, b?.titleFontSize, t)!,
-      titleLineHeight: lerpDouble(a?.titleLineHeight, b?.titleLineHeight, t)!,
+      backgroundColor: Color.lerp(a?.backgroundColor, b?.backgroundColor, t),
+      titleColor: Color.lerp(a?.titleColor, b?.titleColor, t),
+      titlePadding: EdgeInsets.lerp(a?.titlePadding, b?.titlePadding, t),
+      titleFontSize: lerpDouble(a?.titleFontSize, b?.titleFontSize, t),
+      titleLineHeight: lerpDouble(a?.titleLineHeight, b?.titleLineHeight, t),
     );
   }
 

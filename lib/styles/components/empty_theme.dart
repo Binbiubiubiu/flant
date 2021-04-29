@@ -148,19 +148,18 @@ class FlanEmptyThemeData with Diagnosticable {
   static FlanEmptyThemeData lerp(
       FlanEmptyThemeData? a, FlanEmptyThemeData? b, double t) {
     return FlanEmptyThemeData(
-      padding: EdgeInsets.lerp(a?.padding, b?.padding, t)!,
-      imageSize: lerpDouble(a?.imageSize, b?.imageSize, t)!,
+      padding: EdgeInsets.lerp(a?.padding, b?.padding, t),
+      imageSize: lerpDouble(a?.imageSize, b?.imageSize, t),
       descriptionMarginTop:
-          lerpDouble(a?.descriptionMarginTop, b?.descriptionMarginTop, t)!,
+          lerpDouble(a?.descriptionMarginTop, b?.descriptionMarginTop, t),
       descriptionPadding:
-          EdgeInsets.lerp(a?.descriptionPadding, b?.descriptionPadding, t)!,
-      descriptionColor:
-          Color.lerp(a?.descriptionColor, b?.descriptionColor, t)!,
+          EdgeInsets.lerp(a?.descriptionPadding, b?.descriptionPadding, t),
+      descriptionColor: Color.lerp(a?.descriptionColor, b?.descriptionColor, t),
       descriptionFontSize:
-          lerpDouble(a?.descriptionFontSize, b?.descriptionFontSize, t)!,
+          lerpDouble(a?.descriptionFontSize, b?.descriptionFontSize, t),
       descriptionLineHeight:
-          lerpDouble(a?.descriptionLineHeight, b?.descriptionLineHeight, t)!,
-      bottomMarginTop: lerpDouble(a?.bottomMarginTop, b?.bottomMarginTop, t)!,
+          lerpDouble(a?.descriptionLineHeight, b?.descriptionLineHeight, t),
+      bottomMarginTop: lerpDouble(a?.bottomMarginTop, b?.bottomMarginTop, t),
     );
   }
 

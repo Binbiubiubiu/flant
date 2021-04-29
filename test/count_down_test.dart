@@ -62,7 +62,7 @@ void main() {
     final String? preStr = tester.widget<Text>(find.byType(Text)).data;
     await tester.pumpAndSettle(const Duration(milliseconds: 50));
     final String? laterStr = tester.widget<Text>(find.byType(Text)).data;
-    expect(preStr, isNot(laterStr));
+    expect(preStr, isNot(equals(laterStr)));
   });
 
   testWidgets('should not start counting when auto-start prop is false',
@@ -99,7 +99,7 @@ void main() {
     tester.firstState<FlanCountDownState>(find.byType(FlanCountDown)).start();
     await tester.pumpAndSettle(const Duration(milliseconds: 50));
     final String? later = tester.widget<Text>(textFinder).data;
-    expect(pre, isNot(later));
+    expect(pre, isNot(equals(later)));
   });
 
   testWidgets('should pause counting after calling the pause method',

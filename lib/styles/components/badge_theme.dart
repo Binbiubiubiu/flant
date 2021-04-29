@@ -155,15 +155,15 @@ class FlanBadgeThemeData with Diagnosticable {
   static FlanBadgeThemeData lerp(
       FlanBadgeThemeData? a, FlanBadgeThemeData? b, double t) {
     return FlanBadgeThemeData(
-      size: lerpDouble(a?.size, b?.size, t)!,
-      color: Color.lerp(a?.color, b?.color, t)!,
-      padding: EdgeInsets.lerp(a?.padding, b?.padding, t)!,
-      fontSize: lerpDouble(a?.fontSize, b?.fontSize, t)!,
-      fontWeight: FontWeight.lerp(a?.fontWeight, b?.fontWeight, t)!,
-      borderWidth: lerpDouble(a?.borderWidth, b?.borderWidth, t)!,
-      backgroundColor: Color.lerp(a?.backgroundColor, b?.backgroundColor, t)!,
-      dotColor: Color.lerp(a?.dotColor, b?.dotColor, t)!,
-      dotSize: lerpDouble(a?.dotSize, b?.dotSize, t)!,
+      size: lerpDouble(a?.size, b?.size, t),
+      color: Color.lerp(a?.color, b?.color, t),
+      padding: EdgeInsets.lerp(a?.padding, b?.padding, t),
+      fontSize: lerpDouble(a?.fontSize, b?.fontSize, t),
+      fontWeight: FontWeight.lerp(a?.fontWeight, b?.fontWeight, t),
+      borderWidth: lerpDouble(a?.borderWidth, b?.borderWidth, t),
+      backgroundColor: Color.lerp(a?.backgroundColor, b?.backgroundColor, t),
+      dotColor: Color.lerp(a?.dotColor, b?.dotColor, t),
+      dotSize: lerpDouble(a?.dotSize, b?.dotSize, t),
       fontFamily: b?.fontFamily,
     );
   }

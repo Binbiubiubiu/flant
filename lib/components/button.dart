@@ -4,12 +4,12 @@ import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 
 // 🌎 Project imports:
-import 'package:flant/components/common/active_response.dart';
 import '../mixins/route_mixins.dart';
 import '../styles/components/button_theme.dart';
 import '../styles/theme.dart';
 import '../styles/var.dart';
 import '../utils/widget.dart';
+import './common/active_response.dart';
 import 'icon.dart';
 import 'loading.dart';
 

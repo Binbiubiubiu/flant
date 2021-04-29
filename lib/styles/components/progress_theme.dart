@@ -142,15 +142,15 @@ class FlanProgressThemeData with Diagnosticable {
   static FlanProgressThemeData lerp(
       FlanProgressThemeData? a, FlanProgressThemeData? b, double t) {
     return FlanProgressThemeData(
-      height: lerpDouble(a?.height, b?.height, t)!,
-      color: Color.lerp(a?.color, b?.color, t)!,
-      backgroundColor: Color.lerp(a?.backgroundColor, b?.backgroundColor, t)!,
-      pivotPadding: EdgeInsets.lerp(a?.pivotPadding, b?.pivotPadding, t)!,
-      pivotTextColor: Color.lerp(a?.pivotTextColor, b?.pivotTextColor, t)!,
-      pivotFontSize: lerpDouble(a?.pivotFontSize, b?.pivotFontSize, t)!,
-      pivotLineHeight: lerpDouble(a?.pivotLineHeight, b?.pivotLineHeight, t)!,
+      height: lerpDouble(a?.height, b?.height, t),
+      color: Color.lerp(a?.color, b?.color, t),
+      backgroundColor: Color.lerp(a?.backgroundColor, b?.backgroundColor, t),
+      pivotPadding: EdgeInsets.lerp(a?.pivotPadding, b?.pivotPadding, t),
+      pivotTextColor: Color.lerp(a?.pivotTextColor, b?.pivotTextColor, t),
+      pivotFontSize: lerpDouble(a?.pivotFontSize, b?.pivotFontSize, t),
+      pivotLineHeight: lerpDouble(a?.pivotLineHeight, b?.pivotLineHeight, t),
       pivotBackgroundColor:
-          Color.lerp(a?.pivotBackgroundColor, b?.pivotBackgroundColor, t)!,
+          Color.lerp(a?.pivotBackgroundColor, b?.pivotBackgroundColor, t),
     );
   }
 

@@ -203,25 +203,25 @@ class FlanTagThemeData with Diagnosticable {
   static FlanTagThemeData lerp(
       FlanTagThemeData? a, FlanTagThemeData? b, double t) {
     return FlanTagThemeData(
-      padding: EdgeInsets.lerp(a?.padding, b?.padding, t)!,
-      textColor: Color.lerp(a?.textColor, b?.textColor, t)!,
-      fontSize: lerpDouble(a?.fontSize, b?.fontSize, t)!,
-      borderRadius: lerpDouble(a?.borderRadius, b?.borderRadius, t)!,
-      lineHeight: lerpDouble(a?.lineHeight, b?.lineHeight, t)!,
-      mediumPadding: EdgeInsets.lerp(a?.mediumPadding, b?.mediumPadding, t)!,
-      largePadding: EdgeInsets.lerp(a?.largePadding, b?.largePadding, t)!,
+      padding: EdgeInsets.lerp(a?.padding, b?.padding, t),
+      textColor: Color.lerp(a?.textColor, b?.textColor, t),
+      fontSize: lerpDouble(a?.fontSize, b?.fontSize, t),
+      borderRadius: lerpDouble(a?.borderRadius, b?.borderRadius, t),
+      lineHeight: lerpDouble(a?.lineHeight, b?.lineHeight, t),
+      mediumPadding: EdgeInsets.lerp(a?.mediumPadding, b?.mediumPadding, t),
+      largePadding: EdgeInsets.lerp(a?.largePadding, b?.largePadding, t),
       largeBorderRadius:
-          lerpDouble(a?.largeBorderRadius, b?.largeBorderRadius, t)!,
-      largeFontSize: lerpDouble(a?.largeFontSize, b?.largeFontSize, t)!,
+          lerpDouble(a?.largeBorderRadius, b?.largeBorderRadius, t),
+      largeFontSize: lerpDouble(a?.largeFontSize, b?.largeFontSize, t),
       roundBorderRadius:
-          lerpDouble(a?.roundBorderRadius, b?.roundBorderRadius, t)!,
-      dangerColor: Color.lerp(a?.dangerColor, b?.dangerColor, t)!,
-      primaryColor: Color.lerp(a?.primaryColor, b?.primaryColor, t)!,
-      successColor: Color.lerp(a?.successColor, b?.successColor, t)!,
-      warningColor: Color.lerp(a?.warningColor, b?.warningColor, t)!,
-      defaultColor: Color.lerp(a?.defaultColor, b?.defaultColor, t)!,
+          lerpDouble(a?.roundBorderRadius, b?.roundBorderRadius, t),
+      dangerColor: Color.lerp(a?.dangerColor, b?.dangerColor, t),
+      primaryColor: Color.lerp(a?.primaryColor, b?.primaryColor, t),
+      successColor: Color.lerp(a?.successColor, b?.successColor, t),
+      warningColor: Color.lerp(a?.warningColor, b?.warningColor, t),
+      defaultColor: Color.lerp(a?.defaultColor, b?.defaultColor, t),
       plainBackgroundColor:
-          Color.lerp(a?.plainBackgroundColor, b?.plainBackgroundColor, t)!,
+          Color.lerp(a?.plainBackgroundColor, b?.plainBackgroundColor, t),
     );
   }
 
