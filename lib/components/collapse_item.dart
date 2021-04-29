@@ -389,9 +389,8 @@ class __AnimatedContentState extends State<_AnimatedContent>
 
   @override
   void didUpdateWidget(covariant _AnimatedContent oldWidget) {
-    if (widget.child != oldWidget.child) {
-      _calcMaxHeight();
-    }
+    _calcMaxHeight();
+
     // 重新计算高度后再动画
     nextTick(() {
       if (widget.expanded) {
@@ -405,9 +404,13 @@ class __AnimatedContentState extends State<_AnimatedContent>
 
   void _calcMaxHeight() {
     nextTick(() {
-      maxHeight = wrapKey.currentContext?.size?.height;
-      _animation = _controller.drive(Tween<double>(begin: 0.0, end: maxHeight));
-      setState(() {});
+      final double? currentMaxHeight = wrapKey.currentContext?.size?.height;
+      if (maxHeight != currentMaxHeight) {
+        maxHeight = wrapKey.currentContext?.size?.height;
+        _animation =
+            _controller.drive(Tween<double>(begin: 0.0, end: maxHeight));
+        setState(() {});
+      }
     });
   }
 
