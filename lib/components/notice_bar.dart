@@ -164,8 +164,8 @@ class _FlanNoticeBarState extends State<FlanNoticeBar>
 
       if (widget.scrollable == true || contentRefWidth < textRefWidth) {
         final double fullWidth = contentRefWidth + textRefWidth;
-        print('contentRefWidth:$contentRefWidth');
-        print('textRefWidth$textRefWidth');
+        // print('contentRefWidth:$contentRefWidth');
+        // print('textRefWidth$textRefWidth');
         controller
           ..value = contentRefWidth / fullWidth
           ..duration = Duration(seconds: fullWidth ~/ widget.speed);
