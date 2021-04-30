@@ -206,13 +206,6 @@ class _FlanNoticeBarState extends State<FlanNoticeBar>
             _buildLeftIcon(themeData),
             Expanded(child: _buildMarquee(context)),
             _buildRightIcon(themeData),
-            Offstage(
-              offstage: true,
-              child: UnconstrainedBox(
-                key: textRef,
-                child: childWidget,
-              ),
-            ),
           ].noNull,
         ),
       ),
@@ -230,32 +223,37 @@ class _FlanNoticeBarState extends State<FlanNoticeBar>
     );
   }
 
-  bool get ellipsis => widget.scrollable == false && !widget.wrapable;
-
-  Widget get childWidget {
-    return widget.child ??
-        Text(
-          widget.text,
-          softWrap: widget.wrapable,
-          maxLines: widget.wrapable ? null : 1,
-          overflow: ellipsis ? TextOverflow.ellipsis : TextOverflow.visible,
-        );
-  }
-
   Widget _buildMarquee(BuildContext context) {
-    Widget marquee = childWidget;
+    final bool ellipsis = widget.scrollable == false && !widget.wrapable;
+    Widget marquee = Builder(
+      key: textRef,
+      builder: (BuildContext context) {
+        return widget.child ??
+            Text(
+              widget.text,
+              softWrap: widget.wrapable,
+              maxLines: widget.wrapable ? null : 1,
+              overflow: ellipsis ? TextOverflow.ellipsis : TextOverflow.visible,
+            );
+      },
+    );
 
     if (widget.scrollable != false) {
       marquee = ClipRect(
-        child: AnimatedBuilder(
-          animation: animation,
-          builder: (BuildContext context, Widget? child) {
-            return Transform.translate(
-              offset: animation.value,
-              child: child,
-            );
-          },
-          child: marquee,
+        child: SingleChildScrollView(
+          scrollDirection: Axis.horizontal,
+          primary: false,
+          physics: const NeverScrollableScrollPhysics(),
+          child: AnimatedBuilder(
+            animation: animation,
+            builder: (BuildContext context, Widget? child) {
+              return Transform.translate(
+                offset: animation.value,
+                child: child,
+              );
+            },
+            child: marquee,
+          ),
         ),
       );
     }
