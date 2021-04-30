@@ -10,7 +10,7 @@ import 'intl/messages_all.dart';
 
 // ignore_for_file: non_constant_identifier_names, lines_longer_than_80_chars
 // ignore_for_file: join_return_with_assignment, prefer_final_in_for_each
-// ignore_for_file: avoid_redundant_argument_values
+// ignore_for_file: avoid_redundant_argument_values, avoid_escaping_inner_quotes
 
 class FlanS {
   FlanS();
@@ -18,28 +18,31 @@ class FlanS {
   static FlanS? _current;
 
   static FlanS get current {
-    assert(_current != null, 'No instance of FlanS was loaded. Try to initialize the FlanS delegate before accessing FlanS.current.');
+    assert(_current != null,
+        'No instance of FlanS was loaded. Try to initialize the FlanS delegate before accessing FlanS.current.');
     return _current!;
   }
 
-  static const AppLocalizationDelegate delegate =
-    AppLocalizationDelegate();
+  static const AppLocalizationDelegate delegate = AppLocalizationDelegate();
 
   static Future<FlanS> load(Locale locale) {
-    final name = (locale.countryCode?.isEmpty ?? false) ? locale.languageCode : locale.toString();
-    final localeName = Intl.canonicalizedLocale(name); 
+    final name = (locale.countryCode?.isEmpty ?? false)
+        ? locale.languageCode
+        : locale.toString();
+    final localeName = Intl.canonicalizedLocale(name);
     return initializeMessages(localeName).then((_) {
       Intl.defaultLocale = localeName;
       final instance = FlanS();
       FlanS._current = instance;
- 
+
       return instance;
     });
-  } 
+  }
 
   static FlanS of(BuildContext context) {
     final instance = FlanS.maybeOf(context);
-    assert(instance != null, 'No instance of FlanS present in the widget tree. Did you add FlanS.delegate in localizationsDelegates?');
+    assert(instance != null,
+        'No instance of FlanS present in the widget tree. Did you add FlanS.delegate in localizationsDelegates?');
     return instance!;
   }
 

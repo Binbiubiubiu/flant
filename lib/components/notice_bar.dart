@@ -225,14 +225,18 @@ class _FlanNoticeBarState extends State<FlanNoticeBar>
 
   Widget _buildMarquee(BuildContext context) {
     final bool ellipsis = widget.scrollable == false && !widget.wrapable;
-    Widget marquee = widget.child ??
-        Text(
-          widget.text,
-          key: textRef,
-          softWrap: widget.wrapable,
-          maxLines: widget.wrapable ? null : 1,
-          overflow: ellipsis ? TextOverflow.ellipsis : TextOverflow.visible,
-        );
+    Widget marquee = Builder(
+      key: textRef,
+      builder: (BuildContext context) {
+        return widget.child ??
+            Text(
+              widget.text,
+              softWrap: widget.wrapable,
+              maxLines: widget.wrapable ? null : 1,
+              overflow: ellipsis ? TextOverflow.ellipsis : TextOverflow.visible,
+            );
+      },
+    );
 
     if (widget.scrollable != false) {
       marquee = ClipRect(
