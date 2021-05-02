@@ -4,12 +4,13 @@ import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 
 // 🌎 Project imports:
-import 'package:flant/components/sidebar.dart';
-import 'package:flant/flant.dart';
-import 'package:flant/mixins/route_mixins.dart';
-import '../styles/var.dart';
+import '../styles/components/sidebar_theme.dart';
+import '../styles/theme.dart';
+import 'badge.dart';
+import 'common/active_response.dart';
+import 'sidebar.dart';
 
-class FlanSidebarItem extends RouteStatelessWidget {
+class FlanSidebarItem extends StatelessWidget {
   const FlanSidebarItem({
     Key? key,
     this.title = '',
@@ -19,10 +20,7 @@ class FlanSidebarItem extends RouteStatelessWidget {
     this.padding,
     this.onClick,
     this.titleSlot,
-    String? toName,
-    PageRoute<Object?>? toRoute,
-    bool replace = false,
-  }) : super(key: key, toName: toName, toRoute: toRoute, replace: replace);
+  }) : super(key: key);
 
   // ****************** Props ******************
   /// 内容
@@ -59,26 +57,75 @@ class FlanSidebarItem extends RouteStatelessWidget {
     final int index = parent.children.indexOf(this);
     final bool selected = index == parent.getActive();
 
-    return _SideBarItemButton(
-      selected: selected,
-      disabled: disabled,
-      padding: padding,
-      onClick: () {
-        if (disabled) {
-          return;
-        }
+    final FlanSidebarThemeData themeData = FlanTheme.of(context).sidebarTheme;
 
-        if (onClick != null) {
-          onClick!(index);
-        }
-        parent.setActive(index);
-        route(context);
-      },
-      child: FlanBadge(
-        dot: dot,
-        content: badge,
-        child: titleSlot ?? Text(title),
+    final Widget borderRight = Positioned.fill(
+      child: Align(
+        alignment: Alignment.centerLeft,
+        child: Visibility(
+          visible: selected,
+          child: Container(
+            width: themeData.selectedBorderWidth,
+            height: themeData.selectedBorderHeight,
+            color: themeData.selectedBorderColor,
+          ),
+        ),
       ),
+    );
+
+    void _onClick() {
+      if (disabled) {
+        return;
+      }
+
+      if (onClick != null) {
+        onClick!(index);
+      }
+      parent.setActive(index);
+    }
+
+    return Stack(
+      children: <Widget>[
+        SizedBox(
+          width: double.infinity,
+          child: FlanActiveResponse(
+            disabled: disabled,
+            builder: (BuildContext contenxt, bool active, Widget? child) {
+              final Color bgColor = selected
+                  ? themeData.selectedBackgroundColor
+                  : active
+                      ? themeData.activeColor
+                      : themeData.backgroundColor;
+
+              final Color textColor = disabled
+                  ? themeData.disabledTextColor
+                  : selected
+                      ? themeData.selectedTextColor
+                      : themeData.textColor;
+              return DefaultTextStyle(
+                style: TextStyle(
+                  fontSize: themeData.fontSize,
+                  height: themeData.lineHeight,
+                  color: textColor,
+                ),
+                child: Container(
+                  alignment: Alignment.centerLeft,
+                  padding: padding ?? themeData.padding,
+                  color: bgColor,
+                  child: child,
+                ),
+              );
+            },
+            onClick: _onClick,
+            child: FlanBadge(
+              dot: dot,
+              content: badge,
+              child: titleSlot ?? Text(title),
+            ),
+          ),
+        ),
+        borderRight,
+      ],
     );
   }
 
@@ -93,103 +140,5 @@ class FlanSidebarItem extends RouteStatelessWidget {
         DiagnosticsProperty<bool>('disabled', disabled, defaultValue: false));
     properties.add(DiagnosticsProperty<EdgeInsets>('padding', padding));
     super.debugFillProperties(properties);
-  }
-}
-
-class _SideBarItemButton extends StatefulWidget {
-  const _SideBarItemButton({
-    Key? key,
-    this.selected = false,
-    this.disabled = false,
-    this.padding,
-    this.onClick,
-    required this.child,
-  }) : super(key: key);
-
-  final bool selected;
-  final bool disabled;
-
-  /// 内边距
-  final EdgeInsets? padding;
-
-  final VoidCallback? onClick;
-
-  final Widget child;
-
-  @override
-  _SideBarItemButtonState createState() => _SideBarItemButtonState();
-}
-
-class _SideBarItemButtonState extends State<_SideBarItemButton> {
-  bool isPressed = false;
-
-  void doActive() {
-    setState(() => isPressed = true);
-  }
-
-  void doDisActive() {
-    setState(() => isPressed = false);
-  }
-
-  Color get bgColor => widget.disabled
-      ? ThemeVars.sidebarBackgroundColor
-      : widget.selected
-          ? ThemeVars.sidebarSelectedBackgroundColor
-          : isPressed
-              ? ThemeVars.sidebarActiveColor
-              : ThemeVars.sidebarBackgroundColor;
-
-  Color get textColor => widget.disabled
-      ? ThemeVars.sidebarDisabledTextColor
-      : widget.selected
-          ? ThemeVars.sidebarSelectedTextColor
-          : ThemeVars.sidebarTextColor;
-
-  @override
-  Widget build(BuildContext context) {
-    return MouseRegion(
-      cursor: widget.disabled
-          ? SystemMouseCursors.click
-          : SystemMouseCursors.forbidden,
-      child: DefaultTextStyle(
-        style: TextStyle(
-          fontSize: ThemeVars.sidebarFontSize,
-          height: ThemeVars.sidebarLineHeight / ThemeVars.sidebarFontSize,
-          color: textColor,
-        ),
-        child: GestureDetector(
-          onTapDown: (TapDownDetails e) => doActive(),
-          onTapCancel: () => doDisActive(),
-          onTapUp: (TapUpDetails e) => doDisActive(),
-          onTap: widget.onClick,
-          child: Stack(
-            children: <Widget>[
-              SizedBox(
-                width: double.infinity,
-                child: Container(
-                  color: bgColor,
-                  alignment: Alignment.centerLeft,
-                  padding: widget.padding ?? ThemeVars.sidebarPadding,
-                  child: widget.child,
-                ),
-              ),
-              Positioned.fill(
-                child: Align(
-                  alignment: Alignment.centerLeft,
-                  child: Visibility(
-                    visible: widget.selected,
-                    child: Container(
-                      width: ThemeVars.sidebarSelectedBorderWidth,
-                      height: ThemeVars.sidebarSelectedBorderHeight,
-                      color: ThemeVars.sidebarSelectedBorderColor,
-                    ),
-                  ),
-                ),
-              ),
-            ],
-          ),
-        ),
-      ),
-    );
   }
 }

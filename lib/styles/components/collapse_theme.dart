@@ -76,7 +76,7 @@ class FlanCollapseThemeData with Diagnosticable {
               horizontal: FlanThemeVars.paddingMd.rpx),
       itemContentFontSize:
           itemContentFontSize ?? FlanThemeVars.fontSizeMd.rpx.rpx,
-      itemContentLineHeight: itemContentLineHeight ?? 1.5.rpx,
+      itemContentLineHeight: itemContentLineHeight ?? 1.5,
       itemContentTextColor: itemContentTextColor ?? FlanThemeVars.gray6,
       itemContentBackgroundColor:
           itemContentBackgroundColor ?? FlanThemeVars.white,

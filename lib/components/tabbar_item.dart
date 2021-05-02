@@ -6,6 +6,7 @@ import 'package:flutter/material.dart';
 import '../styles/components/tabbar_theme.dart';
 import '../styles/theme.dart';
 import '../styles/var.dart';
+import '../utils/widget.dart';
 import 'badge.dart';
 import 'icon.dart';
 import 'style.dart';
@@ -77,7 +78,6 @@ class FlanTabbarItem extends StatelessWidget {
     if (iconBuilder != null) {
       customIcon = iconBuilder!(context, active);
     }
-
     if (iconName != null || iconUrl != null) {
       customIcon = FlanIcon(
         iconName: iconName,
@@ -91,8 +91,8 @@ class FlanTabbarItem extends StatelessWidget {
         size: themeData.itemIconSize,
       ),
       child: Container(
-        height: 20.0,
-        constraints: const BoxConstraints.tightFor(width: 20.0),
+        height: 20.0.rpx,
+        constraints: BoxConstraints.tightFor(width: 20.0.rpx),
         child: customIcon,
       ),
     );
@@ -121,7 +121,7 @@ class FlanTabbarItem extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.center,
               crossAxisAlignment: CrossAxisAlignment.center,
               children: <Widget>[
-                const SizedBox(height: FlanThemeVars.paddingBase),
+                SizedBox(height: FlanThemeVars.paddingBase.rpx),
                 FlanBadge(
                   dot: dot,
                   content: badge,

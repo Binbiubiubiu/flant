@@ -54,8 +54,8 @@ class FlanEmpty extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final FlanEmptyThemeData themeData = FlanTheme.of(context).emptyTheme;
-    return FractionallySizedBox(
-      widthFactor: 1.0,
+    return SizedBox(
+      width: double.infinity,
       child: Padding(
         padding: themeData.padding,
         child: Column(

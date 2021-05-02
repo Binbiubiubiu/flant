@@ -66,6 +66,7 @@ class FlanNoticeBarThemeData with Diagnosticable {
     double? iconSize,
     double? iconMinWidth,
   }) {
+    final double _fontSize = fontSize ?? FlanThemeVars.fontSizeMd.rpx;
     return FlanNoticeBarThemeData.raw(
       height: height ?? 40.0.rpx,
       padding: padding ??
@@ -76,8 +77,8 @@ class FlanNoticeBarThemeData with Diagnosticable {
               vertical: FlanThemeVars.paddingXs.rpx,
               horizontal: FlanThemeVars.paddingMd.rpx),
       textColor: textColor ?? FlanThemeVars.orangeDark,
-      fontSize: fontSize ?? FlanThemeVars.fontSizeMd.rpx,
-      lineHeight: lineHeight ?? 24.0.rpx,
+      fontSize: _fontSize,
+      lineHeight: lineHeight ?? (24.0.rpx / _fontSize),
       backgroundColor: backgroundColor ?? FlanThemeVars.orangeLight,
       iconSize: iconSize ?? 16.0.rpx,
       iconMinWidth: iconMinWidth ?? 24.0.rpx,

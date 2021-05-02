@@ -8,6 +8,7 @@ import 'package:flutter/material.dart';
 import '../styles/components/nav_bar_theme.dart';
 import '../styles/theme.dart';
 import '../styles/var.dart';
+import '../utils/widget.dart';
 import 'icon.dart';
 import 'style.dart';
 
@@ -86,8 +87,8 @@ class FlanNavBar extends StatelessWidget {
               );
             },
             child: Padding(
-              padding: const EdgeInsets.symmetric(
-                horizontal: FlanThemeVars.paddingMd,
+              padding: EdgeInsets.symmetric(
+                horizontal: FlanThemeVars.paddingMd.rpx,
               ),
               child: _buildLeft(themeData),
             ),
@@ -132,8 +133,8 @@ class FlanNavBar extends StatelessWidget {
               );
             },
             child: Padding(
-              padding: const EdgeInsets.symmetric(
-                horizontal: FlanThemeVars.paddingMd,
+              padding: EdgeInsets.symmetric(
+                horizontal: FlanThemeVars.paddingMd.rpx,
               ),
               child: _buildRight(themeData),
             ),
@@ -179,7 +180,7 @@ class FlanNavBar extends StatelessWidget {
           size: themeData.arrowSize,
           color: themeData.iconColor,
         ),
-        const SizedBox(width: FlanThemeVars.paddingBase)
+        SizedBox(width: FlanThemeVars.paddingBase.rpx)
       ]);
     }
 

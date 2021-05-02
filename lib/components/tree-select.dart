@@ -1,14 +1,17 @@
 // 🐦 Flutter imports:
 import 'package:flutter/foundation.dart';
-import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 
 // 🌎 Project imports:
-import 'package:flant/components/icon.dart';
-import 'package:flant/components/sidebar.dart';
-import 'package:flant/components/sidebar_item.dart';
+import '../styles/components/tree_select_theme.dart';
+import '../styles/theme.dart';
 import '../styles/var.dart';
+import '../utils/widget.dart';
+import 'common/active_response.dart';
+import 'icon.dart';
+import 'sidebar.dart';
+import 'sidebar_item.dart';
 
 /// ### TreeSelect 分类选择
 /// 用于从一组相关联的数据集合中进行选择。
@@ -17,7 +20,7 @@ class FlanTreeSelect extends StatelessWidget {
     Key? key,
     this.max,
     this.items = const <FlanTreeSelectItem>[],
-    this.height = 300.0,
+    this.height,
     this.activeId = const <String>[],
     this.selectedIconName = FlanIcons.success,
     this.selectedIconUrl,
@@ -39,7 +42,7 @@ class FlanTreeSelect extends StatelessWidget {
   final List<FlanTreeSelectItem> items;
 
   /// 高度
-  final double height;
+  final double? height;
 
   /// 右侧选中项的 id
   final List<String> activeId;
@@ -75,67 +78,32 @@ class FlanTreeSelect extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final FlanTreeSelectThemeData themeData =
+        FlanTheme.of(context).treeSelectTheme;
+
     return SizedBox(
-      height: height,
+      height: height ?? 300.0.rpx,
       child: DefaultTextStyle(
-        style: const TextStyle(
-          fontSize: ThemeVars.treeSelectFontSize,
+        style: TextStyle(
+          fontSize: themeData.fontSize,
         ),
         child: Row(
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: <Widget>[
             Expanded(
               flex: 1,
-              child: _buildSidebar(),
+              child: _buildSidebar(themeData),
             ),
             Expanded(
               flex: 2,
               child: Container(
-                color: ThemeVars.treeSelectContentBackgroundColor,
-                child: _buildContent(),
+                color: themeData.contentBackgroundColor,
+                child: _buildContent(themeData),
               ),
             ),
           ],
         ),
       ),
-    );
-  }
-
-  Widget _buildSubItem(FlanTreeSelectChild item) {
-    return _FlanTreeSelectSubItem(
-      active: _isActiveItem(item.id),
-      item: item,
-      activeIcon: FlanIcon(
-        color: ThemeVars.treeSelectItemActiveColor,
-        size: ThemeVars.treeSelectItemSelectedSize,
-        iconName: selectedIconName,
-        iconUrl: selectedIconUrl,
-      ),
-      onClick: () {
-        if (item.disabled) {
-          return;
-        }
-
-        List<String> activeId;
-        if (isMulit) {
-          activeId = this.activeId.toList();
-          final int index = activeId.indexOf(item.id);
-          if (index != -1) {
-            activeId.remove(item.id);
-          } else if (max == null || (max != null && activeId.length < max!)) {
-            activeId.add(item.id);
-          }
-        } else {
-          activeId = <String>[item.id];
-        }
-
-        if (onActiveIdChange != null) {
-          onActiveIdChange!(activeId);
-        }
-        if (onClickItem != null) {
-          onClickItem!(item);
-        }
-      },
     );
   }
 
@@ -149,7 +117,7 @@ class FlanTreeSelect extends StatelessWidget {
     }
   }
 
-  Widget _buildSidebar() {
+  Widget _buildSidebar(FlanTreeSelectThemeData themeData) {
     final List<FlanSidebarItem> items =
         this.items.map((FlanTreeSelectItem item) {
       return FlanSidebarItem(
@@ -157,19 +125,18 @@ class FlanTreeSelect extends StatelessWidget {
         title: item.text,
         badge: item.badge,
         disabled: item.disabled,
-        padding: ThemeVars.treeSelectNavItemPadding,
+        padding: themeData.navItemPadding,
       );
     }).toList();
     return FlanSidebar(
       value: mainActiveIndex,
-      onValueChange: onMainActiveIndexChange,
       onChange: _onSidebarChange,
       children: items,
-      backgroundColor: ThemeVars.treeSelectNavBackgroundColor,
+      backgroundColor: themeData.navBackgroundColor,
     );
   }
 
-  Widget _buildContent() {
+  Widget? _buildContent(FlanTreeSelectThemeData themeData) {
     if (child != null) {
       return child!;
     }
@@ -177,10 +144,97 @@ class FlanTreeSelect extends StatelessWidget {
         items.isNotEmpty ? items[mainActiveIndex] : null;
     if (selected != null) {
       return ListView(
-        children: selected.children.map(_buildSubItem).toList(),
+        children: selected.children.map((FlanTreeSelectChild item) {
+          void _onClick() {
+            if (item.disabled) {
+              return;
+            }
+
+            List<String> _activeId;
+            if (isMulit) {
+              _activeId = <String>[...activeId];
+              if (_activeId.contains(item.id)) {
+                _activeId.remove(item.id);
+              } else if (max == null ||
+                  (max != null && activeId.length < max!)) {
+                _activeId.add(item.id);
+              }
+            } else {
+              _activeId = <String>[item.id];
+            }
+
+            if (onActiveIdChange != null) {
+              onActiveIdChange!(_activeId);
+            }
+            if (onClickItem != null) {
+              onClickItem!(item);
+            }
+          }
+
+          final bool active = _isActiveItem(item.id);
+
+          final Widget rightIcon = Visibility(
+            visible: active,
+            child: Container(
+              width: 32.0.rpx,
+              padding: EdgeInsets.only(
+                right: FlanThemeVars.paddingMd.rpx,
+              ),
+              child: FlanIcon(
+                color: themeData.itemActiveColor,
+                size: themeData.itemSelectedSize,
+                iconName: selectedIconName,
+                iconUrl: selectedIconUrl,
+              ),
+            ),
+          );
+
+          return FlanActiveResponse(
+            disabled: item.disabled,
+            builder: (BuildContext contenxt, bool isPressed, Widget? child) {
+              final Color bgColor =
+                  isPressed ? FlanThemeVars.activeColor : Colors.transparent;
+
+              final Color textColor = item.disabled
+                  ? themeData.itemDisabledColor
+                  : active
+                      ? themeData.itemActiveColor
+                      : FlanThemeVars.textColor;
+
+              return DefaultTextStyle(
+                style: TextStyle(
+                  color: textColor,
+                ),
+                child: Container(
+                  height: themeData.itemHeight,
+                  color: bgColor,
+                  child: child,
+                ),
+              );
+            },
+            onClick: _onClick,
+            child: Row(
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: <Widget>[
+                SizedBox(width: FlanThemeVars.paddingMd.rpx),
+                Expanded(
+                  child: Text(
+                    item.text,
+                    maxLines: 1,
+                    overflow: TextOverflow.ellipsis,
+                    style: const TextStyle(
+                      fontWeight: FlanThemeVars.fontWeightBold,
+                      // height: FlanThemeVars.itemHeight
+                    ),
+                  ),
+                ),
+                rightIcon,
+              ],
+            ),
+          );
+        }).toList(),
       );
     }
-    return const SizedBox.shrink();
   }
 
   bool _isActiveItem(String id) => activeId.contains(id);
@@ -255,94 +309,4 @@ class FlanTreeSelectItem {
   String badge;
   List<FlanTreeSelectChild> children;
   bool disabled;
-}
-
-class _FlanTreeSelectSubItem extends StatefulWidget {
-  const _FlanTreeSelectSubItem({
-    Key? key,
-    this.active = false,
-    required this.item,
-    this.onClick,
-    required this.activeIcon,
-  }) : super(key: key);
-
-  final bool active;
-  final FlanTreeSelectChild item;
-
-  final VoidCallback? onClick;
-
-  final Widget activeIcon;
-
-  @override
-  __FlanTreeSelectSubItemState createState() => __FlanTreeSelectSubItemState();
-}
-
-class __FlanTreeSelectSubItemState extends State<_FlanTreeSelectSubItem> {
-  bool isPressed = false;
-
-  void doActive() {
-    setState(() => isPressed = true);
-  }
-
-  void doDisActive() {
-    setState(() => isPressed = false);
-  }
-
-  Color get bgColor => isPressed ? ThemeVars.activeColor : Colors.transparent;
-
-  Color get textColor => widget.item.disabled
-      ? ThemeVars.treeSelectItemDisabledColor
-      : widget.active
-          ? ThemeVars.treeSelectItemActiveColor
-          : ThemeVars.textColor;
-
-  @override
-  Widget build(BuildContext context) {
-    return MouseRegion(
-      key: ValueKey<String>(widget.item.id),
-      cursor: widget.item.disabled
-          ? SystemMouseCursors.forbidden
-          : SystemMouseCursors.click,
-      child: IgnorePointer(
-        ignoring: widget.item.disabled,
-        child: GestureDetector(
-          onTap: widget.onClick,
-          onTapDown: (TapDownDetails e) => doActive(),
-          onTapCancel: () => doDisActive(),
-          onTapUp: (TapUpDetails e) => doDisActive(),
-          child: Container(
-            height: ThemeVars.treeSelectItemHeight,
-            decoration: BoxDecoration(color: bgColor),
-            child: Row(
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: <Widget>[
-                const SizedBox(width: ThemeVars.paddingMd),
-                Expanded(
-                  child: Text(
-                    widget.item.text,
-                    maxLines: 1,
-                    overflow: TextOverflow.ellipsis,
-                    style: TextStyle(
-                      color: textColor,
-                      fontWeight: ThemeVars.fontWeightBold,
-                      // height: ThemeVars.treeSelectItemHeight /
-                      //     ThemeVars.treeSelectFontSize,
-                    ),
-                  ),
-                ),
-                Visibility(
-                  visible: widget.active,
-                  child: Container(
-                    width: 32.0,
-                    padding: const EdgeInsets.only(right: ThemeVars.paddingMd),
-                    child: widget.activeIcon,
-                  ),
-                ),
-              ],
-            ),
-          ),
-        ),
-      ),
-    );
-  }
 }

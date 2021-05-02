@@ -82,7 +82,7 @@ class FlanCellThemeData with Diagnosticable {
     final double _labelFontSize = labelFontSize ?? FlanThemeVars.fontSizeSm.rpx;
     return FlanCellThemeData.raw(
       fontSize: _fontSize,
-      lineHeight: (lineHeight ?? 24.0.rpx) / _fontSize,
+      lineHeight: lineHeight ?? (24.0.rpx / _fontSize),
       verticalPadding: verticalPadding ?? 10.0.rpx,
       horizontalPadding: horizontalPadding ?? FlanThemeVars.paddingMd.rpx,
       textColor: textColor ?? FlanThemeVars.textColor,
@@ -93,7 +93,7 @@ class FlanCellThemeData with Diagnosticable {
       labelColor: labelColor ?? FlanThemeVars.gray6,
       labelFontSize: _labelFontSize,
       labelLineHeight:
-          (labelLineHeight ?? FlanThemeVars.lineHeightSm.rpx) / _labelFontSize,
+          labelLineHeight ?? (FlanThemeVars.lineHeightSm.rpx / _labelFontSize),
       labelMarginTop: labelMarginTop ?? FlanThemeVars.paddingBase.rpx,
       valueColor: valueColor ?? FlanThemeVars.gray6,
       iconSize: iconSize ?? 16.0.rpx,

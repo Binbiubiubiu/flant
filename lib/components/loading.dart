@@ -9,7 +9,7 @@ import 'package:flutter/material.dart';
 // 🌎 Project imports:
 import '../styles/components/loading_theme.dart';
 import '../styles/theme.dart';
-import '../styles/var.dart';
+// import '../styles/var.dart';
 import '../utils/widget.dart';
 
 /// ### FlanImage 加载
@@ -70,7 +70,7 @@ class FlanLoading extends StatelessWidget {
       return Wrap(
         direction: Axis.vertical,
         crossAxisAlignment: WrapCrossAlignment.center,
-        // runSpacing: FlanThemeVars.paddingXs,
+        // runSpacing: FlanThemeVars.paddingXs.rpx,
         children: <Widget?>[
           icon,
           buildText(themeData),
@@ -81,7 +81,7 @@ class FlanLoading extends StatelessWidget {
     return Wrap(
       direction: Axis.horizontal,
       crossAxisAlignment: WrapCrossAlignment.center,
-      // spacing: FlanThemeVars.paddingXs,
+      // spacing: FlanThemeVars.paddingXs.rpx,
       children: <Widget?>[
         icon,
         buildText(themeData),
@@ -93,8 +93,8 @@ class FlanLoading extends StatelessWidget {
     if (child != null) {
       return Padding(
         padding: EdgeInsets.only(
-          left: vertical ? 0.0 : 8.0,
-          top: vertical ? 8.0 : 0.0,
+          left: vertical ? 0.0 : 8.0.rpx,
+          top: vertical ? 8.0.rpx : 0.0,
         ),
         child: DefaultTextStyle(
           style: TextStyle(
@@ -112,10 +112,8 @@ class FlanLoading extends StatelessWidget {
     properties.add(DiagnosticsProperty<Color>('color', color));
     properties.add(DiagnosticsProperty<FlanLoadingType>('type', type,
         defaultValue: FlanLoadingType.circular));
-    properties
-        .add(DiagnosticsProperty<double>('size', size, defaultValue: 30.0));
-    properties.add(
-        DiagnosticsProperty<double>('textSize', textSize, defaultValue: 14.0));
+    properties.add(DiagnosticsProperty<double>('size', size));
+    properties.add(DiagnosticsProperty<double>('textSize', textSize));
     properties.add(DiagnosticsProperty<Color>('textColor', textColor));
     properties.add(
         DiagnosticsProperty<bool>('vertical', vertical, defaultValue: false));

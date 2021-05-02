@@ -83,7 +83,7 @@ class FlanTagThemeData with Diagnosticable {
       textColor: textColor ?? FlanThemeVars.white,
       fontSize: _fontSize,
       borderRadius: borderRadius ?? 2.0.rpx,
-      lineHeight: (lineHeight ?? 16.0.rpx) / _fontSize,
+      lineHeight: lineHeight ?? (16.0.rpx / _fontSize),
       mediumPadding: mediumPadding ??
           EdgeInsets.symmetric(vertical: 2.0, horizontal: 6.0.rpx),
       largePadding: largePadding ??

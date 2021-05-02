@@ -18,8 +18,10 @@ import 'components/loading_theme.dart';
 import 'components/nav_bar_theme.dart';
 import 'components/notice_bar_theme.dart';
 import 'components/progress_theme.dart';
+import 'components/sidebar_theme.dart';
 import 'components/tabbar_theme.dart';
 import 'components/tag_theme.dart';
+import 'components/tree_select_theme.dart';
 
 class FlanTheme extends StatelessWidget {
   const FlanTheme({
@@ -88,6 +90,8 @@ class FlanThemeData with Diagnosticable {
     FlanProgressThemeData? progressTheme,
     FlanTagThemeData? tagTheme,
     FlanTabbarThemeData? tabbarTheme,
+    FlanTreeSelectThemeData? treeSelectTheme,
+    FlanSidebarThemeData? sidebarTheme,
     FlanLoadingThemeData? loadingTheme,
     FlanNavBarThemeData? navBarTheme,
     FlanNoticeBarThemeData? noticeBarTheme,
@@ -107,6 +111,8 @@ class FlanThemeData with Diagnosticable {
       progressTheme: progressTheme ?? FlanProgressThemeData(),
       tagTheme: tagTheme ?? FlanTagThemeData(),
       tabbarTheme: tabbarTheme ?? FlanTabbarThemeData(),
+      treeSelectTheme: treeSelectTheme ?? FlanTreeSelectThemeData(),
+      sidebarTheme: sidebarTheme ?? FlanSidebarThemeData(),
       loadingTheme: loadingTheme ?? FlanLoadingThemeData(),
       navBarTheme: navBarTheme ?? FlanNavBarThemeData(),
       noticeBarTheme: noticeBarTheme ?? FlanNoticeBarThemeData(),
@@ -128,6 +134,8 @@ class FlanThemeData with Diagnosticable {
     required this.progressTheme,
     required this.tagTheme,
     required this.tabbarTheme,
+    required this.treeSelectTheme,
+    required this.sidebarTheme,
     required this.loadingTheme,
     required this.navBarTheme,
     required this.noticeBarTheme,
@@ -181,7 +189,13 @@ class FlanThemeData with Diagnosticable {
   final FlanProgressThemeData progressTheme;
 
   // Tabbar 标签栏
+  final FlanSidebarThemeData sidebarTheme;
+
+  // Tabbar 标签栏
   final FlanTabbarThemeData tabbarTheme;
+
+  // TreeSelect 分类选择
+  final FlanTreeSelectThemeData treeSelectTheme;
 
   // Tag 标签
   final FlanTagThemeData tagTheme;
@@ -208,6 +222,10 @@ class FlanThemeData with Diagnosticable {
           FlanProgressThemeData.lerp(a.progressTheme, b.progressTheme, t),
       tagTheme: FlanTagThemeData.lerp(a.tagTheme, b.tagTheme, t),
       tabbarTheme: FlanTabbarThemeData.lerp(a.tabbarTheme, b.tabbarTheme, t),
+      sidebarTheme:
+          FlanSidebarThemeData.lerp(a.sidebarTheme, b.sidebarTheme, t),
+      treeSelectTheme:
+          FlanTreeSelectThemeData.lerp(a.treeSelectTheme, b.treeSelectTheme, t),
       loadingTheme:
           FlanLoadingThemeData.lerp(a.loadingTheme, b.loadingTheme, t),
       navBarTheme: FlanNavBarThemeData.lerp(a.navBarTheme, b.navBarTheme, t),

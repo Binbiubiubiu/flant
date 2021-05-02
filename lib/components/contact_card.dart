@@ -8,6 +8,7 @@ import '../locale/l10n.dart';
 import '../styles/components/contact_card_theme.dart';
 import '../styles/theme.dart';
 import '../styles/var.dart';
+import '../utils/widget.dart';
 import 'cell.dart';
 import 'icon.dart';
 
@@ -103,7 +104,7 @@ class FlanContactCard extends StatelessWidget {
     }
 
     return Padding(
-      padding: const EdgeInsets.only(left: 5.0),
+      padding: EdgeInsets.only(left: 5.0.rpx),
       child: content,
     );
   }

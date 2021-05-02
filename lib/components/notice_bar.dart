@@ -188,11 +188,11 @@ class _FlanNoticeBarState extends State<FlanNoticeBar>
     final Widget noticeBar = DefaultTextStyle(
       style: TextStyle(
         color: widget.color ?? themeData.textColor,
-        // height: themeData.lineHeight / themeData.fontSize,
+        // height: themeData.lineHeight ,
       ),
       child: Container(
         color: widget.background ?? themeData.backgroundColor,
-        // height: this.widget.wrapable ? null : ThemeVars.noticeBarHeight,
+        // height: this.widget.wrapable ? null :FlanThemeVars.height,
         padding:
             widget.wrapable ? themeData.wrapablePadding : themeData.padding,
 

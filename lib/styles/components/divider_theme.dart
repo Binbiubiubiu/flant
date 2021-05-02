@@ -74,7 +74,7 @@ class FlanDividerThemeData with Diagnosticable {
               vertical: FlanThemeVars.paddingMd.rpx, horizontal: 0),
       textColor: textColor ?? FlanThemeVars.gray6,
       fontSize: _fontSize,
-      lineHeight: (lineHeight ?? 24.0.rpx) / _fontSize,
+      lineHeight: lineHeight ?? (24.0.rpx / _fontSize),
       borderColor: borderColor ?? FlanThemeVars.borderColor,
       contentPadding: contentPadding ?? FlanThemeVars.paddingMd.rpx,
       contentLeftWidthPercent: contentLeftWidthPercent ?? 0.1,

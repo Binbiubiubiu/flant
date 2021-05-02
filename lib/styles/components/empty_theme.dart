@@ -79,9 +79,8 @@ class FlanEmptyThemeData with Diagnosticable {
           const EdgeInsets.symmetric(vertical: 0, horizontal: 60.0),
       descriptionColor: descriptionColor ?? FlanThemeVars.gray6,
       descriptionFontSize: _descriptionFontSize,
-      descriptionLineHeight:
-          (descriptionLineHeight ?? FlanThemeVars.lineHeightMd.rpx) /
-              _descriptionFontSize,
+      descriptionLineHeight: descriptionLineHeight ??
+          (FlanThemeVars.lineHeightMd.rpx / _descriptionFontSize),
       bottomMarginTop: bottomMarginTop ?? 24.0.rpx,
     );
   }

@@ -191,7 +191,7 @@ class FlanCollapseItemState extends State<FlanCollapseItem>
       toggled: _expanded,
       child: FlanCell(
         rightIconSlot: Padding(
-          padding: const EdgeInsets.only(left: FlanThemeVars.paddingBase),
+          padding: EdgeInsets.only(left: FlanThemeVars.paddingBase.rpx),
           child: widget.rightIconSlot ??
               _CollapseRightIcon(
                 expanded: _expanded,
@@ -243,10 +243,10 @@ class FlanCollapseItemState extends State<FlanCollapseItem>
       children: <Widget>[
         Visibility(
           visible: _index > 0 && widget.border,
-          child: const Divider(
+          child: Divider(
             height: 0.5,
-            indent: FlanThemeVars.paddingMd,
-            endIndent: FlanThemeVars.paddingMd,
+            indent: FlanThemeVars.paddingMd.rpx,
+            endIndent: FlanThemeVars.paddingMd.rpx,
             color: FlanThemeVars.borderColor,
           ),
         ),

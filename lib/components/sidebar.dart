@@ -3,8 +3,8 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
 // 🌎 Project imports:
-import 'package:flant/flant.dart';
-import '../styles/var.dart';
+import '../styles/components/sidebar_theme.dart';
+import '../styles/theme.dart';
 
 /// ### Sidebar 侧边导航
 /// 垂直展示的导航栏，用于在不同的内容区域之间进行切换。
@@ -38,8 +38,9 @@ class FlanSidebar extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final FlanSidebarThemeData themeData = FlanTheme.of(context).sidebarTheme;
     return Container(
-      width: ThemeVars.sidebarWidth,
+      width: themeData.width,
       color: backgroundColor,
       child: ListView(
         shrinkWrap: true,

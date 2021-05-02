@@ -8,7 +8,7 @@ import '../styles/var.dart';
 /// 1px 边框
 class FlanHairLine extends BorderSide {
   const FlanHairLine({
-    Color color = ThemeVars.borderColor,
+    Color color = FlanThemeVars.borderColor,
   }) : super(color: color, width: 0.5);
 }
 
@@ -17,8 +17,8 @@ typedef FlanCurveBuilder = Curve Function(bool show);
 
 /// 默认动画曲线构造器
 Curve kFlanCurveBuilder(bool show) => show
-    ? ThemeVars.animationTimingFunctionEnter
-    : ThemeVars.animationTimingFunctionLeave;
+    ? FlanThemeVars.animationTimingFunctionEnter
+    : FlanThemeVars.animationTimingFunctionLeave;
 
 /// 过渡动画构造器
 typedef FlanTransitionBuilder = Widget Function(
@@ -184,7 +184,7 @@ class _FlanTransitionState extends State<FlanTransition>
   void initState() {
     animationController = AnimationController(
       vsync: this,
-      duration: widget.duration ?? ThemeVars.animationDurationBase,
+      duration: widget.duration ?? FlanThemeVars.animationDurationBase,
     )
       ..addStatusListener(_transitionStatusChange)
       ..addListener(_handleChange);

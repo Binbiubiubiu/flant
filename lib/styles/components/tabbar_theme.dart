@@ -73,7 +73,7 @@ class FlanTabbarThemeData with Diagnosticable {
       itemTextColor: itemTextColor ?? FlanThemeVars.gray7,
       itemActiveColor: itemActiveColor ?? FlanThemeVars.blue,
       itemActiveBackgroundColor: itemActiveBackgroundColor ?? bgColor,
-      itemLineHeight: itemLineHeight ?? 1.0.rpx,
+      itemLineHeight: itemLineHeight ?? 1.0,
       itemIconSize: itemIconSize ?? 22.0.rpx,
       itemMarginBottom: itemMarginBottom ?? 4.0.rpx,
     );

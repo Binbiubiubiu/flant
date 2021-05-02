@@ -29,7 +29,7 @@ class FlanCircle extends StatefulWidget {
     this.fill,
     this.speed = 0.0,
     this.text,
-    this.strokeWidth = 4.0,
+    this.strokeWidth,
     this.strokeLineCap = StrokeCap.round,
     this.clockwise = true,
     this.onChange,
@@ -37,7 +37,6 @@ class FlanCircle extends StatefulWidget {
   })  : assert(currentRate >= 0.0 && currentRate <= 100.0),
         assert(rate >= 0.0 && rate <= 100.0),
         assert(speed >= 0.0),
-        assert(strokeWidth > 0.0),
         super(key: key);
 
   // ****************** Props ******************
@@ -69,7 +68,7 @@ class FlanCircle extends StatefulWidget {
   final String? text;
 
   /// 进度条宽度
-  final double strokeWidth;
+  final double? strokeWidth;
 
   /// 进度条端点的形状，可选值为 `sqaure` `butt`
   final StrokeCap strokeLineCap;
@@ -155,6 +154,7 @@ class _FlanCircleState extends State<FlanCircle>
   @override
   Widget build(BuildContext context) {
     final FlanCircleThemeData themeData = FlanTheme.of(context).circleTheme;
+    final double _strokeWidth = widget.strokeWidth ?? 4.0.rpx;
     return Stack(
       children: <Widget>[
         Positioned.fill(
@@ -163,7 +163,7 @@ class _FlanCircleState extends State<FlanCircle>
             painter: _FlanDividerCirclePainter(
               rate: 100.0,
               color: widget.layerColor ?? themeData.layerColor,
-              strokeWidth: widget.strokeWidth,
+              strokeWidth: _strokeWidth,
               strokeLineCap: widget.strokeLineCap,
               fill: widget.fill,
             ),
@@ -175,7 +175,7 @@ class _FlanCircleState extends State<FlanCircle>
             rate: widget.currentRate,
             color: widget.color ?? themeData.color,
             gradient: widget.gradient,
-            strokeWidth: widget.strokeWidth,
+            strokeWidth: _strokeWidth,
             strokeLineCap: widget.strokeLineCap,
             clockwise: widget.clockwise,
           ),
@@ -183,9 +183,9 @@ class _FlanCircleState extends State<FlanCircle>
             width: widget.size ?? themeData.size,
             height: widget.size ?? themeData.size,
             alignment: Alignment.center,
-            padding: const EdgeInsets.symmetric(
+            padding: EdgeInsets.symmetric(
               vertical: 0.0,
-              horizontal: FlanThemeVars.paddingBase,
+              horizontal: FlanThemeVars.paddingBase.rpx,
             ),
             child: DefaultTextStyle(
               style: TextStyle(
@@ -228,9 +228,8 @@ class _FlanCircleState extends State<FlanCircle>
 
     properties.add(DiagnosticsProperty<Gradient>('gradient', widget.gradient));
 
-    properties.add(DiagnosticsProperty<double>(
-        'strokeWidth', widget.strokeWidth,
-        defaultValue: 4.0));
+    properties
+        .add(DiagnosticsProperty<double>('strokeWidth', widget.strokeWidth));
 
     properties.add(DiagnosticsProperty<bool>('clockwise', widget.clockwise,
         defaultValue: true));

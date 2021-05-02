@@ -76,8 +76,8 @@ class FlanCellGroupThemeData with Diagnosticable {
             right: FlanThemeVars.paddingMd,
             bottom: FlanThemeVars.paddingXs,
           ),
-      titleFontSize: titleFontSize ?? FlanThemeVars.fontSizeMd.rpx,
-      titleLineHeight: (titleLineHeight ?? 16.0.rpx) / _titleFontSize,
+      titleFontSize: _titleFontSize,
+      titleLineHeight: titleLineHeight ?? (16.0.rpx / _titleFontSize),
     );
   }
 

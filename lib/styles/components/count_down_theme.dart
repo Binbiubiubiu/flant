@@ -67,7 +67,7 @@ class FlanCountDownThemeData with Diagnosticable {
     return FlanCountDownThemeData.raw(
       textColor: textColor ?? FlanThemeVars.textColor,
       fontSize: _fontSize,
-      lineHeight: (lineHeight ?? FlanThemeVars.lineHeightMd.rpx) / _fontSize,
+      lineHeight: lineHeight ?? (FlanThemeVars.lineHeightMd.rpx / _fontSize),
     );
   }
 

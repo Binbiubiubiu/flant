@@ -75,7 +75,7 @@ class FlanCircleThemeData with Diagnosticable {
       textFontWeight: textFontWeight ?? FlanThemeVars.fontWeightBold,
       textFontSize: _textFontSize,
       textLineHeight:
-          (textLineHeight ?? FlanThemeVars.lineHeightMd.rpx) / _textFontSize,
+          textLineHeight ?? (FlanThemeVars.lineHeightMd.rpx / _textFontSize),
     );
   }
 
