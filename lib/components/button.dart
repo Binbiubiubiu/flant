@@ -154,50 +154,46 @@ class FlanButton extends RouteStatelessWidget {
 
     final Widget _btn = DefaultTextStyle(
       style: textStyle,
-      child: FlanActiveResponse(
-        disabled: disabled || loading,
-        cursorBuilder: (SystemMouseCursor cursor) =>
-            loading ? SystemMouseCursors.basic : cursor,
-        onClick: () {
-          if (onClick != null) {
-            onClick!();
-          }
-          route(context);
-        },
-        builder: (BuildContext contenxt, bool active) {
-          return Container(
-            decoration: BoxDecoration(
-              border: _themeType.border,
-              borderRadius: radius,
-              gradient: color != null ? null : gradient,
-              color: bgColor,
+      child: Container(
+        decoration: BoxDecoration(
+          border: _themeType.border,
+          borderRadius: radius,
+          gradient: color != null ? null : gradient,
+          color: bgColor,
+        ),
+        height: _btnSize.height,
+        child: Stack(
+          alignment: Alignment.center,
+          children: <Widget>[
+            Padding(
+              padding: _btnSize.padding,
+              child: _buildContent(sideIcon),
             ),
-            height: _btnSize.height,
-            child: Stack(
-              alignment: Alignment.center,
-              children: <Widget>[
-                Padding(
-                  padding: _btnSize.padding,
-                  child: _buildContent(sideIcon),
-                ),
-                Positioned.fill(
-                  child: RepaintBoundary(
-                    child: IgnorePointer(
-                      ignoring: true,
-                      child: Container(
-                        decoration: BoxDecoration(
-                          borderRadius: radius,
-                          color:
-                              ThemeVars.black.withOpacity(active ? 0.1 : 0.0),
-                        ),
+            Positioned.fill(
+              child: RepaintBoundary(
+                child: FlanActiveResponse(
+                  disabled: disabled || loading,
+                  cursorBuilder: (SystemMouseCursor cursor) =>
+                      loading ? SystemMouseCursors.basic : cursor,
+                  onClick: () {
+                    if (onClick != null) {
+                      onClick!();
+                    }
+                    route(context);
+                  },
+                  builder: (BuildContext contenxt, bool active, Widget? child) {
+                    return Container(
+                      decoration: BoxDecoration(
+                        borderRadius: radius,
+                        color: ThemeVars.black.withOpacity(active ? 0.1 : 0.0),
                       ),
-                    ),
-                  ),
+                    );
+                  },
                 ),
-              ],
+              ),
             ),
-          );
-        },
+          ],
+        ),
       ),
     );
 

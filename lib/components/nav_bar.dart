@@ -1,13 +1,17 @@
 // 🐦 Flutter imports:
+
+import 'package:flant/components/common/active_response.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
 // 🌎 Project imports:
+import '../styles/components/nav_bar_theme.dart';
+import '../styles/theme.dart';
 import '../styles/var.dart';
-import './icon.dart';
-import './style.dart';
+import 'icon.dart';
+import 'style.dart';
 
-class FlanNavBar extends StatelessWidget implements PreferredSizeWidget {
+class FlanNavBar extends StatelessWidget {
   const FlanNavBar({
     Key? key,
     this.title = '',
@@ -64,6 +68,8 @@ class FlanNavBar extends StatelessWidget implements PreferredSizeWidget {
 
   @override
   Widget build(BuildContext context) {
+    final FlanNavBarThemeData themeData = FlanTheme.of(context).navBarTheme;
+
     final List<Widget> content = <Widget>[];
     final bool hasLeft = leftArrow || leftText.isNotEmpty || leftSlot != null;
     final bool hasRight = rightText.isNotEmpty || rightSlot != null;
@@ -72,19 +78,24 @@ class FlanNavBar extends StatelessWidget implements PreferredSizeWidget {
       content.add(
         Positioned(
           left: 0.0,
-          child: _OpacityResponse(
-            opacity: ThemeVars.activeOpacity,
-            onPressed: () {
+          child: FlanActiveResponse(
+            builder: (BuildContext contenxt, bool active, Widget? child) {
+              return Opacity(
+                opacity: active ? FlanThemeVars.activeOpacity : 1.0,
+                child: child,
+              );
+            },
+            child: Padding(
+              padding: const EdgeInsets.symmetric(
+                horizontal: FlanThemeVars.paddingMd,
+              ),
+              child: _buildLeft(themeData),
+            ),
+            onClick: () {
               if (onClickLeft != null) {
                 onClickLeft!();
               }
             },
-            child: Padding(
-              padding: const EdgeInsets.symmetric(
-                horizontal: ThemeVars.paddingMd,
-              ),
-              child: _buildLeft(context),
-            ),
           ),
         ),
       );
@@ -97,10 +108,10 @@ class FlanNavBar extends StatelessWidget implements PreferredSizeWidget {
           child: titleSlot ??
               Text(
                 title,
-                style: const TextStyle(
-                  color: ThemeVars.navBarTitleTextColor,
-                  fontSize: ThemeVars.navBarTitleFontSize,
-                  fontWeight: ThemeVars.fontWeightBold,
+                style: TextStyle(
+                  color: themeData.titleTextColor,
+                  fontSize: themeData.titleFontSize,
+                  fontWeight: FlanThemeVars.fontWeightBold,
                 ),
                 textAlign: TextAlign.center,
                 overflow: TextOverflow.ellipsis,
@@ -113,35 +124,42 @@ class FlanNavBar extends StatelessWidget implements PreferredSizeWidget {
       content.add(
         Positioned(
           right: 0.0,
-          child: _OpacityResponse(
-            opacity: ThemeVars.activeOpacity,
-            onPressed: () {
+          child: FlanActiveResponse(
+            builder: (BuildContext contenxt, bool active, Widget? child) {
+              return Opacity(
+                opacity: active ? FlanThemeVars.activeOpacity : 1.0,
+                child: child,
+              );
+            },
+            child: Padding(
+              padding: const EdgeInsets.symmetric(
+                horizontal: FlanThemeVars.paddingMd,
+              ),
+              child: _buildRight(themeData),
+            ),
+            onClick: () {
               if (onClickRight != null) {
                 onClickRight!();
               }
             },
-            child: Padding(
-              padding:
-                  const EdgeInsets.symmetric(horizontal: ThemeVars.paddingMd),
-              child: _buildRight(context),
-            ),
           ),
         ),
       );
     }
 
-    return Material(
-      color: ThemeVars.navBarBackgroundColor,
+    return DecoratedBox(
+      decoration: BoxDecoration(
+        color: themeData.backgroundColor,
+      ),
       child: SafeArea(
         top: safeAreaInsetTop,
         child: Container(
-          height: ThemeVars.navBarHeight,
+          height: themeData.height,
           decoration: const BoxDecoration(
             border: Border(bottom: FlanHairLine()),
           ),
           child: Stack(
             alignment: Alignment.center,
-            // crossAxisAlignment: CrossAxisAlignment.center,
             children: content,
           ),
         ),
@@ -149,110 +167,70 @@ class FlanNavBar extends StatelessWidget implements PreferredSizeWidget {
     );
   }
 
-  TextStyle get _textStyle {
-    return const TextStyle(color: ThemeVars.navBarTextColor);
-  }
-
-  Widget _buildLeft(BuildContext context) {
+  Widget _buildLeft(FlanNavBarThemeData themeData) {
     if (leftSlot != null) {
-      return IconTheme(
-        data: const IconThemeData(
-          color: ThemeVars.navBarIconColor,
-        ),
-        child: DefaultTextStyle(
-          style: _textStyle,
-          child: leftSlot!,
-        ),
-      );
+      return _NavBarSlot(child: leftSlot!);
     }
     final List<Widget> left = <Widget>[];
     if (leftArrow) {
-      left.add(const Padding(
-        padding: EdgeInsets.only(right: ThemeVars.paddingBase),
-        child: FlanIcon(
+      left.addAll(<Widget>[
+        FlanIcon(
           iconName: FlanIcons.arrow_left,
-          size: ThemeVars.navBarArrowSize,
-          color: ThemeVars.navBarIconColor,
+          size: themeData.arrowSize,
+          color: themeData.iconColor,
         ),
-      ));
+        const SizedBox(width: FlanThemeVars.paddingBase)
+      ]);
     }
 
     if (leftText.isNotEmpty) {
-      left.add(Text(
-        leftText,
-        style: _textStyle,
-      ));
+      left.add(
+        Text(
+          leftText,
+          style: TextStyle(
+            color: themeData.textColor,
+          ),
+        ),
+      );
     }
 
     return Row(children: left);
   }
 
-  Widget _buildRight(BuildContext context) {
+  Widget _buildRight(FlanNavBarThemeData themeData) {
     if (rightSlot != null) {
-      return IconTheme(
-        data: const IconThemeData(
-          color: ThemeVars.navBarIconColor,
-        ),
-        child: DefaultTextStyle(
-          style: _textStyle,
-          child: rightSlot!,
-        ),
-      );
+      return _NavBarSlot(child: rightSlot!);
     }
 
     return Text(
       rightText,
-      style: _textStyle,
+      style: TextStyle(
+        color: themeData.textColor,
+      ),
     );
   }
-
-  @override
-  Size get preferredSize => const Size.fromHeight(ThemeVars.navBarHeight);
 }
 
-class _OpacityResponse extends StatefulWidget {
-  const _OpacityResponse({
+class _NavBarSlot extends StatelessWidget {
+  const _NavBarSlot({
     Key? key,
-    required this.onPressed,
     required this.child,
-    this.opacity = 0.4,
   }) : super(key: key);
-
-  final double opacity;
-
-  final VoidCallback onPressed;
 
   final Widget child;
 
   @override
-  __OpacityResponseState createState() => __OpacityResponseState();
-}
-
-class __OpacityResponseState extends State<_OpacityResponse> {
-  bool isPressed = false;
-
-  @override
   Widget build(BuildContext context) {
-    return GestureDetector(
-      onTap: widget.onPressed,
-      onTapDown: (TapDownDetails details) {
-        setState(() {
-          isPressed = true;
-        });
-      },
-      onTapUp: (TapUpDetails details) {
-        setState(() {
-          isPressed = false;
-        });
-      },
-      onTapCancel: () {
-        setState(() {
-          isPressed = false;
-        });
-      },
-      child: Opacity(
-        opacity: isPressed ? widget.opacity : 1.0,
-        child: widget.child,
+    final FlanNavBarThemeData themeData = FlanTheme.of(context).navBarTheme;
+    return IconTheme(
+      data: IconThemeData(
+        color: themeData.iconColor,
+      ),
+      child: DefaultTextStyle(
+        style: TextStyle(
+          color: themeData.textColor,
+        ),
+        child: child,
       ),
     );
   }

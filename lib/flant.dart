@@ -32,7 +32,7 @@ export './components/image.dart';
 export './components/index_bar.dart';
 export './components/list.dart';
 export './components/loading.dart';
-export './components/navbar.dart';
+export 'components/nav_bar.dart';
 export './components/notice_bar.dart';
 export './components/number_keyboard.dart';
 export './components/overlay.dart';

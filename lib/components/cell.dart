@@ -1,6 +1,7 @@
 // 🐦 Flutter imports:
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/src/rendering/mouse_cursor.dart';
 
 // 🌎 Project imports:
 import '../mixins/route_mixins.dart';
@@ -179,37 +180,32 @@ class FlanCell extends RouteStatelessWidget {
       ].noNull,
     );
 
-    Widget buildCell(Color bgColor) {
-      return Stack(
-        children: <Widget>[
-          Container(
-            color: bgColor,
-            padding: cellPadding,
-            child: content,
-          ),
-          bottomBorder,
-          requiredIcon,
-        ],
-      );
-    }
-
-    Widget cell;
-    if (_isClickable) {
-      cell = FlanActiveResponse(
-        disabled: disabled,
-        builder: (BuildContext contenxt, bool active) {
-          return buildCell(active ? themeData.activeColor : bgColor);
-        },
-        onClick: () {
-          if (onClick != null) {
-            onClick!();
-          }
-          route(context);
-        },
-      );
-    } else {
-      cell = buildCell(bgColor);
-    }
+    final Widget cell = Stack(
+      children: <Widget>[
+        FlanActiveResponse(
+          disabled: !_isClickable || disabled,
+          cursorBuilder: (SystemMouseCursor cursor) {
+            return _isClickable ? cursor : SystemMouseCursors.basic;
+          },
+          builder: (BuildContext contenxt, bool active, Widget? child) {
+            return Container(
+              color: active ? themeData.activeColor : bgColor,
+              padding: cellPadding,
+              child: child,
+            );
+          },
+          child: content,
+          onClick: () {
+            if (onClick != null) {
+              onClick!();
+            }
+            route(context);
+          },
+        ),
+        bottomBorder,
+        requiredIcon,
+      ],
+    );
 
     return Semantics(
       container: true,

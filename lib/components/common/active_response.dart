@@ -10,12 +10,15 @@ class FlanActiveResponse extends StatefulWidget {
     this.onClick,
     this.cursorBuilder,
     required this.builder,
+    this.child,
   }) : super(key: key);
 
   final bool disabled;
   final VoidCallback? onClick;
   final SystemMouseCursor Function(SystemMouseCursor cursor)? cursorBuilder;
-  final Widget Function(BuildContext contenxt, bool active) builder;
+  final Widget Function(BuildContext contenxt, bool active, Widget? child)
+      builder;
+  final Widget? child;
 
   @override
   _FlanActiveResponseState createState() => _FlanActiveResponseState();
@@ -41,7 +44,7 @@ class _FlanActiveResponseState extends State<FlanActiveResponse> {
           onTapDown: (TapDownDetails e) => setActive(true),
           onTapCancel: () => setActive(false),
           onTapUp: (TapUpDetails e) => setActive(false),
-          child: widget.builder(context, _active),
+          child: widget.builder(context, _active, widget.child),
         ),
       ),
     );

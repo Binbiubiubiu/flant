@@ -4,12 +4,12 @@ import 'dart:math' as math;
 // 🐦 Flutter imports:
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-
-// 🌎 Project imports:
-import 'package:flant/components/cell.dart';
-import 'package:flant/flant.dart';
-import 'package:flant/styles/icons.dart';
+import '../locale/l10n.dart';
+import '../styles/components/contact_card_theme.dart';
+import '../styles/theme.dart';
 import '../styles/var.dart';
+import 'cell.dart';
+import 'icon.dart';
 
 /// ### ContactCard 联系人卡片
 /// 以卡片的形式展示联系人信息。
@@ -17,9 +17,9 @@ class FlanContactCard extends StatelessWidget {
   const FlanContactCard({
     Key? key,
     this.type = FlanContactCardType.add,
-    this.name,
-    this.tel,
-    this.addText,
+    this.name = '',
+    this.tel = '',
+    this.addText = '',
     this.editable = true,
     this.onClick,
   }) : super(key: key);
@@ -29,13 +29,13 @@ class FlanContactCard extends StatelessWidget {
   final FlanContactCardType type;
 
   /// 联系人姓名
-  final String? name;
+  final String name;
 
   /// 联系人手机号
-  final String? tel;
+  final String tel;
 
   /// 添加时的文案提示
-  final String? addText;
+  final String addText;
 
   /// 是否可编辑
   final bool editable;
@@ -48,22 +48,24 @@ class FlanContactCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final FlanContactCardThemeData themeData =
+        FlanTheme.of(context).contactCardTheme;
     return Stack(
       children: <Widget>[
         FlanCell(
           center: true,
           iconSlot: type == FlanContactCardType.edit
               ? const FlanIcon(iconName: FlanIcons.contact)
-              : const FlanIcon(
+              : FlanIcon(
                   iconName: FlanIcons.add_square,
-                  size: ThemeVars.contactCardAddIconSize,
-                  color: ThemeVars.contactCardAddIconColor,
+                  size: themeData.addIconSize,
+                  color: themeData.addIconColor,
                 ),
           border: false,
           isLink: editable,
-          padding: const EdgeInsets.all(ThemeVars.contactCardPadding),
+          padding: EdgeInsets.all(themeData.padding),
           onClick: onClick,
-          child: _buildContent(context),
+          child: _buildContent(context, themeData),
         ),
         const Positioned(
           bottom: 0,
@@ -75,18 +77,19 @@ class FlanContactCard extends StatelessWidget {
     );
   }
 
-  Widget _buildContent(BuildContext context) {
+  Widget _buildContent(
+    BuildContext context,
+    FlanContactCardThemeData themeData,
+  ) {
     final FlanS S = FlanS.of(context);
 
     Widget content;
     if (type == FlanContactCardType.add) {
       content = Container(
-        height: ThemeVars.contactCardAddIconSize,
+        height: themeData.addIconSize,
         alignment: Alignment.centerLeft,
         child: Text(
-          addText != null && addText!.isNotEmpty
-              ? addText!
-              : S.ContactCard_addText,
+          addText.isNotEmpty ? addText : S.ContactCard_addText,
         ),
       );
     } else {
@@ -103,6 +106,20 @@ class FlanContactCard extends StatelessWidget {
       padding: const EdgeInsets.only(left: 5.0),
       child: content,
     );
+  }
+
+  @override
+  void debugFillProperties(DiagnosticPropertiesBuilder properties) {
+    properties.add(DiagnosticsProperty<FlanContactCardType>('type', type,
+        defaultValue: FlanContactCardType.add));
+    properties.add(DiagnosticsProperty<String>('name', name, defaultValue: ''));
+    properties.add(DiagnosticsProperty<String>('tel', tel, defaultValue: ''));
+    properties
+        .add(DiagnosticsProperty<String>('addText', addText, defaultValue: ''));
+    properties.add(
+        DiagnosticsProperty<bool>('editable', editable, defaultValue: true));
+
+    super.debugFillProperties(properties);
   }
 }
 
@@ -143,8 +160,8 @@ class _ColorsDashLine extends StatelessWidget {
                 Color(0xffff6c6c),
                 Colors.transparent,
                 Colors.transparent,
-                ThemeVars.blue,
-                ThemeVars.blue,
+                FlanThemeVars.blue,
+                FlanThemeVars.blue,
                 Colors.transparent,
                 Colors.transparent,
               ],

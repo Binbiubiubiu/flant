@@ -3,6 +3,8 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
 // 🌎 Project imports:
+import '../styles/components/tabbar_theme.dart';
+import '../styles/theme.dart';
 import '../styles/var.dart';
 import 'badge.dart';
 import 'icon.dart';
@@ -12,7 +14,7 @@ import 'tabbar.dart';
 typedef FlanTabbarItemSlotBuilder = Widget Function(
     BuildContext context, bool active);
 
-class FlanTabbarItem<T> extends StatelessWidget {
+class FlanTabbarItem extends StatelessWidget {
   const FlanTabbarItem({
     Key? key,
     this.name,
@@ -27,7 +29,7 @@ class FlanTabbarItem<T> extends StatelessWidget {
 
   // ****************** Props ******************
   /// 标签名称，作为匹配的标识符
-  final T? name;
+  final String? name;
 
   /// 图标名称
   final IconData? iconName;
@@ -55,8 +57,9 @@ class FlanTabbarItem<T> extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final FlanTabbar<T>? parent =
-        context.findAncestorWidgetOfExactType<FlanTabbar<T>>();
+    final FlanTabbarThemeData themeData = FlanTheme.of(context).tabbarTheme;
+    final FlanTabbar? parent =
+        context.findAncestorWidgetOfExactType<FlanTabbar>();
 
     if (parent == null) {
       throw 'TabbarItem must be a child component of Tabbar.';
@@ -64,64 +67,68 @@ class FlanTabbarItem<T> extends StatelessWidget {
     final int index =
         parent.children.indexWhere((Widget element) => element == this);
 
-    final bool active = (name ?? index) == parent.value;
+    final bool active = (name ?? index.toString()) == parent.value;
 
     final Color color = active
-        ? (parent.activeColor ?? ThemeVars.tabbarItemActiveColor)
-        : (parent.inactiveColor ?? ThemeVars.tabbarItemTextColor);
+        ? (parent.activeColor ?? themeData.itemActiveColor)
+        : (parent.inactiveColor ?? themeData.itemTextColor);
 
-    Widget? customIcon =
-        iconBuilder != null ? iconBuilder!(context, active) : null;
-    if (customIcon != null && customIcon is! FlanIcons) {
-      customIcon = SizedBox(height: 20.0, child: customIcon);
+    Widget? customIcon;
+    if (iconBuilder != null) {
+      customIcon = iconBuilder!(context, active);
+    }
+
+    if (iconName != null || iconUrl != null) {
+      customIcon = FlanIcon(
+        iconName: iconName,
+        iconUrl: iconUrl,
+      );
     }
 
     final IconTheme iconWidget = IconTheme(
       data: IconThemeData(
         color: color,
-        size: ThemeVars.tabbarItemIconSize,
+        size: themeData.itemIconSize,
       ),
-      child: customIcon ??
-          FlanIcon(
-            iconName: iconName,
-            iconUrl: iconUrl,
-          ),
+      child: Container(
+        height: 20.0,
+        constraints: const BoxConstraints.tightFor(width: 20.0),
+        child: customIcon,
+      ),
     );
 
     return Expanded(
       child: GestureDetector(
         onTap: () {
-          parent.setActive(name ?? index as T);
+          parent.setActive(name ?? index.toString());
           if (onClick != null) {
             onClick!();
           }
         },
-        child: Material(
-          textStyle: TextStyle(
+        child: DefaultTextStyle(
+          style: TextStyle(
             color: color,
-            fontSize: ThemeVars.tabbarItemFontSize,
-            height: ThemeVars.tabbarItemLineHeight,
+            fontSize: themeData.itemFontSize,
+            height: themeData.itemLineHeight,
           ),
-          color: Colors.transparent,
-          child: Ink(
-            height: ThemeVars.tabbarHeight,
-            decoration:
-                const BoxDecoration(border: Border(top: FlanHairLine())),
+          child: Container(
+            height: themeData.height,
+            decoration: const BoxDecoration(
+              border: Border(top: FlanHairLine()),
+              color: Colors.transparent,
+            ),
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               crossAxisAlignment: CrossAxisAlignment.center,
               children: <Widget>[
-                const SizedBox(height: ThemeVars.paddingBase),
+                const SizedBox(height: FlanThemeVars.paddingBase),
                 FlanBadge(
                   dot: dot,
                   content: badge,
                   child: iconWidget,
                 ),
-                const SizedBox(height: ThemeVars.tabbarItemMarginBottom),
-                if (textBuilder != null)
-                  textBuilder!(context, active)
-                else
-                  const SizedBox.shrink(),
+                SizedBox(height: themeData.itemMarginBottom),
+                if (textBuilder != null) textBuilder!(context, active),
               ],
             ),
           ),
@@ -132,7 +139,7 @@ class FlanTabbarItem<T> extends StatelessWidget {
 
   @override
   void debugFillProperties(DiagnosticPropertiesBuilder properties) {
-    properties.add(DiagnosticsProperty<T>('name', name));
+    properties.add(DiagnosticsProperty<String>('name', name));
     properties.add(DiagnosticsProperty<IconData>('iconName', iconName));
     properties.add(DiagnosticsProperty<String>('iconUrl', iconUrl));
     properties.add(DiagnosticsProperty<bool>('dot', dot, defaultValue: false));

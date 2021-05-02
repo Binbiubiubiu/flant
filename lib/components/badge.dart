@@ -74,7 +74,7 @@ class FlanBadge extends StatelessWidget {
 
     return Transform.translate(
       offset: Offset(offset[0], offset[1]),
-      child: _buildBadge(themeData) ?? const SizedBox.shrink(),
+      child: _buildBadge(themeData),
     );
   }
 
