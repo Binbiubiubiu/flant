@@ -74,7 +74,6 @@ class FlanActionBarButton extends RouteStatelessWidget {
   Widget build(BuildContext context) {
     final FlanActionBar? parent =
         context.findAncestorWidgetOfExactType<FlanActionBar>();
-
     if (parent == null) {
       throw 'ActionButton must be a child component of FlanActionBar';
     }

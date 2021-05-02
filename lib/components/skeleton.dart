@@ -3,10 +3,13 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
 // 🌎 Project imports:
+import '../styles/components/skeleton_theme.dart';
+import '../styles/theme.dart';
 import '../styles/var.dart';
+import '../utils/widget.dart';
 
-const double DEFAULT_ROW_WIDTH = 1.0;
-const double DEFAULT_LAST_ROW_WIDTH = 0.6;
+const double DEFAULT_ROW_WIDTH = 1.0; // percent
+const double DEFAULT_LAST_ROW_WIDTH = 0.6; // percent
 
 /// ### Skeleton 骨架屏
 class FlanSkeleton extends StatelessWidget {
@@ -82,29 +85,30 @@ class FlanSkeleton extends StatelessWidget {
     if (!loading) {
       return child ?? const SizedBox.shrink();
     }
-
+    final FlanSkeletonThemeData themeData = FlanTheme.of(context).skeletonTheme;
     final Padding skeleton = Padding(
-      padding: const EdgeInsets.symmetric(horizontal: ThemeVars.paddingMd),
+      padding: EdgeInsets.symmetric(horizontal: FlanThemeVars.paddingMd.rpx),
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.start,
-        children: <Widget>[
-          _buildAvatar(context),
+        children: <Widget?>[
+          _buildAvatar(themeData),
           Expanded(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
-              children: <Widget>[
-                const SizedBox(height: ThemeVars.paddingXs),
-                _buildTitle(context),
-                ..._buildRows(context),
-              ],
+              children: <Widget?>[
+                SizedBox(height: ThemeVars.paddingXs.rpx),
+                _buildTitle(themeData),
+                ..._buildRows(themeData),
+              ].noNull,
             ),
           ),
-        ],
+        ].noNull,
       ),
     );
 
     if (animate) {
       return _AnimatedOpacityBlock(
+        duration: themeData.animationDuration,
         child: skeleton,
       );
     }
@@ -112,29 +116,40 @@ class FlanSkeleton extends StatelessWidget {
     return skeleton;
   }
 
-  Widget _buildAvatar(BuildContext context) {
+  Widget? _buildAvatar(FlanSkeletonThemeData themeData) {
     if (avatar) {
+      final double size = avatarSize ?? themeData.avatarSize;
       return Padding(
-        padding: const EdgeInsets.only(right: ThemeVars.paddingMd),
-        child: CircleAvatar(
-          backgroundColor: ThemeVars.skeletonAvatarBackgroundColor,
-          radius: (avatarSize ?? ThemeVars.skeletonAvatarSize) / 2,
+        padding: EdgeInsets.only(right: ThemeVars.paddingMd.rpx),
+        child: Container(
+          width: size,
+          height: size,
+          decoration: BoxDecoration(
+            color: themeData.avatarBackgroundColor,
+            shape: _avatarShape,
+          ),
         ),
       );
     }
-
-    return const SizedBox.shrink();
   }
 
-  Widget _buildTitle(BuildContext context) {
+  BoxShape get _avatarShape {
+    switch (avatarShape) {
+      case FlanSkeletonAvatarShape.square:
+        return BoxShape.rectangle;
+      case FlanSkeletonAvatarShape.round:
+        return BoxShape.circle;
+    }
+  }
+
+  Widget? _buildTitle(FlanSkeletonThemeData themeData) {
     if (title) {
-      final double tWidth =
-          titleWidth > 1 ? titleWidth : ThemeVars.skeletonTitleWidth;
+      final double tWidth = titleWidth > 1 ? titleWidth : themeData.titleWidth;
       Widget title = Container(
         width: tWidth,
-        height: ThemeVars.skeletonRowHeight,
+        height: themeData.rowHeight,
         decoration: BoxDecoration(
-          color: ThemeVars.skeletonRowBackgroundColor,
+          color: themeData.rowBackgroundColor,
           borderRadius: borderRadius,
         ),
       );
@@ -147,7 +162,6 @@ class FlanSkeleton extends StatelessWidget {
       }
       return title;
     }
-    return const SizedBox.shrink();
   }
 
   double getRowWidth(int index) {
@@ -156,21 +170,21 @@ class FlanSkeleton extends StatelessWidget {
     }
 
     if (rowWidths != null) {
-      return rowWidths![index];
+      return index < rowWidths!.length ? rowWidths![index] : rowWidth;
     }
 
     return rowWidth;
   }
 
-  List<Widget> _buildRows(BuildContext context) {
+  List<Widget> _buildRows(FlanSkeletonThemeData themeData) {
     final List<Widget> rows = <Widget>[];
     for (int i = 0; i < row; i++) {
       final double rWidth = getRowWidth(i);
       Widget row = Container(
         width: rWidth,
-        height: ThemeVars.skeletonRowHeight,
+        height: themeData.rowHeight,
         decoration: BoxDecoration(
-          color: ThemeVars.skeletonRowBackgroundColor,
+          color: themeData.rowBackgroundColor,
           borderRadius: borderRadius,
         ),
       );
@@ -180,9 +194,7 @@ class FlanSkeleton extends StatelessWidget {
           child: row,
         );
       }
-      rows
-        ..add(const SizedBox(height: ThemeVars.skeletonRowMarginTop))
-        ..add(row);
+      rows..add(SizedBox(height: themeData.rowMarginTop))..add(row);
     }
 
     return rows;
@@ -217,8 +229,11 @@ class FlanSkeleton extends StatelessWidget {
 class _AnimatedOpacityBlock extends StatefulWidget {
   const _AnimatedOpacityBlock({
     Key? key,
+    required this.duration,
     required this.child,
   }) : super(key: key);
+
+  final Duration duration;
 
   final Widget child;
 
@@ -233,10 +248,7 @@ class __AnimatedOpacityBlockState extends State<_AnimatedOpacityBlock>
 
   @override
   void initState() {
-    controller = AnimationController(
-      duration: ThemeVars.skeletonAnimationDuration,
-      vsync: this,
-    );
+    controller = AnimationController(duration: widget.duration, vsync: this);
     animation = TweenSequence<double>(<TweenSequenceItem<double>>[
       TweenSequenceItem<double>(
         tween: Tween<double>(begin: 1.0, end: 0.6),
@@ -249,25 +261,27 @@ class __AnimatedOpacityBlockState extends State<_AnimatedOpacityBlock>
     ]).animate(CurvedAnimation(
       parent: controller,
       curve: Curves.easeInOut,
-    ))
-      ..addListener(_handleChange);
+    ));
     controller.repeat(reverse: true);
     super.initState();
   }
 
   @override
   void dispose() {
-    animation.removeListener(_handleChange);
     controller.dispose();
     super.dispose();
   }
 
-  void _handleChange() => setState(() {});
-
   @override
   Widget build(BuildContext context) {
-    return Opacity(
-      opacity: animation.value,
+    return AnimatedBuilder(
+      animation: animation,
+      builder: (BuildContext context, Widget? child) {
+        return Opacity(
+          opacity: animation.value,
+          child: child,
+        );
+      },
       child: widget.child,
     );
   }
