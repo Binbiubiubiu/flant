@@ -87,7 +87,7 @@ class FlanIcon extends StatelessWidget {
   }
 
   // 构建图片图标
-  Widget _buildIcon(BuildContext context) {
+  Widget? _buildIcon(BuildContext context) {
     final IconThemeData iconTheme = IconTheme.of(context);
     final double? iconSize = size ?? iconTheme.size;
 
@@ -99,21 +99,23 @@ class FlanIcon extends StatelessWidget {
       );
     }
 
-    final bool isNetWork = RegExp('^https?:\/\/').hasMatch(iconUrl!);
+    if (iconUrl != null) {
+      final bool isNetWork = RegExp('^https?:\/\/').hasMatch(iconUrl!);
 
-    if (isNetWork) {
+      if (isNetWork) {
+        return ImageIcon(
+          NetworkImage(iconUrl!),
+          size: iconSize,
+          color: color,
+        );
+      }
+
       return ImageIcon(
-        NetworkImage(iconUrl!),
+        AssetImage(iconUrl!),
         size: iconSize,
         color: color,
       );
     }
-
-    return ImageIcon(
-      AssetImage(iconUrl!),
-      size: iconSize,
-      color: color,
-    );
   }
 
   @override
