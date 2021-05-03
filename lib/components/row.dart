@@ -57,8 +57,9 @@ class FlanRow extends StatelessWidget {
 
     return LayoutBuilder(
       builder: (BuildContext context, BoxConstraints constraints) {
-        return FlanRowProvider(
+        return FlanRowScope(
           maxWidth: constraints.maxWidth,
+          parent: this,
           child: content,
         );
       },
@@ -200,21 +201,23 @@ enum FlanRowAlign {
   bottom,
 }
 
-class FlanRowProvider extends InheritedWidget {
-  const FlanRowProvider({
+class FlanRowScope extends InheritedWidget {
+  const FlanRowScope({
     Key? key,
     required this.maxWidth,
+    required this.parent,
     required Widget child,
   }) : super(key: key, child: child);
 
   final double maxWidth;
+  final FlanRow parent;
 
-  static FlanRowProvider? of(BuildContext context) {
-    return context.dependOnInheritedWidgetOfExactType<FlanRowProvider>();
+  static FlanRowScope? of(BuildContext context) {
+    return context.dependOnInheritedWidgetOfExactType<FlanRowScope>();
   }
 
   @override
-  bool updateShouldNotify(FlanRowProvider oldWidget) {
-    return maxWidth != oldWidget.maxWidth;
+  bool updateShouldNotify(FlanRowScope oldWidget) {
+    return maxWidth != oldWidget.maxWidth || parent != oldWidget.parent;
   }
 }

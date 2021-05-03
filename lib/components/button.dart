@@ -15,7 +15,7 @@ import 'loading.dart';
 
 /// ### FlanButton 按钮
 /// 用于触发一个操作，如提交表单
-class FlanButton extends RouteStatelessWidget {
+class FlanButton extends FlanRouteStatelessWidget {
   const FlanButton({
     Key? key,
     this.type = FlanButtonType.normal,

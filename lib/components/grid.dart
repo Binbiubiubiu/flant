@@ -60,9 +60,12 @@ class FlanGrid extends StatelessWidget {
         ),
       ),
       padding: EdgeInsets.only(left: gutter),
-      child: Wrap(
-        crossAxisAlignment: WrapCrossAlignment.center,
-        children: children,
+      child: FlanGridScope(
+        parent: this,
+        child: Wrap(
+          crossAxisAlignment: WrapCrossAlignment.center,
+          children: children,
+        ),
       ),
     );
   }
@@ -86,5 +89,24 @@ class FlanGrid extends StatelessWidget {
     properties.add(DiagnosticsProperty<Axis>('direction', direction,
         defaultValue: Axis.vertical));
     super.debugFillProperties(properties);
+  }
+}
+
+class FlanGridScope extends InheritedWidget {
+  const FlanGridScope({
+    Key? key,
+    required this.parent,
+    required Widget child,
+  }) : super(key: key, child: child);
+
+  final FlanGrid parent;
+
+  static FlanGridScope? of(BuildContext context) {
+    return context.dependOnInheritedWidgetOfExactType<FlanGridScope>();
+  }
+
+  @override
+  bool updateShouldNotify(FlanGridScope oldWidget) {
+    return parent != oldWidget.parent;
   }
 }

@@ -2,6 +2,7 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
+@optionalTypeArgs
 class FlanRadioGroup<T extends dynamic> extends StatelessWidget {
   const FlanRadioGroup({
     Key? key,
@@ -46,9 +47,12 @@ class FlanRadioGroup<T extends dynamic> extends StatelessWidget {
   Widget build(BuildContext context) {
     return Semantics(
       label: 'radiogroup',
-      child: Flex(
-        direction: direction,
-        children: children,
+      child: FlanRadioScope(
+        parent: this,
+        child: Flex(
+          direction: direction,
+          children: children,
+        ),
       ),
     );
   }
@@ -70,5 +74,24 @@ class FlanRadioGroup<T extends dynamic> extends StatelessWidget {
     properties.add(DiagnosticsProperty<T>('value', value));
 
     super.debugFillProperties(properties);
+  }
+}
+
+class FlanRadioScope extends InheritedWidget {
+  const FlanRadioScope({
+    Key? key,
+    required this.parent,
+    required Widget child,
+  }) : super(key: key, child: child);
+
+  final FlanRadioGroup parent;
+
+  static FlanRadioScope? of(BuildContext context) {
+    return context.dependOnInheritedWidgetOfExactType<FlanRadioScope>();
+  }
+
+  @override
+  bool updateShouldNotify(FlanRadioScope oldWidget) {
+    return parent != oldWidget.parent;
   }
 }

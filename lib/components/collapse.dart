@@ -46,8 +46,11 @@ class FlanCollapse extends StatelessWidget {
           bottom: border ? const FlanHairLine() : BorderSide.none,
         ),
       ),
-      child: Column(
-        children: children,
+      child: FlanCollapseScope(
+        parent: this,
+        child: Column(
+          children: children,
+        ),
       ),
     );
   }
@@ -88,5 +91,24 @@ class FlanCollapse extends StatelessWidget {
     properties
         .add(DiagnosticsProperty<bool>('border', border, defaultValue: true));
     super.debugFillProperties(properties);
+  }
+}
+
+class FlanCollapseScope extends InheritedWidget {
+  const FlanCollapseScope({
+    Key? key,
+    required this.parent,
+    required Widget child,
+  }) : super(key: key, child: child);
+
+  final FlanCollapse parent;
+
+  static FlanCollapseScope? of(BuildContext context) {
+    return context.dependOnInheritedWidgetOfExactType<FlanCollapseScope>();
+  }
+
+  @override
+  bool updateShouldNotify(FlanCollapseScope oldWidget) {
+    return parent != oldWidget.parent;
   }
 }

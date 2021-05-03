@@ -226,7 +226,7 @@ class _FlanStepState extends State<FlanStep> {
   }
 
   FlanSteps get parent {
-    final FlanSteps? p = context.findAncestorWidgetOfExactType<FlanSteps>();
+    final FlanSteps? p = FlanStepsScope.of(context)?.parent;
     if (p == null) {
       throw 'Step must be a child component of Steps';
     }

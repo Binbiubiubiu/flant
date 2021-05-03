@@ -84,8 +84,11 @@ class FlanSteps extends StatelessWidget {
               margin: const EdgeInsets.only(bottom: 10.0),
               child: Stack(
                 children: <Widget>[
-                  Row(
-                    children: content,
+                  FlanStepsScope(
+                    parent: this,
+                    child: Row(
+                      children: content,
+                    ),
                   ),
                   Positioned(
                     top: 0.0,
@@ -95,9 +98,12 @@ class FlanSteps extends StatelessWidget {
                 ],
               ),
             )
-          : Column(
-              mainAxisSize: MainAxisSize.min,
-              children: children,
+          : FlanStepsScope(
+              parent: this,
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: children,
+              ),
             ),
     );
   }
@@ -128,5 +134,24 @@ class FlanSteps extends StatelessWidget {
     properties.add(DiagnosticsProperty<String>('finishIconUrl', finishIconUrl));
 
     super.debugFillProperties(properties);
+  }
+}
+
+class FlanStepsScope extends InheritedWidget {
+  const FlanStepsScope({
+    Key? key,
+    required this.parent,
+    required Widget child,
+  }) : super(key: key, child: child);
+
+  final FlanSteps parent;
+
+  static FlanStepsScope? of(BuildContext context) {
+    return context.dependOnInheritedWidgetOfExactType<FlanStepsScope>();
+  }
+
+  @override
+  bool updateShouldNotify(FlanStepsScope oldWidget) {
+    return parent != oldWidget.parent;
   }
 }

@@ -29,8 +29,9 @@ class FlanCol extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final FlanRow? parent = context.findAncestorWidgetOfExactType<FlanRow>();
-    final double maxWidth = FlanRowProvider.of(context)?.maxWidth ?? 0.0;
+    final FlanRowScope? scope = FlanRowScope.of(context);
+    final FlanRow? parent = scope?.parent;
+    final double maxWidth = scope?.maxWidth ?? 0.0;
 
     BoxConstraints? colSpan;
     EdgeInsets? colOffset;

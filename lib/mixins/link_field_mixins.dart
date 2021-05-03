@@ -5,7 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:flant/components/field.dart';
 
 @optionalTypeArgs
-mixin LinkFieldMixin<T extends StatefulWidget> on State<T> {
+mixin FlanLinkFieldMixin<T extends StatefulWidget> on State<T> {
   FlanFieldState<T>? get field {
     return context.findAncestorStateOfType<FlanFieldState<T>>();
   }

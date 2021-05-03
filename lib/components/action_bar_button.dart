@@ -12,7 +12,7 @@ import 'action_bar.dart';
 import 'button.dart';
 
 /// ### ActionBarButton 动作栏按钮
-class FlanActionBarButton extends RouteStatelessWidget {
+class FlanActionBarButton extends FlanRouteStatelessWidget {
   const FlanActionBarButton({
     Key? key,
     this.text = '',
@@ -75,8 +75,7 @@ class FlanActionBarButton extends RouteStatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final FlanActionBar? parent =
-        context.findAncestorWidgetOfExactType<FlanActionBar>();
+    final FlanActionBar? parent = FlanActionBarScope.of(context)?.parent;
     if (parent == null) {
       throw 'ActionButton must be a child component of FlanActionBar';
     }

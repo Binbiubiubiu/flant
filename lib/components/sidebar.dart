@@ -42,9 +42,12 @@ class FlanSidebar extends StatelessWidget {
     return Container(
       width: themeData.width,
       color: backgroundColor,
-      child: ListView(
-        shrinkWrap: true,
-        children: children,
+      child: FlanSidebarScope(
+        parent: this,
+        child: ListView(
+          shrinkWrap: true,
+          children: children,
+        ),
       ),
     );
   }
@@ -69,5 +72,24 @@ class FlanSidebar extends StatelessWidget {
     properties
         .add(DiagnosticsProperty<Color>('backgroundColor', backgroundColor));
     super.debugFillProperties(properties);
+  }
+}
+
+class FlanSidebarScope extends InheritedWidget {
+  const FlanSidebarScope({
+    Key? key,
+    required this.parent,
+    required Widget child,
+  }) : super(key: key, child: child);
+
+  final FlanSidebar parent;
+
+  static FlanSidebarScope? of(BuildContext context) {
+    return context.dependOnInheritedWidgetOfExactType<FlanSidebarScope>();
+  }
+
+  @override
+  bool updateShouldNotify(FlanSidebarScope oldWidget) {
+    return parent != oldWidget.parent;
   }
 }

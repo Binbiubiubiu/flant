@@ -59,7 +59,7 @@ class FlanActionBarThemeData with Diagnosticable {
     Color? backgroundColor,
     double? height,
     double? iconWidth,
-    double? iconHeightFactor,
+    double? iconHeight,
     Color? iconColor,
     double? iconSize,
     double? iconFontSize,
@@ -69,11 +69,12 @@ class FlanActionBarThemeData with Diagnosticable {
     LinearGradient? buttonWarningColor,
     LinearGradient? buttonDangerColor,
   }) {
+    final double _height = height ?? 50.0.rpx;
     return FlanActionBarThemeData.raw(
       backgroundColor: backgroundColor ?? FlanThemeVars.white,
-      height: height ?? 50.0.rpx,
+      height: _height,
       iconWidth: iconWidth ?? 48.0.rpx,
-      iconHeightFactor: iconHeightFactor ?? 1.0,
+      iconHeight: iconHeight ?? _height,
       iconColor: iconColor ?? FlanThemeVars.textColor,
       iconSize: iconSize ?? 18.0.rpx,
       iconFontSize: iconFontSize ?? FlanThemeVars.fontSizeXs.rpx,
@@ -89,7 +90,7 @@ class FlanActionBarThemeData with Diagnosticable {
     required this.backgroundColor,
     required this.height,
     required this.iconWidth,
-    required this.iconHeightFactor,
+    required this.iconHeight,
     required this.iconColor,
     required this.iconSize,
     required this.iconFontSize,
@@ -103,7 +104,7 @@ class FlanActionBarThemeData with Diagnosticable {
   final Color backgroundColor;
   final double height;
   final double iconWidth;
-  final double iconHeightFactor;
+  final double iconHeight;
   final Color iconColor;
   final double iconSize;
   final double iconFontSize;
@@ -117,7 +118,7 @@ class FlanActionBarThemeData with Diagnosticable {
     Color? backgroundColor,
     double? height,
     double? iconWidth,
-    double? iconHeightFactor,
+    double? iconHeight,
     Color? iconColor,
     double? iconSize,
     double? iconFontSize,
@@ -131,7 +132,7 @@ class FlanActionBarThemeData with Diagnosticable {
       backgroundColor: backgroundColor ?? this.backgroundColor,
       height: height ?? this.height,
       iconWidth: iconWidth ?? this.iconWidth,
-      iconHeightFactor: iconHeightFactor ?? this.iconHeightFactor,
+      iconHeight: iconHeight ?? this.iconHeight,
       iconColor: iconColor ?? this.iconColor,
       iconSize: iconSize ?? this.iconSize,
       iconFontSize: iconFontSize ?? this.iconFontSize,
@@ -151,7 +152,7 @@ class FlanActionBarThemeData with Diagnosticable {
       backgroundColor: other.backgroundColor,
       height: other.height,
       iconWidth: other.iconWidth,
-      iconHeightFactor: other.iconHeightFactor,
+      iconHeight: other.iconHeight,
       iconColor: other.iconColor,
       iconSize: other.iconSize,
       iconFontSize: other.iconFontSize,
@@ -169,7 +170,7 @@ class FlanActionBarThemeData with Diagnosticable {
       backgroundColor: Color.lerp(a?.backgroundColor, b?.backgroundColor, t),
       height: lerpDouble(a?.height, b?.height, t),
       iconWidth: lerpDouble(a?.iconWidth, b?.iconWidth, t),
-      iconHeightFactor: lerpDouble(a?.iconHeightFactor, b?.iconHeightFactor, t),
+      iconHeight: lerpDouble(a?.iconHeight, b?.iconHeight, t),
       iconColor: Color.lerp(a?.iconColor, b?.iconColor, t),
       iconSize: lerpDouble(a?.iconSize, b?.iconSize, t),
       iconFontSize: lerpDouble(a?.iconFontSize, b?.iconFontSize, t),
@@ -189,7 +190,7 @@ class FlanActionBarThemeData with Diagnosticable {
       backgroundColor,
       height,
       iconWidth,
-      iconHeightFactor,
+      iconHeight,
       iconColor,
       iconSize,
       iconFontSize,
@@ -215,7 +216,7 @@ class FlanActionBarThemeData with Diagnosticable {
         other.backgroundColor == backgroundColor &&
         other.height == height &&
         other.iconWidth == iconWidth &&
-        other.iconHeightFactor == iconHeightFactor &&
+        other.iconHeight == iconHeight &&
         other.iconColor == iconColor &&
         other.iconSize == iconSize &&
         other.iconFontSize == iconFontSize &&
@@ -235,8 +236,7 @@ class FlanActionBarThemeData with Diagnosticable {
         .add(DiagnosticsProperty<double>('height', height, defaultValue: null));
     properties.add(DiagnosticsProperty<double>('iconWidth', iconWidth,
         defaultValue: null));
-    properties.add(DiagnosticsProperty<double>(
-        'iconHeightFactor', iconHeightFactor,
+    properties.add(DiagnosticsProperty<double>('iconHeight', iconHeight,
         defaultValue: null));
     properties.add(
         DiagnosticsProperty<Color>('iconColor', iconColor, defaultValue: null));

@@ -12,6 +12,7 @@ import '../styles/var.dart';
 
 /// ### Slider 滑块
 /// 滑动输入条，用于在给定的范围内选择一个值。
+@optionalTypeArgs
 class FlanSlider<T> extends StatefulWidget {
   const FlanSlider({
     Key? key,

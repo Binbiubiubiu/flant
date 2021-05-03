@@ -32,15 +32,11 @@ void main() {
 
   testWidgets('should render disabled submit button correctly',
       (WidgetTester tester) async {
-    int a = 0;
     await tester.pumpWidget(
-      MaterialApp(
+      const MaterialApp(
         home: Material(
           child: FlanSubmitBar(
             disabled: true,
-            onSubmit: () {
-              a++;
-            },
           ),
         ),
       ),

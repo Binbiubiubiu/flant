@@ -48,8 +48,7 @@ class FlanSidebarItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final FlanSidebar? parent =
-        context.findAncestorWidgetOfExactType<FlanSidebar>();
+    final FlanSidebar? parent = FlanSidebarScope.of(context)?.parent;
     if (parent == null) {
       throw 'FlanSidebarItem must be a child Widget of FlanSidebar';
     }

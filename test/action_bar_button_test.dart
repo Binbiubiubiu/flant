@@ -13,8 +13,12 @@ void main() {
     await tester.pumpWidget(
       const MaterialApp(
         home: Material(
-          child: FlanActionBarButton(
-            child: Text('Content'),
+          child: FlanActionBar(
+            children: <Widget>[
+              FlanActionBarButton(
+                child: Text('Content'),
+              )
+            ],
           ),
         ),
       ),

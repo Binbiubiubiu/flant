@@ -59,8 +59,11 @@ class FlanTabbar extends StatelessWidget {
       decoration: BoxDecoration(
         color: themeData.backgroundColor,
       ),
-      child: Row(
-        children: children,
+      child: FlanTabbarScope(
+        parent: this,
+        child: Row(
+          children: children,
+        ),
       ),
     );
 
@@ -96,5 +99,24 @@ class FlanTabbar extends StatelessWidget {
         'safeAreaInsetBottom', safeAreaInsetBottom,
         defaultValue: false));
     super.debugFillProperties(properties);
+  }
+}
+
+class FlanTabbarScope extends InheritedWidget {
+  const FlanTabbarScope({
+    Key? key,
+    required this.parent,
+    required Widget child,
+  }) : super(key: key, child: child);
+
+  final FlanTabbar parent;
+
+  static FlanTabbarScope? of(BuildContext context) {
+    return context.dependOnInheritedWidgetOfExactType<FlanTabbarScope>();
+  }
+
+  @override
+  bool updateShouldNotify(FlanTabbarScope oldWidget) {
+    return parent != oldWidget.parent;
   }
 }

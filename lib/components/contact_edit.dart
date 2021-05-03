@@ -147,7 +147,7 @@ class _FlanContactEditState extends State<FlanContactEdit> {
   }
 
   void _onDelete() {
-    // TODO: Dialog comfirm
+    // TODO(Simon-Bin): Dialog comfirm
     widget.onDelete!(contact);
   }
 

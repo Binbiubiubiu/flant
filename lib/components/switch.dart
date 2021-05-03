@@ -4,11 +4,12 @@ import 'package:flutter/material.dart';
 
 // 🌎 Project imports:
 import 'package:flant/components/loading.dart';
-import 'package:flant/mixins/field_mixins.dart';
+import 'package:flant/mixins/link_field_mixins.dart';
 import '../styles/var.dart';
 
 /// ### FlanSwitch
 /// 用于在打开和关闭状态之间进行切换。
+@optionalTypeArgs
 class FlanSwitch<T> extends StatefulWidget {
   const FlanSwitch({
     Key? key,
@@ -61,7 +62,7 @@ class FlanSwitch<T> extends StatefulWidget {
 }
 
 class _FlanSwitchState<T> extends State<FlanSwitch<T>>
-    with TickerProviderStateMixin, LinkFieldMixin {
+    with TickerProviderStateMixin, FlanLinkFieldMixin {
   late Animation<Color?> bgColorAnimation;
   late AnimationController bgColorAnimationController;
 

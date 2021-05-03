@@ -18,8 +18,11 @@ import 'icon.dart';
 
 int uuid = 0;
 
+typedef FlanFieldFormatter = String Function(String);
+
 /// ### FlanField
 /// 表单中的输入框组件。
+@optionalTypeArgs
 class FlanField<T extends dynamic> extends StatefulWidget {
   FlanField({
     Key? key,
@@ -155,7 +158,7 @@ class FlanField<T extends dynamic> extends StatefulWidget {
   final String? errorMessage;
 
   /// 输入内容格式化函数
-  final String Function(String)? formatter;
+  final FlanFieldFormatter? formatter;
 
   /// 格式化函数触发的时机，可选值为 `onBlur` `onChange`
   final FlanFieldFormatTrigger formatTrigger;
@@ -509,7 +512,7 @@ class FlanFieldState<T extends dynamic> extends State<FlanField<T>> {
 
   bool get disabled => widget.disabled || (form != null && form!.disabled);
 
-  FlanForm? get form => context.findAncestorWidgetOfExactType<FlanForm>();
+  FlanForm? get form => FlanFormScope.of(context)?.parent;
   String get modelvalue => "${widget.value ?? ''}";
   bool get showClear {
     final bool readonly = widget.readonly || (form != null && form!.readonly);
@@ -856,8 +859,8 @@ class FlanFieldState<T extends dynamic> extends State<FlanField<T>> {
     properties.add(DiagnosticsProperty<String>(
         'errorMessage', widget.errorMessage,
         defaultValue: ''));
-    properties.add(DiagnosticsProperty<String Function(String)>(
-        'formatter', widget.formatter));
+    properties.add(
+        DiagnosticsProperty<FlanFieldFormatter>('formatter', widget.formatter));
     properties.add(DiagnosticsProperty<FlanFieldFormatTrigger>(
         'formatTrigger', widget.formatTrigger,
         defaultValue: FlanFieldFormatTrigger.onChange));

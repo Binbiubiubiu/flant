@@ -10,6 +10,7 @@ import 'icon.dart';
 
 /// ### Checkbox 复选框
 /// 用于在选中和非选中状态之间进行切换。
+@optionalTypeArgs
 class FlanCheckbox<T extends dynamic> extends StatelessWidget {
   const FlanCheckbox({
     Key? key,
@@ -50,7 +51,7 @@ class FlanCheckbox<T extends dynamic> extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final FlanCheckboxGroup<T>? parent =
-        context.findAncestorWidgetOfExactType<FlanCheckboxGroup<T>>();
+        FlanCheckBoxScope.of(context)?.parent as FlanCheckboxGroup<T>?;
     if (parent != null && name == null) {
       throw 'use FlanCheckbox in the FlanCheckboxGroup,please set the name of FlanCheckbox';
     }

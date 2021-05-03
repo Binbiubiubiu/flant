@@ -29,8 +29,8 @@ import 'package:flutter/material.dart';
 ///
 /// 通过继承的`to`和`replace`属性设置跳转条件
 ///
-abstract class RouteStatelessWidget extends StatelessWidget {
-  const RouteStatelessWidget({
+abstract class FlanRouteStatelessWidget extends StatelessWidget {
+  const FlanRouteStatelessWidget({
     this.toRoute,
     this.toName,
     this.replace = false,

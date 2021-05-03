@@ -134,6 +134,8 @@ class FlanImage extends StatelessWidget {
   /// 构建图片Loading图标
   Widget _buildLoadingIcon(FlanImageThemeData themeData) {
     return _FlanImagePlaceHolder(
+      width: width,
+      height: height,
       child: IconTheme(
         data: IconThemeData(
           color: themeData.loadingIconColor,
@@ -152,6 +154,8 @@ class FlanImage extends StatelessWidget {
 
   Widget _buildErrorIcon(FlanImageThemeData themeData) {
     return _FlanImagePlaceHolder(
+      width: width,
+      height: height,
       child: IconTheme(
         data: IconThemeData(
           color: themeData.errorIconColor,
@@ -242,15 +246,18 @@ class FlanImage extends StatelessWidget {
 class _FlanImagePlaceHolder extends StatelessWidget {
   const _FlanImagePlaceHolder({
     Key? key,
-    required this.child,
+    this.width,
+    this.height,
+    this.child,
   }) : super(key: key);
 
-  final Widget child;
+  final double? width;
+  final double? height;
+  final Widget? child;
 
   @override
   Widget build(BuildContext context) {
     final FlanImageThemeData themeData = FlanTheme.of(context).imageTheme;
-    final FlanImage? image = context.findAncestorWidgetOfExactType<FlanImage>();
 
     return DefaultTextStyle(
       style: TextStyle(
@@ -258,8 +265,8 @@ class _FlanImagePlaceHolder extends StatelessWidget {
         fontSize: themeData.placeholderFontSize,
       ),
       child: Container(
-        width: image?.width,
-        height: image?.height,
+        width: width,
+        height: height,
         color: themeData.placeholderBackgroundColor,
         alignment: Alignment.center,
         child: child,

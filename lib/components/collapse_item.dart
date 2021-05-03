@@ -272,8 +272,7 @@ class FlanCollapseItemState extends State<FlanCollapseItem>
   int get _index => _parent.children.indexOf(widget);
 
   FlanCollapse get _parent {
-    final FlanCollapse? parent =
-        context.findAncestorWidgetOfExactType<FlanCollapse>();
+    final FlanCollapse? parent = FlanCollapseScope.of(context)?.parent;
 
     if (parent == null) {
       throw 'FlanCollapseItem must be a child component of FlanCollapse';

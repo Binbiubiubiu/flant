@@ -9,6 +9,7 @@ import 'checkbox.dart';
 
 /// ### Radio 单选框
 /// 用于在多个选项中选择单个结果。
+@optionalTypeArgs
 class FlanRadio<T extends dynamic> extends StatelessWidget {
   const FlanRadio({
     Key? key,
@@ -68,7 +69,7 @@ class FlanRadio<T extends dynamic> extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final FlanRadioGroup<T>? parent =
-        context.findAncestorWidgetOfExactType<FlanRadioGroup<T>>();
+        FlanRadioScope.of(context)?.parent as FlanRadioGroup<T>?;
     if (parent != null && name == null) {
       throw 'use FlanRadio in the FlanRadioGroup,please set the name of FlanRadio';
     }

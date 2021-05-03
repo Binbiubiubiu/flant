@@ -86,14 +86,18 @@ class FlanFormState extends State<FlanForm> {
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      children: widget.children,
+    return FlanFormScope(
+      parent: widget,
+      child: Column(
+        children: widget.children,
+      ),
     );
   }
 
   List<FlanField<dynamic>> _getFieldsByNames({List<String>? names}) {
     if (names != null) {
       final List<FlanField<dynamic>> children = <FlanField<dynamic>>[];
+
       context.visitChildElements((Element element) {
         children.add(element.widget as FlanField<dynamic>);
       });
@@ -250,4 +254,23 @@ class FlanFormFailDetail {
   });
   final Map<String, dynamic> values;
   final List<FlanFieldValidateError> errors;
+}
+
+class FlanFormScope extends InheritedWidget {
+  const FlanFormScope({
+    Key? key,
+    required this.parent,
+    required Widget child,
+  }) : super(key: key, child: child);
+
+  final FlanForm parent;
+
+  static FlanFormScope? of(BuildContext context) {
+    return context.dependOnInheritedWidgetOfExactType<FlanFormScope>();
+  }
+
+  @override
+  bool updateShouldNotify(FlanFormScope oldWidget) {
+    return parent != oldWidget.parent;
+  }
 }

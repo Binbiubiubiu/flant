@@ -23,6 +23,7 @@ class FlanShareSheetIcons {
       'https://img.yzcdn.cn/vant/share-sheet-$icon.png';
 }
 
+@optionalTypeArgs
 class FlanShareSheet<T extends dynamic> extends StatelessWidget {
   const FlanShareSheet({
     Key? key,

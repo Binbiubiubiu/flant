@@ -37,9 +37,12 @@ class FlanActionBar extends StatelessWidget {
         top: false,
         left: false,
         right: false,
-        child: Row(
-          crossAxisAlignment: CrossAxisAlignment.center,
-          children: children,
+        child: FlanActionBarScope(
+          parent: this,
+          child: Row(
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: children,
+          ),
         ),
       ),
     );
@@ -51,5 +54,24 @@ class FlanActionBar extends StatelessWidget {
         'safeAreaInsetBottom', safeAreaInsetBottom,
         defaultValue: true));
     super.debugFillProperties(properties);
+  }
+}
+
+class FlanActionBarScope extends InheritedWidget {
+  const FlanActionBarScope({
+    Key? key,
+    required this.parent,
+    required Widget child,
+  }) : super(key: key, child: child);
+
+  final FlanActionBar parent;
+
+  static FlanActionBarScope? of(BuildContext context) {
+    return context.dependOnInheritedWidgetOfExactType<FlanActionBarScope>();
+  }
+
+  @override
+  bool updateShouldNotify(FlanActionBarScope oldWidget) {
+    return parent != oldWidget.parent;
   }
 }

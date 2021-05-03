@@ -59,8 +59,7 @@ class FlanTabbarItem extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final FlanTabbarThemeData themeData = FlanTheme.of(context).tabbarTheme;
-    final FlanTabbar? parent =
-        context.findAncestorWidgetOfExactType<FlanTabbar>();
+    final FlanTabbar? parent = FlanTabbarScope.of(context)?.parent;
 
     if (parent == null) {
       throw 'TabbarItem must be a child component of Tabbar.';

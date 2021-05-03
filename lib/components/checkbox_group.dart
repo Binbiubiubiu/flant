@@ -6,6 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:flant/components/checkbox.dart';
 import 'checkbox.dart';
 
+@optionalTypeArgs
 class FlanCheckboxGroup<T extends dynamic> extends StatelessWidget {
   const FlanCheckboxGroup({
     Key? key,
@@ -35,9 +36,12 @@ class FlanCheckboxGroup<T extends dynamic> extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Flex(
-      direction: direction,
-      children: children,
+    return FlanCheckBoxScope(
+      parent: this,
+      child: Flex(
+        direction: direction,
+        children: children,
+      ),
     );
   }
 
@@ -84,5 +88,24 @@ class FlanCheckboxGroup<T extends dynamic> extends StatelessWidget {
     properties.add(DiagnosticsProperty<List<T>>('value', value));
 
     super.debugFillProperties(properties);
+  }
+}
+
+class FlanCheckBoxScope extends InheritedWidget {
+  const FlanCheckBoxScope({
+    Key? key,
+    required this.parent,
+    required Widget child,
+  }) : super(key: key, child: child);
+
+  final FlanCheckboxGroup parent;
+
+  static FlanCheckBoxScope? of(BuildContext context) {
+    return context.dependOnInheritedWidgetOfExactType<FlanCheckBoxScope>();
+  }
+
+  @override
+  bool updateShouldNotify(FlanCheckBoxScope oldWidget) {
+    return parent != oldWidget.parent;
   }
 }

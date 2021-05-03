@@ -13,7 +13,7 @@ import 'badge.dart';
 import 'icon.dart';
 
 /// ### ActionBarIcon 动作栏图标按钮
-class FlanActionBarIcon extends RouteStatelessWidget {
+class FlanActionBarIcon extends FlanRouteStatelessWidget {
   const FlanActionBarIcon({
     Key? key,
     this.text = '',
@@ -72,14 +72,15 @@ class FlanActionBarIcon extends RouteStatelessWidget {
 
     return Semantics(
       button: true,
-      child: FractionallySizedBox(
-        heightFactor: themeData.iconHeightFactor,
-        child: Stack(
-          children: <Widget>[
-            Positioned.fill(
+      child: Stack(
+        children: <Widget>[
+          Positioned.fill(
+            child: Align(
+              alignment: Alignment.center,
               child: FlanActiveResponse(
                 builder: (BuildContext contenxt, bool active, Widget? child) {
                   return Container(
+                    height: themeData.iconHeight,
                     color:
                         active ? themeData.iconActiveColor : Colors.transparent,
                   );
@@ -92,31 +93,31 @@ class FlanActionBarIcon extends RouteStatelessWidget {
                 },
               ),
             ),
-            IgnorePointer(
-              child: Container(
-                constraints: BoxConstraints(
-                  minWidth: themeData.iconWidth - 2.0,
-                ),
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: <Widget>[
-                    _buildIcon(),
-                    SizedBox(height: 5.0.rpx),
-                    DefaultTextStyle(
-                      textAlign: TextAlign.center,
-                      style: TextStyle(
-                        color: themeData.iconTextColor,
-                        fontSize: themeData.iconFontSize,
-                        height: 1.0,
-                      ),
-                      child: child ?? Text(text),
+          ),
+          IgnorePointer(
+            child: Container(
+              constraints: BoxConstraints(
+                minWidth: themeData.iconWidth - 2.0,
+              ),
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: <Widget>[
+                  _buildIcon(),
+                  SizedBox(height: 5.0.rpx),
+                  DefaultTextStyle(
+                    textAlign: TextAlign.center,
+                    style: TextStyle(
+                      color: themeData.iconTextColor,
+                      fontSize: themeData.iconFontSize,
+                      height: 1.0,
                     ),
-                  ],
-                ),
+                    child: child ?? Text(text),
+                  ),
+                ],
               ),
             ),
-          ],
-        ),
+          ),
+        ],
       ),
     );
   }

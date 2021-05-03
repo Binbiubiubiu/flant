@@ -83,7 +83,7 @@ void main() {
         ),
       ),
     );
-    TextStyle? textStyle = tester
+    final TextStyle? textStyle = tester
         .renderObject<RenderParagraph>(find.text('Custom text'))
         .text
         .style;

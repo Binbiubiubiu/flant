@@ -11,7 +11,7 @@ import './grid.dart';
 import './icon.dart';
 import './style.dart';
 
-class FlanGridItem extends RouteStatelessWidget {
+class FlanGridItem extends FlanRouteStatelessWidget {
   const FlanGridItem({
     Key? key,
     this.text,
@@ -58,7 +58,7 @@ class FlanGridItem extends RouteStatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final FlanGrid? parent = context.findAncestorWidgetOfExactType<FlanGrid>();
+    final FlanGrid? parent = FlanGridScope.of(context)?.parent;
     if (parent == null) {
       throw 'GridItem must be a child widget of Grid';
     }
@@ -126,7 +126,7 @@ class FlanGridItem extends RouteStatelessWidget {
   }
 
   Widget _buildIcon(BuildContext context) {
-    final FlanGrid? parent = context.findAncestorWidgetOfExactType<FlanGrid>();
+    final FlanGrid? parent = FlanGridScope.of(context)?.parent;
 
     if (iconSlot != null) {
       return FlanBadge(dot: dot, content: badge, child: iconSlot);
