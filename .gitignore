@@ -28,8 +28,9 @@
 .packages
 .pub-cache/
 .pub/
-build/
-exmaple/
+/build/
+/exmaple/
+/coverage/
 
 # Android related
 **/android/**/gradle-wrapper.jar
