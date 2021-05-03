@@ -3,14 +3,14 @@
 # separate terms of service, privacy policy, and support
 # documentation.
 
-name: publish_dry
+name: Codecov
 
 on:
   workflow_dispatch:
-#   push:
-#     branches: [ master ]
-#   pull_request:
-#     branches: [ master ]
+  push:
+    branches: [master]
+  pull_request:
+    branches: [master]
 
 jobs:
   build:
@@ -37,18 +37,11 @@ jobs:
 
       # 执行测试
       - name: Run tests
-        run: flutter test
+        run: flutter test --coverage --coverage-path coverage/lcov.info
 
-      - name: Publish Dart/Flutter package
-        # You may pin to the exact commit or the version.
-        # uses: sakebook/actions-flutter-pub-publisher@7112915a1a834881d4c98ef7af12f3456e5c79c7
-        uses: sakebook/actions-flutter-pub-publisher@v1.3.1
+      - name: Upload coverage to codecov
+        uses: codecov/codecov-action@v1
         with:
-          # Google Account credential
-          credential: ${{ secrets.CREDENTIAL_JSON }}
-          # (Optional) Publish packages type. (default: true)
-          flutter_package: true # optional, default is true
-          # (Optional) Skip test (default: false)
-          skip_test: true # optional
-          # (Optional) Dry run, no publish (default: false)
-          dry_run: true # optional
+          token: ${{ secrets.CODECOV_TOKEN }}
+          flags: components
+          file: ./coverage/lcov.info
