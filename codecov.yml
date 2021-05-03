@@ -19,9 +19,4 @@ flags:
       - lib/components/
 
 ignore:
-  - lib/components/common/*
-  - lib/locale/*
-  - lib/mixins/*
-  - lib/styles/*
-  - lib/utils/*
-  - flant.dart
+  - lib/components/common
