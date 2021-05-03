@@ -1,4 +1,5 @@
 // 🐦 Flutter imports:
+import 'package:flant/styles/components/action_bar_theme.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
@@ -20,6 +21,7 @@ import 'components/notice_bar_theme.dart';
 import 'components/progress_theme.dart';
 import 'components/sidebar_theme.dart';
 import 'components/skeleton_theme.dart';
+import 'components/submit_bar_theme.dart';
 import 'components/tabbar_theme.dart';
 import 'components/tag_theme.dart';
 import 'components/tree_select_theme.dart';
@@ -77,6 +79,7 @@ class _InheritedFlanTheme extends InheritedTheme {
 @immutable
 class FlanThemeData with Diagnosticable {
   factory FlanThemeData({
+    FlanActionBarThemeData? actionBarTheme,
     FlanBadgeThemeData? badgeTheme,
     FlanButtonThemeData? buttonTheme,
     FlanCellThemeData? cellTheme,
@@ -94,11 +97,13 @@ class FlanThemeData with Diagnosticable {
     FlanTreeSelectThemeData? treeSelectTheme,
     FlanSidebarThemeData? sidebarTheme,
     FlanSkeletonThemeData? skeletonTheme,
+    FlanSubmitBarThemeData? submitBarTheme,
     FlanLoadingThemeData? loadingTheme,
     FlanNavBarThemeData? navBarTheme,
     FlanNoticeBarThemeData? noticeBarTheme,
   }) {
     return FlanThemeData.raw(
+      actionBarTheme: actionBarTheme ?? FlanActionBarThemeData(),
       badgeTheme: badgeTheme ?? FlanBadgeThemeData(),
       buttonTheme: buttonTheme ?? FlanButtonThemeData(),
       cellTheme: cellTheme ?? FlanCellThemeData(),
@@ -118,11 +123,13 @@ class FlanThemeData with Diagnosticable {
       skeletonTheme: skeletonTheme ?? FlanSkeletonThemeData(),
       loadingTheme: loadingTheme ?? FlanLoadingThemeData(),
       navBarTheme: navBarTheme ?? FlanNavBarThemeData(),
+      submitBarTheme: submitBarTheme ?? FlanSubmitBarThemeData(),
       noticeBarTheme: noticeBarTheme ?? FlanNoticeBarThemeData(),
     );
   }
 
   const FlanThemeData.raw({
+    required this.actionBarTheme,
     required this.badgeTheme,
     required this.buttonTheme,
     required this.cellTheme,
@@ -140,12 +147,16 @@ class FlanThemeData with Diagnosticable {
     required this.treeSelectTheme,
     required this.sidebarTheme,
     required this.skeletonTheme,
+    required this.submitBarTheme,
     required this.loadingTheme,
     required this.navBarTheme,
     required this.noticeBarTheme,
   });
 
   factory FlanThemeData.fallback() => FlanThemeData();
+
+  /// ActionBar 动作栏
+  final FlanActionBarThemeData actionBarTheme;
 
   /// Badge 徽标
   final FlanBadgeThemeData badgeTheme;
@@ -198,6 +209,9 @@ class FlanThemeData with Diagnosticable {
   /// Skeleton 骨架屏
   final FlanSkeletonThemeData skeletonTheme;
 
+  /// SubmitBar 提交订单栏
+  final FlanSubmitBarThemeData submitBarTheme;
+
   /// Tabbar 标签栏
   final FlanTabbarThemeData tabbarTheme;
 
@@ -209,6 +223,8 @@ class FlanThemeData with Diagnosticable {
 
   static FlanThemeData lerp(FlanThemeData a, FlanThemeData b, double t) {
     return FlanThemeData.raw(
+      actionBarTheme:
+          FlanActionBarThemeData.lerp(a.actionBarTheme, b.actionBarTheme, t),
       badgeTheme: FlanBadgeThemeData.lerp(a.badgeTheme, b.badgeTheme, t),
       buttonTheme: FlanButtonThemeData.lerp(a.buttonTheme, b.buttonTheme, t),
       cellTheme: FlanCellThemeData.lerp(a.cellTheme, b.cellTheme, t),
@@ -233,6 +249,8 @@ class FlanThemeData with Diagnosticable {
           FlanSidebarThemeData.lerp(a.sidebarTheme, b.sidebarTheme, t),
       skeletonTheme:
           FlanSkeletonThemeData.lerp(a.skeletonTheme, b.skeletonTheme, t),
+      submitBarTheme:
+          FlanSubmitBarThemeData.lerp(a.submitBarTheme, b.submitBarTheme, t),
       treeSelectTheme:
           FlanTreeSelectThemeData.lerp(a.treeSelectTheme, b.treeSelectTheme, t),
       loadingTheme:

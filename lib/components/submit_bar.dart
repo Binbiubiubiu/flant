@@ -3,9 +3,13 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
 // 🌎 Project imports:
-import 'package:flant/components/button.dart';
-import 'package:flant/flant.dart';
+import '../locale/l10n.dart';
+import '../styles/components/submit_bar_theme.dart';
+import '../styles/theme.dart';
 import '../styles/var.dart';
+import '../utils/widget.dart';
+import 'button.dart';
+import 'icon.dart';
 
 /// ### SubmitBar 提交订单栏
 class FlanSubmitBar extends StatelessWidget {
@@ -13,13 +17,13 @@ class FlanSubmitBar extends StatelessWidget {
     Key? key,
     this.price,
     this.decimalLength = 2,
-    this.label = '合计：',
+    this.label = '',
     this.suffixLabel,
     this.textAlign = TextAlign.right,
-    this.buttonText,
+    this.buttonText = '',
     this.buttonType = FlanButtonType.danger,
     this.buttonColor,
-    this.tip,
+    this.tip = '',
     this.tipIconName,
     this.tipIconUrl,
     this.currency = '¥',
@@ -52,7 +56,7 @@ class FlanSubmitBar extends StatelessWidget {
   final TextAlign textAlign;
 
   /// 按钮文字
-  final String? buttonText;
+  final String buttonText;
 
   /// 按钮类型
   final FlanButtonType buttonType;
@@ -61,7 +65,7 @@ class FlanSubmitBar extends StatelessWidget {
   final Color? buttonColor;
 
   /// 在订单栏上方的提示文案
-  final String? tip;
+  final String tip;
 
   /// 提示文案左侧的图标名称
   final IconData? tipIconName;
@@ -96,103 +100,107 @@ class FlanSubmitBar extends StatelessWidget {
   final Widget? topSlot;
 
   /// 提示文案中的额外内容
-  final Widget? tipSlot;
+  final InlineSpan? tipSlot;
 
   @override
   Widget build(BuildContext context) {
+    final FlanSubmitBarThemeData themeData =
+        FlanTheme.of(context).submitBarTheme;
+
     return Container(
-      color: ThemeVars.submitBarBackgroundColor,
+      color: themeData.backgroundColor,
       child: SafeArea(
         bottom: safeAreaInsetBottom,
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
-          children: <Widget>[
-            topSlot ?? const SizedBox.shrink(),
-            _buildTip(),
-            Container(
-              height: ThemeVars.submitBarHeight,
-              padding: ThemeVars.submitBarPadding,
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.end,
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: <Widget>[
-                  child ?? const SizedBox.shrink(),
-                  _buildText(context),
-                  _buildButton(),
-                ],
+          children: <Widget?>[
+            topSlot,
+            _buildTip(themeData),
+            DefaultTextStyle(
+              style: TextStyle(
+                fontSize: themeData.textFontSize,
+              ),
+              child: Container(
+                height: themeData.height,
+                padding: themeData.padding,
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.end,
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: <Widget?>[
+                    child,
+                    _buildText(context, themeData),
+                    _buildButton(themeData),
+                  ].noNull,
+                ),
               ),
             ),
-          ],
+          ].noNull,
         ),
       ),
     );
   }
 
-  Widget _buildTip() {
-    if (tipSlot != null || (tip != null && tip!.isNotEmpty)) {
+  Widget? _buildTip(FlanSubmitBarThemeData themeData) {
+    if (tipSlot != null || tip.isNotEmpty) {
       return Container(
         width: double.infinity,
-        color: ThemeVars.submitBarTipBackgroundColor,
-        padding: ThemeVars.submitBarTipPadding,
+        color: themeData.tipBackgroundColor,
+        padding: themeData.tipPadding,
         child: DefaultTextStyle(
-          style: const TextStyle(
-            color: ThemeVars.submitBarTipColor,
-            fontSize: ThemeVars.submitBarTipFontSize,
-            // height: ThemeVars.submitBarTipLineHeight,
+          style: TextStyle(
+            color: themeData.tipColor,
+            fontSize: themeData.tipFontSize,
+            height: themeData.tipLineHeight,
           ),
           child: Text.rich(
             TextSpan(
-              children: <InlineSpan>[
-                WidgetSpan(
-                  alignment: PlaceholderAlignment.top,
-                  child: tipIconName != null || tipIconUrl != null
-                      ? ConstrainedBox(
-                          constraints: const BoxConstraints(
-                            minWidth: ThemeVars.submitBarTipIconSize * 1.5,
-                          ),
-                          child: FlanIcon(
-                            iconName: tipIconName,
-                            iconUrl: tipIconUrl,
-                            size: ThemeVars.submitBarTipIconSize,
-                            color: ThemeVars.submitBarTipColor,
-                          ),
-                        )
-                      : const SizedBox.shrink(),
-                ),
+              children: <InlineSpan?>[
+                if (tipIconName != null || tipIconUrl != null)
+                  WidgetSpan(
+                    alignment: PlaceholderAlignment.middle,
+                    child: ConstrainedBox(
+                      constraints: BoxConstraints(
+                        minWidth: themeData.tipIconSize * 1.5,
+                      ),
+                      child: FlanIcon(
+                        iconName: tipIconName,
+                        iconUrl: tipIconUrl,
+                        size: themeData.tipIconSize,
+                        color: themeData.tipColor,
+                      ),
+                    ),
+                  ),
                 TextSpan(text: tip),
-                WidgetSpan(
-                  child: tipSlot ?? const SizedBox.shrink(),
-                ),
-              ],
+                tipSlot,
+              ].noNull,
             ),
           ),
         ),
       );
     }
-
-    return const SizedBox.shrink();
   }
 
-  Widget _buildButton() {
+  Widget _buildButton(FlanSubmitBarThemeData themeData) {
     if (buttonSlot != null) {
       return buttonSlot!;
     }
 
     return SizedBox(
-      width: ThemeVars.submitBarButtonWidth,
-      height: ThemeVars.submitBarButtonHeight,
+      width: themeData.buttonWidth,
+      height: themeData.buttonHeight,
       child: FlanButton(
         round: true,
         type: buttonType,
         child: Text(
-          buttonText ?? '',
-          style: const TextStyle(fontWeight: ThemeVars.fontWeightBold),
+          buttonText,
+          style: const TextStyle(fontWeight: FlanThemeVars.fontWeightBold),
         ),
         color: buttonColor,
         loading: loading,
         disabled: disabled,
-        gradient:
-            buttonType == FlanButtonType.danger ? ThemeVars.gradientRed : null,
+        gradient: buttonType == FlanButtonType.danger
+            ? FlanThemeVars.gradientRed
+            : null,
         onClick: () {
           if (onSubmit != null) {
             onSubmit!();
@@ -202,7 +210,7 @@ class FlanSubmitBar extends StatelessWidget {
     );
   }
 
-  Widget _buildText(BuildContext context) {
+  Widget? _buildText(BuildContext context, FlanSubmitBarThemeData themeData) {
     if (price != null) {
       final List<String> pricePair =
           (price! / 100).toStringAsFixed(decimalLength).split('.');
@@ -210,30 +218,26 @@ class FlanSubmitBar extends StatelessWidget {
 
       return Expanded(
         child: Padding(
-          padding: const EdgeInsets.only(right: ThemeVars.paddingSm),
-          // alignment: <TextAlign, Alignment>{
-          //   TextAlign.left: Alignment.centerLeft,
-          //   TextAlign.center: Alignment.center,
-          //   TextAlign.right: Alignment.centerRight,
-          // }[textAlign],
+          padding: EdgeInsets.only(right: FlanThemeVars.paddingSm.rpx),
           child: Text.rich(
             TextSpan(
               text:
                   label.isNotEmpty ? label : FlanS.of(context).SubmitBar_label,
-              style: const TextStyle(color: ThemeVars.submitBarTextColor),
+              style: TextStyle(color: themeData.textColor),
               children: <InlineSpan>[
                 TextSpan(
-                  style: const TextStyle(
-                    color: ThemeVars.submitBarPriceColor,
-                    fontWeight: ThemeVars.fontWeightBold,
-                    fontSize: ThemeVars.fontSizeSm,
+                  style: TextStyle(
+                    color: themeData.priceColor,
+                    fontWeight: FlanThemeVars.fontWeightBold,
+                    fontSize: themeData.priceFontSize,
                   ),
                   children: <InlineSpan>[
                     TextSpan(text: currency),
                     TextSpan(
                       text: pricePair[0],
-                      style: const TextStyle(
-                        fontSize: ThemeVars.submitBarPriceIntegerFontSize,
+                      style: TextStyle(
+                        fontSize: themeData.priceIntegerFontSize,
+                        fontFamily: themeData.priceFontFamily,
                       ),
                     ),
                     TextSpan(text: deciaml),
@@ -247,8 +251,6 @@ class FlanSubmitBar extends StatelessWidget {
         ),
       );
     }
-
-    return const SizedBox.shrink();
   }
 
   @override

@@ -182,25 +182,32 @@ class FlanCell extends RouteStatelessWidget {
 
     final Widget cell = Stack(
       children: <Widget>[
-        FlanActiveResponse(
-          disabled: !_isClickable || disabled,
-          cursorBuilder: (SystemMouseCursor cursor) {
-            return _isClickable ? cursor : SystemMouseCursors.basic;
-          },
-          builder: (BuildContext contenxt, bool active, Widget? child) {
-            return Container(
-              color: active ? themeData.activeColor : bgColor,
-              padding: cellPadding,
-              child: child,
-            );
-          },
-          child: content,
-          onClick: () {
-            if (onClick != null) {
-              onClick!();
-            }
-            route(context);
-          },
+        Positioned.fill(
+          child: FlanActiveResponse(
+            disabled: !_isClickable || disabled,
+            cursorBuilder: (SystemMouseCursor cursor) {
+              return _isClickable ? cursor : SystemMouseCursors.basic;
+            },
+            builder: (BuildContext contenxt, bool active, Widget? child) {
+              return DecoratedBox(
+                decoration: BoxDecoration(
+                  color: active ? themeData.activeColor : bgColor,
+                ),
+              );
+            },
+            onClick: () {
+              if (onClick != null) {
+                onClick!();
+              }
+              route(context);
+            },
+          ),
+        ),
+        IgnorePointer(
+          child: Padding(
+            padding: cellPadding,
+            child: content,
+          ),
         ),
         bottomBorder,
         requiredIcon,

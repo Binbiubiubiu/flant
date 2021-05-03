@@ -1,11 +1,14 @@
 // 🐦 Flutter imports:
+import 'package:flant/components/common/active_response.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/semantics.dart';
 
 // 🌎 Project imports:
 import '../mixins/route_mixins.dart';
+import '../styles/components/action_bar_theme.dart';
+import '../styles/theme.dart';
 import '../styles/var.dart';
+import '../utils/widget.dart';
 import 'badge.dart';
 import 'icon.dart';
 
@@ -64,41 +67,55 @@ class FlanActionBarIcon extends RouteStatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final FlanActionBarThemeData themeData =
+        FlanTheme.of(context).actionBarTheme;
+
     return Semantics(
       button: true,
-      sortKey: const OrdinalSortKey(0),
-      child: ConstrainedBox(
-        constraints: const BoxConstraints(
-          minWidth: ThemeVars.actionBarIconWidth - 2.0,
-        ),
-        child: Material(
-          color: ThemeVars.white,
-          child: InkWell(
-            splashColor: Colors.transparent,
-            highlightColor: ThemeVars.black.withOpacity(0.1),
-            onTap: () {
-              route(context);
-              if (onClick != null) {
-                onClick!();
-              }
-            },
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: <Widget>[
-                _buildIcon(),
-                const SizedBox(height: 5.0),
-                DefaultTextStyle(
-                  textAlign: TextAlign.center,
-                  style: const TextStyle(
-                    color: ThemeVars.actionBarIconTextColor,
-                    fontSize: ThemeVars.actionBarIconFontSize,
-                    height: 1.0,
-                  ),
-                  child: child ?? Text(text),
-                ),
-              ],
+      child: FractionallySizedBox(
+        heightFactor: themeData.iconHeightFactor,
+        child: Stack(
+          children: <Widget>[
+            Positioned.fill(
+              child: FlanActiveResponse(
+                builder: (BuildContext contenxt, bool active, Widget? child) {
+                  return Container(
+                    color:
+                        active ? themeData.iconActiveColor : Colors.transparent,
+                  );
+                },
+                onClick: () {
+                  route(context);
+                  if (onClick != null) {
+                    onClick!();
+                  }
+                },
+              ),
             ),
-          ),
+            IgnorePointer(
+              child: Container(
+                constraints: BoxConstraints(
+                  minWidth: themeData.iconWidth - 2.0,
+                ),
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: <Widget>[
+                    _buildIcon(),
+                    SizedBox(height: 5.0.rpx),
+                    DefaultTextStyle(
+                      textAlign: TextAlign.center,
+                      style: TextStyle(
+                        color: themeData.iconTextColor,
+                        fontSize: themeData.iconFontSize,
+                        height: 1.0,
+                      ),
+                      child: child ?? Text(text),
+                    ),
+                  ],
+                ),
+              ),
+            ),
+          ],
         ),
       ),
     );

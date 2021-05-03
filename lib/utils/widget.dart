@@ -14,6 +14,6 @@ extension FlanSizeExtension on num {
   double get rpx => FlanTheme.rpx(this);
 }
 
-extension FlanListExtension on List<Widget?> {
-  List<Widget> get noNull => whereType<Widget>().toList();
+extension FlanListExtension<T> on List<T?> {
+  List<T> get noNull => whereType<T>().toList();
 }

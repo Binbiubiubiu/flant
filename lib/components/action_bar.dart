@@ -3,7 +3,8 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
 // 🌎 Project imports:
-import '../styles/var.dart';
+import '../styles/components/action_bar_theme.dart';
+import '../styles/theme.dart';
 
 /// ### ActionBar 动作栏
 class FlanActionBar extends StatelessWidget {
@@ -25,9 +26,12 @@ class FlanActionBar extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final FlanActionBarThemeData themeData =
+        FlanTheme.of(context).actionBarTheme;
+
     return Container(
-      height: ThemeVars.actionBarHeight,
-      color: ThemeVars.actionBarBackgroundColor,
+      height: themeData.height,
+      color: themeData.backgroundColor,
       child: SafeArea(
         bottom: safeAreaInsetBottom,
         top: false,

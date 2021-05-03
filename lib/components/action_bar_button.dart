@@ -4,7 +4,10 @@ import 'package:flutter/material.dart';
 
 // 🌎 Project imports:
 import '../mixins/route_mixins.dart';
+import '../styles/components/action_bar_theme.dart';
+import '../styles/theme.dart';
 import '../styles/var.dart';
+import '../utils/widget.dart';
 import 'action_bar.dart';
 import 'button.dart';
 
@@ -83,6 +86,9 @@ class FlanActionBarButton extends RouteStatelessWidget {
     final bool isLast = !(index != parent.children.length - 1 &&
         parent.children.elementAt(index + 1) is FlanActionBarButton);
 
+    final FlanActionBarThemeData themeData =
+        FlanTheme.of(context).actionBarTheme;
+
     return Expanded(
       child: Padding(
         padding: EdgeInsets.only(
@@ -90,14 +96,14 @@ class FlanActionBarButton extends RouteStatelessWidget {
           right: isLast ? 5.0 : 0.0,
         ),
         child: SizedBox(
-          height: height ?? ThemeVars.actionBarButtonHeight,
+          height: height ?? themeData.buttonHeight,
           child: FlanButton(
             radius: BorderRadius.horizontal(
               left: isFirst
-                  ? const Radius.circular(ThemeVars.borderRadiusMax)
+                  ? Radius.circular(FlanThemeVars.borderRadiusMax.rpx)
                   : Radius.zero,
               right: isLast
-                  ? const Radius.circular(ThemeVars.borderRadiusMax)
+                  ? Radius.circular(FlanThemeVars.borderRadiusMax.rpx)
                   : Radius.zero,
             ),
             size: FlanButtonSize.large,
@@ -106,11 +112,10 @@ class FlanActionBarButton extends RouteStatelessWidget {
             iconUrl: iconUrl,
             color: color,
             gradient: gradient ??
-                (type == FlanButtonType.danger
-                    ? ThemeVars.actionBarButtonDangerColor
-                    : type == FlanButtonType.warning
-                        ? ThemeVars.actionBarButtonWarningColor
-                        : null),
+                <FlanButtonType, Gradient>{
+                  FlanButtonType.danger: themeData.buttonDangerColor,
+                  FlanButtonType.warning: themeData.buttonWarningColor,
+                }[type],
             loading: loading,
             disabled: disabled,
             onClick: () {
@@ -120,9 +125,9 @@ class FlanActionBarButton extends RouteStatelessWidget {
               }
             },
             child: DefaultTextStyle(
-              style: const TextStyle(
-                fontSize: ThemeVars.fontSizeMd,
-                fontWeight: ThemeVars.fontWeightBold,
+              style: TextStyle(
+                fontSize: FlanThemeVars.fontSizeMd.rpx,
+                fontWeight: FlanThemeVars.fontWeightBold,
               ),
               child: child ?? Text(text),
             ),

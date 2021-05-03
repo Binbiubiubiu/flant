@@ -55,15 +55,17 @@ class FlanLoading extends StatelessWidget {
   Widget build(BuildContext context) {
     final FlanLoadingThemeData themeData = FlanTheme.of(context).loadingTheme;
 
-    final SizedBox icon = SizedBox(
-      width: size ?? themeData.spinnerSize,
-      height: size ?? themeData.spinnerSize,
-      child: type == FlanLoadingType.spinner
-          ? _FlanLoadingSpinner(
-              color: color ?? themeData.spinnerColor,
-              duration: themeData.spinnerAnimationDuration,
-            )
-          : _FlanLoadingCirclar(color: color ?? themeData.spinnerColor),
+    final Widget icon = RepaintBoundary(
+      child: SizedBox(
+        width: size ?? themeData.spinnerSize,
+        height: size ?? themeData.spinnerSize,
+        child: type == FlanLoadingType.spinner
+            ? _FlanLoadingSpinner(
+                color: color ?? themeData.spinnerColor,
+                duration: themeData.spinnerAnimationDuration,
+              )
+            : _FlanLoadingCirclar(color: color ?? themeData.spinnerColor),
+      ),
     );
 
     if (vertical) {

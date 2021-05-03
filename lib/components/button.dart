@@ -170,26 +170,24 @@ class FlanButton extends RouteStatelessWidget {
               child: _buildContent(sideIcon),
             ),
             Positioned.fill(
-              child: RepaintBoundary(
-                child: FlanActiveResponse(
-                  disabled: disabled || loading,
-                  cursorBuilder: (SystemMouseCursor cursor) =>
-                      loading ? SystemMouseCursors.basic : cursor,
-                  onClick: () {
-                    if (onClick != null) {
-                      onClick!();
-                    }
-                    route(context);
-                  },
-                  builder: (BuildContext contenxt, bool active, Widget? child) {
-                    return Container(
-                      decoration: BoxDecoration(
-                        borderRadius: radius,
-                        color: ThemeVars.black.withOpacity(active ? 0.1 : 0.0),
-                      ),
-                    );
-                  },
-                ),
+              child: FlanActiveResponse(
+                disabled: disabled || loading,
+                cursorBuilder: (SystemMouseCursor cursor) =>
+                    loading ? SystemMouseCursors.basic : cursor,
+                onClick: () {
+                  if (onClick != null) {
+                    onClick!();
+                  }
+                  route(context);
+                },
+                builder: (BuildContext contenxt, bool active, Widget? child) {
+                  return Container(
+                    decoration: BoxDecoration(
+                      borderRadius: radius,
+                      color: ThemeVars.black.withOpacity(active ? 0.1 : 0.0),
+                    ),
+                  );
+                },
               ),
             ),
           ],
