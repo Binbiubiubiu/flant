@@ -39,9 +39,12 @@ jobs:
       - name: Run tests
         run: flutter test --coverage --coverage-path coverage/lcov.info
 
+      - name: clean untested file
+        run: flutter pub active clean_coverage
+        run: flutter  pub global run clean_coverage clean --exclusions-file codecov_exclusions.txt coverage/lcov.info
+
       - name: Upload coverage to codecov
         uses: codecov/codecov-action@v1
         with:
           token: ${{ secrets.CODECOV_TOKEN }}
-          flags: components
           file: ./coverage/lcov.info
