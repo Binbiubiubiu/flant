@@ -1,6 +1,0 @@
-lib/components/common/**
-lib/locale/**
-lib/mixins/**
-lib/styles/**
-lib/utils/**
-flant.dart

@@ -43,4 +43,5 @@ jobs:
         uses: codecov/codecov-action@v1
         with:
           token: ${{ secrets.CODECOV_TOKEN }}
+          flags: components
           file: ./coverage/lcov.info
