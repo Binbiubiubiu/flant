@@ -23,6 +23,7 @@ typedef FlanFieldFormatter = String Function(String);
 /// ### FlanField
 /// 表单中的输入框组件。
 @optionalTypeArgs
+// ignore: must_be_immutable
 class FlanField<T extends dynamic> extends StatefulWidget {
   FlanField({
     Key? key,

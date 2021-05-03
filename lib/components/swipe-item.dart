@@ -17,10 +17,4 @@ class FlanSwipeItem extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container();
   }
-
-  @override
-  // ignore: unnecessary_overrides
-  void debugFillProperties(DiagnosticPropertiesBuilder properties) {
-    super.debugFillProperties(properties);
-  }
 }
