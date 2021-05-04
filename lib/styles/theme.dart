@@ -1,5 +1,6 @@
 // 🐦 Flutter imports:
 import 'package:flant/styles/components/action_bar_theme.dart';
+import 'package:flant/styles/components/card_theme.dart';
 import 'package:flant/styles/components/pagination_theme.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
@@ -83,6 +84,7 @@ class FlanThemeData with Diagnosticable {
     FlanActionBarThemeData? actionBarTheme,
     FlanBadgeThemeData? badgeTheme,
     FlanButtonThemeData? buttonTheme,
+    FlanCardThemeData? cardTheme,
     FlanCellThemeData? cellTheme,
     FlanCellGroupThemeData? cellGroupTheme,
     FlanCircleThemeData? circleTheme,
@@ -108,6 +110,7 @@ class FlanThemeData with Diagnosticable {
       actionBarTheme: actionBarTheme ?? FlanActionBarThemeData(),
       badgeTheme: badgeTheme ?? FlanBadgeThemeData(),
       buttonTheme: buttonTheme ?? FlanButtonThemeData(),
+      cardTheme: cardTheme ?? FlanCardThemeData(),
       cellTheme: cellTheme ?? FlanCellThemeData(),
       cellGroupTheme: cellGroupTheme ?? FlanCellGroupThemeData(),
       circleTheme: circleTheme ?? FlanCircleThemeData(),
@@ -135,6 +138,7 @@ class FlanThemeData with Diagnosticable {
     required this.actionBarTheme,
     required this.badgeTheme,
     required this.buttonTheme,
+    required this.cardTheme,
     required this.cellTheme,
     required this.cellGroupTheme,
     required this.circleTheme,
@@ -167,6 +171,9 @@ class FlanThemeData with Diagnosticable {
 
   /// Button 按钮
   final FlanButtonThemeData buttonTheme;
+
+  /// Card 卡片
+  final FlanCardThemeData cardTheme;
 
   /// ContactCard 联系人卡片
   final FlanContactCardThemeData contactCardTheme;
@@ -234,6 +241,7 @@ class FlanThemeData with Diagnosticable {
           FlanActionBarThemeData.lerp(a.actionBarTheme, b.actionBarTheme, t),
       badgeTheme: FlanBadgeThemeData.lerp(a.badgeTheme, b.badgeTheme, t),
       buttonTheme: FlanButtonThemeData.lerp(a.buttonTheme, b.buttonTheme, t),
+      cardTheme: FlanCardThemeData.lerp(a.cardTheme, b.cardTheme, t),
       cellTheme: FlanCellThemeData.lerp(a.cellTheme, b.cellTheme, t),
       cellGroupTheme:
           FlanCellGroupThemeData.lerp(a.cellGroupTheme, b.cellGroupTheme, t),

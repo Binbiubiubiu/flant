@@ -3,7 +3,10 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
 // 🌎 Project imports:
+import '../styles/components/card_theme.dart';
+import '../styles/theme.dart';
 import '../styles/var.dart';
+import '../utils/widget.dart';
 import 'image.dart';
 import 'tag.dart';
 
@@ -16,17 +19,16 @@ class FlanCard extends StatelessWidget {
     this.title = '',
     this.desc = '',
     this.tag = '',
-    this.number = '',
+    this.num = '',
     this.price = '',
     this.originPrice = '',
     this.centered = false,
     this.currency = '¥',
     this.thumbLink,
-    this.onClick,
     this.onClickThumb,
     this.titleSlot,
     this.descSlot,
-    this.numberSlot,
+    this.numSlot,
     this.priceSlot,
     this.originPriceSlot,
     this.priceTopSlot,
@@ -51,7 +53,7 @@ class FlanCard extends StatelessWidget {
   final String tag;
 
   /// 商品数量
-  final String number;
+  final String num;
 
   /// 商品价格
   final String price;
@@ -73,9 +75,6 @@ class FlanCard extends StatelessWidget {
 
   // ****************** Events ******************
 
-  /// 点击时触发
-  final VoidCallback? onClick;
-
   /// 点击自定义图片时触发
   final VoidCallback? onClickThumb;
 
@@ -87,7 +86,7 @@ class FlanCard extends StatelessWidget {
   final Widget? descSlot;
 
   /// 自定义数量
-  final Widget? numberSlot;
+  final Widget? numSlot;
 
   /// 自定义价格
   final Widget? priceSlot;
@@ -114,135 +113,133 @@ class FlanCard extends StatelessWidget {
   final List<Widget>? footerSlot;
   @override
   Widget build(BuildContext context) {
+    final FlanCardThemeData themeData = FlanTheme.of(context).cardTheme;
     return Container(
-      padding: ThemeVars.cardPadding,
-      color: ThemeVars.cardBackgroundColor,
+      padding: themeData.padding,
+      color: themeData.backgroundColor,
       child: DefaultTextStyle(
-        style: const TextStyle(
-          color: ThemeVars.cardTextColor,
-          fontSize: ThemeVars.cardFontSize,
+        style: TextStyle(
+          color: themeData.textColor,
+          fontSize: themeData.fontSize,
         ),
         child: Column(
-          children: <Widget>[
+          children: <Widget?>[
             Row(
-              children: <Widget>[
-                _buildThumb(),
+              children: <Widget?>[
+                _buildThumb(themeData),
                 Expanded(
                   child: Container(
-                    constraints: const BoxConstraints(
+                    constraints: BoxConstraints(
                       minWidth: 0.0,
-                      minHeight: ThemeVars.cardThumbSize,
+                      minHeight: themeData.thumbSize,
                     ),
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: <Widget>[
+                      children: <Widget?>[
                         Column(
                           mainAxisSize: MainAxisSize.min,
                           crossAxisAlignment: CrossAxisAlignment.start,
-                          children: <Widget>[
-                            _buildTitle(),
-                            _buildDesc(),
-                            const SizedBox(height: 2.0),
-                            tagsSlot ?? const SizedBox.shrink(),
-                          ],
+                          children: <Widget?>[
+                            _buildTitle(themeData),
+                            _buildDesc(themeData),
+                            SizedBox(height: 2.0.rpx),
+                            tagsSlot,
+                          ].noNull,
                         ),
-                        _buildBottom(),
-                      ],
+                        _buildBottom(themeData),
+                      ].noNull,
                     ),
                   ),
                 ),
-              ],
+              ].noNull,
             ),
             _buildFooter(),
-          ],
+          ].noNull,
         ),
       ),
     );
   }
 
-  bool get _showNum => numberSlot != null || number.isNotEmpty;
+  bool get _showNum => numSlot != null || num.isNotEmpty;
   bool get _showPrice => priceSlot != null || price.isNotEmpty;
   bool get _showOriginPrice =>
       originPriceSlot != null || originPrice.isNotEmpty;
   bool get _showBottom =>
       _showNum || _showPrice || _showOriginPrice || bottomSlot != null;
 
-  Widget _buildPrice() {
+  Widget _buildPrice(FlanCardThemeData themeData) {
     if (_showPrice) {
       return DefaultTextStyle(
-        style: const TextStyle(
-          color: ThemeVars.cardPriceColor,
-          fontSize: ThemeVars.cardPriceFontSize,
-          fontWeight: ThemeVars.fontWeightBold,
+        style: TextStyle(
+          color: themeData.priceColor,
+          fontSize: themeData.priceFontSize,
+          fontWeight: FlanThemeVars.fontWeightBold,
         ),
-        child: priceSlot ?? _buildPriceText(),
+        child: priceSlot ?? _buildPriceText(themeData),
       );
     }
     return const SizedBox.shrink();
   }
 
-  Widget _buildOriginPrice() {
+  Widget? _buildOriginPrice(FlanCardThemeData themeData) {
     if (_showOriginPrice) {
       return Padding(
-        padding: const EdgeInsets.only(left: 5.0),
+        padding: EdgeInsets.only(left: 5.0.rpx),
         child: DefaultTextStyle(
-          style: const TextStyle(
-            color: ThemeVars.cardOriginPriceColor,
-            fontSize: ThemeVars.cardOriginPriceFontSize,
+          style: TextStyle(
+            color: themeData.originPriceColor,
+            fontSize: themeData.originPriceFontSize,
             decoration: TextDecoration.lineThrough,
           ),
           child: originPriceSlot ?? Text('$currency $originPrice'),
         ),
       );
     }
-    return const SizedBox.shrink();
   }
 
-  Widget _buildNumber() {
+  Widget _buildNumber(FlanCardThemeData themeData) {
     if (_showNum) {
       return DefaultTextStyle(
-        style: const TextStyle(
-          color: ThemeVars.cardNumColor,
+        style: TextStyle(
+          color: themeData.numColor,
         ),
-        child: numberSlot ?? Text('x$number'),
+        child: numSlot ?? Text('x$num'),
       );
     }
     return const SizedBox.shrink();
   }
 
-  Widget _buildBottom() {
+  Widget? _buildBottom(FlanCardThemeData themeData) {
     if (_showBottom) {
       return Row(
         children: <Widget>[
           Expanded(
             child: Wrap(
               crossAxisAlignment: WrapCrossAlignment.center,
-              children: <Widget>[
-                priceTopSlot ?? const SizedBox.shrink(),
-                _buildPrice(),
-                _buildOriginPrice(),
-                bottomSlot ?? const SizedBox.shrink(),
-              ],
+              children: <Widget?>[
+                priceTopSlot,
+                _buildPrice(themeData),
+                _buildOriginPrice(themeData),
+                bottomSlot,
+              ].noNull,
             ),
           ),
-          _buildNumber()
+          _buildNumber(themeData)
         ],
       );
     }
-
-    return const SizedBox.shrink();
   }
 
-  Widget _buildPriceText() {
+  Widget _buildPriceText(FlanCardThemeData themeData) {
     final List<String> priceArr = price.split('.');
     return Text.rich(
       TextSpan(children: <InlineSpan>[
         TextSpan(text: currency),
         TextSpan(
           text: priceArr.elementAt(0),
-          style: const TextStyle(
-            fontSize: ThemeVars.cardPriceIntegerFontSize,
+          style: TextStyle(
+            fontSize: themeData.priceIntegerFontSize,
           ),
         ),
         TextSpan(text: '.${priceArr.elementAt(1)}'),
@@ -250,7 +247,7 @@ class FlanCard extends StatelessWidget {
     );
   }
 
-  Widget _buildTitle() {
+  Widget _buildTitle(FlanCardThemeData themeData) {
     if (titleSlot != null) {
       return titleSlot!;
     }
@@ -262,32 +259,31 @@ class FlanCard extends StatelessWidget {
         maxLines: 2,
         overflow: TextOverflow.ellipsis,
         style: const TextStyle(
-          fontWeight: ThemeVars.fontWeightBold,
-          // height: ThemeVars.cardTitleLineHeight,
+          fontWeight: FlanThemeVars.fontWeightBold,
+          // height: themeData.titleLineHeight,
         ),
       ),
     );
   }
 
-  Widget _buildDesc() {
+  Widget? _buildDesc(FlanCardThemeData themeData) {
     if (descSlot != null) {
       return descSlot!;
     }
     if (desc.isNotEmpty) {
       return Text(
         desc,
-        style: const TextStyle(
-          color: ThemeVars.cardDescColor,
-          // height: ThemeVars.cardDescLineHeight ,
+        style: TextStyle(
+          color: themeData.descColor,
+          // height: themeData.descLineHeight ,
         ),
         maxLines: 1,
         overflow: TextOverflow.ellipsis,
       );
     }
-    return const SizedBox.shrink();
   }
 
-  Widget _buildThumbTag() {
+  Widget? _buildThumbTag() {
     if (tagSlot != null || tag.isNotEmpty) {
       return Positioned(
         top: 2.0,
@@ -300,11 +296,9 @@ class FlanCard extends StatelessWidget {
             ),
       );
     }
-
-    return const SizedBox.shrink();
   }
 
-  Widget _bulidThumbImage() {
+  Widget _bulidThumbImage(FlanCardThemeData themeData) {
     if (thumbSlot != null) {
       return thumbSlot!;
     }
@@ -312,13 +306,13 @@ class FlanCard extends StatelessWidget {
     return FlanImage(
       src: thumb,
       fit: BoxFit.cover,
-      width: ThemeVars.cardThumbSize,
-      height: ThemeVars.cardThumbSize,
-      radius: ThemeVars.cardThumbBorderRadius,
+      width: themeData.thumbSize,
+      height: themeData.thumbSize,
+      radius: themeData.thumbBorderRadius,
     );
   }
 
-  Widget _buildThumb() {
+  Widget? _buildThumb(FlanCardThemeData themeData) {
     if (thumbSlot != null || thumb.isNotEmpty) {
       return GestureDetector(
         onTap: () {
@@ -327,18 +321,16 @@ class FlanCard extends StatelessWidget {
           }
         },
         child: Stack(
-          children: <Widget>[
-            _bulidThumbImage(),
+          children: <Widget?>[
+            _bulidThumbImage(themeData),
             _buildThumbTag(),
-          ],
+          ].noNull,
         ),
       );
     }
-
-    return const SizedBox.shrink();
   }
 
-  Widget _buildFooter() {
+  Widget? _buildFooter() {
     if (footerSlot != null) {
       return SizedBox(
         width: double.infinity,
@@ -349,8 +341,6 @@ class FlanCard extends StatelessWidget {
         ),
       );
     }
-
-    return const SizedBox.shrink();
   }
 
   @override
@@ -361,8 +351,7 @@ class FlanCard extends StatelessWidget {
         .add(DiagnosticsProperty<String>('title', title, defaultValue: ''));
     properties.add(DiagnosticsProperty<String>('desc', desc, defaultValue: ''));
     properties.add(DiagnosticsProperty<String>('tag', tag, defaultValue: ''));
-    properties
-        .add(DiagnosticsProperty<String>('number', number, defaultValue: ''));
+    properties.add(DiagnosticsProperty<String>('num', num, defaultValue: ''));
     properties
         .add(DiagnosticsProperty<String>('price', price, defaultValue: ''));
     properties.add(DiagnosticsProperty<String>('originPrice', originPrice,
