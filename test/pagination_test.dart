@@ -31,6 +31,9 @@ void main() {
   testWidgets('should render page slot correctly', (WidgetTester tester) async {
     await tester.pumpWidget(
       MaterialApp(
+        localizationsDelegates: const <LocalizationsDelegate<dynamic>>[
+          FlanS.delegate,
+        ],
         home: Material(
           child: FlanPagination(
             value: 1,
@@ -42,6 +45,7 @@ void main() {
         ),
       ),
     );
+    await tester.pumpAndSettle();
     expect(find.textContaining('foo'), findsWidgets);
   });
 }
