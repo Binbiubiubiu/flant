@@ -19,7 +19,7 @@ dependencies:
 dev_dependencies:
   flutter_test:
     sdk: flutter
-  import_sorter: ^4.4.2
+  import_sorter: ^4.5.0
   intl_utils: ^2.0.0
 
 # For information on the generic Dart part of this file, see the

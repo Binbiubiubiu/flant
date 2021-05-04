@@ -1,5 +1,6 @@
 // 🐦 Flutter imports:
 import 'package:flant/styles/components/action_bar_theme.dart';
+import 'package:flant/styles/components/pagination_theme.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
@@ -91,6 +92,7 @@ class FlanThemeData with Diagnosticable {
     FlanDividerThemeData? dividerTheme,
     FlanEmptyThemeData? emptyTheme,
     FlanImageThemeData? imageTheme,
+    FlanPaginationThemeData? paginationTheme,
     FlanProgressThemeData? progressTheme,
     FlanTagThemeData? tagTheme,
     FlanTabbarThemeData? tabbarTheme,
@@ -115,6 +117,7 @@ class FlanThemeData with Diagnosticable {
       dividerTheme: dividerTheme ?? FlanDividerThemeData(),
       emptyTheme: emptyTheme ?? FlanEmptyThemeData(),
       imageTheme: imageTheme ?? FlanImageThemeData(),
+      paginationTheme: paginationTheme ?? FlanPaginationThemeData(),
       progressTheme: progressTheme ?? FlanProgressThemeData(),
       tagTheme: tagTheme ?? FlanTagThemeData(),
       tabbarTheme: tabbarTheme ?? FlanTabbarThemeData(),
@@ -141,6 +144,7 @@ class FlanThemeData with Diagnosticable {
     required this.dividerTheme,
     required this.emptyTheme,
     required this.imageTheme,
+    required this.paginationTheme,
     required this.progressTheme,
     required this.tagTheme,
     required this.tabbarTheme,
@@ -201,6 +205,9 @@ class FlanThemeData with Diagnosticable {
   final FlanNoticeBarThemeData noticeBarTheme;
 
   /// Progress 进度条
+  final FlanPaginationThemeData paginationTheme;
+
+  /// Progress 进度条
   final FlanProgressThemeData progressTheme;
 
   /// Tabbar 标签栏
@@ -241,6 +248,8 @@ class FlanThemeData with Diagnosticable {
           FlanDividerThemeData.lerp(a.dividerTheme, b.dividerTheme, t),
       emptyTheme: FlanEmptyThemeData.lerp(a.emptyTheme, b.emptyTheme, t),
       imageTheme: FlanImageThemeData.lerp(a.imageTheme, b.imageTheme, t),
+      paginationTheme:
+          FlanPaginationThemeData.lerp(a.paginationTheme, b.paginationTheme, t),
       progressTheme:
           FlanProgressThemeData.lerp(a.progressTheme, b.progressTheme, t),
       tagTheme: FlanTagThemeData.lerp(a.tagTheme, b.tagTheme, t),

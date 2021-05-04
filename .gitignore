@@ -28,9 +28,11 @@
 .packages
 .pub-cache/
 .pub/
+package-lock.json
 /build/
 /exmaple/
 /coverage/
+/node_modules/
 
 # Android related
 **/android/**/gradle-wrapper.jar

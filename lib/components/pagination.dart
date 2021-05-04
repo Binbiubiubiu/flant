@@ -2,13 +2,18 @@
 import 'dart:math' as math;
 
 // 🐦 Flutter imports:
+import 'package:flant/components/common/active_response.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 
 // 🌎 Project imports:
-import 'package:flant/flant.dart';
+import '../locale/l10n.dart';
+import '../styles/components/pagination_theme.dart';
+import '../styles/theme.dart';
 import '../styles/var.dart';
+import '../utils/widget.dart';
+import 'style.dart' show FlanHairLine;
 
 /// Pagination 分页
 class FlanPagination extends StatefulWidget {
@@ -82,7 +87,7 @@ class FlanPagination extends StatefulWidget {
 class _FlanPaginationState extends State<FlanPagination> {
   @override
   void initState() {
-    WidgetsBinding.instance?.addPostFrameCallback((Duration timeStamp) {
+    nextTick(() {
       select(widget.value);
     });
     super.initState();
@@ -90,12 +95,15 @@ class _FlanPaginationState extends State<FlanPagination> {
 
   @override
   Widget build(BuildContext context) {
+    final FlanPaginationThemeData themeData =
+        FlanTheme.of(context).paginationTheme;
+
     return DefaultTextStyle(
-      style: const TextStyle(
-        fontSize: ThemeVars.paginationFontSize,
+      style: TextStyle(
+        fontSize: themeData.fontSize,
       ),
       child: Row(
-        children: <Widget>[
+        children: <Widget?>[
           _PaginationItem(
             isPreOrNext: true,
             disabled: widget.value == 1,
@@ -113,7 +121,7 @@ class _FlanPaginationState extends State<FlanPagination> {
                         : Text(e.text),
                   ))
               .toList(),
-          _buildDesc(),
+          _buildDesc(themeData),
           _PaginationItem(
             isPreOrNext: true,
             disabled: widget.value == count,
@@ -122,27 +130,26 @@ class _FlanPaginationState extends State<FlanPagination> {
             child: widget.nextTextSlot ??
                 Text(widget.nextText ?? FlanS.of(context).Pagination_next),
           ),
-        ],
+        ].noNull,
       ),
     );
   }
 
-  Widget _buildDesc() {
+  Widget? _buildDesc(FlanPaginationThemeData themeData) {
     if (widget.mode != FlanPaginationMode.multi) {
       return Expanded(
         child: Container(
-          height: ThemeVars.paginationHeight,
+          height: themeData.height,
           alignment: Alignment.center,
           child: DefaultTextStyle(
-            style: const TextStyle(
-              color: ThemeVars.paginationDescColor,
+            style: TextStyle(
+              color: themeData.descColor,
             ),
             child: widget.pageDescSlot ?? Text('${widget.value}/$count'),
           ),
         ),
       );
     }
-    return const SizedBox.shrink();
   }
 
   void select(int page) {
@@ -166,7 +173,7 @@ class _FlanPaginationState extends State<FlanPagination> {
     if (widget.mode != FlanPaginationMode.multi) {
       return items;
     }
-// Default page limits
+    // Default page limits
     int startPage = 1;
     int endPage = pageCount;
     final bool isMaxSized = showPageSize < pageCount;
@@ -251,7 +258,7 @@ PageItem makePage(int number, String text, {bool active = false}) {
   return PageItem(text, number, active);
 }
 
-class _PaginationItem extends StatefulWidget {
+class _PaginationItem extends StatelessWidget {
   const _PaginationItem({
     Key? key,
     this.active = false,
@@ -272,90 +279,68 @@ class _PaginationItem extends StatefulWidget {
   final Widget? child;
 
   @override
-  __PaginationItemState createState() => __PaginationItemState();
-}
-
-class __PaginationItemState extends State<_PaginationItem> {
-  bool isPressed = false;
-
-  void doActive() {
-    setState(() => isPressed = true);
-  }
-
-  void doDisActive() {
-    setState(() => isPressed = false);
-  }
-
-  bool get active => isPressed || widget.active;
-
-  Color get bgColor => widget.disabled
-      ? ThemeVars.paginationItemDisabledBackgroundColor
-      : active
-          ? ThemeVars.paginationItemDefaultColor
-          : ThemeVars.paginationBackgroundColor;
-
-  Color get textColor => widget.disabled
-      ? ThemeVars.paginationItemDefaultColor
-      : active
-          ? ThemeVars.white
-          : ThemeVars.paginationItemDefaultColor;
-
-  @override
   Widget build(BuildContext context) {
-    const BorderSide borderSide = BorderSide(
-      color: ThemeVars.borderColor,
-      width: 0.5,
-    );
+    final FlanPaginationThemeData themeData =
+        FlanTheme.of(context).paginationTheme;
+
+    const BorderSide borderSide = FlanHairLine();
 
     return Expanded(
-      flex: widget.isPreOrNext ? 1 : 0,
-      child: IgnorePointer(
-        ignoring: widget.disabled,
-        child: MouseRegion(
-          cursor: widget.disabled
-              ? SystemMouseCursors.forbidden
-              : SystemMouseCursors.click,
-          child: GestureDetector(
-            onTapDown: (TapDownDetails e) => doActive(),
-            onTapCancel: () => doDisActive(),
-            onTapUp: (TapUpDetails e) => doDisActive(),
-            onTap: widget.onClick,
-            child: DefaultTextStyle(
-              style: TextStyle(color: textColor),
-              child: Opacity(
-                opacity:
-                    widget.disabled ? ThemeVars.paginationDisabledOpacity : 1.0,
-                child: Container(
-                  decoration: BoxDecoration(
-                    color: bgColor,
-                    border: Border(
-                      top: borderSide,
-                      bottom: borderSide,
-                      left: borderSide,
-                      right: borderSide.copyWith(
-                        width: widget.isLast ? 1.0 : 0.0,
-                      ),
-                    ),
-                  ),
-                  padding: EdgeInsets.symmetric(
-                    horizontal:
-                        widget.isPreOrNext ? ThemeVars.paddingBase : 0.0,
-                  ),
-                  height: ThemeVars.paginationHeight,
-                  constraints: const BoxConstraints(
-                    minWidth: ThemeVars.paginationItemWidth,
-                  ),
-                  alignment: Alignment.center,
-                  child: IconTheme(
-                    data: IconThemeData(
-                      color: textColor,
-                      size: ThemeVars.paginationFontSize,
-                    ),
-                    child: widget.child ?? const SizedBox.shrink(),
-                  ),
+      flex: isPreOrNext ? 1 : 0,
+      child: Opacity(
+        opacity: disabled ? themeData.disabledOpacity : 1.0,
+        child: FlanActiveResponse(
+          disabled: disabled,
+          builder: (BuildContext contenxt, bool isPressed, Widget? child) {
+            final bool _active = isPressed || active;
+
+            final Color bgColor = disabled
+                ? themeData.itemDisabledBackgroundColor
+                : _active
+                    ? themeData.itemDefaultColor
+                    : themeData.backgroundColor;
+
+            final Color textColor = disabled
+                ? themeData.itemDefaultColor
+                : _active
+                    ? FlanThemeVars.white
+                    : themeData.itemDefaultColor;
+
+            return IconTheme(
+              data: IconThemeData(
+                color: textColor,
+                size: themeData.fontSize,
+              ),
+              child: DefaultTextStyle(
+                style: TextStyle(color: textColor),
+                child: DecoratedBox(
+                  decoration: BoxDecoration(color: bgColor),
+                  child: child,
+                ),
+              ),
+            );
+          },
+          onClick: onClick,
+          child: Container(
+            decoration: BoxDecoration(
+              border: Border(
+                top: borderSide,
+                bottom: borderSide,
+                left: borderSide,
+                right: borderSide.copyWith(
+                  width: isLast ? 1.0 : 0.0,
                 ),
               ),
             ),
+            padding: EdgeInsets.symmetric(
+              horizontal: isPreOrNext ? FlanThemeVars.paddingBase.rpx : 0.0,
+            ),
+            height: themeData.height,
+            constraints: BoxConstraints(
+              minWidth: themeData.itemWidth,
+            ),
+            alignment: Alignment.center,
+            child: child,
           ),
         ),
       ),
