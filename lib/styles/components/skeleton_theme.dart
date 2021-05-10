@@ -141,8 +141,8 @@ class FlanSkeletonThemeData with Diagnosticable {
       avatarSize: lerpDouble(a?.avatarSize, b?.avatarSize, t),
       avatarBackgroundColor:
           Color.lerp(a?.avatarBackgroundColor, b?.avatarBackgroundColor, t),
-      // animationDuration:
-      //     Duration.lerp(a?.animationDuration, b?.animationDuration, t),
+      animationDuration: lerpDuration(a?.animationDuration ?? Duration.zero,
+          b?.animationDuration ?? Duration.zero, t),
     );
   }
 

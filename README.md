@@ -1,6 +1,7 @@
 # flant
 
 ![GitHub Repo stars](https://img.shields.io/github/stars/Simon-Bin/flant?style=social) [![publish_dry](https://github.com/Simon-Bin/flant/actions/workflows/publish_dry.yml/badge.svg)](https://github.com/Simon-Bin/flant/actions/workflows/publish_dry.yml) [![codecov](https://codecov.io/gh/Simon-Bin/flant/branch/master/graph/badge.svg?token=TTOTI50ZEM)](https://codecov.io/gh/Simon-Bin/flant) ![GitHub](https://img.shields.io/github/license/Simon-Bin/flant)
+
 轻量、可靠的移动端 Flutter 组件库
 
 ##### 基础组件
@@ -79,7 +80,7 @@
 
 ##### 业务组件
 
-- [ ] AddressEidt 地址编辑
+- [ ] AddressEdit 地址编辑
 - [x] AddressList 地址列表
 - [x] Area 省市区选择
 - [x] Card 商品卡片

@@ -143,8 +143,7 @@ class FlanButton extends FlanRouteStatelessWidget {
 
     final TextStyle textStyle = TextStyle(
       fontSize: _btnSize.fontSize,
-      // height: ThemeVars.buttonDefaultLineHeight /
-      //     ThemeVars.buttonDefaultFontSize,
+      height: themeData.defaultLineHeight,
       color: textColor ?? _themeType.color,
     );
 
@@ -163,6 +162,7 @@ class FlanButton extends FlanRouteStatelessWidget {
         ),
         height: _btnSize.height,
         child: Stack(
+          clipBehavior: Clip.hardEdge,
           alignment: Alignment.center,
           children: <Widget>[
             Padding(
@@ -183,8 +183,10 @@ class FlanButton extends FlanRouteStatelessWidget {
                 builder: (BuildContext contenxt, bool active, Widget? child) {
                   return Container(
                     decoration: BoxDecoration(
+                      color: active
+                          ? ThemeVars.black.withOpacity(0.1)
+                          : Colors.transparent,
                       borderRadius: radius,
-                      color: ThemeVars.black.withOpacity(active ? 0.1 : 0.0),
                     ),
                   );
                 },

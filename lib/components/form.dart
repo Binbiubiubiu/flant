@@ -23,7 +23,7 @@ class FlanForm extends StatefulWidget {
     this.showErrorMessage = true,
     this.onSubmit,
     this.onFailed,
-    this.children = const <FlanField<dynamic>>[],
+    this.children = const <FlanField>[],
   }) : super(key: key);
 
   // ****************** Props ******************
@@ -72,13 +72,62 @@ class FlanForm extends StatefulWidget {
 
   // ****************** Slots ******************
 
-  final List<FlanField<dynamic>> children;
+  final List<FlanField> children;
 
   @override
   FlanFormState createState() => FlanFormState();
+
+  static FlanFormState? of(BuildContext context) {
+    return context
+        .dependOnInheritedWidgetOfExactType<_FlanFormScope>()
+        ?._formState;
+  }
+
+  @override
+  void debugFillProperties(DiagnosticPropertiesBuilder properties) {
+    properties
+        .add(DiagnosticsProperty<bool>('colon', colon, defaultValue: false));
+    properties.add(
+        DiagnosticsProperty<bool>('disabled', disabled, defaultValue: false));
+    properties.add(
+        DiagnosticsProperty<bool>('readonly', readonly, defaultValue: false));
+    properties.add(
+        DiagnosticsProperty<bool>('showError', showError, defaultValue: true));
+    properties.add(DiagnosticsProperty<double>('labelWidth', labelWidth));
+    properties.add(DiagnosticsProperty<TextAlign>('labelAlign', labelAlign,
+        defaultValue: TextAlign.left));
+    properties.add(DiagnosticsProperty<TextAlign>('inputAlign', inputAlign,
+        defaultValue: TextAlign.left));
+    properties.add(DiagnosticsProperty<bool>('scrollToError', scrollToError,
+        defaultValue: false));
+    properties.add(DiagnosticsProperty<bool>('validateFirst', validateFirst,
+        defaultValue: false));
+    properties.add(DiagnosticsProperty<bool>('submitOnEnter', submitOnEnter,
+        defaultValue: true));
+    properties.add(DiagnosticsProperty<TextAlign>(
+        'errMessageAlign', errMessageAlign,
+        defaultValue: TextAlign.left));
+    properties.add(DiagnosticsProperty<FlanFieldValidateTrigger>(
+        'validateTrigger', validateTrigger,
+        defaultValue: FlanFieldValidateTrigger.onBlur));
+    properties.add(DiagnosticsProperty<bool>(
+        'showErrorMessage', showErrorMessage,
+        defaultValue: false));
+    super.debugFillProperties(properties);
+  }
 }
 
 class FlanFormState extends State<FlanForm> {
+  final Map<String, FlanFieldState> _fields = <String, FlanFieldState>{};
+
+  void register(String name, FlanFieldState field) {
+    _fields[name] = field;
+  }
+
+  void unregister(String name) {
+    _fields.remove(name);
+  }
+
   @override
   void initState() {
     super.initState();
@@ -86,31 +135,29 @@ class FlanFormState extends State<FlanForm> {
 
   @override
   Widget build(BuildContext context) {
-    return FlanFormScope(
-      parent: widget,
+    return _FlanFormScope(
+      formState: this,
       child: Column(
         children: widget.children,
       ),
     );
   }
 
-  List<FlanField<dynamic>> _getFieldsByNames({List<String>? names}) {
+  List<FlanFieldState> _getFieldsByNames({List<String>? names}) {
     if (names != null) {
-      final List<FlanField<dynamic>> children = <FlanField<dynamic>>[];
-
-      context.visitChildElements((Element element) {
-        children.add(element.widget as FlanField<dynamic>);
-      });
-      return children;
+      return _fields.keys
+          .where((String key) => names.contains(key))
+          .map((String key) => _fields[key]!)
+          .toList();
     }
-    return widget.children;
+    return _fields.values.toList();
   }
 
   Future<void> _validateSeq({List<String>? names}) async {
     final List<FlanFieldValidateError> errors = <FlanFieldValidateError>[];
-    final List<FlanField<dynamic>> fields = _getFieldsByNames(names: names);
+    final List<FlanFieldState> fields = _getFieldsByNames(names: names);
 
-    for (final FlanField<dynamic> field in fields) {
+    for (final FlanFieldState field in fields) {
       if (errors.isEmpty) {
         final FlanFieldValidateError? error = await field.validate();
         if (error != null) {
@@ -126,9 +173,9 @@ class FlanFormState extends State<FlanForm> {
 
   Future<dynamic> _validateAll({List<String>? names}) async {
     final List<FlanFieldValidateError> errors = <FlanFieldValidateError>[];
-    final List<FlanField<dynamic>> fields = _getFieldsByNames(names: names);
+    final List<FlanFieldState> fields = _getFieldsByNames(names: names);
 
-    for (final FlanField<dynamic> field in fields) {
+    for (final FlanFieldState field in fields) {
       final FlanFieldValidateError? error = await field.validate();
       if (error != null) {
         errors.add(error);
@@ -140,16 +187,11 @@ class FlanFormState extends State<FlanForm> {
   }
 
   Future<void> _validateField(String name) async {
-    final int index = widget.children.indexWhere(
-      (FlanField<dynamic> item) => item.name == name,
-    );
-    if (index != -1) {
-      final FlanField<dynamic> matched = widget.children.elementAt(index);
-      final FlanFieldValidateError? error = await matched.validate();
+    final FlanFieldState? matched = _fields[name];
+    final FlanFieldValidateError? error = await matched?.validate();
 
-      if (error != null) {
-        throw error;
-      }
+    if (error != null) {
+      throw error;
     }
   }
 
@@ -163,18 +205,18 @@ class FlanFormState extends State<FlanForm> {
   }
 
   void resetValidation<T>({T? name}) {
-    final List<FlanField<dynamic>> fields = _getFieldsByNames(
+    final List<FlanFieldState> fields = _getFieldsByNames(
       names: name is String ? <String>[name as String] : name as List<String>,
     );
 
-    for (final FlanField<dynamic> field in fields) {
+    for (final FlanFieldState field in fields) {
       field.resetValidation();
     }
   }
 
-  Map<String, dynamic> _getValues() => widget.children.fold(<String, dynamic>{},
-          (Map<String, dynamic> form, FlanField<dynamic> field) {
-        form[field.name] = field.value;
+  Map<String, dynamic> _getValues() => _fields.values.fold(<String, dynamic>{},
+          (Map<String, dynamic> form, FlanFieldState field) {
+        form[field.widget.name] = field.modelvalue;
         return form;
       });
 
@@ -197,53 +239,20 @@ class FlanFormState extends State<FlanForm> {
     }
   }
 
-  void scrollToField(String name) {
-    for (int i = 0; i < widget.children.length; i++) {
-      final FlanField<dynamic> item = widget.children[i];
-      if (item.name == name) {
-        item.scrollToVisiable();
-        break;
-      }
-    }
-  }
-
-  @override
-  void debugFillProperties(DiagnosticPropertiesBuilder properties) {
-    properties.add(
-        DiagnosticsProperty<bool>('colon', widget.colon, defaultValue: false));
-    properties.add(DiagnosticsProperty<bool>('disabled', widget.disabled,
-        defaultValue: false));
-    properties.add(DiagnosticsProperty<bool>('readonly', widget.readonly,
-        defaultValue: false));
-    properties.add(DiagnosticsProperty<bool>('showError', widget.showError,
-        defaultValue: true));
-    properties
-        .add(DiagnosticsProperty<double>('labelWidth', widget.labelWidth));
-    properties.add(DiagnosticsProperty<TextAlign>(
-        'labelAlign', widget.labelAlign,
-        defaultValue: TextAlign.left));
-    properties.add(DiagnosticsProperty<TextAlign>(
-        'inputAlign', widget.inputAlign,
-        defaultValue: TextAlign.left));
-    properties.add(DiagnosticsProperty<bool>(
-        'scrollToError', widget.scrollToError,
-        defaultValue: false));
-    properties.add(DiagnosticsProperty<bool>(
-        'validateFirst', widget.validateFirst,
-        defaultValue: false));
-    properties.add(DiagnosticsProperty<bool>(
-        'submitOnEnter', widget.submitOnEnter,
-        defaultValue: true));
-    properties.add(DiagnosticsProperty<TextAlign>(
-        'errMessageAlign', widget.errMessageAlign,
-        defaultValue: TextAlign.left));
-    properties.add(DiagnosticsProperty<FlanFieldValidateTrigger>(
-        'validateTrigger', widget.validateTrigger,
-        defaultValue: FlanFieldValidateTrigger.onBlur));
-    properties.add(DiagnosticsProperty<bool>(
-        'showErrorMessage', widget.showErrorMessage,
-        defaultValue: false));
-    super.debugFillProperties(properties);
+  void scrollToField(
+    String name, {
+    double alignment = 0.0,
+    Duration duration = Duration.zero,
+    Curve curve = Curves.ease,
+    ScrollPositionAlignmentPolicy alignmentPolicy =
+        ScrollPositionAlignmentPolicy.explicit,
+  }) {
+    _fields[name]?.scrollToVisiable(
+      alignment: alignment,
+      duration: duration,
+      curve: curve,
+      alignmentPolicy: alignmentPolicy,
+    );
   }
 }
 
@@ -256,21 +265,20 @@ class FlanFormFailDetail {
   final List<FlanFieldValidateError> errors;
 }
 
-class FlanFormScope extends InheritedWidget {
-  const FlanFormScope({
+class _FlanFormScope extends InheritedWidget {
+  const _FlanFormScope({
     Key? key,
-    required this.parent,
+    required FlanFormState formState,
     required Widget child,
-  }) : super(key: key, child: child);
+  })   : _formState = formState,
+        super(key: key, child: child);
 
-  final FlanForm parent;
+  final FlanFormState _formState;
 
-  static FlanFormScope? of(BuildContext context) {
-    return context.dependOnInheritedWidgetOfExactType<FlanFormScope>();
-  }
+  FlanForm get form => _formState.widget;
 
   @override
-  bool updateShouldNotify(FlanFormScope oldWidget) {
-    return parent != oldWidget.parent;
+  bool updateShouldNotify(_FlanFormScope oldWidget) {
+    return _formState != oldWidget._formState;
   }
 }

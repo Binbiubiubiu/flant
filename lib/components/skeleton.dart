@@ -90,19 +90,19 @@ class FlanSkeleton extends StatelessWidget {
       padding: EdgeInsets.symmetric(horizontal: FlanThemeVars.paddingMd.rpx),
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.start,
-        children: <Widget?>[
+        children: <Widget>[
           _buildAvatar(themeData),
           Expanded(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
-              children: <Widget?>[
+              children: <Widget>[
                 SizedBox(height: ThemeVars.paddingXs.rpx),
                 _buildTitle(themeData),
                 ..._buildRows(themeData),
-              ].noNull,
+              ],
             ),
           ),
-        ].noNull,
+        ],
       ),
     );
 
@@ -116,7 +116,7 @@ class FlanSkeleton extends StatelessWidget {
     return skeleton;
   }
 
-  Widget? _buildAvatar(FlanSkeletonThemeData themeData) {
+  Widget _buildAvatar(FlanSkeletonThemeData themeData) {
     if (avatar) {
       final double size = avatarSize ?? themeData.avatarSize;
       return Padding(
@@ -131,6 +131,7 @@ class FlanSkeleton extends StatelessWidget {
         ),
       );
     }
+    return const SizedBox.shrink();
   }
 
   BoxShape get _avatarShape {
@@ -142,7 +143,7 @@ class FlanSkeleton extends StatelessWidget {
     }
   }
 
-  Widget? _buildTitle(FlanSkeletonThemeData themeData) {
+  Widget _buildTitle(FlanSkeletonThemeData themeData) {
     if (title) {
       final double tWidth = titleWidth > 1 ? titleWidth : themeData.titleWidth;
       Widget title = Container(
@@ -162,6 +163,7 @@ class FlanSkeleton extends StatelessWidget {
       }
       return title;
     }
+    return const SizedBox.shrink();
   }
 
   double getRowWidth(int index) {

@@ -10,7 +10,6 @@ import 'package:flutter_svg/flutter_svg.dart';
 // 🌎 Project imports:
 import '../styles/components/empty_theme.dart';
 import '../styles/theme.dart';
-import '../utils/widget.dart';
 
 /// ### FlanEmpty 空状态
 /// 空状态时的占位提示
@@ -61,11 +60,11 @@ class FlanEmpty extends StatelessWidget {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           crossAxisAlignment: CrossAxisAlignment.center,
-          children: <Widget?>[
+          children: <Widget>[
             _buildImage(themeData),
             _buildDescription(themeData),
             _buildBottom(themeData),
-          ].noNull,
+          ],
         ),
       ),
     );
@@ -104,13 +103,14 @@ class FlanEmpty extends StatelessWidget {
     );
   }
 
-  Widget? _buildBottom(FlanEmptyThemeData themeData) {
+  Widget _buildBottom(FlanEmptyThemeData themeData) {
     if (child != null) {
       return Padding(
         padding: EdgeInsets.only(top: themeData.bottomMarginTop),
         child: child,
       );
     }
+    return const SizedBox.shrink();
   }
 
   String get imageTypeUrl {

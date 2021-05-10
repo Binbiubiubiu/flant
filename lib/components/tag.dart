@@ -6,7 +6,6 @@ import 'package:flutter/material.dart';
 import '../styles/components/tag_theme.dart';
 import '../styles/theme.dart';
 import '../styles/var.dart';
-import '../utils/widget.dart';
 import 'icon.dart';
 
 /// ### FlanCircle 环形进度条
@@ -173,8 +172,8 @@ class FlanTag extends StatelessWidget {
           alignment: WrapAlignment.center,
           runAlignment: WrapAlignment.center,
           crossAxisAlignment: WrapCrossAlignment.center,
-          children: <Widget?>[
-            child,
+          children: <Widget>[
+            child ?? const SizedBox.shrink(),
             if (closeable)
               Padding(
                 padding: const EdgeInsets.only(left: 2.0),
@@ -186,8 +185,8 @@ class FlanTag extends StatelessWidget {
                 ),
               )
             else
-              null,
-          ].noNull,
+              const SizedBox.shrink(),
+          ],
         ),
       ),
     );

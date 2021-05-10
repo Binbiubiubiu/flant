@@ -216,7 +216,6 @@ class _FlanSliderState<T> extends State<FlanSlider<T>> {
 
   void updateValue(T value, {bool end = false}) {
     if (isRange(value)) {
-      print(value);
       value = handleOverlap(value as List<double>).map(format).toList() as T;
     } else {
       value = format(value as double) as T;

@@ -1,17 +1,15 @@
 // 🐦 Flutter imports:
+
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter/services.dart';
 
 // 🌎 Project imports:
-import 'package:flant/components/cell.dart';
-import 'package:flant/components/form.dart';
-import 'package:flant/components/icon.dart';
-import 'package:flant/styles/icons.dart';
-import 'package:flant/styles/var.dart';
+import '../styles/icons.dart';
 import '../styles/var.dart';
 import '../utils/format/number.dart';
+import '../utils/widget.dart';
 import 'cell.dart';
 import 'form.dart';
 import 'icon.dart';
@@ -23,34 +21,147 @@ typedef FlanFieldFormatter = String Function(String);
 /// ### FlanField
 /// 表单中的输入框组件。
 @optionalTypeArgs
-// ignore: must_be_immutable
-class FlanField<T extends dynamic> extends StatefulWidget {
-  FlanField({
+class FlanField extends StatefulWidget {
+  factory FlanField({
     Key? key,
-    required this.value,
-    this.label = '',
+    TextEditingController? controller,
+    String? label,
     String? name,
-    this.type = FlanFieldType.text,
-    this.size = FlanCellSize.normal,
+    FlanFieldType? type,
+    FlanCellSize? size,
+    int? maxLength,
+    String? placeholder,
+    bool? border,
+    bool? disabled,
+    bool? readonly,
+    bool? colon,
+    bool? isRequired,
+    bool? center,
+    bool? clearable,
+    FlanFieldClearTrigger? clearTrigger,
+    bool? clickable,
+    bool? isLink = false,
+    bool? autofocus = false,
+    bool? showWordLimit = false,
+    bool? error = false,
+    String? errorMessage,
+    FlanFieldFormatter? formatter,
+    FlanFieldFormatTrigger? formatTrigger,
+    FlanCellArrowDirection? arrowDirection,
+    TextStyle? labelStyle,
+    double? labelWidth,
+    TextAlign? labelAlign,
+    TextAlign? inputAlign,
+    TextAlign? errMessageAlign,
+    BoxConstraints? autosize,
+    int? rows,
+    IconData? leftIconName,
+    String? leftIconUrl,
+    IconData? rightIconName,
+    String? rightIconUrl,
+    List<FlanFieldRule>? rules,
+    EdgeInsets? padding,
+    Color? bgColor,
+    ValueChanged<String>? onInput,
+    VoidCallback? onFocus,
+    VoidCallback? onBlur,
+    VoidCallback? onClear,
+    VoidCallback? onKeypress,
+    VoidCallback? onClickInput,
+    VoidCallback? onClickLeftIcon,
+    VoidCallback? onClickRightIcon,
+    ValueChanged<String>? onSubmitted,
+    InlineSpan? labelSlot,
+    Widget? inputSlot,
+    Widget? leftIconSlot,
+    Widget? rightIconSlot,
+    Widget? buttonSlot,
+    Widget? extraSlot,
+  }) {
+    return FlanField.raw(
+      key: key,
+      controller: controller,
+      label: label ?? '',
+      name: name ?? 'FlanField$uuid',
+      type: type ?? FlanFieldType.text,
+      size: size ?? FlanCellSize.normal,
+      maxLength: maxLength,
+      placeholder: placeholder ?? '',
+      border: border ?? false,
+      disabled: disabled ?? false,
+      readonly: readonly ?? false,
+      colon: colon ?? false,
+      isRequired: isRequired ?? false,
+      center: center ?? false,
+      clearable: clearable ?? false,
+      clearTrigger: clearTrigger ?? FlanFieldClearTrigger.focus,
+      clickable: clickable ?? false,
+      isLink: isLink ?? false,
+      autofocus: autofocus ?? false,
+      showWordLimit: showWordLimit ?? false,
+      error: error,
+      errorMessage: errorMessage,
+      formatter: formatter,
+      formatTrigger: formatTrigger ?? FlanFieldFormatTrigger.onChange,
+      arrowDirection: arrowDirection ?? FlanCellArrowDirection.right,
+      labelStyle: labelStyle,
+      labelWidth: labelWidth,
+      labelAlign: labelAlign,
+      inputAlign: inputAlign,
+      errMessageAlign: errMessageAlign,
+      autosize: autosize,
+      rows: rows,
+      leftIconName: leftIconName,
+      leftIconUrl: leftIconUrl,
+      rightIconName: rightIconName,
+      rightIconUrl: rightIconUrl,
+      rules: rules ?? const <FlanFieldRule>[],
+      padding: padding,
+      bgColor: bgColor,
+      onInput: onInput,
+      onFocus: onFocus,
+      onBlur: onBlur,
+      onClear: onClear,
+      onKeypress: onKeypress,
+      onClickInput: onClickInput,
+      onClickLeftIcon: onClickLeftIcon,
+      onClickRightIcon: onClickRightIcon,
+      onSubmitted: onSubmitted,
+      labelSlot: labelSlot,
+      inputSlot: inputSlot,
+      leftIconSlot: leftIconSlot,
+      rightIconSlot: rightIconSlot,
+      buttonSlot: buttonSlot,
+      extraSlot: extraSlot,
+    );
+  }
+
+  const FlanField.raw({
+    Key? key,
+    required this.controller,
+    required this.label,
+    required this.name,
+    required this.type,
+    required this.size,
     this.maxLength,
-    this.placeholder = '',
-    this.border = false,
-    this.disabled = false,
-    this.readonly = false,
-    this.colon = false,
-    this.isRequired = false,
-    this.center = false,
-    this.clearable = false,
-    this.clearTrigger = FlanFieldClearTrigger.focus,
-    this.clickable = false,
-    this.isLink = false,
-    this.autofocus = false,
-    this.showWordLimit = false,
-    this.error = false,
+    required this.placeholder,
+    required this.border,
+    required this.disabled,
+    required this.readonly,
+    required this.colon,
+    required this.isRequired,
+    required this.center,
+    required this.clearable,
+    required this.clearTrigger,
+    required this.clickable,
+    required this.isLink,
+    required this.autofocus,
+    required this.showWordLimit,
+    this.error,
     this.errorMessage,
     this.formatter,
-    this.formatTrigger = FlanFieldFormatTrigger.onChange,
-    this.arrowDirection = FlanCellArrowDirection.right,
+    required this.formatTrigger,
+    required this.arrowDirection,
     this.labelStyle,
     this.labelWidth,
     this.labelAlign,
@@ -62,10 +173,10 @@ class FlanField<T extends dynamic> extends StatefulWidget {
     this.leftIconUrl,
     this.rightIconName,
     this.rightIconUrl,
-    this.rules = const <FlanFieldRule>[],
+    required this.rules,
     this.padding,
     this.bgColor,
-    required this.onInput,
+    this.onInput,
     this.onFocus,
     this.onBlur,
     this.onClear,
@@ -81,12 +192,11 @@ class FlanField<T extends dynamic> extends StatefulWidget {
     this.buttonSlot,
     this.extraSlot,
   })  : assert(!showWordLimit || showWordLimit && maxLength != null),
-        name = name ?? 'FlanField$uuid',
         super(key: key);
 
   // ****************** Props ******************
   /// 当前输入的值
-  final T value;
+  final TextEditingController? controller;
 
   /// 输入框左侧文本
   final String label;
@@ -153,7 +263,7 @@ class FlanField<T extends dynamic> extends StatefulWidget {
   final bool showWordLimit;
 
   /// 是否将输入内容标红
-  final bool error;
+  final bool? error;
 
   /// 底部错误提示文案，为空时不展示
   final String? errorMessage;
@@ -212,7 +322,7 @@ class FlanField<T extends dynamic> extends StatefulWidget {
   // ****************** Events ******************
 
   /// 输入框内容变化时触发
-  final ValueChanged<T> onInput;
+  final ValueChanged<String>? onInput;
 
   /// 输入框获得焦点时触发
   final VoidCallback? onFocus;
@@ -236,12 +346,12 @@ class FlanField<T extends dynamic> extends StatefulWidget {
   final VoidCallback? onClickRightIcon;
 
   /// 键盘回车键
-  final ValueChanged<T>? onSubmitted;
+  final ValueChanged<String>? onSubmitted;
 
   // ****************** Slots ******************
 
   /// 自定义输入框 label 标签
-  final Widget? labelSlot;
+  final InlineSpan? labelSlot;
 
   /// 自定义输入框，使用此插槽后，与输入框相关的属性和事件将失效
   final Widget? inputSlot;
@@ -261,25 +371,16 @@ class FlanField<T extends dynamic> extends StatefulWidget {
   // late final Future<FlanFieldValidateError?> Function(
   //     {List<FlanFieldRule>? rules}) validate;
 
-  FlanFieldState<T>? _state;
-
-  void resetValidation() {
-    _state?.resetValidation();
-  }
-
-  Future<FlanFieldValidateError?> validate() async {
-    return _state?.validate();
-  }
-
-  void scrollToVisiable() {
-    _state?._scrollToVisiable();
-  }
-
   @override
-  FlanFieldState<T> createState() => _state = FlanFieldState<T>();
+  FlanFieldState createState() => FlanFieldState();
+
+  static FlanFieldState? of(BuildContext context) {
+    return context.dependOnInheritedWidgetOfExactType<FlanFieldScope>()?._state;
+  }
 }
 
-class FlanFieldState<T extends dynamic> extends State<FlanField<T>> {
+@optionalTypeArgs
+class FlanFieldState extends State<FlanField> {
   bool focuesd = false;
   bool validateFailed = false;
   String validateMessage = '';
@@ -287,24 +388,20 @@ class FlanFieldState<T extends dynamic> extends State<FlanField<T>> {
   late FocusNode focusNode;
   late TextEditingController editingController;
 
-  late ValueNotifier<dynamic> childFieldValue;
+  FlanForm? form;
+  ValueNotifier<dynamic>? childFieldValue;
 
   @override
   void initState() {
-    childFieldValue = ValueNotifier<dynamic>(widget.value);
-    // widget.validate = validate;
-    editingController = TextEditingController(text: widget.value.toString())
-      ..addListener(onInput);
+    editingController = widget.controller ?? TextEditingController();
     focusNode = FocusNode()..addListener(onFouse);
     super.initState();
 
-    WidgetsBinding.instance?.addPostFrameCallback((Duration timeStamp) {
-      updateValue(modelvalue, trigger: widget.formatTrigger);
-      watchValue();
+    nextTick(() {
+      validWhereValueChange();
     });
   }
 
-  void onInput() => updateValue(editingController.text);
   void onFouse() {
     focuesd = focusNode.hasFocus;
     if (focuesd) {
@@ -324,26 +421,22 @@ class FlanFieldState<T extends dynamic> extends State<FlanField<T>> {
   }
 
   @override
-  void dispose() {
-    editingController
-      ..removeListener(onInput)
-      ..dispose();
-    focusNode.removeListener(onFouse);
-    super.dispose();
-  }
-
-  void watchValue() {
-    updateValue(modelvalue);
-    resetValidation();
-    validateWithTrigger(FlanFieldValidateTrigger.onChange);
+  void deactivate() {
+    FlanForm.of(context)?.unregister(widget.name);
+    super.deactivate();
   }
 
   @override
-  void didUpdateWidget(covariant FlanField<T> oldWidget) {
-    if (widget.value != oldWidget.value) {
-      watchValue();
-    }
-    super.didUpdateWidget(oldWidget);
+  void dispose() {
+    editingController.dispose();
+    focusNode.removeListener(onFouse);
+
+    super.dispose();
+  }
+
+  void validWhereValueChange() {
+    resetValidation();
+    validateWithTrigger(FlanFieldValidateTrigger.onChange);
   }
 
   Future<FlanFieldValidateError?> validate({List<FlanFieldRule>? rules}) async {
@@ -362,12 +455,22 @@ class FlanFieldState<T extends dynamic> extends State<FlanField<T>> {
 
   @override
   Widget build(BuildContext context) {
-    final Widget label = _buildLabel();
-    final Widget leftIcon = _buildLeftIcon();
+    final FlanFormState? formState = FlanForm.of(context);
+    form = formState?.widget;
+    final Widget? label = _buildLabel();
+    final Widget? leftIcon = _buildLeftIcon();
+
+    final TextStyle textStyle = DefaultTextStyle.of(context).style;
+
+    final double labelWidth = ThemeVars.fieldLabelWidth *
+        (textStyle.fontSize ?? ThemeVars.cellLabelFontSize);
+
+    formState?.register(widget.name, this);
 
     return FlanCell(
       iconSlot: leftIcon,
       titleSlot: label,
+      titleWidth: labelWidth,
       extraSlots: widget.extraSlot,
       size: widget.size,
       iconName: widget.leftIconName,
@@ -379,32 +482,14 @@ class FlanFieldState<T extends dynamic> extends State<FlanField<T>> {
       clickable: widget.clickable,
       padding: widget.padding,
       bgColor: widget.bgColor,
-      // titleStyle: TextStyle(),
-      // valueStyle: ,
-      // titleStyle: ,
       arrowDirection: widget.arrowDirection,
       child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
         children: <Widget>[
           Row(
             children: <Widget>[
               Expanded(child: _buildInput()),
-              if (showClear)
-                Padding(
-                  padding: const EdgeInsets.only(left: ThemeVars.paddingXs),
-                  child: FlanIcon.name(
-                    FlanIcons.clear,
-                    color: ThemeVars.fieldClearIconColor,
-                    size: ThemeVars.fieldClearIconSize,
-                    onClick: () {
-                      widget.onInput('' as T);
-                      if (widget.onClear != null) {
-                        widget.onClear!();
-                      }
-                    },
-                  ),
-                )
-              else
-                const SizedBox.shrink(),
+              _buildClearIcon(),
               _buildRightIcon(),
               widget.buttonSlot ??
                   Padding(
@@ -465,6 +550,33 @@ class FlanFieldState<T extends dynamic> extends State<FlanField<T>> {
     }
   }
 
+  Widget _buildClearIcon() {
+    return ValueListenableBuilder<TextEditingValue>(
+      valueListenable: editingController,
+      builder: (BuildContext context, TextEditingValue value, Widget? child) {
+        return Visibility(
+          visible: showClear,
+          child: child!,
+        );
+      },
+      child: Padding(
+        padding: const EdgeInsets.only(left: ThemeVars.paddingXs),
+        child: FlanIcon.name(
+          FlanIcons.clear,
+          color: ThemeVars.fieldClearIconColor,
+          size: ThemeVars.fieldClearIconSize,
+          onClick: () {
+            editingController.clear();
+
+            if (widget.onClear != null) {
+              widget.onClear!();
+            }
+          },
+        ),
+      ),
+    );
+  }
+
   void validateWithTrigger(FlanFieldValidateTrigger trigger) {
     if (form != null && widget.rules.isNotEmpty) {
       final bool defaultTrigger = form!.validateTrigger == trigger;
@@ -479,19 +591,19 @@ class FlanFieldState<T extends dynamic> extends State<FlanField<T>> {
     }
   }
 
-  String limitValueLength(String value) {
-    if (widget.maxLength != null && widget.maxLength! < value.length) {
-      if (modelvalue.isNotEmpty && modelvalue.length == widget.maxLength) {
-        return modelvalue;
-      }
-      return value.substring(0, widget.maxLength);
-    }
-    return value;
-  }
+  // String limitValueLength(String value) {
+  //   if (widget.maxLength != null && widget.maxLength! < value.length) {
+  //     if (modelvalue.isNotEmpty && modelvalue.length == widget.maxLength) {
+  //       return modelvalue;
+  //     }
+  //     return value.substring(0, widget.maxLength);
+  //   }
+  //   return value;
+  // }
 
-  void updateValue(String value, {FlanFieldFormatTrigger? trigger}) {
+  void updateValue(String value, [FlanFieldFormatTrigger? trigger]) {
     trigger ??= FlanFieldFormatTrigger.onChange;
-    value = limitValueLength(value);
+    // value = limitValueLength(value);
     // if (widget.type == FlanFieldType.number ||
     //     widget.type == FlanFieldType.digit) {
     //   final bool isNumber = widget.type == FlanFieldType.number;
@@ -502,21 +614,14 @@ class FlanFieldState<T extends dynamic> extends State<FlanField<T>> {
     //   value = widget.formatter!(value);
     // }
 
-    if (editingController.text != value) {
-      editingController.text = value;
-    }
-
-    if (value != widget.value) {
-      widget.onInput(value as T);
-    }
+    editingController.text = value;
   }
 
-  bool get disabled => widget.disabled || (form != null && form!.disabled);
+  bool get disabled => widget.disabled || form?.disabled == true;
 
-  FlanForm? get form => FlanFormScope.of(context)?.parent;
-  String get modelvalue => "${widget.value ?? ''}";
+  String get modelvalue => editingController.text;
   bool get showClear {
-    final bool readonly = widget.readonly || (form != null && form!.readonly);
+    final bool readonly = widget.readonly || form?.readonly == true;
     if (widget.clearable && !readonly) {
       final bool hasValue = modelvalue.isNotEmpty;
       final bool trigger =
@@ -547,15 +652,19 @@ class FlanFieldState<T extends dynamic> extends State<FlanField<T>> {
     return result;
   }
 
-  T get formValue {
-    if (childFieldValue.value != null && widget.inputSlot != null) {
-      return childFieldValue.value as T;
+  dynamic get formValue {
+    if (childFieldValue?.value != null && widget.inputSlot != null) {
+      return childFieldValue?.value;
     }
-    return widget.value;
+    return editingController.text;
   }
 
   bool get showError {
-    return widget.error || (form != null && form!.showError && validateFailed);
+    if (widget.error != null) {
+      return widget.error!;
+    }
+
+    return form != null && form!.showError && validateFailed;
   }
 
   void onKeypress() {
@@ -591,7 +700,10 @@ class FlanFieldState<T extends dynamic> extends State<FlanField<T>> {
                   ? ThemeVars.fieldInputErrorTextColor
                   : ThemeVars.fieldInputTextColor,
             ),
-            child: widget.inputSlot!,
+            child: FlanFieldScope(
+              fieldState: this,
+              child: widget.inputSlot!,
+            ),
           ),
         ),
       );
@@ -601,8 +713,9 @@ class FlanFieldState<T extends dynamic> extends State<FlanField<T>> {
       constraints: widget.autosize ??
           (widget.type == FlanFieldType.textarea
               ? const BoxConstraints(
-                  minHeight: ThemeVars.fieldTextAreaMinHeight)
-              : widget.autosize),
+                  minHeight: ThemeVars.fieldTextAreaMinHeight,
+                )
+              : null),
       child: TextField(
         textAlign: inputAlign,
         onTap: onClickInput,
@@ -610,11 +723,12 @@ class FlanFieldState<T extends dynamic> extends State<FlanField<T>> {
           border: InputBorder.none,
           contentPadding: EdgeInsets.zero,
           hintText: widget.placeholder,
-          hintStyle:
-              const TextStyle(color: ThemeVars.fieldPlaceholderTextColor),
-
+          hintStyle: TextStyle(
+            color: showError
+                ? ThemeVars.fieldInputErrorTextColor
+                : ThemeVars.fieldPlaceholderTextColor,
+          ),
           counterText: '',
-          // errorStyle: TextStyle(),
           isDense: true,
         ),
         textInputAction: <FlanFieldType, TextInputAction>{
@@ -625,7 +739,13 @@ class FlanFieldState<T extends dynamic> extends State<FlanField<T>> {
         enabled: !disabled,
         onSubmitted: (String value) {
           if (widget.onSubmitted != null) {
-            widget.onSubmitted!(value as T);
+            widget.onSubmitted!(value);
+          }
+        },
+        onChanged: (String value) {
+          validWhereValueChange();
+          if (widget.onInput != null) {
+            widget.onInput!(value);
           }
         },
         readOnly: widget.readonly,
@@ -681,7 +801,6 @@ class FlanFieldState<T extends dynamic> extends State<FlanField<T>> {
         ),
       );
     }
-
     return const SizedBox.shrink();
   }
 
@@ -716,23 +835,23 @@ class FlanFieldState<T extends dynamic> extends State<FlanField<T>> {
     if (widget.showWordLimit && widget.maxLength != null) {
       final int count = modelvalue.runes.length;
       return Container(
+        width: double.infinity,
         padding: const EdgeInsets.only(top: ThemeVars.paddingBase),
-        alignment: Alignment.centerRight,
         child: Text(
           '$count/${widget.maxLength}',
           style: const TextStyle(
             color: ThemeVars.fieldWordLimitColor,
             fontSize: ThemeVars.fieldWordLimitFontSize,
           ),
+          textAlign: TextAlign.right,
         ),
       );
     }
-
     return const SizedBox.shrink();
   }
 
   Widget _buildMessage() {
-    if (form != null && form!.showErrorMessage == false) {
+    if (form?.showErrorMessage == false) {
       return const SizedBox.shrink();
     }
 
@@ -741,12 +860,8 @@ class FlanFieldState<T extends dynamic> extends State<FlanField<T>> {
       final TextAlign errorMessageAlign =
           widget.errMessageAlign ?? form?.errMessageAlign ?? TextAlign.left;
 
-      return Container(
-        alignment: <TextAlign, Alignment>{
-          TextAlign.left: Alignment.centerLeft,
-          TextAlign.center: Alignment.center,
-          TextAlign.right: Alignment.centerRight,
-        }[errorMessageAlign],
+      return SizedBox(
+        width: double.infinity,
         child: Text(
           message,
           style: const TextStyle(
@@ -757,17 +872,13 @@ class FlanFieldState<T extends dynamic> extends State<FlanField<T>> {
         ),
       );
     }
-
     return const SizedBox.shrink();
   }
 
-  Widget _buildLabel() {
-    final String colon =
-        widget.colon || (form != null && form!.colon) ? ':' : '';
-    return Builder(builder: (BuildContext context) {
-      final TextStyle textStyle = DefaultTextStyle.of(context).style;
-      final double labelWidth = ThemeVars.fieldLabelWidth *
-          (textStyle.fontSize ?? ThemeVars.cellLabelFontSize);
+  Widget? _buildLabel() {
+    if (widget.label.isNotEmpty || widget.labelSlot != null) {
+      final String colon = widget.colon || (form?.colon == true) ? ':' : '';
+
       const EdgeInsets labelMargin = EdgeInsets.only(
         right: ThemeVars.fieldLabelMarginRight,
       );
@@ -775,51 +886,47 @@ class FlanFieldState<T extends dynamic> extends State<FlanField<T>> {
       final TextAlign labelAlign =
           widget.labelAlign ?? form?.labelAlign ?? TextAlign.left;
 
-      Widget? labelContent;
-
-      if (widget.labelSlot != null) {
-        labelContent = Wrap(
-          children: <Widget>[
-            widget.labelSlot!,
-            Text(colon),
-          ],
-        );
-      }
-      if (widget.label.isNotEmpty) {
-        labelContent = Text('${widget.label}$colon');
-      }
-
-      if (labelContent != null) {
-        return DefaultTextStyle(
+      return Container(
+        width: double.infinity,
+        margin: labelMargin,
+        child: Text.rich(
+          TextSpan(
+            children: <InlineSpan>[
+              widget.labelSlot ?? TextSpan(text: widget.label),
+              TextSpan(text: colon),
+            ],
+          ),
+          textAlign: labelAlign,
           style: TextStyle(
             color: disabled
                 ? ThemeVars.fieldDisabledTextColor
                 : ThemeVars.fieldLabelColor,
           ),
-          child: Container(
-            width: labelWidth,
-            padding: labelMargin,
-            alignment: <TextAlign, Alignment>{
-              TextAlign.left: Alignment.centerLeft,
-              TextAlign.center: Alignment.center,
-              TextAlign.right: Alignment.centerRight,
-            }[labelAlign],
-            child: labelContent,
-          ),
-        );
-      }
-
-      return const SizedBox.shrink();
-    });
+        ),
+      );
+    }
   }
 
-  void _scrollToVisiable() {
-    Scrollable.ensureVisible(context);
+  void scrollToVisiable({
+    double alignment = 0.0,
+    Duration duration = Duration.zero,
+    Curve curve = Curves.ease,
+    ScrollPositionAlignmentPolicy alignmentPolicy =
+        ScrollPositionAlignmentPolicy.explicit,
+  }) {
+    Scrollable.ensureVisible(
+      context,
+      alignment: alignment,
+      duration: duration,
+      curve: curve,
+      alignmentPolicy: alignmentPolicy,
+    );
   }
 
   @override
   void debugFillProperties(DiagnosticPropertiesBuilder properties) {
-    properties.add(DiagnosticsProperty<T>('value', widget.value));
+    properties.add(DiagnosticsProperty<TextEditingController>(
+        'controller', widget.controller));
     properties.add(DiagnosticsProperty<String>('name', widget.name));
     properties.add(DiagnosticsProperty<FlanFieldType>('type', widget.type,
         defaultValue: FlanFieldType.text));
@@ -901,28 +1008,22 @@ class FlanFieldState<T extends dynamic> extends State<FlanField<T>> {
   }
 }
 
-class FlanFieldProvider extends InheritedWidget {
-  const FlanFieldProvider({
+@optionalTypeArgs
+class FlanFieldScope extends InheritedWidget {
+  const FlanFieldScope({
     Key? key,
-    required this.childFieldValue,
-    required this.resetValidation,
-    required this.validateWithTrigger,
+    required FlanFieldState fieldState,
     required Widget child,
-  }) : super(key: key, child: child);
+  })   : _state = fieldState,
+        super(key: key, child: child);
 
-  final ValueNotifier<dynamic> childFieldValue;
-  final VoidCallback resetValidation;
-  final void Function(FlanFieldValidateTrigger trigger) validateWithTrigger;
+  final FlanFieldState _state;
 
-  static FlanFieldProvider? of(BuildContext context) {
-    return context.dependOnInheritedWidgetOfExactType<FlanFieldProvider>();
-  }
+  FlanField get field => _state.widget;
 
   @override
-  bool updateShouldNotify(FlanFieldProvider oldWidget) {
-    return childFieldValue != oldWidget.childFieldValue ||
-        resetValidation != oldWidget.resetValidation ||
-        validateWithTrigger != oldWidget.validateWithTrigger;
+  bool updateShouldNotify(FlanFieldScope oldWidget) {
+    return false;
   }
 }
 

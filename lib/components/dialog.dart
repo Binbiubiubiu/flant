@@ -113,7 +113,6 @@ class FlanDialog extends StatefulWidget {
             return FlanDialog(
               show: show,
               onChange: (bool value) {
-                print(value);
                 setState(() {
                   show = value;
                 });
@@ -428,7 +427,6 @@ class _FlanDialogState extends State<FlanDialog> {
   bool get isRoundTheme => widget.theme == FlanDialogTheme.roundButton;
 
   Widget _buildButtons() {
-    print(cancel);
     return Container(
       decoration: const BoxDecoration(
         border: Border(top: FlanHairLine()),

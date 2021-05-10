@@ -155,7 +155,6 @@ class _FlanStepperState extends State<FlanStepper> {
           ..addListener(onInput);
     focusNode = FocusNode()
       ..addListener(() {
-        print(focusNode.hasFocus);
         if (focusNode.hasFocus) {
           if (widget.onFocus != null) {
             widget.onFocus!();

@@ -73,10 +73,10 @@ class FlanLoading extends StatelessWidget {
         direction: Axis.vertical,
         crossAxisAlignment: WrapCrossAlignment.center,
         // runSpacing: FlanThemeVars.paddingXs.rpx,
-        children: <Widget?>[
+        children: <Widget>[
           icon,
           buildText(themeData),
-        ].noNull,
+        ],
       );
     }
 
@@ -84,14 +84,14 @@ class FlanLoading extends StatelessWidget {
       direction: Axis.horizontal,
       crossAxisAlignment: WrapCrossAlignment.center,
       // spacing: FlanThemeVars.paddingXs.rpx,
-      children: <Widget?>[
+      children: <Widget>[
         icon,
         buildText(themeData),
-      ].noNull,
+      ],
     );
   }
 
-  Widget? buildText(FlanLoadingThemeData themeData) {
+  Widget buildText(FlanLoadingThemeData themeData) {
     if (child != null) {
       return Padding(
         padding: EdgeInsets.only(
@@ -107,6 +107,8 @@ class FlanLoading extends StatelessWidget {
         ),
       );
     }
+
+    return const SizedBox.shrink();
   }
 
   @override

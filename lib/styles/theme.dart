@@ -24,6 +24,7 @@ import 'components/progress_theme.dart';
 import 'components/sidebar_theme.dart';
 import 'components/skeleton_theme.dart';
 import 'components/submit_bar_theme.dart';
+import 'components/switch_theme.dart';
 import 'components/tabbar_theme.dart';
 import 'components/tag_theme.dart';
 import 'components/tree_select_theme.dart';
@@ -102,6 +103,7 @@ class FlanThemeData with Diagnosticable {
     FlanSidebarThemeData? sidebarTheme,
     FlanSkeletonThemeData? skeletonTheme,
     FlanSubmitBarThemeData? submitBarTheme,
+    FlanSwitchThemeData? switchTheme,
     FlanLoadingThemeData? loadingTheme,
     FlanNavBarThemeData? navBarTheme,
     FlanNoticeBarThemeData? noticeBarTheme,
@@ -127,6 +129,7 @@ class FlanThemeData with Diagnosticable {
       treeSelectTheme: treeSelectTheme ?? FlanTreeSelectThemeData(),
       sidebarTheme: sidebarTheme ?? FlanSidebarThemeData(),
       skeletonTheme: skeletonTheme ?? FlanSkeletonThemeData(),
+      switchTheme: switchTheme ?? FlanSwitchThemeData(),
       loadingTheme: loadingTheme ?? FlanLoadingThemeData(),
       navBarTheme: navBarTheme ?? FlanNavBarThemeData(),
       submitBarTheme: submitBarTheme ?? FlanSubmitBarThemeData(),
@@ -155,6 +158,7 @@ class FlanThemeData with Diagnosticable {
     required this.treeSelectTheme,
     required this.sidebarTheme,
     required this.skeletonTheme,
+    required this.switchTheme,
     required this.submitBarTheme,
     required this.loadingTheme,
     required this.navBarTheme,
@@ -226,6 +230,9 @@ class FlanThemeData with Diagnosticable {
   /// SubmitBar 提交订单栏
   final FlanSubmitBarThemeData submitBarTheme;
 
+  ///  Switch 开关
+  final FlanSwitchThemeData switchTheme;
+
   /// Tabbar 标签栏
   final FlanTabbarThemeData tabbarTheme;
 
@@ -268,6 +275,7 @@ class FlanThemeData with Diagnosticable {
           FlanSkeletonThemeData.lerp(a.skeletonTheme, b.skeletonTheme, t),
       submitBarTheme:
           FlanSubmitBarThemeData.lerp(a.submitBarTheme, b.submitBarTheme, t),
+      switchTheme: FlanSwitchThemeData.lerp(a.switchTheme, b.switchTheme, t),
       treeSelectTheme:
           FlanTreeSelectThemeData.lerp(a.treeSelectTheme, b.treeSelectTheme, t),
       loadingTheme:

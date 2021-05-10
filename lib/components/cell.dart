@@ -19,6 +19,7 @@ class FlanCell extends FlanRouteStatelessWidget {
   const FlanCell({
     Key? key,
     this.title,
+    this.titleWidth,
     this.value,
     this.label,
     this.size = FlanCellSize.normal,
@@ -57,6 +58,9 @@ class FlanCell extends FlanRouteStatelessWidget {
 
   /// 标题下方的描述信息
   final String? label;
+
+  /// 左侧标题宽度
+  final double? titleWidth;
 
   /// 单元格大小，可选值为 `large`
   final FlanCellSize size;
@@ -142,7 +146,7 @@ class FlanCell extends FlanRouteStatelessWidget {
 
     final Widget requiredIcon = Positioned(
       top: paddingVertical,
-      left: FlanThemeVars.paddingXs,
+      left: FlanThemeVars.paddingXs.rpx,
       child: Visibility(
         visible: isRequired,
         child: Text(
@@ -156,8 +160,8 @@ class FlanCell extends FlanRouteStatelessWidget {
     );
 
     final Widget bottomBorder = Positioned(
-      left: FlanThemeVars.paddingMd,
-      right: FlanThemeVars.paddingMd,
+      left: FlanThemeVars.paddingMd.rpx,
+      right: FlanThemeVars.paddingMd.rpx,
       bottom: 0.0,
       child: Visibility(
         visible: border,
@@ -171,43 +175,41 @@ class FlanCell extends FlanRouteStatelessWidget {
     final Widget content = Row(
       crossAxisAlignment:
           center ? CrossAxisAlignment.center : CrossAxisAlignment.start,
-      children: <Widget?>[
+      children: <Widget>[
         _buildLeftIcon(themeData),
         _buildTitle(themeData, collapseThemeData),
         _buildValue(themeData),
         _buildRigthIcon(themeData, collapseThemeData),
-        extraSlots,
-      ].noNull,
+        extraSlots ?? const SizedBox.shrink(),
+      ],
     );
 
     final Widget cell = Stack(
       children: <Widget>[
-        Positioned.fill(
-          child: FlanActiveResponse(
-            disabled: !_isClickable || disabled,
-            cursorBuilder: (SystemMouseCursor cursor) {
-              return _isClickable ? cursor : SystemMouseCursors.basic;
-            },
-            builder: (BuildContext contenxt, bool active, Widget? child) {
-              return DecoratedBox(
-                decoration: BoxDecoration(
-                  color: active ? themeData.activeColor : bgColor,
-                ),
-              );
-            },
-            onClick: () {
-              if (onClick != null) {
-                onClick!();
-              }
-              route(context);
-            },
-          ),
-        ),
-        IgnorePointer(
+        FlanActiveResponse(
+          disabled: disabled,
+          enabled: _isClickable,
+          cursorBuilder: (SystemMouseCursor cursor) {
+            return _isClickable ? cursor : SystemMouseCursors.basic;
+          },
+          builder: (BuildContext contenxt, bool active, Widget? child) {
+            return DecoratedBox(
+              decoration: BoxDecoration(
+                color: active ? themeData.activeColor : bgColor,
+              ),
+              child: child,
+            );
+          },
           child: Padding(
             padding: cellPadding,
             child: content,
           ),
+          onClick: () {
+            if (onClick != null) {
+              onClick!();
+            }
+            route(context);
+          },
         ),
         bottomBorder,
         requiredIcon,
@@ -260,7 +262,7 @@ class FlanCell extends FlanRouteStatelessWidget {
   }
 
   /// 构建标题
-  Widget? _buildTitle(
+  Widget _buildTitle(
     FlanCellThemeData themeData,
     FlanCollapseThemeData collapseThemeData,
   ) {
@@ -275,20 +277,30 @@ class FlanCell extends FlanRouteStatelessWidget {
         child: titleSlot ?? Text(this.title!),
       );
 
+      final Widget content = Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: <Widget>[
+          title,
+          _buildLabel(themeData),
+        ],
+      );
+
+      if (titleWidth != null) {
+        return SizedBox(
+          width: titleWidth,
+          child: content,
+        );
+      }
+
       return Expanded(
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: <Widget?>[
-            title,
-            _buildLabel(themeData),
-          ].noNull,
-        ),
+        child: content,
       );
     }
+    return const SizedBox.shrink();
   }
 
   /// 构建标题下方的描述信息
-  Widget? _buildLabel(FlanCellThemeData themeData) {
+  Widget _buildLabel(FlanCellThemeData themeData) {
     final bool showLabel = labelSlot != null || label != null;
     if (showLabel) {
       final double fontSize = _getLabelFontSize(themeData);
@@ -304,10 +316,11 @@ class FlanCell extends FlanRouteStatelessWidget {
         ),
       );
     }
+    return const SizedBox.shrink();
   }
 
   /// 构建右侧内容
-  Widget? _buildValue(FlanCellThemeData themeData) {
+  Widget _buildValue(FlanCellThemeData themeData) {
     final bool hasValue = child != null || value != null;
     if (hasValue) {
       final bool hasTitle = titleSlot != null || title != null;
@@ -327,12 +340,14 @@ class FlanCell extends FlanRouteStatelessWidget {
         ),
       );
     }
+
+    return const SizedBox.shrink();
   }
 
   /// 构建左侧图标
-  Widget? _buildLeftIcon(FlanCellThemeData themeData) {
+  Widget _buildLeftIcon(FlanCellThemeData themeData) {
     if (iconSlot != null) {
-      return iconSlot;
+      return iconSlot!;
     }
 
     if (iconName != null || iconUrl != null) {
@@ -346,15 +361,17 @@ class FlanCell extends FlanRouteStatelessWidget {
         ),
       );
     }
+
+    return const SizedBox.shrink();
   }
 
   /// 构建右侧图标
-  Widget? _buildRigthIcon(
+  Widget _buildRigthIcon(
     FlanCellThemeData themeData,
     FlanCollapseThemeData collapseThemeData,
   ) {
     if (rightIconSlot != null) {
-      return rightIconSlot;
+      return rightIconSlot!;
     }
 
     if (isLink) {
@@ -370,6 +387,8 @@ class FlanCell extends FlanRouteStatelessWidget {
         ),
       );
     }
+
+    return const SizedBox.shrink();
   }
 
   /// cell 图标布局hack

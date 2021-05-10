@@ -9,7 +9,6 @@ import 'package:flutter/material.dart';
 import '../styles/components/divider_theme.dart';
 import '../styles/theme.dart';
 import '../styles/var.dart';
-import '../utils/widget.dart';
 
 /// ### FlanImage 图片
 /// 增强版的 img 标签，提供多种图片填充模式，支持图片懒加载、加载中提示、加载失败提示。
@@ -58,21 +57,21 @@ class FlanDivider extends StatelessWidget {
           builder: (BuildContext context, BoxConstraints constraints) {
             return Row(
               crossAxisAlignment: CrossAxisAlignment.center,
-              children: <Widget?>[
+              children: <Widget>[
                 _buildLine(
                   themeData,
                   constraints,
                   position: FlanDividerContentPosition.left,
                 ),
                 _buildContentSpace(themeData),
-                child,
+                child ?? const SizedBox.shrink(),
                 _buildContentSpace(themeData),
                 _buildLine(
                   themeData,
                   constraints,
                   position: FlanDividerContentPosition.right,
                 ),
-              ].noNull,
+              ],
             );
           },
         ),
@@ -81,10 +80,8 @@ class FlanDivider extends StatelessWidget {
   }
 
   /// 构建空白区域
-  Widget? _buildContentSpace(FlanDividerThemeData themeData) {
-    if (child != null) {
-      return SizedBox(width: themeData.contentPadding);
-    }
+  Widget _buildContentSpace(FlanDividerThemeData themeData) {
+    return SizedBox(width: child != null ? themeData.contentPadding : 0.0);
   }
 
   /// 构建线条

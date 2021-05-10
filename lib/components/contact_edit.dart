@@ -68,19 +68,32 @@ class FlanContactEdit extends StatefulWidget {
 
 class _FlanContactEditState extends State<FlanContactEdit> {
   late FlanContactEditInfo contact;
+  late TextEditingController nameControlller;
+  late TextEditingController telController;
+  late ValueNotifier<bool> isDefault;
 
   GlobalKey<FlanFormState> form = GlobalKey<FlanFormState>();
 
   @override
   void initState() {
     contact = widget.contactInfo;
+    nameControlller = TextEditingController(text: contact.name);
+    telController = TextEditingController(text: contact.tel);
+    isDefault = ValueNotifier<bool>(contact.isDefault);
     super.initState();
   }
 
   @override
+  void dispose() {
+    nameControlller.dispose();
+    telController.dispose();
+    super.dispose();
+  }
+
+  @override
   void didUpdateWidget(covariant FlanContactEdit oldWidget) {
-    if (widget.contactInfo != oldWidget.contactInfo) {
-      contact = widget.contactInfo;
+    if (widget.contactInfo.isDefault != isDefault.value) {
+      isDefault.value = widget.contactInfo.isDefault;
     }
     super.didUpdateWidget(oldWidget);
   }
@@ -92,9 +105,9 @@ class _FlanContactEditState extends State<FlanContactEdit> {
         FlanForm(
           key: form,
           onSubmit: _onSave,
-          children: <FlanField<String>>[
-            FlanField<String>(
-              value: contact.name,
+          children: <FlanField>[
+            FlanField(
+              controller: nameControlller,
               onInput: (String val) {
                 setState(() => contact.name = val);
               },
@@ -111,12 +124,12 @@ class _FlanContactEditState extends State<FlanContactEdit> {
               border: true,
               placeholder: FlanS.of(context).nameEmpty,
             ),
-            FlanField<String>(
-              value: contact.tel,
+            FlanField(
+              controller: telController,
               onInput: (String val) {
                 setState(() => contact.tel = val);
               },
-              // labelWidth: ThemeVars.contactEditFieldLabelWidth,
+              labelWidth: ThemeVars.contactEditFieldLabelWidth,
               clearable: true,
               type: FlanFieldType.tel,
               label: FlanS.of(context).tel,
@@ -124,7 +137,6 @@ class _FlanContactEditState extends State<FlanContactEdit> {
                 FlanFieldRule(
                   validator: widget.telValidator ??
                       (dynamic value, FlanFieldRule rule) {
-                        print(isMobile(value.toString()));
                         return isMobile(value.toString());
                       },
                   message: FlanS.of(context).telInvalid,
@@ -153,12 +165,12 @@ class _FlanContactEditState extends State<FlanContactEdit> {
 
   Widget _buildSwitch() {
     return FlanSwitch<bool>(
-      value: contact.isDefault,
+      modalValue: isDefault,
       onChange: (bool checked) {
-        setState(() => contact.isDefault = checked);
         if (widget.onDefaultChange != null) {
           widget.onDefaultChange!(checked);
         }
+        contact.isDefault = checked;
       },
       size: 24.0,
     );

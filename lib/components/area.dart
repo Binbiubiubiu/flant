@@ -281,7 +281,7 @@ class _FlanAreaState extends State<FlanArea> {
     if (picker == null) {
       return;
     }
-    print(city);
+
     picker.setColumnValues(0, province);
     picker.setColumnValues(1, city);
     if (city.isNotEmpty &&

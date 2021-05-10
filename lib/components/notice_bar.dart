@@ -164,8 +164,7 @@ class _FlanNoticeBarState extends State<FlanNoticeBar>
 
       if (widget.scrollable == true || contentRefWidth < textRefWidth) {
         final double fullWidth = contentRefWidth + textRefWidth;
-        // print('contentRefWidth:$contentRefWidth');
-        // print('textRefWidth$textRefWidth');
+
         controller
           ..value = contentRefWidth / fullWidth
           ..duration = Duration(seconds: fullWidth ~/ widget.speed);
@@ -202,11 +201,11 @@ class _FlanNoticeBarState extends State<FlanNoticeBar>
         ),
         child: Row(
           crossAxisAlignment: CrossAxisAlignment.center,
-          children: <Widget?>[
+          children: <Widget>[
             _buildLeftIcon(themeData),
             Expanded(child: _buildMarquee(context)),
             _buildRightIcon(themeData),
-          ].noNull,
+          ],
         ),
       ),
     );
@@ -280,7 +279,7 @@ class _FlanNoticeBarState extends State<FlanNoticeBar>
     );
   }
 
-  Widget? _buildLeftIcon(FlanNoticeBarThemeData themeData) {
+  Widget _buildLeftIcon(FlanNoticeBarThemeData themeData) {
     if (widget.leftIconSlot != null) {
       return widget.leftIconSlot!;
     }
@@ -297,9 +296,11 @@ class _FlanNoticeBarState extends State<FlanNoticeBar>
         ),
       );
     }
+
+    return const SizedBox.shrink();
   }
 
-  Widget? _buildRightIcon(FlanNoticeBarThemeData themeData) {
+  Widget _buildRightIcon(FlanNoticeBarThemeData themeData) {
     if (widget.rightIconSlot != null) {
       return widget.rightIconSlot!;
     }
@@ -316,6 +317,8 @@ class _FlanNoticeBarState extends State<FlanNoticeBar>
         ),
       );
     }
+
+    return const SizedBox.shrink();
   }
 
   void onClickRightIcon() {

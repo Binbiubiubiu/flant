@@ -225,7 +225,7 @@ class _FlanListState extends State<FlanList> {
 
   Widget _buildErrorText() {
     Widget? child;
-    print('error --- ${widget.error}');
+
     if (widget.error) {
       final Widget? text = widget.errorSlot ??
           (widget.errorText != null ? Text(widget.errorText!) : null);

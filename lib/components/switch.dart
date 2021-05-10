@@ -1,19 +1,22 @@
 // 🐦 Flutter imports:
+import 'package:flant/mixins/link_field_mixins.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
 // 🌎 Project imports:
 import 'package:flant/components/loading.dart';
-import 'package:flant/mixins/link_field_mixins.dart';
-import '../styles/var.dart';
+import 'package:flutter/rendering.dart';
+// import 'package:flant/mixins/link_field_mixins.dart';
+import '../styles/components/switch_theme.dart';
+import '../styles/theme.dart';
 
 /// ### FlanSwitch
 /// 用于在打开和关闭状态之间进行切换。
 @optionalTypeArgs
-class FlanSwitch<T> extends StatefulWidget {
+class FlanSwitch<T extends dynamic> extends StatefulWidget {
   const FlanSwitch({
     Key? key,
-    required T value,
+    this.modalValue,
     this.loading = false,
     this.disabled = false,
     this.size,
@@ -21,15 +24,14 @@ class FlanSwitch<T> extends StatefulWidget {
     this.inActiveColor,
     T? activeValue,
     T? inActiveValue,
-    required this.onChange,
-  })   : value = value ?? false as T,
-        activeValue = activeValue ?? true as T,
+    this.onChange,
+  })  : activeValue = activeValue ?? true as T,
         inActiveValue = inActiveValue ?? false as T,
         super(key: key);
 
   // ****************** Props ******************
   /// 开关选中状态
-  final T value;
+  final ValueNotifier<T>? modalValue;
 
   /// 是否为加载状态
   final bool loading;
@@ -55,106 +57,93 @@ class FlanSwitch<T> extends StatefulWidget {
   // ****************** Events ******************
 
   /// 开关状态切换时触发
-  final ValueChanged<T> onChange;
+  final ValueChanged<T>? onChange;
 
   @override
   _FlanSwitchState<T> createState() => _FlanSwitchState<T>();
 }
 
-class _FlanSwitchState<T> extends State<FlanSwitch<T>>
-    with TickerProviderStateMixin, FlanLinkFieldMixin {
-  late Animation<Color?> bgColorAnimation;
-  late AnimationController bgColorAnimationController;
-
-  late Animation<double> nodeAnimation;
-  late AnimationController nodeAnimationCotroller;
+class _FlanSwitchState<T> extends State<FlanSwitch<T>> with FlanLinkFieldMixin {
+  late ValueNotifier<T> modalValue;
 
   @override
   void initState() {
-    bgColorAnimationController = AnimationController(
-      value: isChecked ? 1.0 : 0.0,
-      duration: ThemeVars.switchTransitionDuration,
-      vsync: this,
-    )..addListener(_handleChange);
-
-    bgColorAnimation = ColorTween(
-            begin: widget.inActiveColor ?? ThemeVars.switchBackgroundColor,
-            end: widget.activeColor ?? ThemeVars.switchOnBackgroundColor)
-        .animate(bgColorAnimationController);
-
-    nodeAnimationCotroller = AnimationController(
-      value: isChecked ? 1.0 : 0.0,
-      duration: ThemeVars.switchTransitionDuration,
-      vsync: this,
-    );
-    nodeAnimation = Tween<double>(
-      begin: 0.0,
-      end: ThemeVars.switchWidth * em - ThemeVars.switchNodeSize * em,
-    ).animate(nodeAnimationCotroller);
+    modalValue = widget.modalValue ?? ValueNotifier<T>(widget.inActiveValue);
+    modalValue.addListener(_onChange);
     super.initState();
   }
 
   @override
   void dispose() {
-    bgColorAnimationController.removeListener(_handleChange);
-    bgColorAnimationController.dispose();
-    nodeAnimationCotroller.dispose();
+    modalValue.removeListener(_onChange);
     super.dispose();
   }
 
-  @override
-  void didUpdateWidget(covariant FlanSwitch<T> oldWidget) {
-    useLinkField(widget, oldWidget);
-    super.didUpdateWidget(oldWidget);
+  void _onChange() {
+    if (widget.onChange != null) {
+      widget.onChange!(modalValue.value);
+    }
+    validateChangedValue();
   }
-
-  void _handleChange() => setState(() {});
-
-  double get em => widget.size ?? ThemeVars.switchSize;
 
   @override
   Widget build(BuildContext context) {
+    linkField(modalValue);
+    final FlanSwitchThemeData themeData = FlanTheme.of(context).switchTheme;
+    final double em = widget.size ?? themeData.size;
+
     final Container node = Container(
-      width: ThemeVars.switchNodeSize * em,
-      height: ThemeVars.switchNodeSize * em,
+      width: themeData.nodeSize * em,
+      height: themeData.nodeSize * em,
       decoration: BoxDecoration(
-        color: ThemeVars.switchNodeBackgroundColor,
+        color: themeData.nodeBackgroundColor,
         shape: BoxShape.circle,
-        boxShadow: ThemeVars.switchNodeBoxShadow,
+        boxShadow: themeData.nodeBoxShadow,
       ),
-      child: _buildLoading(context),
+      child: _buildLoading(themeData),
     );
 
-    final Container sWidget = Container(
-      width: ThemeVars.switchWidth * em + ThemeVars.switchBorder.width * 2,
-      height: ThemeVars.switchHeight * em + ThemeVars.switchBorder.width * 2,
-      decoration: BoxDecoration(
-        color: bgColorAnimation.value,
-        border: const Border.fromBorderSide(ThemeVars.switchBorder),
-        borderRadius: BorderRadius.circular(
-          ThemeVars.switchNodeSize * em,
-        ),
-      ),
-      child: Stack(
-        children: <Widget>[
-          Positioned(
-            top: 0,
-            left: 0,
-            child: Transform.translate(
-              offset: Offset(nodeAnimation.value, 0.0),
-              child: node,
+    final Color begin = widget.inActiveColor ?? themeData.backgroundColor;
+    final Color end = widget.activeColor ?? themeData.onBackgroundColor;
+
+    final Widget sWidget = ValueListenableBuilder<T>(
+      valueListenable: modalValue,
+      builder: (BuildContext context, T? value, Widget? child) {
+        return AnimatedContainer(
+          duration: themeData.transitionDuration,
+          width: themeData.width * em + themeData.border.width * 2,
+          height: themeData.height * em + themeData.border.width * 2,
+          decoration: BoxDecoration(
+            color: isChecked ? end : begin,
+            border: Border.fromBorderSide(themeData.border),
+            borderRadius: BorderRadius.circular(
+              themeData.nodeSize * em,
             ),
           ),
-        ],
-      ),
+          child: AnimatedAlign(
+            alignment: isChecked ? Alignment.centerRight : Alignment.centerLeft,
+            duration: themeData.transitionDuration,
+            child: child,
+          ),
+        );
+      },
+      child: node,
     );
 
     return Semantics(
-      child: GestureDetector(
-        onTap: onClick,
-        child: Opacity(
-          opacity: widget.disabled ? ThemeVars.switchDisabledOpacity : 1.0,
-          child: sWidget,
+      child: MouseRegion(
+        cursor: _cursor,
+        child: IgnorePointer(
+          ignoring: widget.disabled || widget.loading,
+          child: GestureDetector(
+            onTap: onClick,
+            child: Opacity(
+              opacity: widget.disabled ? themeData.disabledOpacity : 1.0,
+              child: RepaintBoundary(
+                child: sWidget,
+              ),
+            ),
+          ),
         ),
       ),
       button: true,
@@ -165,38 +154,38 @@ class _FlanSwitchState<T> extends State<FlanSwitch<T>>
   }
 
   void onClick() {
-    if (!widget.disabled && !widget.loading) {
-      if (isChecked) {
-        nodeAnimationCotroller.reverse();
-        bgColorAnimationController.reverse();
-        widget.onChange(widget.inActiveValue);
-      } else {
-        nodeAnimationCotroller.forward();
-        bgColorAnimationController.forward();
-        widget.onChange(widget.activeValue);
-      }
-    }
+    modalValue.value = isChecked ? widget.inActiveValue : widget.activeValue;
   }
 
-  bool get isChecked => widget.value == widget.activeValue;
+  SystemMouseCursor get _cursor {
+    if (widget.disabled) {
+      return SystemMouseCursors.forbidden;
+    }
+    if (widget.loading) {
+      return SystemMouseCursors.basic;
+    }
 
-  Widget _buildLoading(BuildContext context) {
+    return SystemMouseCursors.click;
+  }
+
+  bool get isChecked => modalValue.value == widget.activeValue;
+
+  Widget? _buildLoading(FlanSwitchThemeData themeData) {
     if (widget.loading) {
       final Color color =
           (isChecked ? widget.activeColor : widget.inActiveColor) ??
-              ThemeVars.switchOnBackgroundColor;
+              themeData.onBackgroundColor;
       return FractionallySizedBox(
         widthFactor: .5,
         // heightFactor: .5,
         child: FlanLoading(color: color),
       );
     }
-    return const SizedBox.shrink();
   }
 
   @override
   void debugFillProperties(DiagnosticPropertiesBuilder properties) {
-    properties.add(DiagnosticsProperty<dynamic>('value', widget.value,
+    properties.add(DiagnosticsProperty<dynamic>('modalValue', widget.modalValue,
         defaultValue: false));
     properties.add(DiagnosticsProperty<bool>('loading', widget.loading,
         defaultValue: false));

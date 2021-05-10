@@ -122,8 +122,11 @@ class FlanLoadingThemeData with Diagnosticable {
       textFontSize: lerpDouble(a?.textFontSize, b?.textFontSize, t),
       spinnerColor: Color.lerp(a?.spinnerColor, b?.spinnerColor, t),
       spinnerSize: lerpDouble(a?.spinnerSize, b?.spinnerSize, t),
-      // spinnerAnimationDuration: Duration.lerp(
-      //     a?.spinnerAnimationDuration, b?.spinnerAnimationDuration, t),
+      spinnerAnimationDuration: lerpDuration(
+        a?.spinnerAnimationDuration ?? Duration.zero,
+        b?.spinnerAnimationDuration ?? Duration.zero,
+        t,
+      ),
     );
   }
 

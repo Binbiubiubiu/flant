@@ -17,7 +17,7 @@ class FlanSearch extends StatefulWidget {
     this.label,
     this.rightIconName,
     this.rightIconUrl,
-    required this.value,
+    this.controller,
     this.actionText,
     this.background,
     this.maxLength,
@@ -34,7 +34,7 @@ class FlanSearch extends StatefulWidget {
     this.leftIconName = FlanIcons.search,
     this.leftIconUrl,
     this.onSearch,
-    required this.onInput,
+    this.onInput,
     this.onFocus,
     this.onBlur,
     this.onClear,
@@ -58,7 +58,7 @@ class FlanSearch extends StatefulWidget {
   final String? rightIconUrl;
 
   /// 搜索框值
-  final String value;
+  final TextEditingController? controller;
 
   /// 取消按钮文字
   final String? actionText;
@@ -110,7 +110,7 @@ class FlanSearch extends StatefulWidget {
   final ValueChanged<String>? onSearch;
 
   /// 输入框内容变化时触发
-  final ValueChanged<String> onInput;
+  final ValueChanged<String>? onInput;
 
   /// 输入框获得焦点时触发
   final VoidCallback? onFocus;
@@ -146,6 +146,20 @@ class FlanSearch extends StatefulWidget {
 }
 
 class _FlanSearchState extends State<FlanSearch> {
+  late TextEditingController editingController;
+
+  @override
+  void initState() {
+    editingController = widget.controller ?? TextEditingController();
+    super.initState();
+  }
+
+  @override
+  void dispose() {
+    editingController.dispose();
+    super.dispose();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -171,6 +185,7 @@ class _FlanSearchState extends State<FlanSearch> {
                 ),
               ),
               child: Row(
+                crossAxisAlignment: CrossAxisAlignment.center,
                 children: <Widget>[
                   _buildLabel(),
                   _buildField(),
@@ -202,16 +217,16 @@ class _FlanSearchState extends State<FlanSearch> {
     return const SizedBox.shrink();
   }
 
-  GlobalKey<FlanFieldState<dynamic>> inputKey = GlobalKey();
+  GlobalKey<FlanFieldState> inputKey = GlobalKey();
 
   void blur() => inputKey.currentState?.blur();
   void focus() => inputKey.currentState?.focus();
 
   Widget _buildField() {
     return Expanded(
-      child: FlanField<String>(
+      child: FlanField(
         key: inputKey,
-        value: widget.value,
+        controller: editingController,
         onInput: widget.onInput,
         type: FlanFieldType.search,
         border: false,
@@ -220,6 +235,7 @@ class _FlanSearchState extends State<FlanSearch> {
           right: ThemeVars.paddingXs,
           bottom: 5.0,
         ),
+        center: true,
         bgColor: Colors.transparent,
         leftIconName: widget.leftIconName,
         leftIconUrl: widget.leftIconUrl,
@@ -227,7 +243,7 @@ class _FlanSearchState extends State<FlanSearch> {
         rightIconUrl: widget.rightIconUrl,
         clearable: widget.clearable,
         clearTrigger: widget.clearTrigger,
-        onSubmitted: _onKeypress,
+        onSubmitted: widget.onSearch,
         onClear: widget.onClear,
         onBlur: widget.onBlur,
         onFocus: widget.onFocus,
@@ -281,17 +297,11 @@ class _FlanSearchState extends State<FlanSearch> {
 
   void _onCancel() {
     if (widget.actionSlot == null) {
-      widget.onInput('');
+      editingController.text = '';
 
       if (widget.onCancel != null) {
         widget.onCancel!();
       }
-    }
-  }
-
-  void _onKeypress(String value) {
-    if (widget.onSearch != null) {
-      widget.onSearch!(value);
     }
   }
 
@@ -302,7 +312,8 @@ class _FlanSearchState extends State<FlanSearch> {
         DiagnosticsProperty<IconData>('rightIconName', widget.rightIconName));
     properties
         .add(DiagnosticsProperty<String>('rightIconUrl', widget.rightIconUrl));
-    properties.add(DiagnosticsProperty<String>('value', widget.value));
+    properties.add(DiagnosticsProperty<TextEditingController>(
+        'controller', widget.controller));
     properties
         .add(DiagnosticsProperty<String>('actionText', widget.actionText));
     properties.add(DiagnosticsProperty<Color>('background', widget.background));

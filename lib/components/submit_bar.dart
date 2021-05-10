@@ -113,8 +113,8 @@ class FlanSubmitBar extends StatelessWidget {
         bottom: safeAreaInsetBottom,
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
-          children: <Widget?>[
-            topSlot,
+          children: <Widget>[
+            topSlot ?? const SizedBox.shrink(),
             _buildTip(themeData),
             DefaultTextStyle(
               style: TextStyle(
@@ -126,21 +126,21 @@ class FlanSubmitBar extends StatelessWidget {
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.end,
                   crossAxisAlignment: CrossAxisAlignment.center,
-                  children: <Widget?>[
-                    child,
+                  children: <Widget>[
+                    child ?? const SizedBox.shrink(),
                     _buildText(context, themeData),
                     _buildButton(themeData),
-                  ].noNull,
+                  ],
                 ),
               ),
             ),
-          ].noNull,
+          ],
         ),
       ),
     );
   }
 
-  Widget? _buildTip(FlanSubmitBarThemeData themeData) {
+  Widget _buildTip(FlanSubmitBarThemeData themeData) {
     if (tipSlot != null || tip.isNotEmpty) {
       return Container(
         width: double.infinity,
@@ -154,7 +154,7 @@ class FlanSubmitBar extends StatelessWidget {
           ),
           child: Text.rich(
             TextSpan(
-              children: <InlineSpan?>[
+              children: <InlineSpan>[
                 if (tipIconName != null || tipIconUrl != null)
                   WidgetSpan(
                     alignment: PlaceholderAlignment.middle,
@@ -171,13 +171,14 @@ class FlanSubmitBar extends StatelessWidget {
                     ),
                   ),
                 TextSpan(text: tip),
-                tipSlot,
-              ].noNull,
+                tipSlot ?? const TextSpan(),
+              ],
             ),
           ),
         ),
       );
     }
+    return const SizedBox.shrink();
   }
 
   Widget _buildButton(FlanSubmitBarThemeData themeData) {
@@ -210,7 +211,7 @@ class FlanSubmitBar extends StatelessWidget {
     );
   }
 
-  Widget? _buildText(BuildContext context, FlanSubmitBarThemeData themeData) {
+  Widget _buildText(BuildContext context, FlanSubmitBarThemeData themeData) {
     if (price != null) {
       final List<String> pricePair =
           (price! / 100).toStringAsFixed(decimalLength).split('.');
@@ -251,6 +252,7 @@ class FlanSubmitBar extends StatelessWidget {
         ),
       );
     }
+    return const SizedBox.shrink();
   }
 
   @override

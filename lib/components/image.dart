@@ -5,7 +5,6 @@ import 'package:flutter/material.dart';
 // 🌎 Project imports:
 import '../styles/components/image_theme.dart';
 import '../styles/theme.dart';
-import '../utils/widget.dart';
 import 'icon.dart';
 
 /// ### FlanImage 图片
@@ -108,10 +107,10 @@ class FlanImage extends StatelessWidget {
 
     Widget image = Column(
       mainAxisSize: MainAxisSize.min,
-      children: <Widget?>[
+      children: <Widget>[
         _buildImage(themeData),
-        child,
-      ].noNull,
+        child ?? const SizedBox.shrink(),
+      ],
     );
 
     if (round) {

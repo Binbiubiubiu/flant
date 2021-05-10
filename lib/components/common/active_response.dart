@@ -7,6 +7,7 @@ class FlanActiveResponse extends StatefulWidget {
   const FlanActiveResponse({
     Key? key,
     this.disabled = false,
+    this.enabled = true,
     this.onClick,
     this.cursorBuilder,
     required this.builder,
@@ -14,6 +15,7 @@ class FlanActiveResponse extends StatefulWidget {
   }) : super(key: key);
 
   final bool disabled;
+  final bool enabled;
   final VoidCallback? onClick;
   final SystemMouseCursor Function(SystemMouseCursor cursor)? cursorBuilder;
   final Widget Function(BuildContext contenxt, bool active, Widget? child)
@@ -41,10 +43,12 @@ class _FlanActiveResponseState extends State<FlanActiveResponse> {
         ignoring: widget.disabled,
         child: GestureDetector(
           onTap: widget.onClick,
-          onTapDown: (TapDownDetails e) => setActive(true),
+          onTapDown: (TapDownDetails e) => setActive(widget.enabled),
           onTapCancel: () => setActive(false),
           onTapUp: (TapUpDetails e) => setActive(false),
-          child: widget.builder(context, _active, widget.child),
+          child: RepaintBoundary(
+            child: widget.builder(context, _active, widget.child),
+          ),
         ),
       ),
     );

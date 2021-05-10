@@ -103,7 +103,7 @@ class _FlanPaginationState extends State<FlanPagination> {
         fontSize: themeData.fontSize,
       ),
       child: Row(
-        children: <Widget?>[
+        children: <Widget>[
           _PaginationItem(
             isPreOrNext: true,
             disabled: widget.value == 1,
@@ -130,12 +130,12 @@ class _FlanPaginationState extends State<FlanPagination> {
             child: widget.nextTextSlot ??
                 Text(widget.nextText ?? FlanS.of(context).Pagination_next),
           ),
-        ].noNull,
+        ],
       ),
     );
   }
 
-  Widget? _buildDesc(FlanPaginationThemeData themeData) {
+  Widget _buildDesc(FlanPaginationThemeData themeData) {
     if (widget.mode != FlanPaginationMode.multi) {
       return Expanded(
         child: Container(
@@ -150,6 +150,7 @@ class _FlanPaginationState extends State<FlanPagination> {
         ),
       );
     }
+    return const SizedBox.shrink();
   }
 
   void select(int page) {

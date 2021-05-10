@@ -258,7 +258,6 @@ class _FlanDatePickerState extends State<FlanDatePicker> {
           return '';
       }
     }).toList();
-    // print(values);
     nextTick(() {
       picker.currentState?.setValues(values);
     });
@@ -439,7 +438,7 @@ class _FlanDatePickerState extends State<FlanDatePicker> {
           .map((FlanDateTimePickerRange column) => column.type)
           .toList()
             ..insertAll(0, widget.columnsOrder!);
-      print(columnsOrder);
+
       result.sort(
         (FlanDateTimePickerRange a, FlanDateTimePickerRange b) =>
             columnsOrder.indexOf(a.type) - columnsOrder.indexOf(b.type),

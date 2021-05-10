@@ -2,21 +2,21 @@
 import 'package:flutter/material.dart';
 
 // 🌎 Project imports:
-import 'package:flant/components/field.dart';
+import '../components/field.dart';
 
 @optionalTypeArgs
 mixin FlanLinkFieldMixin<T extends StatefulWidget> on State<T> {
-  FlanFieldState<T>? get field {
-    return context.findAncestorStateOfType<FlanFieldState<T>>();
+  void linkField(ValueNotifier<dynamic> modalValue) {
+    FlanField.of(context)?.childFieldValue = modalValue;
   }
 
-  void useLinkField(dynamic widget, dynamic oldWidget) {
-    if (field != null) {
-      field!.childFieldValue.value = widget.value;
-      if (widget.value != oldWidget.value) {
-        field?.resetValidation();
-        field?.validateWithTrigger(FlanFieldValidateTrigger.onChange);
-      }
-    }
+  @override
+  void deactivate() {
+    FlanField.of(context)?.childFieldValue = null;
+    super.deactivate();
+  }
+
+  void validateChangedValue() {
+    FlanField.of(context)?.validWhereValueChange();
   }
 }
