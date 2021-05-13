@@ -188,7 +188,7 @@ class FlanCell extends FlanRouteStatelessWidget {
       children: <Widget>[
         FlanActiveResponse(
           disabled: disabled,
-          enabled: _isClickable,
+          enable: _isClickable,
           cursorBuilder: (SystemMouseCursor cursor) {
             return _isClickable ? cursor : SystemMouseCursors.basic;
           },

@@ -18,7 +18,8 @@ void main() {
         ),
       ),
     ));
-    final Finder loading = find.byType(SizedBox);
+    final Finder loading = find.byType(SizedBox).at(0);
+
     expect(tester.getSize(loading), equals(const Size(20.0, 20.0)));
   });
 

@@ -15,6 +15,7 @@ import 'components/collapse_theme.dart';
 import 'components/contact_card_theme.dart';
 import 'components/count_down_theme.dart';
 import 'components/divider_theme.dart';
+import 'components/field_theme.dart';
 import 'components/empty_theme.dart';
 import 'components/image_theme.dart';
 import 'components/loading_theme.dart';
@@ -93,6 +94,7 @@ class FlanThemeData with Diagnosticable {
     FlanCountDownThemeData? countDownTheme,
     FlanContactCardThemeData? contactCardTheme,
     FlanDividerThemeData? dividerTheme,
+    FlanFieldThemeData? fieldTheme,
     FlanEmptyThemeData? emptyTheme,
     FlanImageThemeData? imageTheme,
     FlanPaginationThemeData? paginationTheme,
@@ -121,6 +123,7 @@ class FlanThemeData with Diagnosticable {
       contactCardTheme: contactCardTheme ?? FlanContactCardThemeData(),
       dividerTheme: dividerTheme ?? FlanDividerThemeData(),
       emptyTheme: emptyTheme ?? FlanEmptyThemeData(),
+      fieldTheme: fieldTheme ?? FlanFieldThemeData(),
       imageTheme: imageTheme ?? FlanImageThemeData(),
       paginationTheme: paginationTheme ?? FlanPaginationThemeData(),
       progressTheme: progressTheme ?? FlanProgressThemeData(),
@@ -149,6 +152,7 @@ class FlanThemeData with Diagnosticable {
     required this.countDownTheme,
     required this.contactCardTheme,
     required this.dividerTheme,
+    required this.fieldTheme,
     required this.emptyTheme,
     required this.imageTheme,
     required this.paginationTheme,
@@ -202,6 +206,9 @@ class FlanThemeData with Diagnosticable {
 
   /// Divider 分割线
   final FlanDividerThemeData dividerTheme;
+
+  /// Field 输入框
+  final FlanFieldThemeData fieldTheme;
 
   /// Image 图片
   final FlanImageThemeData imageTheme;
@@ -261,6 +268,7 @@ class FlanThemeData with Diagnosticable {
           FlanCountDownThemeData.lerp(a.countDownTheme, b.countDownTheme, t),
       dividerTheme:
           FlanDividerThemeData.lerp(a.dividerTheme, b.dividerTheme, t),
+      fieldTheme: FlanFieldThemeData.lerp(a.fieldTheme, b.fieldTheme, t),
       emptyTheme: FlanEmptyThemeData.lerp(a.emptyTheme, b.emptyTheme, t),
       imageTheme: FlanImageThemeData.lerp(a.imageTheme, b.imageTheme, t),
       paginationTheme:

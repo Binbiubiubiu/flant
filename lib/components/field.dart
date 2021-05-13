@@ -1,14 +1,16 @@
 // 🐦 Flutter imports:
 
+import 'package:flant/styles/components/cell_theme.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter/services.dart';
 
 // 🌎 Project imports:
-import '../styles/icons.dart';
+import '../styles/components/field_theme.dart';
+import '../styles/theme.dart';
 import '../styles/var.dart';
-import '../utils/format/number.dart';
+import '../utils/format/number.dart' show customFormat, formatNumber;
 import '../utils/widget.dart';
 import 'cell.dart';
 import 'form.dart';
@@ -16,7 +18,7 @@ import 'icon.dart';
 
 int uuid = 0;
 
-typedef FlanFieldFormatter = String Function(String);
+typedef FlanFieldFormatter = String Function(String value);
 
 /// ### FlanField
 /// 表单中的输入框组件。
@@ -38,6 +40,8 @@ class FlanField extends StatefulWidget {
     bool? isRequired,
     bool? center,
     bool? clearable,
+    IconData? clearIconName,
+    String? clearIconUrl,
     FlanFieldClearTrigger? clearTrigger,
     bool? clickable,
     bool? isLink = false,
@@ -60,6 +64,7 @@ class FlanField extends StatefulWidget {
     IconData? rightIconName,
     String? rightIconUrl,
     List<FlanFieldRule>? rules,
+    bool? autocomplete,
     EdgeInsets? padding,
     Color? bgColor,
     ValueChanged<String>? onInput,
@@ -94,6 +99,8 @@ class FlanField extends StatefulWidget {
       isRequired: isRequired ?? false,
       center: center ?? false,
       clearable: clearable ?? false,
+      clearIconName: clearIconName,
+      clearIconUrl: clearIconUrl,
       clearTrigger: clearTrigger ?? FlanFieldClearTrigger.focus,
       clickable: clickable ?? false,
       isLink: isLink ?? false,
@@ -116,6 +123,7 @@ class FlanField extends StatefulWidget {
       rightIconName: rightIconName,
       rightIconUrl: rightIconUrl,
       rules: rules ?? const <FlanFieldRule>[],
+      autocomplete: autocomplete ?? false,
       padding: padding,
       bgColor: bgColor,
       onInput: onInput,
@@ -152,6 +160,8 @@ class FlanField extends StatefulWidget {
     required this.isRequired,
     required this.center,
     required this.clearable,
+    this.clearIconName,
+    this.clearIconUrl,
     required this.clearTrigger,
     required this.clickable,
     required this.isLink,
@@ -174,6 +184,7 @@ class FlanField extends StatefulWidget {
     this.rightIconName,
     this.rightIconUrl,
     required this.rules,
+    required this.autocomplete,
     this.padding,
     this.bgColor,
     this.onInput,
@@ -244,6 +255,11 @@ class FlanField extends StatefulWidget {
 
   /// 是否启用清除图标，点击清除图标后会清空输入框
   final bool clearable;
+
+  /// 清除图标名称或图片链接
+  final IconData? clearIconName;
+
+  final String? clearIconUrl;
 
   /// 显示清除图标的时机，
   /// - `always` 表示输入框不为空时展示，
@@ -318,6 +334,9 @@ class FlanField extends StatefulWidget {
 
   /// 背景色
   final Color? bgColor;
+
+  /// 自动补全
+  final bool autocomplete;
 
   // ****************** Events ******************
 
@@ -395,11 +414,11 @@ class FlanFieldState extends State<FlanField> {
   void initState() {
     editingController = widget.controller ?? TextEditingController();
     focusNode = FocusNode()..addListener(onFouse);
-    super.initState();
-
     nextTick(() {
+      updateValueCorrect(modelvalue, widget.formatTrigger);
       validWhereValueChange();
     });
+    super.initState();
   }
 
   void onFouse() {
@@ -410,7 +429,7 @@ class FlanFieldState extends State<FlanField> {
       }
     } else {
       if (widget.formatTrigger == FlanFieldFormatTrigger.onBlur) {
-        updateValue(formatNumber(modelvalue));
+        updateValueCorrect(modelvalue, FlanFieldFormatTrigger.onBlur);
       }
       if (widget.onBlur != null) {
         widget.onBlur!();
@@ -428,14 +447,16 @@ class FlanFieldState extends State<FlanField> {
 
   @override
   void dispose() {
-    editingController.dispose();
+    // 如果是自带controller 需要销毁
+    if (widget.controller == null) {
+      editingController.dispose();
+    }
     focusNode.removeListener(onFouse);
 
     super.dispose();
   }
 
   void validWhereValueChange() {
-    resetValidation();
     validateWithTrigger(FlanFieldValidateTrigger.onChange);
   }
 
@@ -455,22 +476,19 @@ class FlanFieldState extends State<FlanField> {
 
   @override
   Widget build(BuildContext context) {
+    final FlanFieldThemeData themeData = FlanTheme.of(context).fieldTheme;
+
     final FlanFormState? formState = FlanForm.of(context);
     form = formState?.widget;
-    final Widget? label = _buildLabel();
-    final Widget? leftIcon = _buildLeftIcon();
-
-    final TextStyle textStyle = DefaultTextStyle.of(context).style;
-
-    final double labelWidth = ThemeVars.fieldLabelWidth *
-        (textStyle.fontSize ?? ThemeVars.cellLabelFontSize);
+    final Widget? label = _buildLabel(themeData);
+    final Widget? leftIcon = _buildLeftIcon(themeData);
 
     formState?.register(widget.name, this);
 
     return FlanCell(
       iconSlot: leftIcon,
       titleSlot: label,
-      titleWidth: labelWidth,
+      titleWidth: widget.labelWidth ?? themeData.labelWidth,
       extraSlots: widget.extraSlot,
       size: widget.size,
       iconName: widget.leftIconName,
@@ -488,18 +506,20 @@ class FlanFieldState extends State<FlanField> {
         children: <Widget>[
           Row(
             children: <Widget>[
-              Expanded(child: _buildInput()),
-              _buildClearIcon(),
-              _buildRightIcon(),
+              Expanded(child: _buildInput(context, themeData)),
+              _buildClearIcon(themeData),
+              _buildRightIcon(themeData),
               widget.buttonSlot ??
                   Padding(
-                    padding: const EdgeInsets.only(left: ThemeVars.paddingXs),
+                    padding: EdgeInsets.only(
+                      left: FlanThemeVars.paddingXs.rpx,
+                    ),
                     child: widget.buttonSlot,
                   )
             ],
           ),
-          _buildWordLimt(),
-          _buildMessage(),
+          _buildWordLimt(themeData),
+          _buildMessage(themeData),
         ],
       ),
     );
@@ -550,7 +570,7 @@ class FlanFieldState extends State<FlanField> {
     }
   }
 
-  Widget _buildClearIcon() {
+  Widget _buildClearIcon(FlanFieldThemeData themeData) {
     return ValueListenableBuilder<TextEditingValue>(
       valueListenable: editingController,
       builder: (BuildContext context, TextEditingValue value, Widget? child) {
@@ -560,11 +580,13 @@ class FlanFieldState extends State<FlanField> {
         );
       },
       child: Padding(
-        padding: const EdgeInsets.only(left: ThemeVars.paddingXs),
-        child: FlanIcon.name(
-          FlanIcons.clear,
-          color: ThemeVars.fieldClearIconColor,
-          size: ThemeVars.fieldClearIconSize,
+        padding: EdgeInsets.only(left: FlanThemeVars.paddingXs.rpx),
+        child: FlanIcon(
+          iconName: widget.clearIconName ??
+              (widget.clearIconUrl == null ? FlanIcons.clear : null),
+          iconUrl: widget.clearIconUrl,
+          color: themeData.clearIconColor,
+          size: themeData.clearIconSize,
           onClick: () {
             editingController.clear();
 
@@ -589,17 +611,36 @@ class FlanFieldState extends State<FlanField> {
       }).toList();
       validate(rules: rules);
     }
+    // else {
+    //   resetValidation();
+    // }
   }
 
-  // String limitValueLength(String value) {
-  //   if (widget.maxLength != null && widget.maxLength! < value.length) {
-  //     if (modelvalue.isNotEmpty && modelvalue.length == widget.maxLength) {
-  //       return modelvalue;
-  //     }
-  //     return value.substring(0, widget.maxLength);
-  //   }
-  //   return value;
-  // }
+  String limitValueLength(String value) {
+    if (widget.maxLength != null && widget.maxLength! < value.length) {
+      if (modelvalue.isNotEmpty && modelvalue.length == widget.maxLength) {
+        return modelvalue;
+      }
+      return value.substring(0, widget.maxLength);
+    }
+    return value;
+  }
+
+  void updateValueCorrect(String value, [FlanFieldFormatTrigger? trigger]) {
+    trigger ??= FlanFieldFormatTrigger.onChange;
+    value = limitValueLength(value);
+    if (widget.type == FlanFieldType.number ||
+        widget.type == FlanFieldType.digit) {
+      final bool isNumber = widget.type == FlanFieldType.number;
+      value = formatNumber(value, allowDot: isNumber, allowMinus: isNumber);
+    }
+
+    if (widget.formatter != null && trigger == widget.formatTrigger) {
+      value = widget.formatter!(value);
+    }
+
+    editingController.text = value;
+  }
 
   void updateValue(String value, [FlanFieldFormatTrigger? trigger]) {
     trigger ??= FlanFieldFormatTrigger.onChange;
@@ -667,38 +708,33 @@ class FlanFieldState extends State<FlanField> {
     return form != null && form!.showError && validateFailed;
   }
 
-  void onKeypress() {
-    if (widget.onKeypress != null) {
-      widget.onKeypress!();
-    }
-  }
-
   void onClickInput() {
     if (widget.onClickInput != null) {
       widget.onClickInput!();
     }
   }
 
-  Widget _buildInput() {
+  Widget _buildInput(BuildContext context, FlanFieldThemeData themeData) {
+    final FlanCellThemeData cellThemeData = FlanTheme.of(context).cellTheme;
     final TextAlign inputAlign =
         widget.inputAlign ?? form?.inputAlign ?? TextAlign.left;
     if (widget.inputSlot != null) {
       return GestureDetector(
         onTap: onClickInput,
         child: Container(
-          constraints: const BoxConstraints(
-            minHeight: ThemeVars.cellLineHeight,
+          constraints: BoxConstraints(
+            minHeight: cellThemeData.lineHeight,
           ),
           alignment: <TextAlign, Alignment>{
             TextAlign.left: Alignment.centerLeft,
             TextAlign.center: Alignment.center,
             TextAlign.right: Alignment.centerRight,
           }[inputAlign],
-          child: DefaultTextStyle(
+          child: DefaultTextStyle.merge(
             style: TextStyle(
               color: showError
-                  ? ThemeVars.fieldInputErrorTextColor
-                  : ThemeVars.fieldInputTextColor,
+                  ? themeData.inputErrorTextColor
+                  : themeData.inputTextColor,
             ),
             child: FlanFieldScope(
               fieldState: this,
@@ -712,8 +748,8 @@ class FlanFieldState extends State<FlanField> {
     return Container(
       constraints: widget.autosize ??
           (widget.type == FlanFieldType.textarea
-              ? const BoxConstraints(
-                  minHeight: ThemeVars.fieldTextAreaMinHeight,
+              ? BoxConstraints(
+                  minHeight: themeData.textAreaMinHeight,
                 )
               : null),
       child: TextField(
@@ -725,8 +761,8 @@ class FlanFieldState extends State<FlanField> {
           hintText: widget.placeholder,
           hintStyle: TextStyle(
             color: showError
-                ? ThemeVars.fieldInputErrorTextColor
-                : ThemeVars.fieldPlaceholderTextColor,
+                ? themeData.inputErrorTextColor
+                : themeData.placeholderTextColor,
           ),
           counterText: '',
           isDense: true,
@@ -742,8 +778,13 @@ class FlanFieldState extends State<FlanField> {
             widget.onSubmitted!(value);
           }
         },
+        autofocus: widget.autofocus,
+        autocorrect: widget.autocomplete,
         onChanged: (String value) {
           validWhereValueChange();
+          if (widget.onKeypress != null) {
+            widget.onKeypress!();
+          }
           if (widget.onInput != null) {
             widget.onInput!(value);
           }
@@ -754,20 +795,21 @@ class FlanFieldState extends State<FlanField> {
         keyboardType: <FlanFieldType, TextInputType>{
           FlanFieldType.digit: TextInputType.number,
           FlanFieldType.number: TextInputType.number,
+          FlanFieldType.tel: TextInputType.phone,
         }[widget.type],
         cursorWidth: 1.0,
         obscureText: widget.type == FlanFieldType.password,
         obscuringCharacter: '●',
         inputFormatters: formatters,
         style: TextStyle(
-          color: disabled
-              ? ThemeVars.fieldDisabledTextColor
-              : ThemeVars.fieldInputTextColor,
-          fontSize: ThemeVars.cellFontSize,
+          color:
+              disabled ? themeData.disabledTextColor : themeData.inputTextColor,
+          fontSize: cellThemeData.fontSize,
         ),
         cursorColor: showError
-            ? ThemeVars.fieldInputErrorTextColor
-            : ThemeVars.fieldInputTextColor,
+            ? themeData.inputErrorTextColor
+            : themeData.inputTextColor,
+        textAlignVertical: TextAlignVertical.center,
         maxLength: widget.maxLength,
         maxLengthEnforcement: MaxLengthEnforcement.enforced,
         maxLines: widget.type == FlanFieldType.textarea ? null : 1,
@@ -776,7 +818,7 @@ class FlanFieldState extends State<FlanField> {
     );
   }
 
-  Widget _buildLeftIcon() {
+  Widget _buildLeftIcon(FlanFieldThemeData themeData) {
     if (widget.leftIconName != null ||
         widget.leftIconUrl != null ||
         widget.leftIconSlot != null) {
@@ -787,10 +829,10 @@ class FlanFieldState extends State<FlanField> {
           }
         },
         child: Padding(
-          padding: const EdgeInsets.only(right: ThemeVars.paddingBase),
+          padding: EdgeInsets.only(right: FlanThemeVars.paddingBase.rpx),
           child: IconTheme.merge(
-            data: const IconThemeData(
-              size: ThemeVars.fieldIconSize,
+            data: IconThemeData(
+              size: themeData.iconSize,
             ),
             child: widget.leftIconSlot ??
                 FlanIcon(
@@ -804,7 +846,7 @@ class FlanFieldState extends State<FlanField> {
     return const SizedBox.shrink();
   }
 
-  Widget _buildRightIcon() {
+  Widget _buildRightIcon(FlanFieldThemeData themeData) {
     if (widget.rightIconName != null ||
         widget.rightIconUrl != null ||
         widget.rightIconSlot != null) {
@@ -815,9 +857,9 @@ class FlanFieldState extends State<FlanField> {
           }
         },
         child: IconTheme.merge(
-          data: const IconThemeData(
-            size: ThemeVars.fieldIconSize,
-            color: ThemeVars.fieldRightIconColor,
+          data: IconThemeData(
+            size: themeData.iconSize,
+            color: themeData.rightIconColor,
           ),
           child: widget.rightIconSlot ??
               FlanIcon(
@@ -831,26 +873,33 @@ class FlanFieldState extends State<FlanField> {
     return const SizedBox.shrink();
   }
 
-  Widget _buildWordLimt() {
+  Widget _buildWordLimt(FlanFieldThemeData themeData) {
     if (widget.showWordLimit && widget.maxLength != null) {
-      final int count = modelvalue.runes.length;
+      final TextStyle textStyle = TextStyle(
+        color: themeData.wordLimitColor,
+        fontSize: themeData.wordLimitFontSize,
+      );
       return Container(
         width: double.infinity,
-        padding: const EdgeInsets.only(top: ThemeVars.paddingBase),
-        child: Text(
-          '$count/${widget.maxLength}',
-          style: const TextStyle(
-            color: ThemeVars.fieldWordLimitColor,
-            fontSize: ThemeVars.fieldWordLimitFontSize,
-          ),
-          textAlign: TextAlign.right,
+        padding: EdgeInsets.only(top: FlanThemeVars.paddingBase.rpx),
+        child: ValueListenableBuilder<TextEditingValue>(
+          valueListenable: editingController,
+          builder:
+              (BuildContext context, TextEditingValue value, Widget? child) {
+            final int count = value.text.runes.length;
+            return Text(
+              '$count/${widget.maxLength}',
+              style: textStyle,
+              textAlign: TextAlign.right,
+            );
+          },
         ),
       );
     }
     return const SizedBox.shrink();
   }
 
-  Widget _buildMessage() {
+  Widget _buildMessage(FlanFieldThemeData themeData) {
     if (form?.showErrorMessage == false) {
       return const SizedBox.shrink();
     }
@@ -864,9 +913,9 @@ class FlanFieldState extends State<FlanField> {
         width: double.infinity,
         child: Text(
           message,
-          style: const TextStyle(
-            color: ThemeVars.fieldErrorMessageColor,
-            fontSize: ThemeVars.fieldErrorMessageTextColor,
+          style: TextStyle(
+            color: themeData.errorMessageColor,
+            fontSize: themeData.errorMessageTextColor,
           ),
           textAlign: errorMessageAlign,
         ),
@@ -875,20 +924,18 @@ class FlanFieldState extends State<FlanField> {
     return const SizedBox.shrink();
   }
 
-  Widget? _buildLabel() {
+  Widget? _buildLabel(FlanFieldThemeData themeData) {
     if (widget.label.isNotEmpty || widget.labelSlot != null) {
       final String colon = widget.colon || (form?.colon == true) ? ':' : '';
-
-      const EdgeInsets labelMargin = EdgeInsets.only(
-        right: ThemeVars.fieldLabelMarginRight,
-      );
 
       final TextAlign labelAlign =
           widget.labelAlign ?? form?.labelAlign ?? TextAlign.left;
 
       return Container(
         width: double.infinity,
-        margin: labelMargin,
+        margin: EdgeInsets.only(
+          right: themeData.labelMarginRight,
+        ),
         child: Text.rich(
           TextSpan(
             children: <InlineSpan>[
@@ -898,9 +945,8 @@ class FlanFieldState extends State<FlanField> {
           ),
           textAlign: labelAlign,
           style: TextStyle(
-            color: disabled
-                ? ThemeVars.fieldDisabledTextColor
-                : ThemeVars.fieldLabelColor,
+            color:
+                disabled ? themeData.disabledTextColor : themeData.labelColor,
           ),
         ),
       );
@@ -950,6 +996,14 @@ class FlanFieldState extends State<FlanField> {
         defaultValue: false));
     properties.add(DiagnosticsProperty<bool>('clearable', widget.clearable,
         defaultValue: false));
+    properties.add(DiagnosticsProperty<IconData>(
+      'clearIconName',
+      widget.clearIconName,
+    ));
+    properties.add(DiagnosticsProperty<String>(
+      'clearIconUrl',
+      widget.clearIconUrl,
+    ));
     properties.add(DiagnosticsProperty<FlanFieldClearTrigger>(
         'clearTrigger', widget.clearTrigger,
         defaultValue: FlanFieldClearTrigger.focus));
@@ -1003,7 +1057,9 @@ class FlanFieldState extends State<FlanField> {
         .add(DiagnosticsProperty<String>('rightIconUrl', widget.rightIconUrl));
     properties
         .add(DiagnosticsProperty<List<FlanFieldRule>>('rules', widget.rules));
-
+    properties.add(DiagnosticsProperty<bool>(
+        'autocomplete', widget.autocomplete,
+        defaultValue: false));
     super.debugFillProperties(properties);
   }
 }
