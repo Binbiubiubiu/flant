@@ -2,13 +2,12 @@
 import 'package:flant/mixins/link_field_mixins.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/rendering.dart';
 
 // 🌎 Project imports:
-import 'package:flant/components/loading.dart';
-import 'package:flutter/rendering.dart';
-// import 'package:flant/mixins/link_field_mixins.dart';
 import '../styles/components/switch_theme.dart';
 import '../styles/theme.dart';
+import 'loading.dart';
 
 /// ### FlanSwitch
 /// 用于在打开和关闭状态之间进行切换。
@@ -76,6 +75,9 @@ class _FlanSwitchState<T> extends State<FlanSwitch<T>> with FlanLinkFieldMixin {
   @override
   void dispose() {
     modalValue.removeListener(_onChange);
+    if (widget.modalValue == null) {
+      modalValue.dispose();
+    }
     super.dispose();
   }
 

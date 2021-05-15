@@ -84,19 +84,17 @@ class _FlanOverlayState extends State<FlanOverlay> {
         removeRight: true,
         removeBottom: true,
         context: context,
-        child: FlanTransition.fade(
+        child: FlanTransitionVisiable.fade(
           duration: widget.duration,
+          visible: widget.show,
           onDismissed: () {
             close();
           },
-          child: Visibility(
-            visible: widget.show,
-            child: GestureDetector(
-              onTap: _onOverlayClick,
-              child: Container(
-                color: widget.color ?? ThemeVars.overlayBackgroundColor,
-                child: widget.child ?? const SizedBox.shrink(),
-              ),
+          child: GestureDetector(
+            onTap: _onOverlayClick,
+            child: Container(
+              color: widget.color ?? ThemeVars.overlayBackgroundColor,
+              child: widget.child ?? const SizedBox.shrink(),
             ),
           ),
         ),

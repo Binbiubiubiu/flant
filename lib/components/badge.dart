@@ -6,7 +6,6 @@ import 'package:flutter/material.dart';
 import '../styles/components/badge_theme.dart';
 import '../styles/theme.dart';
 import '../styles/var.dart';
-import '../utils/widget.dart';
 
 /// ### FlanImage 图片
 /// 增强版的 img 标签，提供多种图片填充模式，支持图片懒加载、加载中提示、加载失败提示。
@@ -58,8 +57,8 @@ class FlanBadge extends StatelessWidget {
     if (child != null) {
       return Stack(
         clipBehavior: Clip.none,
-        children: <Widget?>[
-          child,
+        children: <Widget>[
+          child ?? const SizedBox.shrink(),
           Positioned(
             top: offset[0],
             right: -offset[1],
@@ -68,7 +67,7 @@ class FlanBadge extends StatelessWidget {
               child: _buildBadge(themeData),
             ),
           ),
-        ].noNull,
+        ],
       );
     }
 

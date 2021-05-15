@@ -389,6 +389,9 @@ class __AnimatedContentState extends State<_AnimatedContent>
   @override
   void didUpdateWidget(covariant _AnimatedContent oldWidget) {
     _calcMaxHeight();
+    if (widget.duration != oldWidget.duration) {
+      _controller.duration = widget.duration;
+    }
 
     // 重新计算高度后再动画
     nextTick(() {
@@ -473,6 +476,10 @@ class __CollapseRightIconState extends State<_CollapseRightIcon>
 
   @override
   void didUpdateWidget(covariant _CollapseRightIcon oldWidget) {
+    if (widget.duration != oldWidget.duration) {
+      _controller.duration = widget.duration;
+    }
+
     if (widget.expanded) {
       _controller.forward();
     } else {

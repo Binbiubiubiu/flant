@@ -162,7 +162,9 @@ class _FlanTimePickerState extends State<FlanTimePicker> {
 
   @override
   void dispose() {
-    currentDate.removeListener(_onValueChange);
+    currentDate
+      ..removeListener(_onValueChange)
+      ..dispose();
     super.dispose();
   }
 

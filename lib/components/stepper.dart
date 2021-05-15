@@ -147,34 +147,41 @@ class _FlanStepperState extends State<FlanStepper> {
   @override
   void initState() {
     current = ValueNotifier<dynamic>(getInitialValue())
-      ..addListener(() {
-        widget.onChange(current.value, FlanStepperDetails(name: widget.name));
-      });
+      ..addListener(_handleCurrentChange);
     textEditingController =
         TextEditingController(text: current.value.toString())
           ..addListener(onInput);
-    focusNode = FocusNode()
-      ..addListener(() {
-        if (focusNode.hasFocus) {
-          if (widget.onFocus != null) {
-            widget.onFocus!();
-          }
-        } else {
-          final dynamic value = format(textEditingController.text);
-          textEditingController.text = value.toString();
-          current.value = value;
-          if (widget.onBlur != null) {
-            widget.onBlur!();
-          }
-        }
-      });
+    focusNode = FocusNode()..addListener(_handleFocus);
     super.initState();
+  }
+
+  void _handleCurrentChange() {
+    widget.onChange(current.value, FlanStepperDetails(name: widget.name));
+  }
+
+  void _handleFocus() {
+    if (focusNode.hasFocus) {
+      if (widget.onFocus != null) {
+        widget.onFocus!();
+      }
+    } else {
+      final dynamic value = format(textEditingController.text);
+      textEditingController.text = value.toString();
+      current.value = value;
+      if (widget.onBlur != null) {
+        widget.onBlur!();
+      }
+    }
   }
 
   @override
   void dispose() {
-    current.dispose();
-    focusNode.dispose();
+    current
+      ..removeListener(_handleCurrentChange)
+      ..dispose();
+    focusNode
+      ..removeListener(_handleFocus)
+      ..dispose();
     super.dispose();
   }
 

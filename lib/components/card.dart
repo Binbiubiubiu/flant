@@ -123,9 +123,9 @@ class FlanCard extends StatelessWidget {
           fontSize: themeData.fontSize,
         ),
         child: Column(
-          children: <Widget?>[
+          children: <Widget>[
             Row(
-              children: <Widget?>[
+              children: <Widget>[
                 _buildThumb(themeData),
                 Expanded(
                   child: Container(
@@ -136,26 +136,26 @@ class FlanCard extends StatelessWidget {
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: <Widget?>[
+                      children: <Widget>[
                         Column(
                           mainAxisSize: MainAxisSize.min,
                           crossAxisAlignment: CrossAxisAlignment.start,
-                          children: <Widget?>[
+                          children: <Widget>[
                             _buildTitle(themeData),
                             _buildDesc(themeData),
                             SizedBox(height: 2.0.rpx),
-                            tagsSlot,
-                          ].noNull,
+                            tagsSlot ?? const SizedBox.shrink(),
+                          ],
                         ),
                         _buildBottom(themeData),
-                      ].noNull,
+                      ],
                     ),
                   ),
                 ),
-              ].noNull,
+              ],
             ),
             _buildFooter(),
-          ].noNull,
+          ],
         ),
       ),
     );
@@ -182,7 +182,7 @@ class FlanCard extends StatelessWidget {
     return const SizedBox.shrink();
   }
 
-  Widget? _buildOriginPrice(FlanCardThemeData themeData) {
+  Widget _buildOriginPrice(FlanCardThemeData themeData) {
     if (_showOriginPrice) {
       return Padding(
         padding: EdgeInsets.only(left: 5.0.rpx),
@@ -196,6 +196,7 @@ class FlanCard extends StatelessWidget {
         ),
       );
     }
+    return const SizedBox.shrink();
   }
 
   Widget _buildNumber(FlanCardThemeData themeData) {
@@ -210,25 +211,26 @@ class FlanCard extends StatelessWidget {
     return const SizedBox.shrink();
   }
 
-  Widget? _buildBottom(FlanCardThemeData themeData) {
+  Widget _buildBottom(FlanCardThemeData themeData) {
     if (_showBottom) {
       return Row(
         children: <Widget>[
           Expanded(
             child: Wrap(
               crossAxisAlignment: WrapCrossAlignment.center,
-              children: <Widget?>[
-                priceTopSlot,
+              children: <Widget>[
+                priceTopSlot ?? const SizedBox.shrink(),
                 _buildPrice(themeData),
                 _buildOriginPrice(themeData),
-                bottomSlot,
-              ].noNull,
+                bottomSlot ?? const SizedBox.shrink(),
+              ],
             ),
           ),
           _buildNumber(themeData)
         ],
       );
     }
+    return const SizedBox.shrink();
   }
 
   Widget _buildPriceText(FlanCardThemeData themeData) {
@@ -266,7 +268,7 @@ class FlanCard extends StatelessWidget {
     );
   }
 
-  Widget? _buildDesc(FlanCardThemeData themeData) {
+  Widget _buildDesc(FlanCardThemeData themeData) {
     if (descSlot != null) {
       return descSlot!;
     }
@@ -281,9 +283,10 @@ class FlanCard extends StatelessWidget {
         overflow: TextOverflow.ellipsis,
       );
     }
+    return const SizedBox.shrink();
   }
 
-  Widget? _buildThumbTag() {
+  Widget _buildThumbTag() {
     if (tagSlot != null || tag.isNotEmpty) {
       return Positioned(
         top: 2.0,
@@ -296,6 +299,8 @@ class FlanCard extends StatelessWidget {
             ),
       );
     }
+
+    return const SizedBox.shrink();
   }
 
   Widget _bulidThumbImage(FlanCardThemeData themeData) {
@@ -312,7 +317,7 @@ class FlanCard extends StatelessWidget {
     );
   }
 
-  Widget? _buildThumb(FlanCardThemeData themeData) {
+  Widget _buildThumb(FlanCardThemeData themeData) {
     if (thumbSlot != null || thumb.isNotEmpty) {
       return GestureDetector(
         onTap: () {
@@ -321,16 +326,17 @@ class FlanCard extends StatelessWidget {
           }
         },
         child: Stack(
-          children: <Widget?>[
+          children: <Widget>[
             _bulidThumbImage(themeData),
             _buildThumbTag(),
-          ].noNull,
+          ],
         ),
       );
     }
+    return const SizedBox.shrink();
   }
 
-  Widget? _buildFooter() {
+  Widget _buildFooter() {
     if (footerSlot != null) {
       return SizedBox(
         width: double.infinity,
@@ -341,6 +347,7 @@ class FlanCard extends StatelessWidget {
         ),
       );
     }
+    return const SizedBox.shrink();
   }
 
   @override

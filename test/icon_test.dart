@@ -32,10 +32,10 @@ void main() {
       ),
     ));
 
-    final Finder icon = find.byType(ImageIcon);
+    final Finder icon = find.byType(Image);
     expect(icon, findsOneWidget);
     final NetworkImage image =
-        tester.widget<ImageIcon>(icon).image as NetworkImage;
+        tester.firstWidget<Image>(icon).image as NetworkImage;
     expect(image.url, equals('https://b.yzcdn.cn/vant/icon-demo-1126.png'));
   });
 

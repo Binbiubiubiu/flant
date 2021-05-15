@@ -2,6 +2,7 @@
 import 'package:flant/styles/components/action_bar_theme.dart';
 import 'package:flant/styles/components/card_theme.dart';
 import 'package:flant/styles/components/pagination_theme.dart';
+import 'package:flant/styles/components/toast_theme.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
@@ -83,6 +84,7 @@ class _InheritedFlanTheme extends InheritedTheme {
 @immutable
 class FlanThemeData with Diagnosticable {
   factory FlanThemeData({
+    Color? overlayBackgroundColor,
     FlanActionBarThemeData? actionBarTheme,
     FlanBadgeThemeData? badgeTheme,
     FlanButtonThemeData? buttonTheme,
@@ -106,11 +108,14 @@ class FlanThemeData with Diagnosticable {
     FlanSkeletonThemeData? skeletonTheme,
     FlanSubmitBarThemeData? submitBarTheme,
     FlanSwitchThemeData? switchTheme,
+    FlanToastThemeData? toastTheme,
     FlanLoadingThemeData? loadingTheme,
     FlanNavBarThemeData? navBarTheme,
     FlanNoticeBarThemeData? noticeBarTheme,
   }) {
     return FlanThemeData.raw(
+      overlayBackgroundColor:
+          overlayBackgroundColor ?? const Color.fromRGBO(0, 0, 0, .7),
       actionBarTheme: actionBarTheme ?? FlanActionBarThemeData(),
       badgeTheme: badgeTheme ?? FlanBadgeThemeData(),
       buttonTheme: buttonTheme ?? FlanButtonThemeData(),
@@ -136,11 +141,13 @@ class FlanThemeData with Diagnosticable {
       loadingTheme: loadingTheme ?? FlanLoadingThemeData(),
       navBarTheme: navBarTheme ?? FlanNavBarThemeData(),
       submitBarTheme: submitBarTheme ?? FlanSubmitBarThemeData(),
+      toastTheme: toastTheme ?? FlanToastThemeData(),
       noticeBarTheme: noticeBarTheme ?? FlanNoticeBarThemeData(),
     );
   }
 
   const FlanThemeData.raw({
+    required this.overlayBackgroundColor,
     required this.actionBarTheme,
     required this.badgeTheme,
     required this.buttonTheme,
@@ -164,12 +171,15 @@ class FlanThemeData with Diagnosticable {
     required this.skeletonTheme,
     required this.switchTheme,
     required this.submitBarTheme,
+    required this.toastTheme,
     required this.loadingTheme,
     required this.navBarTheme,
     required this.noticeBarTheme,
   });
 
   factory FlanThemeData.fallback() => FlanThemeData();
+
+  final Color overlayBackgroundColor;
 
   /// ActionBar 动作栏
   final FlanActionBarThemeData actionBarTheme;
@@ -249,8 +259,13 @@ class FlanThemeData with Diagnosticable {
   /// Tag 标签
   final FlanTagThemeData tagTheme;
 
+  /// Toast 轻提示
+  final FlanToastThemeData toastTheme;
+
   static FlanThemeData lerp(FlanThemeData a, FlanThemeData b, double t) {
     return FlanThemeData.raw(
+      overlayBackgroundColor:
+          Color.lerp(a.overlayBackgroundColor, b.overlayBackgroundColor, t)!,
       actionBarTheme:
           FlanActionBarThemeData.lerp(a.actionBarTheme, b.actionBarTheme, t),
       badgeTheme: FlanBadgeThemeData.lerp(a.badgeTheme, b.badgeTheme, t),
@@ -276,6 +291,7 @@ class FlanThemeData with Diagnosticable {
       progressTheme:
           FlanProgressThemeData.lerp(a.progressTheme, b.progressTheme, t),
       tagTheme: FlanTagThemeData.lerp(a.tagTheme, b.tagTheme, t),
+      toastTheme: FlanToastThemeData.lerp(a.toastTheme, b.toastTheme, t),
       tabbarTheme: FlanTabbarThemeData.lerp(a.tabbarTheme, b.tabbarTheme, t),
       sidebarTheme:
           FlanSidebarThemeData.lerp(a.sidebarTheme, b.sidebarTheme, t),

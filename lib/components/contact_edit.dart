@@ -87,6 +87,7 @@ class _FlanContactEditState extends State<FlanContactEdit> {
   void dispose() {
     nameControlller.dispose();
     telController.dispose();
+    isDefault.dispose();
     super.dispose();
   }
 
