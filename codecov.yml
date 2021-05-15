@@ -16,8 +16,8 @@ comment:
 flags:
   components:
     paths:
-      - /lib/components/
+      - lib/components/
 
 ignore:
-  - /lib/components/common
-  - /lib/components/style
+  - lib/components/common
+  - lib/components/style
