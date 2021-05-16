@@ -10,6 +10,7 @@ import '../styles/components/toast_theme.dart';
 import '../styles/theme.dart';
 import '../styles/var.dart';
 import '../utils/widget.dart';
+import 'common/custom_entry.dart';
 import 'icon.dart';
 import 'loading.dart';
 import 'style.dart';
@@ -41,6 +42,7 @@ class FlanToastOption {
     this.closeOnClick = false,
     this.closeOnClickOverlay = false,
     this.loadingType = FlanLoadingType.circular,
+    this.customStyle,
     this.duration = const Duration(seconds: 2),
     this.transitionBuilder = kFlanFadeTransitionBuilder,
     this.onClose,
@@ -57,6 +59,7 @@ class FlanToastOption {
   final bool forbidClick;
   final bool closeOnClick;
   final bool closeOnClickOverlay;
+  final BoxDecoration? customStyle;
   final FlanLoadingType loadingType;
   final Duration duration;
   final FlanTransitionBuilder transitionBuilder;
@@ -75,6 +78,7 @@ class FlanToastOption {
       iconUrl: other.iconUrl,
       iconSize: other.iconSize,
       overlay: other.overlay,
+      customStyle: other.customStyle,
       forbidClick: other.forbidClick,
       closeOnClick: other.closeOnClick,
       closeOnClickOverlay: other.closeOnClickOverlay,
@@ -97,6 +101,7 @@ class FlanToastOption {
     bool? forbidClick,
     bool? closeOnClick,
     bool? closeOnClickOverlay,
+    BoxDecoration? customStyle,
     FlanLoadingType? loadingType,
     Duration? duration,
     FlanTransitionBuilder? transitionBuilder,
@@ -111,6 +116,7 @@ class FlanToastOption {
       iconUrl: iconUrl ?? this.iconUrl,
       iconSize: iconSize ?? this.iconSize,
       overlay: overlay ?? this.overlay,
+      customStyle: customStyle ?? this.customStyle,
       forbidClick: forbidClick ?? this.forbidClick,
       closeOnClick: closeOnClick ?? this.closeOnClick,
       closeOnClickOverlay: closeOnClickOverlay ?? this.closeOnClickOverlay,
@@ -121,68 +127,6 @@ class FlanToastOption {
       onClose: onClose ?? this.onClose,
     );
   }
-}
-
-class CustomOverlayEntry extends OverlayEntry {
-  factory CustomOverlayEntry({
-    required Widget child,
-    required ValueWidgetBuilder<bool> transitionBuilder,
-  }) {
-    final ValueNotifier<bool> visiable = ValueNotifier<bool>(true);
-    late CustomOverlayEntry entry;
-    entry = CustomOverlayEntry.raw(
-      visiable: visiable,
-      child: child,
-      builder: (BuildContext context) {
-        return ValueListenableBuilder<bool>(
-          valueListenable: entry.visiable,
-          builder: transitionBuilder,
-          child: entry.child,
-        );
-      },
-    );
-    return entry;
-  }
-
-  CustomOverlayEntry.raw({
-    required this.visiable,
-    required this.child,
-    required WidgetBuilder builder,
-  }) : super(builder: builder);
-
-  ValueNotifier<bool> visiable;
-
-  Widget child;
-
-  Timer? timer;
-
-  void update(Widget child, Duration duration) {
-    clearTimer();
-
-    this.child = child;
-    markNeedsBuild();
-    if (duration != Duration.zero) {
-      timer = Timer(duration, close);
-    }
-  }
-
-  void clearTimer() {
-    if (timer != null) {
-      timer!.cancel();
-      timer = null;
-    }
-  }
-
-  void close() {
-    clearTimer();
-    visiable.value = false;
-  }
-
-  // @override
-  // void remove() {
-  //   visiable.dispose();
-  //   super.remove();
-  // }
 }
 
 class FlanToast {
@@ -199,7 +143,7 @@ class FlanToast {
     bool? closeOnClick,
     bool? closeOnClickOverlay,
     FlanLoadingType? loadingType,
-    BoxDecoration? toastStyle,
+    BoxDecoration? customStyle,
     BoxDecoration? overlayStyle,
     Duration? duration,
     FlanTransitionBuilder? transitionBuilder,
@@ -216,28 +160,24 @@ class FlanToast {
     final FlanToastOption _defaultOption = _getDefaultOption(_type);
 
     void open([String? msg]) {
-      final Widget toast = IgnorePointer(
-        ignoring: forbidClick ?? _defaultOption.forbidClick,
-        child: FlanToastBlock(
-          type: _type,
-          position: position ?? _defaultOption.position,
-          message: msg ?? message ?? _defaultOption.message,
-          iconName: iconName ?? _defaultOption.iconName,
-          iconUrl: iconUrl ?? _defaultOption.iconUrl,
-          iconSize: iconSize ?? _defaultOption.iconSize,
-          overlay: overlay ?? _defaultOption.overlay,
-          toastStyle: toastStyle,
-          overlayStyle: overlayStyle,
-          onClick: (closeOnClick ?? _defaultOption.closeOnClick) ? close : null,
-          onClickOverlay:
-              (closeOnClickOverlay ?? _defaultOption.closeOnClickOverlay)
-                  ? close
-                  : null,
-          loadingType: loadingType ?? _defaultOption.loadingType,
+      final Widget toast = Align(
+        alignment: FlanToast.getPosition(position ?? _defaultOption.position),
+        child: UnconstrainedBox(
+          child: _FlanToastBlock(
+            type: _type,
+            message: msg ?? message ?? _defaultOption.message,
+            iconName: iconName ?? _defaultOption.iconName,
+            iconUrl: iconUrl ?? _defaultOption.iconUrl,
+            iconSize: iconSize ?? _defaultOption.iconSize,
+            customStyle: customStyle ?? _defaultOption.customStyle,
+            onClick:
+                (closeOnClick ?? _defaultOption.closeOnClick) ? close : null,
+            loadingType: loadingType ?? _defaultOption.loadingType,
+          ),
         ),
       );
 
-      duration ??= const Duration(seconds: 2);
+      duration ??= _defaultOption.duration;
       if (entry != null) {
         entry!.update(toast, duration!);
         return;
@@ -267,14 +207,37 @@ class FlanToast {
         }
       }
 
+      final VoidCallback? onClickOverlay =
+          (closeOnClickOverlay ?? _defaultOption.closeOnClickOverlay)
+              ? close
+              : null;
+
       entry = CustomOverlayEntry(
-        transitionBuilder: (BuildContext context, bool value, Widget? child) {
-          return FlanTransitionVisiable(
-            transitionBuilder: transitionBuilder ?? kFlanFadeTransitionBuilder,
-            visible: value,
-            appearAnimatable: true,
-            onDismissed: watchToastClose,
-            child: child!,
+        layoutBuilder: (BuildContext context, Widget child) {
+          return IgnorePointer(
+            ignoring: forbidClick ?? _defaultOption.forbidClick,
+            child: child,
+          );
+        },
+        transitionBuilder: (BuildContext context, bool visible, Widget? child) {
+          return Stack(
+            children: <Widget>[
+              Positioned.fill(
+                child: FlanOverlay(
+                  show: (overlay ?? _defaultOption.overlay) && visible,
+                  onClick: onClickOverlay,
+                  customStyle: overlayStyle ?? _defaultOption.customStyle,
+                ),
+              ),
+              FlanTransitionVisiable(
+                transitionBuilder:
+                    transitionBuilder ?? kFlanFadeTransitionBuilder,
+                visible: visible,
+                appear: true,
+                onDismissed: watchToastClose,
+                child: child!,
+              ),
+            ],
           );
         },
         child: toast,
@@ -299,7 +262,7 @@ class FlanToast {
     bool? closeOnClick,
     bool? closeOnClickOverlay,
     FlanLoadingType? loadingType,
-    BoxDecoration? toastStyle,
+    BoxDecoration? customStyle,
     BoxDecoration? overlayStyle,
     Duration? duration,
     FlanTransitionBuilder? transitionBuilder,
@@ -314,7 +277,7 @@ class FlanToast {
       iconName: iconName,
       iconUrl: iconUrl,
       overlay: overlay,
-      toastStyle: toastStyle,
+      customStyle: customStyle,
       overlayStyle: overlayStyle,
       forbidClick: forbidClick,
       closeOnClick: closeOnClick,
@@ -338,7 +301,7 @@ class FlanToast {
     bool? closeOnClick,
     bool? closeOnClickOverlay,
     FlanLoadingType? loadingType,
-    BoxDecoration? toastStyle,
+    BoxDecoration? customStyle,
     BoxDecoration? overlayStyle,
     Duration? duration,
     FlanTransitionBuilder? transitionBuilder,
@@ -353,7 +316,7 @@ class FlanToast {
       iconName: iconName,
       iconUrl: iconUrl,
       overlay: overlay,
-      toastStyle: toastStyle,
+      customStyle: customStyle,
       overlayStyle: overlayStyle,
       forbidClick: forbidClick,
       closeOnClick: closeOnClick,
@@ -377,7 +340,7 @@ class FlanToast {
     bool? closeOnClick,
     bool? closeOnClickOverlay,
     FlanLoadingType? loadingType,
-    BoxDecoration? toastStyle,
+    BoxDecoration? customStyle,
     BoxDecoration? overlayStyle,
     Duration? duration,
     FlanTransitionBuilder? transitionBuilder,
@@ -392,7 +355,7 @@ class FlanToast {
       iconName: iconName,
       iconUrl: iconUrl,
       overlay: overlay,
-      toastStyle: toastStyle,
+      customStyle: customStyle,
       overlayStyle: overlayStyle,
       forbidClick: forbidClick,
       closeOnClick: closeOnClick,
@@ -409,6 +372,17 @@ class FlanToast {
     required this.clear,
     required this.open,
   });
+
+  static Alignment getPosition(FlanToastPosition position) {
+    switch (position) {
+      case FlanToastPosition.top:
+        return const Alignment(0.0, -0.6);
+      case FlanToastPosition.middle:
+        return const Alignment(0.0, 0.0);
+      case FlanToastPosition.bottom:
+        return const Alignment(0.0, 0.6);
+    }
+  }
 
   static CustomOverlayEntry? _getCurrentEntry() {
     if (_queue.isNotEmpty && !_allowMultiple) {
@@ -460,32 +434,24 @@ class FlanToast {
   final void Function(String message) open;
 }
 
-class FlanToastBlock extends StatelessWidget {
-  const FlanToastBlock({
+class _FlanToastBlock extends StatelessWidget {
+  const _FlanToastBlock({
     Key? key,
     required this.type,
-    required this.position,
     required this.message,
     this.iconName,
     this.iconUrl,
     this.iconSize,
-    required this.overlay,
     required this.loadingType,
-    this.toastStyle,
-    this.overlayStyle,
+    this.customStyle,
     this.onClick,
-    this.onClickOverlay,
   })  : assert(type is FlanToastType),
-        assert(position is FlanToastPosition),
         super(key: key);
 
   // ****************** Props ******************
 
   /// 提示类型，可选值为 `loading` `success` `fail` `html` `text`
   final FlanToastType type;
-
-  /// 位置，可选值为 `top` `middle` `bottom`
-  final FlanToastPosition position;
 
   /// 文本内容,支持通过`\n`换行
   final String message;
@@ -499,22 +465,14 @@ class FlanToastBlock extends StatelessWidget {
   /// 图标大小
   final double? iconSize;
 
-  /// 是否显示背景遮罩层
-  final bool overlay;
-
   /// 加载图标类型, 可选值为 `spinner`
   final FlanLoadingType loadingType;
 
   /// 自定义样式
-  final BoxDecoration? toastStyle;
-
-  /// 自定义遮罩样式
-  final BoxDecoration? overlayStyle;
+  final BoxDecoration? customStyle;
 
   // ****************** Events ******************
   final VoidCallback? onClick;
-
-  final VoidCallback? onClickOverlay;
 
   // ****************** Slots ******************
 
@@ -524,78 +482,45 @@ class FlanToastBlock extends StatelessWidget {
     final bool isText =
         type == FlanToastType.text && iconName == null && iconUrl == null;
 
-    final FlanThemeData theme = FlanTheme.of(context);
-    final FlanToastThemeData themeData = theme.toastTheme;
-    final Color overlayColor = theme.overlayBackgroundColor;
+    final FlanToastThemeData themeData = FlanTheme.of(context).toastTheme;
 
-    return Stack(
-      children: <Widget>[
-        Visibility(
-          visible: overlay,
-          child: Positioned.fill(
-            child: GestureDetector(
-              onTap: onClickOverlay,
-              child: Container(
-                decoration: overlayStyle ?? BoxDecoration(color: overlayColor),
+    return DefaultTextStyle(
+      style: TextStyle(
+        color: themeData.textColor,
+        fontSize: themeData.fontSize,
+        height: themeData.lineHeight,
+      ),
+      child: GestureDetector(
+        onTap: onClick,
+        child: DecoratedBox(
+          decoration: customStyle ??
+              BoxDecoration(
+                color: themeData.backgroundColor,
+                borderRadius: BorderRadius.circular(themeData.borderRadius),
               ),
+          child: Container(
+            constraints: BoxConstraints(
+              maxWidth: themeData.maxWidth * size.width,
+              minWidth: themeData.defaultWidth,
+              minHeight: isText ? 0.0 : themeData.defaultMinHeight,
             ),
-          ),
-        ),
-        Align(
-          alignment: _position,
-          child: DefaultTextStyle(
-            style: TextStyle(
-              color: themeData.textColor,
-              fontSize: themeData.fontSize,
-              height: themeData.lineHeight,
-            ),
-            child: GestureDetector(
-              onTap: onClick,
-              child: DecoratedBox(
-                decoration: toastStyle ??
-                    BoxDecoration(
-                      color: themeData.backgroundColor,
-                      borderRadius:
-                          BorderRadius.circular(themeData.borderRadius),
-                    ),
-                child: Container(
-                  constraints: BoxConstraints(
-                    maxWidth: themeData.maxWidth * size.width,
-                    minWidth: themeData.defaultWidth,
-                    minHeight: isText ? 0.0 : themeData.defaultMinHeight,
-                  ),
-                  margin:
-                      isText ? themeData.textPadding : themeData.defaultPadding,
-                  child: Column(
-                    mainAxisSize: MainAxisSize.min,
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    children: <Widget>[
-                      _buildIcon(themeData),
-                      SizedBox(
-                        height: isText ? 0.0 : FlanThemeVars.paddingXs.rpx,
-                      ),
-                      _buildText(),
-                    ],
-                  ),
+            margin: isText ? themeData.textPadding : themeData.defaultPadding,
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              mainAxisAlignment: MainAxisAlignment.center,
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: <Widget>[
+                _buildIcon(themeData),
+                SizedBox(
+                  height: isText ? 0.0 : FlanThemeVars.paddingXs.rpx,
                 ),
-              ),
+                _buildText(),
+              ],
             ),
           ),
         ),
-      ],
+      ),
     );
-  }
-
-  Alignment get _position {
-    switch (position) {
-      case FlanToastPosition.top:
-        return const Alignment(0.0, -0.6);
-      case FlanToastPosition.middle:
-        return const Alignment(0.0, 0.0);
-      case FlanToastPosition.bottom:
-        return const Alignment(0.0, 0.6);
-    }
   }
 
   Widget _buildIcon(FlanToastThemeData themeData) {

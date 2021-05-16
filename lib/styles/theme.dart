@@ -1,14 +1,12 @@
 // 🐦 Flutter imports:
-import 'package:flant/styles/components/action_bar_theme.dart';
-import 'package:flant/styles/components/card_theme.dart';
-import 'package:flant/styles/components/pagination_theme.dart';
-import 'package:flant/styles/components/toast_theme.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
+import 'components/action_bar_theme.dart';
 // 🌎 Project imports:
 import 'components/badge_theme.dart';
 import 'components/button_theme.dart';
+import 'components/card_theme.dart';
 import 'components/cell_group_theme.dart';
 import 'components/cell_theme.dart';
 import 'components/circle_theme.dart';
@@ -22,6 +20,8 @@ import 'components/image_theme.dart';
 import 'components/loading_theme.dart';
 import 'components/nav_bar_theme.dart';
 import 'components/notice_bar_theme.dart';
+import 'components/notify_theme.dart';
+import 'components/pagination_theme.dart';
 import 'components/progress_theme.dart';
 import 'components/sidebar_theme.dart';
 import 'components/skeleton_theme.dart';
@@ -29,6 +29,7 @@ import 'components/submit_bar_theme.dart';
 import 'components/switch_theme.dart';
 import 'components/tabbar_theme.dart';
 import 'components/tag_theme.dart';
+import 'components/toast_theme.dart';
 import 'components/tree_select_theme.dart';
 
 class FlanTheme extends StatelessWidget {
@@ -99,6 +100,7 @@ class FlanThemeData with Diagnosticable {
     FlanFieldThemeData? fieldTheme,
     FlanEmptyThemeData? emptyTheme,
     FlanImageThemeData? imageTheme,
+    FlanNotifyThemeData? notifyTheme,
     FlanPaginationThemeData? paginationTheme,
     FlanProgressThemeData? progressTheme,
     FlanTagThemeData? tagTheme,
@@ -143,6 +145,7 @@ class FlanThemeData with Diagnosticable {
       submitBarTheme: submitBarTheme ?? FlanSubmitBarThemeData(),
       toastTheme: toastTheme ?? FlanToastThemeData(),
       noticeBarTheme: noticeBarTheme ?? FlanNoticeBarThemeData(),
+      notifyTheme: notifyTheme ?? FlanNotifyThemeData(),
     );
   }
 
@@ -175,6 +178,7 @@ class FlanThemeData with Diagnosticable {
     required this.loadingTheme,
     required this.navBarTheme,
     required this.noticeBarTheme,
+    required this.notifyTheme,
   });
 
   factory FlanThemeData.fallback() => FlanThemeData();
@@ -262,6 +266,9 @@ class FlanThemeData with Diagnosticable {
   /// Toast 轻提示
   final FlanToastThemeData toastTheme;
 
+  /// Notify 消息提示
+  final FlanNotifyThemeData notifyTheme;
+
   static FlanThemeData lerp(FlanThemeData a, FlanThemeData b, double t) {
     return FlanThemeData.raw(
       overlayBackgroundColor:
@@ -305,6 +312,7 @@ class FlanThemeData with Diagnosticable {
       loadingTheme:
           FlanLoadingThemeData.lerp(a.loadingTheme, b.loadingTheme, t),
       navBarTheme: FlanNavBarThemeData.lerp(a.navBarTheme, b.navBarTheme, t),
+      notifyTheme: FlanNotifyThemeData.lerp(a.notifyTheme, b.notifyTheme, t),
       noticeBarTheme:
           FlanNoticeBarThemeData.lerp(a.noticeBarTheme, b.noticeBarTheme, t),
     );

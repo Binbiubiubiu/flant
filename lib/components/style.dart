@@ -1,4 +1,3 @@
-// 🐦 Flutter imports:
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
@@ -96,7 +95,7 @@ class FlanTransitionVisiable extends StatefulWidget {
     this.onDismissed,
     required this.transitionBuilder,
     this.replacement = const SizedBox.shrink(),
-    this.appearAnimatable = false,
+    this.appear = false,
     this.visible = true,
     this.maintainState = false,
     this.maintainAnimation = false,
@@ -117,7 +116,7 @@ class FlanTransitionVisiable extends StatefulWidget {
     this.onDismissed,
     this.transitionBuilder = kFlanFadeTransitionBuilder,
     this.replacement = const SizedBox.shrink(),
-    this.appearAnimatable = false,
+    this.appear = false,
     this.visible = true,
     this.maintainState = false,
     this.maintainAnimation = false,
@@ -138,7 +137,7 @@ class FlanTransitionVisiable extends StatefulWidget {
     this.onDismissed,
     this.transitionBuilder = kFlanSlideDownTransitionBuilder,
     this.replacement = const SizedBox.shrink(),
-    this.appearAnimatable = false,
+    this.appear = false,
     this.visible = true,
     this.maintainState = false,
     this.maintainAnimation = false,
@@ -159,7 +158,7 @@ class FlanTransitionVisiable extends StatefulWidget {
     this.onDismissed,
     this.transitionBuilder = kFlanSlideUpTransitionBuilder,
     this.replacement = const SizedBox.shrink(),
-    this.appearAnimatable = false,
+    this.appear = false,
     this.visible = true,
     this.maintainState = false,
     this.maintainAnimation = false,
@@ -179,7 +178,7 @@ class FlanTransitionVisiable extends StatefulWidget {
     this.onCompleted,
     this.onDismissed,
     this.transitionBuilder = kFlanSlideLeftTransitionBuilder,
-    this.appearAnimatable = false,
+    this.appear = false,
     this.replacement = const SizedBox.shrink(),
     this.visible = true,
     this.maintainState = false,
@@ -201,7 +200,7 @@ class FlanTransitionVisiable extends StatefulWidget {
     this.onDismissed,
     this.transitionBuilder = kFlanSlideRightTransitionBuilder,
     this.replacement = const SizedBox.shrink(),
-    this.appearAnimatable = false,
+    this.appear = false,
     this.visible = true,
     this.maintainState = false,
     this.maintainAnimation = false,
@@ -230,7 +229,7 @@ class FlanTransitionVisiable extends StatefulWidget {
   /// 过渡动画构造器
   final FlanTransitionBuilder transitionBuilder;
 
-  final bool appearAnimatable;
+  final bool appear;
   final Widget replacement;
   final bool visible;
   final bool maintainState;
@@ -257,14 +256,14 @@ class _FlanTransitionVisiableState extends State<FlanTransitionVisiable>
   void initState() {
     _visible = widget.visible;
     List<double> initValue = _visible ? <double>[1.0, 0.0] : <double>[0.0, 1.0];
-    if (widget.appearAnimatable) {
+    if (widget.appear) {
       initValue = initValue.reversed.toList();
     }
     animationController = AnimationController(
       vsync: this,
       value: initValue[0],
       duration: widget.duration ?? FlanThemeVars.animationDurationBase,
-      reverseDuration: widget.reverseDuration,
+      reverseDuration: widget.reverseDuration ?? widget.duration,
     )..addStatusListener(_transitionStatusChange);
 
     animation = CurvedAnimation(
@@ -274,7 +273,7 @@ class _FlanTransitionVisiableState extends State<FlanTransitionVisiable>
           widget.reverseCurve ?? FlanThemeVars.animationTimingFunctionLeave,
     );
 
-    if (widget.appearAnimatable) {
+    if (widget.appear) {
       if (_visible) {
         animationController.forward();
       } else {

@@ -4,16 +4,17 @@ import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
 
 // 🌎 Project imports:
-import 'package:flant/flant.dart';
-import '../styles/var.dart';
+import '../styles/theme.dart';
+import 'style.dart';
 
 /// Overlay 遮罩层
-class FlanOverlay extends StatefulWidget {
+class FlanOverlay extends StatelessWidget {
   const FlanOverlay({
     Key? key,
     this.show = false,
     this.duration = const Duration(milliseconds: 200),
-    this.color,
+    this.lockScroll = true,
+    this.customStyle,
     this.onClick,
     this.child,
   }) : super(key: key);
@@ -26,7 +27,10 @@ class FlanOverlay extends StatefulWidget {
   final Duration duration;
 
   /// 自定义样式
-  final Color? color;
+  final BoxDecoration? customStyle;
+
+  /// 是否锁定滚动，锁定时蒙层里的内容也将无法滚动
+  final bool lockScroll;
 
   // ****************** Events ******************
 
@@ -39,93 +43,39 @@ class FlanOverlay extends StatefulWidget {
   final Widget? child;
 
   @override
-  _FlanOverlayState createState() => _FlanOverlayState();
-}
-
-class _FlanOverlayState extends State<FlanOverlay> {
-  OverlayEntry? overlayEntry;
-  bool animating = false;
-
-  @override
-  void initState() {
-    if (widget.show) {
-      _nextTick(open);
-    }
-    super.initState();
-  }
-
-  @override
-  void dispose() {
-    close();
-    super.dispose();
-  }
-
-  @override
-  void didUpdateWidget(covariant FlanOverlay oldWidget) {
-    if (widget.show != oldWidget.show) {
-      _nextTick(() {
-        widget.show ? open() : overlayEntry?.markNeedsBuild();
-      });
-    }
-    super.didUpdateWidget(oldWidget);
-  }
-
-  void _onOverlayClick() {
-    if (widget.onClick != null) {
-      widget.onClick!();
-    }
-  }
-
-  void open() {
-    overlayEntry = OverlayEntry(builder: (BuildContext context) {
-      return MediaQuery.removeViewInsets(
-        removeLeft: true,
-        removeTop: true,
-        removeRight: true,
-        removeBottom: true,
-        context: context,
-        child: FlanTransitionVisiable.fade(
-          duration: widget.duration,
-          visible: widget.show,
-          onDismissed: () {
-            close();
-          },
-          child: GestureDetector(
-            onTap: _onOverlayClick,
-            child: Container(
-              color: widget.color ?? ThemeVars.overlayBackgroundColor,
-              child: widget.child ?? const SizedBox.shrink(),
-            ),
-          ),
-        ),
-      );
-    });
-
-    Overlay.of(context)?.insert(overlayEntry!);
-  }
-
-  void close() {
-    overlayEntry?.remove();
-  }
-
-  void _nextTick(VoidCallback cb) {
-    WidgetsBinding.instance?.addPostFrameCallback((Duration timeStamp) {
-      cb();
-    });
-  }
-
-  @override
   Widget build(BuildContext context) {
-    return const SizedBox.shrink();
+    final Color themeColor = FlanTheme.of(context).overlayBackgroundColor;
+    return FlanTransitionVisiable.fade(
+      duration: duration,
+      // appear: true,
+      visible: show,
+      child: GestureDetector(
+        onTap: onClick,
+        child: DecoratedBox(
+          decoration: customStyle ?? BoxDecoration(color: themeColor),
+          child: _buildChild(),
+        ),
+      ),
+    );
+  }
+
+  Widget? _buildChild() {
+    if (child != null) {
+      return IgnorePointer(
+        ignoring: lockScroll,
+        child: child,
+      );
+    }
   }
 
   @override
   void debugFillProperties(DiagnosticPropertiesBuilder properties) {
-    properties.add(
-        DiagnosticsProperty<bool>('show', widget.show, defaultValue: false));
-    properties.add(DiagnosticsProperty<Duration>('duration', widget.duration,
+    properties
+        .add(DiagnosticsProperty<bool>('show', show, defaultValue: false));
+    properties.add(DiagnosticsProperty<Duration>('duration', duration,
         defaultValue: const Duration(milliseconds: 200)));
-    properties.add(DiagnosticsProperty<Color>('color', widget.color));
+    properties
+        .add(DiagnosticsProperty<BoxDecoration>('customStyle', customStyle));
     super.debugFillProperties(properties);
   }
 }

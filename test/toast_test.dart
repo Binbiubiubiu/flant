@@ -31,10 +31,10 @@ void main() {
     );
 
     await tester.pumpAndSettle(const Duration(seconds: 1));
-    final Finder overlay = find.byType(Container).at(0);
+    final Finder overlay = find.byType(DecoratedBox).at(0);
 
     final BoxDecoration style =
-        tester.firstWidget<Container>(overlay).decoration as BoxDecoration;
+        tester.firstWidget<DecoratedBox>(overlay).decoration as BoxDecoration;
     expect(style.color, equals(Colors.red));
     await tester.pumpAndSettle(const Duration(seconds: 2));
   });
@@ -60,7 +60,8 @@ void main() {
     );
 
     await tester.pumpAndSettle(const Duration(seconds: 1));
-    final Finder overlay = find.byType(Container);
+
+    final Finder overlay = find.byType(DecoratedBox);
     await tester.tap(overlay);
     await tester.pumpAndSettle();
     expect(overlay, findsNothing);
@@ -89,9 +90,9 @@ void main() {
     );
 
     await tester.pumpAndSettle(const Duration(seconds: 1));
-    final Finder overlay = find.byType(Container);
+    final Finder overlay = find.byType(DecoratedBox);
     await tester.tapAt(const Offset(20.0, 20.0));
-    await tester.pumpAndSettle();
+    await tester.pumpAndSettle(const Duration(milliseconds: 300));
     expect(overlay, findsNothing);
   });
 
@@ -117,7 +118,7 @@ void main() {
     );
 
     await tester.pumpAndSettle(const Duration(seconds: 1));
-    final Finder overlay = find.byType(Container);
+    final Finder overlay = find.byType(DecoratedBox);
     await tester.tapAt(const Offset(20.0, 20.0));
     await tester.pumpAndSettle();
     expect(overlay, findsWidgets);
