@@ -213,6 +213,7 @@ class FlanToast {
               : null;
 
       entry = CustomOverlayEntry(
+        lockScroll: false,
         layoutBuilder: (BuildContext context, Widget child) {
           return IgnorePointer(
             ignoring: forbidClick ?? _defaultOption.forbidClick,
