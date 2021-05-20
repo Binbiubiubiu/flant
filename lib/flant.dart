@@ -56,6 +56,7 @@ export './components/stepper.dart';
 export './components/steps.dart';
 export './components/style.dart';
 export './components/submit_bar.dart';
+export './components/swipe.dart';
 export './components/swipe_cell.dart';
 export './components/switch.dart';
 export './components/tabbar.dart';

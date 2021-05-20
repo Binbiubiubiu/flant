@@ -1,4 +1,4 @@
-## 0.0.1-alpha (2021-05-04)
+## 0.0.1-alpha (2021-05-16)
 
 
 ### ✨ Features
@@ -35,6 +35,7 @@
 * loading ([2152ce9](https://github.com/Simon-Bin/flant/commit/2152ce9))
 * navbar ([264a0a0](https://github.com/Simon-Bin/flant/commit/264a0a0))
 * notice_bar ([80293cc](https://github.com/Simon-Bin/flant/commit/80293cc))
+* Notify ([7ff71c9](https://github.com/Simon-Bin/flant/commit/7ff71c9))
 * overlay ([224c7f6](https://github.com/Simon-Bin/flant/commit/224c7f6))
 * Pagination ([9e06ab2](https://github.com/Simon-Bin/flant/commit/9e06ab2))
 * PasswordInput和NumberKeyboard ([e7ed3dd](https://github.com/Simon-Bin/flant/commit/e7ed3dd))
@@ -89,6 +90,7 @@
 * 修复routeMixins 错误 ([86691e8](https://github.com/Simon-Bin/flant/commit/86691e8))
 * 修复style 动画bug ([69d8d51](https://github.com/Simon-Bin/flant/commit/69d8d51))
 * 修复switch 阴影显示问题 ([7236571](https://github.com/Simon-Bin/flant/commit/7236571))
+* 修复toast lockscroll ([10ca351](https://github.com/Simon-Bin/flant/commit/10ca351))
 * 组件路由组名称未显示 ([bd47214](https://github.com/Simon-Bin/flant/commit/bd47214))
 * actionbar 边界问题 ([a4a9fd0](https://github.com/Simon-Bin/flant/commit/a4a9fd0))
 * divider 显示异常 ([413ee30](https://github.com/Simon-Bin/flant/commit/413ee30))

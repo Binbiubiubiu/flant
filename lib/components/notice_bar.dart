@@ -26,7 +26,7 @@ class FlanNoticeBar extends StatefulWidget {
     this.background,
     this.scrollable,
     this.delay = 1.0,
-    this.speed = 50.0,
+    this.speed = 60.0,
     this.onClick,
     this.onClose,
     this.onReplay,

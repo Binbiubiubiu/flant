@@ -63,7 +63,7 @@
 - [x] Skeleton 骨架屏
 - [x] Steps 步骤条
 - [ ] Sticky 粘性布局
-- [ ] Swipe 轮播
+- [x] Swipe 轮播
 - [x] Tag 标签
 
 ##### 导航组件

@@ -974,7 +974,9 @@ class _PickerScrollPhysics extends ScrollPhysics {
 
   double _getTargetPixels(
       ScrollMetrics position, Tolerance tolerance, double velocity) {
-    double page = getIndexByOffset(position.pixels, itemDimension).toDouble();
+    double page =
+        getIndexByOffset(position.pixels + velocity * 0.08, itemDimension)
+            .toDouble();
 
     if (velocity < -tolerance.velocity) {
       page -= 0.5;

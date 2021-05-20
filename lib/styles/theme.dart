@@ -26,6 +26,7 @@ import 'components/progress_theme.dart';
 import 'components/sidebar_theme.dart';
 import 'components/skeleton_theme.dart';
 import 'components/submit_bar_theme.dart';
+import 'components/swipe_theme.dart';
 import 'components/switch_theme.dart';
 import 'components/tabbar_theme.dart';
 import 'components/tag_theme.dart';
@@ -109,6 +110,7 @@ class FlanThemeData with Diagnosticable {
     FlanSidebarThemeData? sidebarTheme,
     FlanSkeletonThemeData? skeletonTheme,
     FlanSubmitBarThemeData? submitBarTheme,
+    FlanSwipeThemeData? swipeTheme,
     FlanSwitchThemeData? switchTheme,
     FlanToastThemeData? toastTheme,
     FlanLoadingThemeData? loadingTheme,
@@ -139,6 +141,7 @@ class FlanThemeData with Diagnosticable {
       treeSelectTheme: treeSelectTheme ?? FlanTreeSelectThemeData(),
       sidebarTheme: sidebarTheme ?? FlanSidebarThemeData(),
       skeletonTheme: skeletonTheme ?? FlanSkeletonThemeData(),
+      swipeTheme: swipeTheme ?? FlanSwipeThemeData(),
       switchTheme: switchTheme ?? FlanSwitchThemeData(),
       loadingTheme: loadingTheme ?? FlanLoadingThemeData(),
       navBarTheme: navBarTheme ?? FlanNavBarThemeData(),
@@ -172,6 +175,7 @@ class FlanThemeData with Diagnosticable {
     required this.treeSelectTheme,
     required this.sidebarTheme,
     required this.skeletonTheme,
+    required this.swipeTheme,
     required this.switchTheme,
     required this.submitBarTheme,
     required this.toastTheme,
@@ -254,6 +258,10 @@ class FlanThemeData with Diagnosticable {
   ///  Switch 开关
   final FlanSwitchThemeData switchTheme;
 
+  ///  Swipe 轮播
+
+  final FlanSwipeThemeData swipeTheme;
+
   /// Tabbar 标签栏
   final FlanTabbarThemeData tabbarTheme;
 
@@ -306,6 +314,7 @@ class FlanThemeData with Diagnosticable {
           FlanSkeletonThemeData.lerp(a.skeletonTheme, b.skeletonTheme, t),
       submitBarTheme:
           FlanSubmitBarThemeData.lerp(a.submitBarTheme, b.submitBarTheme, t),
+      swipeTheme: FlanSwipeThemeData.lerp(a.swipeTheme, b.swipeTheme, t),
       switchTheme: FlanSwitchThemeData.lerp(a.switchTheme, b.switchTheme, t),
       treeSelectTheme:
           FlanTreeSelectThemeData.lerp(a.treeSelectTheme, b.treeSelectTheme, t),
