@@ -210,7 +210,7 @@ class FlanPickerState extends State<FlanPicker> {
   }
 
   FlanPickerDataType get dataType {
-    final dynamic? firstColumn =
+    final dynamic firstColumn =
         widget.columns.isNotEmpty ? widget.columns[0] : null;
     if (firstColumn != null && firstColumn is! String) {
       if (firstColumn[childrenKey] != null) {
@@ -525,7 +525,7 @@ class FlanPickerState extends State<FlanPicker> {
       children.length > index ? children[index].currentState : null;
 
   // get column value by index
-  dynamic? getColumnValue(int index) {
+  dynamic getColumnValue(int index) {
     final _FlanPickerColumnState? column = getChild(index);
     if (column != null) {
       return column.getValue();
@@ -564,7 +564,7 @@ class FlanPickerState extends State<FlanPicker> {
   }
 
   // get options of column by index
-  dynamic? getColumnValues(int index) {
+  dynamic getColumnValues(int index) {
     final _FlanPickerColumnState? column = getChild(index);
     if (column != null) {
       return column.options;
@@ -859,7 +859,7 @@ class _FlanPickerColumnState extends State<FlanPickerColumn> {
     scrollController.jumpTo(widget.itemHeight * index);
   }
 
-  dynamic? getValue() => options.length > index ? options[index] : null;
+  dynamic getValue() => options.length > index ? options[index] : null;
   void setValue(String value) {
     for (int i = 0; i < options.length; i++) {
       if (getOptionText(options[i]) == value) {
