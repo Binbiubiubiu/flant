@@ -6,6 +6,7 @@ import 'package:flutter/rendering.dart';
 // 🌎 Project imports:
 import '../styles/components/sidebar_theme.dart';
 import '../styles/theme.dart';
+import '../styles/var.dart';
 import 'badge.dart';
 import 'common/active_response.dart';
 import 'sidebar.dart';
@@ -119,7 +120,9 @@ class FlanSidebarItem extends StatelessWidget {
             child: FlanBadge(
               dot: dot,
               content: badge,
-              child: titleSlot ?? Text(title),
+              child: titleSlot ??
+                  Text(title,
+                      textHeightBehavior: FlanThemeVars.textHeightBehavior),
             ),
           ),
         ),

@@ -21,60 +21,61 @@ Curve kFlanCurveBuilder(bool show) => show
 
 /// 过渡动画构造器
 typedef FlanTransitionBuilder = Widget Function(
-    Animation<double> animation, Widget child);
+    BuildContext context, Animation<double> animation, Widget child);
 
 /// 过渡动画`Fade` 构造器
-Widget kFlanFadeTransitionBuilder(Animation<double> animation, Widget child) {
-  return Opacity(
-    opacity: animation.value,
+Widget kFlanFadeTransitionBuilder(
+    BuildContext context, Animation<double> animation, Widget child) {
+  return FadeTransition(
+    opacity: animation,
     child: child,
   );
 }
 
 /// 过渡动画`Slide Up` 构造器
 Widget kFlanSlideUpTransitionBuilder(
-    Animation<double> animation, Widget child) {
-  return FractionalTranslation(
-    translation: Tween<Offset>(
+    BuildContext context, Animation<double> animation, Widget child) {
+  return SlideTransition(
+    position: Tween<Offset>(
       begin: const Offset(0, 1),
       end: const Offset(0, 0),
-    ).evaluate(animation),
+    ).animate(animation),
     child: child,
   );
 }
 
 /// 过渡动画`Slide Down` 构造器
 Widget kFlanSlideDownTransitionBuilder(
-    Animation<double> animation, Widget child) {
-  return FractionalTranslation(
-    translation: Tween<Offset>(
+    BuildContext context, Animation<double> animation, Widget child) {
+  return SlideTransition(
+    position: Tween<Offset>(
       begin: const Offset(0, -1),
       end: const Offset(0, 0),
-    ).evaluate(animation),
+    ).animate(animation),
     child: child,
   );
 }
 
 /// 过渡动画`Slide Left` 构造器
 Widget kFlanSlideLeftTransitionBuilder(
-    Animation<double> animation, Widget child) {
-  return FractionalTranslation(
-    translation: Tween<Offset>(
+    BuildContext context, Animation<double> animation, Widget child) {
+  return SlideTransition(
+    position: Tween<Offset>(
       begin: const Offset(-1, 0),
       end: const Offset(0, 0),
-    ).evaluate(animation),
+    ).animate(animation),
     child: child,
   );
 }
 
 /// 过渡动画`Slide Right` 构造器
 Widget kFlanSlideRightTransitionBuilder(
-    Animation<double> animation, Widget child) {
-  return FractionalTranslation(
-    translation: Tween<Offset>(
+    BuildContext context, Animation<double> animation, Widget child) {
+  return SlideTransition(
+    position: Tween<Offset>(
       begin: const Offset(1, 0),
       end: const Offset(0, 0),
-    ).evaluate(animation),
+    ).animate(animation),
     child: child,
   );
 }
@@ -95,6 +96,7 @@ class FlanTransitionVisiable extends StatefulWidget {
     this.onDismissed,
     required this.transitionBuilder,
     this.replacement = const SizedBox.shrink(),
+    this.animation,
     this.appear = false,
     this.visible = true,
     this.maintainState = false,
@@ -116,6 +118,7 @@ class FlanTransitionVisiable extends StatefulWidget {
     this.onDismissed,
     this.transitionBuilder = kFlanFadeTransitionBuilder,
     this.replacement = const SizedBox.shrink(),
+    this.animation,
     this.appear = false,
     this.visible = true,
     this.maintainState = false,
@@ -137,6 +140,7 @@ class FlanTransitionVisiable extends StatefulWidget {
     this.onDismissed,
     this.transitionBuilder = kFlanSlideDownTransitionBuilder,
     this.replacement = const SizedBox.shrink(),
+    this.animation,
     this.appear = false,
     this.visible = true,
     this.maintainState = false,
@@ -158,6 +162,7 @@ class FlanTransitionVisiable extends StatefulWidget {
     this.onDismissed,
     this.transitionBuilder = kFlanSlideUpTransitionBuilder,
     this.replacement = const SizedBox.shrink(),
+    this.animation,
     this.appear = false,
     this.visible = true,
     this.maintainState = false,
@@ -180,6 +185,7 @@ class FlanTransitionVisiable extends StatefulWidget {
     this.transitionBuilder = kFlanSlideLeftTransitionBuilder,
     this.appear = false,
     this.replacement = const SizedBox.shrink(),
+    this.animation,
     this.visible = true,
     this.maintainState = false,
     this.maintainAnimation = false,
@@ -200,6 +206,7 @@ class FlanTransitionVisiable extends StatefulWidget {
     this.onDismissed,
     this.transitionBuilder = kFlanSlideRightTransitionBuilder,
     this.replacement = const SizedBox.shrink(),
+    this.animation,
     this.appear = false,
     this.visible = true,
     this.maintainState = false,
@@ -230,6 +237,7 @@ class FlanTransitionVisiable extends StatefulWidget {
   final FlanTransitionBuilder transitionBuilder;
 
   final bool appear;
+  final Animation<double>? animation;
   final Widget replacement;
   final bool visible;
   final bool maintainState;
@@ -247,37 +255,42 @@ class FlanTransitionVisiable extends StatefulWidget {
 
 class _FlanTransitionVisiableState extends State<FlanTransitionVisiable>
     with SingleTickerProviderStateMixin {
-  late AnimationController animationController;
-  late CurvedAnimation animation;
+  AnimationController? animationController;
+  late Animation<double> animation;
 
   late bool _visible;
 
   @override
   void initState() {
     _visible = widget.visible;
-    List<double> initValue = _visible ? <double>[1.0, 0.0] : <double>[0.0, 1.0];
-    if (widget.appear) {
-      initValue = initValue.reversed.toList();
-    }
-    animationController = AnimationController(
-      vsync: this,
-      value: initValue[0],
-      duration: widget.duration ?? FlanThemeVars.animationDurationBase,
-      reverseDuration: widget.reverseDuration ?? widget.duration,
-    )..addStatusListener(_transitionStatusChange);
+    if (widget.animation != null) {
+      animation = widget.animation!;
+    } else {
+      List<double> initValue =
+          _visible ? <double>[1.0, 0.0] : <double>[0.0, 1.0];
+      if (widget.appear) {
+        initValue = initValue.reversed.toList();
+      }
+      animationController = AnimationController(
+        vsync: this,
+        value: initValue[0],
+        duration: widget.duration ?? FlanThemeVars.animationDurationBase,
+        reverseDuration: widget.reverseDuration ?? widget.duration,
+      )..addStatusListener(_transitionStatusChange);
 
-    animation = CurvedAnimation(
-      parent: animationController,
-      curve: widget.curve ?? FlanThemeVars.animationTimingFunctionEnter,
-      reverseCurve:
-          widget.reverseCurve ?? FlanThemeVars.animationTimingFunctionLeave,
-    );
+      animation = CurvedAnimation(
+        parent: animationController!,
+        curve: widget.curve ?? FlanThemeVars.animationTimingFunctionEnter,
+        reverseCurve:
+            widget.reverseCurve ?? FlanThemeVars.animationTimingFunctionLeave,
+      );
+    }
 
     if (widget.appear) {
       if (_visible) {
-        animationController.forward();
+        animationController?.forward();
       } else {
-        animationController.reverse();
+        animationController?.reverse();
       }
     }
 
@@ -287,7 +300,7 @@ class _FlanTransitionVisiableState extends State<FlanTransitionVisiable>
   @override
   void dispose() {
     animationController
-      ..removeStatusListener(_transitionStatusChange)
+      ?..removeStatusListener(_transitionStatusChange)
       ..dispose();
 
     super.dispose();
@@ -296,15 +309,17 @@ class _FlanTransitionVisiableState extends State<FlanTransitionVisiable>
   @override
   void didUpdateWidget(covariant FlanTransitionVisiable oldWidget) {
     if (widget.duration != oldWidget.duration) {
-      animationController.duration = widget.duration;
+      animationController?.duration = widget.duration;
     }
-    if (widget.visible) {
-      setState(() {
-        _visible = true;
-      });
-      animationController.forward();
-    } else {
-      animationController.reverse();
+    if (widget.visible != oldWidget.visible) {
+      if (widget.visible) {
+        setState(() {
+          _visible = true;
+          animationController?.forward();
+        });
+      } else {
+        animationController?.reverse();
+      }
     }
 
     super.didUpdateWidget(oldWidget);
@@ -315,7 +330,7 @@ class _FlanTransitionVisiableState extends State<FlanTransitionVisiable>
     return AnimatedBuilder(
       animation: animation,
       builder: (BuildContext context, Widget? child) {
-        return widget.transitionBuilder(animation, child!);
+        return widget.transitionBuilder(context, animation, child!);
       },
       child: Visibility(
         replacement: widget.replacement,

@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 // 🌎 Project imports:
 import 'package:flant/flant.dart';
 import '../styles/var.dart';
+import '../utils/widget.dart';
 import 'icon.dart';
 
 typedef FlanAddressChangeCallback = void Function(
@@ -88,20 +89,21 @@ class FlanAddressList extends StatelessWidget {
     final List<Widget> list = _buildList(this.list);
     final List<Widget> disabledList =
         _buildList(this.disabledList, disabled: true);
-    final Widget disabledText = this.disabledText.isNotEmpty
-        ? Padding(
-            padding: ThemeVars.addressListDisabledTextPadding,
-            child: Text(
-              this.disabledText,
-              style: const TextStyle(
-                fontSize: ThemeVars.addressListDisabledTextFontSize,
-                color: ThemeVars.addressListDisabledTextColor,
-                height: ThemeVars.addressListDisabledTextLineHeight /
-                    ThemeVars.addressListDisabledTextFontSize,
-              ),
-            ),
-          )
-        : const SizedBox.shrink();
+    final Widget disabledText = Visibility(
+      visible: this.disabledText.isNotEmpty,
+      child: Padding(
+        padding: ThemeVars.addressListDisabledTextPadding,
+        child: Text(
+          this.disabledText,
+          style: const TextStyle(
+            fontSize: ThemeVars.addressListDisabledTextFontSize,
+            color: ThemeVars.addressListDisabledTextColor,
+            height: ThemeVars.addressListDisabledTextLineHeight /
+                ThemeVars.addressListDisabledTextFontSize,
+          ),
+        ),
+      ),
+    );
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -130,23 +132,13 @@ class FlanAddressList extends StatelessWidget {
       switchable: switchable,
       defaultTagText: defaultTagText,
       onEdit: () {
-        final FlanAddressChangeCallback? cb =
-            disabled ? onEditDisabled : onEdit;
-        if (cb != null) {
-          cb(item, index);
-        }
+        (disabled ? onEditDisabled : onEdit)?.call(item, index);
       },
       onClick: () {
-        if (onClickItem != null) {
-          onClickItem!(item, index);
-        }
+        onClickItem?.call(item, index);
       },
       onSelect: () {
-        final FlanAddressChangeCallback? cb =
-            disabled ? onSelectDisabled : onSelect;
-        if (cb != null) {
-          cb(item, index);
-        }
+        (disabled ? onSelectDisabled : onSelect)?.call(item, index);
 
         if (!disabled) {
           onValueChange(item.id);
@@ -186,9 +178,7 @@ class FlanAddressList extends StatelessWidget {
                 ? addButtonText
                 : FlanS.of(context).AddressList_add,
             onClick: () {
-              if (onAdd != null) {
-                onAdd!();
-              }
+              onAdd?.call();
             },
           ),
         ),
@@ -285,10 +275,7 @@ class FlanAddressListItem extends StatelessWidget {
               child: _buildContent(),
               rightIconSlot: _buildRightIcon(),
             ),
-            if (bottomBuilder != null)
-              bottomBuilder!(address, disabled)
-            else
-              const SizedBox.shrink()
+            bottomBuilder?.call(address, disabled) ?? const SizedBox.shrink()
           ],
         ),
       ),
@@ -297,13 +284,10 @@ class FlanAddressListItem extends StatelessWidget {
 
   void _onClick() {
     if (switchable) {
-      if (onSelect != null) {
-        onSelect!();
-      }
+      onSelect?.call();
     }
-    if (onClick != null) {
-      onClick!();
-    }
+
+    onClick?.call();
   }
 
   Widget _buildRightIcon() {
@@ -315,33 +299,26 @@ class FlanAddressListItem extends StatelessWidget {
         color: ThemeVars.gray6,
         size: ThemeVars.addressListEditIconSize,
         onClick: () {
-          if (onEdit != null) {
-            onEdit!();
-          }
-
-          if (onClick != null) {
-            onClick!();
-          }
+          onEdit?.call();
+          onClick?.call();
         },
       ),
     );
   }
 
   Widget _buildTag() {
-    if (tagBuilder != null) {
-      return tagBuilder!(address);
-    }
-    if (address.isDefault && defaultTagText.isNotEmpty) {
-      return Padding(
-        padding: const EdgeInsets.only(left: ThemeVars.paddingXs),
-        child: FlanTag(
-          type: FlanTagType.danger,
-          round: true,
-          child: Text(defaultTagText),
-        ),
-      );
-    }
-    return const SizedBox.shrink();
+    return tagBuilder?.call(address) ??
+        Visibility(
+          visible: address.isDefault && defaultTagText.isNotEmpty,
+          child: Padding(
+            padding: EdgeInsets.only(left: FlanThemeVars.paddingXs.rpx),
+            child: FlanTag(
+              type: FlanTagType.danger,
+              round: true,
+              child: Text(defaultTagText),
+            ),
+          ),
+        );
   }
 
   Widget _buildContent() {

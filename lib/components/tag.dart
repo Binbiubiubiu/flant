@@ -166,7 +166,7 @@ class FlanTag extends StatelessWidget {
         style: TextStyle(
           color: textColor,
           fontSize: fontSize,
-          // height: themeData.lineHeight ,
+          height: themeData.lineHeight ,
         ),
         child: Wrap(
           alignment: WrapAlignment.center,

@@ -117,6 +117,8 @@ class _FlanSwipeState extends State<FlanSwipe> {
 
   @override
   Widget build(BuildContext context) {
+    final FlanSwipeThemeData themeData = FlanTheme.of(context).swipeTheme;
+
     return SizedBox(
       height: widget.height,
       child: Stack(
@@ -154,7 +156,15 @@ class _FlanSwipeState extends State<FlanSwipe> {
               ),
             ),
           ),
-          _buildIndicator(),
+          Positioned(
+            bottom: widget.vertical ? 0.0 : themeData.indicatorMargin,
+            left: widget.vertical ? themeData.indicatorMargin : 0.0,
+            right: widget.vertical ? null : 0.0,
+            top: widget.vertical ? 0.0 : null,
+            child: IgnorePointer(
+              child: _buildIndicator(),
+            ),
+          ),
         ],
       ),
     );
@@ -274,30 +284,24 @@ class _FlanSwipeIndicator extends StatelessWidget {
   Widget build(BuildContext context) {
     final FlanSwipeThemeData themeData = FlanTheme.of(context).swipeTheme;
 
-    return Positioned(
-      bottom: vertical ? 0.0 : themeData.indicatorMargin,
-      left: vertical ? themeData.indicatorMargin : 0.0,
-      right: vertical ? null : 0.0,
-      top: vertical ? 0.0 : null,
-      child: ValueListenableBuilder<int>(
-        valueListenable: current,
-        builder: (BuildContext context, Object? value, Widget? child) {
-          return Wrap(
-            direction: vertical ? Axis.vertical : Axis.horizontal,
-            alignment: WrapAlignment.center,
-            runSpacing: vertical ? themeData.indicatorSize : 0.0,
-            spacing: themeData.indicatorSize,
-            children: List<Widget>.generate(
-              itemCount,
-              (int index) => _buildDot(
-                themeData,
-                active: index == value,
-                key: ValueKey<int>(index),
-              ),
+    return ValueListenableBuilder<int>(
+      valueListenable: current,
+      builder: (BuildContext context, Object? value, Widget? child) {
+        return Wrap(
+          direction: vertical ? Axis.vertical : Axis.horizontal,
+          alignment: WrapAlignment.center,
+          runSpacing: vertical ? themeData.indicatorSize : 0.0,
+          spacing: themeData.indicatorSize,
+          children: List<Widget>.generate(
+            itemCount,
+            (int index) => _buildDot(
+              themeData,
+              active: index == value,
+              key: ValueKey<int>(index),
             ),
-          );
-        },
-      ),
+          ),
+        );
+      },
     );
   }
 

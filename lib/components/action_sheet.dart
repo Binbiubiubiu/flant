@@ -1,54 +1,145 @@
 // 🐦 Flutter imports:
+import 'package:flant/styles/theme.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
+import 'package:flutter/services.dart';
 
 // 🌎 Project imports:
-import 'package:flant/components/loading.dart';
-import 'package:flant/components/popup.dart';
-import 'package:flant/components/style.dart';
+import '../styles/components/action_sheet_theme.dart';
 import '../styles/var.dart';
+import '../utils/widget.dart';
+import 'common/active_response.dart';
 import 'icon.dart';
+import 'loading.dart';
+import 'popup.dart';
+import 'style.dart';
+
+typedef FlanActionSheetSelectCallback = void Function(
+    FlanActionSheetAction action, int index);
 
 /// ### FlanActionSheet 动作面板
 /// 底部弹起的模态面板，包含与当前情境相关的多个选项。
-class FlanActionSheet extends StatelessWidget {
-  const FlanActionSheet({
+Future<T?> showFlanActionSheet<T extends Object?>(
+  BuildContext context, {
+
+  /// 面板选项列表
+  List<FlanActionSheetAction> actions = const <FlanActionSheetAction>[],
+
+  /// 顶部标题
+  String title = '',
+
+  /// 取消按钮文字
+  String cancelText = '',
+
+  /// 选项上方的描述信息
+  String description = '',
+
+  /// 是否显示关闭图标
+  bool closeable = true,
+
+  /// 关闭图标名称
+  IconData closeIconName = FlanIcons.cross,
+
+  /// 关闭图片链接
+  String? closeIconUrl,
+
+  /// 动画时长
+  Duration? duration,
+
+  /// 是否显示圆角
+  bool round = true,
+
+  /// 自定义遮罩层样式
+  Color? overlayColor,
+
+  /// 是否在点击选项后关闭
+  bool closeOnClickAction = false,
+
+  /// 是否在点击遮罩层后关闭
+  bool closeOnClickOverlay = true,
+
+  /// 是否开启底部安全区适配
+  bool safeAreaInsetBottom = true,
+
+  /// 点击选项时触发，禁用或加载状态下不会触发
+  FlanActionSheetSelectCallback? onSelect,
+
+  /// 点击取消按钮时触发
+  VoidCallback? onCancel,
+
+  /// 打开面板时触发
+  VoidCallback? onOpen,
+
+  /// 关闭面板时触发
+  VoidCallback? onClose,
+
+  /// 打开面板且动画结束后触发
+  VoidCallback? onOpened,
+
+  /// 关闭面板且动画结束后触发
+  VoidCallback? onClosed,
+
+  /// 自定义面板的展示内容
+  WidgetBuilder? builder,
+
+  /// 自定义描述文案
+  WidgetBuilder? descriptionBuilder,
+
+  /// 自定义取消按钮内容
+  WidgetBuilder? cancelBuilder,
+}) {
+  return showFlanPopup(
+    context,
+    builder: (BuildContext context) {
+      return _FlanActionSheet(
+        actions: actions,
+        title: title,
+        description: description,
+        cancelText: cancelText,
+        closeOnClickAction: closeOnClickAction,
+        onSelect: onSelect,
+        onCancel: onCancel,
+        child: builder?.call(context),
+        descriptionSlot: descriptionBuilder?.call(context),
+        cancelSlot: cancelBuilder?.call(context),
+        closeIconName: closeIconName,
+        closeIconUrl: closeIconUrl,
+        closeable: closeable,
+      );
+    },
+    position: FlanPopupPosition.bottom,
+    duration: duration,
+    round: round,
+    overlayColor: overlayColor,
+    safeAreaInsetBottom: safeAreaInsetBottom,
+    closeOnClickOverlay: closeOnClickOverlay,
+    onOpen: onOpen,
+    onClose: onClose,
+    onOpened: onOpened,
+    onClosed: onClosed,
+  );
+}
+
+class _FlanActionSheet extends StatelessWidget {
+  const _FlanActionSheet({
     Key? key,
-    required this.show,
     this.actions = const <FlanActionSheetAction>[],
     this.title = '',
     this.cancelText = '',
     this.description = '',
-    this.closeable = true,
-    this.closeIconName = FlanIcons.cross,
+    required this.closeOnClickAction,
+    required this.closeable,
+    required this.closeIconName,
     this.closeIconUrl,
-    this.duration = const Duration(milliseconds: 300),
-    this.round = true,
-    this.overlay = true,
-    this.overlayStyle,
-    // this.lockScroll = true,
-    // this.lazyRender = true,
-    this.closeOnPopstate = false,
-    this.closeOnClickAction = false,
-    this.closeOnClickOverlay = true,
-    this.safeAreaInsetBottom = true,
-    required this.onShowChange,
     this.onSelect,
     this.onCancel,
-    this.onOpen,
-    this.onClose,
-    this.onOpened,
-    this.onClosed,
-    this.onClickOverlay,
     this.child,
     this.descriptionSlot,
     this.cancelSlot,
   }) : super(key: key);
 
   // ****************** Props ******************
-  /// 是否显示动作面板
-  final bool show;
 
   /// 面板选项列表
   final List<FlanActionSheetAction> actions;
@@ -62,6 +153,9 @@ class FlanActionSheet extends StatelessWidget {
   /// 选项上方的描述信息
   final String description;
 
+  /// 是否在点击选项后关闭
+  final bool closeOnClickAction;
+
   /// 是否显示关闭图标
   final bool closeable;
 
@@ -71,60 +165,13 @@ class FlanActionSheet extends StatelessWidget {
   /// 关闭图片链接
   final String? closeIconUrl;
 
-  /// 动画时长
-  final Duration duration;
-
-  /// 是否显示圆角
-  final bool round;
-
-  /// 是否显示遮罩层
-  final bool overlay;
-
-  /// 自定义遮罩层样式
-  final BoxDecoration? overlayStyle;
-
-  // /// 是否锁定背景滚动
-  // final bool lockScroll;
-
-  // /// 是否在显示弹层时才渲染节点
-  // final bool lazyRender;
-
-  /// 是否在页面回退时自动关闭
-  final bool closeOnPopstate;
-
-  /// 是否在点击选项后关闭
-  final bool closeOnClickAction;
-
-  /// 是否在点击遮罩层后关闭
-  final bool closeOnClickOverlay;
-
-  /// 是否开启底部安全区适配
-  final bool safeAreaInsetBottom;
-
   // ****************** Events ******************
-  /// 是否显示变化
-  final void Function(bool show) onShowChange;
 
   /// 点击选项时触发，禁用或加载状态下不会触发
-  final void Function(FlanActionSheetAction action, int index)? onSelect;
+  final FlanActionSheetSelectCallback? onSelect;
 
   /// 点击取消按钮时触发
   final VoidCallback? onCancel;
-
-  /// 打开面板时触发
-  final VoidCallback? onOpen;
-
-  /// 关闭面板时触发
-  final VoidCallback? onClose;
-
-  /// 打开面板且动画结束后触发
-  final VoidCallback? onOpened;
-
-  /// 关闭面板且动画结束后触发
-  final VoidCallback? onClosed;
-
-  /// 点击遮罩层时触发
-  final VoidCallback? onClickOverlay;
 
   // ****************** Slots ******************
   /// 自定义面板的展示内容
@@ -139,99 +186,113 @@ class FlanActionSheet extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final Size size = MediaQuery.of(context).size;
-    return FlanPopup(
-      show: show,
-      onChange: _updateShow,
-      position: FlanPopupPosition.bottom,
-      round: true,
-      overlay: overlay,
-      overlayStyle: overlayStyle,
-      duration: duration,
-      closeOnClickOverlay: closeOnClickOverlay,
-      safeAreaInsetBottom: safeAreaInsetBottom,
-      closeOnPopstate: closeOnPopstate,
-      onClose: onClose,
-      onOpen: onOpen,
-      onOpened: onOpened,
-      onClosed: onClosed,
-      onClickOverlay: onClickOverlay,
-      child: DefaultTextStyle(
-        style: const TextStyle(
-          color: ThemeVars.actionSheetItemTextColor,
-        ),
-        child: Column(
-          children: <Widget>[
-            _buildHeader(),
-            _buildDescription(),
-            ConstrainedBox(
-              constraints: BoxConstraints(
-                maxHeight:
-                    size.height * (ThemeVars.actionSheetMaxHeight - 0.05),
-              ),
-              child: ListView(
+    final FlanActionSheetThemeData themeData =
+        FlanTheme.of(context).actionSheetTheme;
+
+    return DefaultTextStyle(
+      style: TextStyle(
+        color: themeData.itemTextColor,
+      ),
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        children: <Widget>[
+          _buildHeader(context, themeData),
+          _buildDescription(themeData),
+          LimitedBox(
+            maxHeight: size.height * themeData.maxHeightFactor,
+            child: ListView(
                 physics: const ClampingScrollPhysics(),
                 padding: EdgeInsets.zero,
                 shrinkWrap: true,
-                children: <Widget>[
-                  ..._buildOptions(),
-                  child ?? const SizedBox.shrink(),
-                ],
-              ),
-            ),
-            ..._buildCancel(),
-          ],
-        ),
+                children: List<Widget>.generate(
+                  actions.length,
+                  (int index) =>
+                      _buildOption(context, themeData, actions[index], index),
+                )..add(child ?? const SizedBox.shrink())),
+          ),
+          ..._buildCancel(context, themeData),
+        ],
       ),
     );
   }
 
-  Widget _buildHeader() {
-    if (title.isNotEmpty) {
-      return Stack(
+  Widget _buildHeader(
+      BuildContext context, FlanActionSheetThemeData themeData) {
+    return Visibility(
+      visible: title.isNotEmpty,
+      child: Stack(
         children: <Widget>[
-          Container(
-            width: double.infinity,
-            height: ThemeVars.actionSheetHeaderHeight,
+          Align(
             alignment: Alignment.center,
             child: Text(
               title,
-              style: const TextStyle(
-                fontWeight: ThemeVars.fontWeightBold,
-                fontSize: ThemeVars.actionSheetHeaderFontSize,
-                // height: ThemeVars.actionSheetHeaderHeight /
-                //     ThemeVars.actionSheetHeaderFontSize,
+              style: TextStyle(
+                fontWeight: FlanThemeVars.fontWeightBold,
+                fontSize: themeData.headerFontSize,
+                height: themeData.headerHeight,
               ),
+              textHeightBehavior: FlanThemeVars.textHeightBehavior,
             ),
           ),
-          if (closeable)
-            Positioned(
-              top: 0.0,
-              right: 0.0,
-              child: _FlanPopupCloseIcon(
-                closeIconName: closeIconName,
-                closeIconUrl: closeIconUrl,
-                onPress: _onCancel,
-              ),
-            )
-          else
-            const SizedBox.shrink(),
+          Visibility(
+            visible: closeable,
+            child: _buildCloseIcon(context, themeData),
+          ),
         ],
-      );
-    }
-    return const SizedBox.shrink();
+      ),
+    );
   }
 
-  List<Widget> _buildCancel() {
+  Widget _buildCloseIcon(
+      BuildContext context, FlanActionSheetThemeData themeData) {
+    final Widget icon = Semantics(
+      button: true,
+      child: FlanActiveResponse(
+        onClick: () {
+          Navigator.of(context).maybePop();
+        },
+        builder: (BuildContext contenxt, bool active, Widget? child) {
+          return Container(
+            alignment: Alignment.center,
+            padding: themeData.closeIconPadding,
+            child: FlanIcon(
+              iconName: closeIconName,
+              iconUrl: closeIconUrl,
+              color: active
+                  ? themeData.closeIconActiveColor
+                  : themeData.closeIconColor,
+              size: themeData.closeIconSize,
+            ),
+          );
+        },
+      ),
+    );
+
+    return Positioned(
+      top: 0,
+      right: 0,
+      bottom: 0,
+      child: icon,
+    );
+  }
+
+  List<Widget> _buildCancel(
+      BuildContext context, FlanActionSheetThemeData themeData) {
     if (cancelSlot != null || cancelText.isNotEmpty) {
       return <Widget>[
         Container(
-          color: ThemeVars.actionSheetCancelPaddingColor,
-          height: ThemeVars.actionSheetCancelPaddingTop,
+          color: themeData.cancelPaddingColor,
+          height: themeData.cancelPaddingTop,
         ),
-        _FlanActionSheetCancelButton(
-          onClick: _onCancel,
+        _FlanActionSheetButton(
+          onClick: () {
+            if (onCancel != null) {
+              onCancel!();
+            }
+            Navigator.of(context).maybePop();
+          },
           child: DefaultTextStyle(
-            style: const TextStyle(color: ThemeVars.actionSheetCancelTextColor),
+            style: TextStyle(color: themeData.cancelTextColor),
             child: cancelSlot ?? Text(cancelText),
           ),
         ),
@@ -240,35 +301,9 @@ class FlanActionSheet extends StatelessWidget {
     return <Widget>[];
   }
 
-  Widget _buildOption(FlanActionSheetAction item, int index) {
-    Widget content;
-    if (item.loading) {
-      content = const FlanLoading(
-        color: ThemeVars.actionSheetItemDisabledTextColor,
-        size: ThemeVars.actionSheetLoadingIconSize,
-      );
-    } else {
-      final List<Widget> children = <Widget>[
-        Text(item.name),
-      ];
-      if (item.subname.isNotEmpty) {
-        children.addAll(<Widget>[
-          const SizedBox(height: ThemeVars.paddingXs),
-          Text(
-            item.subname,
-            style: const TextStyle(
-              color: ThemeVars.actionSheetSubnameColor,
-              fontSize: ThemeVars.actionSheetSubnameFontSize,
-              // height: ThemeVars.actionSheetSubnameLineHeight /
-              //     ThemeVars.actionSheetSubnameFontSize,
-            ),
-          ),
-        ]);
-      }
-      content = Column(children: children);
-    }
-
-    return _FlanActionSheetCancelButton(
+  Widget _buildOption(BuildContext context, FlanActionSheetThemeData themeData,
+      FlanActionSheetAction item, int index) {
+    return _FlanActionSheetButton(
       loading: item.loading,
       disabled: item.disabled,
       onClick: () {
@@ -281,61 +316,73 @@ class FlanActionSheet extends StatelessWidget {
         }
 
         if (closeOnClickAction) {
-          _updateShow(false);
+          Navigator.of(context).maybePop(<String, dynamic>{
+            'action': item,
+            'index': index,
+          });
         }
 
         if (onSelect != null) {
           onSelect!(item, index);
         }
       },
-      child: content,
+      child: Visibility(
+        visible: !item.loading,
+        replacement: FlanLoading(
+          color: themeData.itemDisabledTextColor,
+          size: themeData.loadingIconSize,
+        ),
+        child: Column(
+          children: <Widget>[
+            Text(
+              item.name,
+              style: TextStyle(color: item.color),
+            ),
+            Visibility(
+              visible: item.subname.isNotEmpty,
+              child: Padding(
+                padding: EdgeInsets.only(top: FlanThemeVars.paddingXs.rpx),
+                child: Text(
+                  item.subname,
+                  style: TextStyle(
+                    color: themeData.subnameColor,
+                    fontSize: themeData.subnameFontSize,
+                    height: themeData.subnameLineHeight,
+                  ),
+                  textHeightBehavior: FlanThemeVars.textHeightBehavior,
+                ),
+              ),
+            ),
+          ],
+        ),
+      ),
     );
   }
 
-  Widget _buildDescription() {
-    if (description.isNotEmpty || descriptionSlot != null) {
-      return Container(
+  Widget _buildDescription(FlanActionSheetThemeData themeData) {
+    return Visibility(
+      visible: description.isNotEmpty || descriptionSlot != null,
+      child: Container(
         width: double.infinity,
         alignment: Alignment.center,
-        margin: const EdgeInsets.symmetric(horizontal: ThemeVars.paddingMd),
-        padding: const EdgeInsets.symmetric(vertical: 20.0),
+        margin: EdgeInsets.symmetric(horizontal: FlanThemeVars.paddingMd.rpx),
+        padding: EdgeInsets.symmetric(vertical: 20.0.rpx),
         decoration: const BoxDecoration(border: Border(bottom: FlanHairLine())),
         child: DefaultTextStyle(
-          style: const TextStyle(
-            color: ThemeVars.actionSheetDescriptionColor,
-            fontSize: ThemeVars.actionSheetDescriptionFontSize,
-            // height: ThemeVars.actionSheetDescriptionLineHeight /
-            //     ThemeVars.actionSheetDescriptionFontSize,
+          style: TextStyle(
+            color: themeData.descriptionColor,
+            fontSize: themeData.descriptionFontSize,
+            height: themeData.descriptionLineHeight,
           ),
+          textHeightBehavior: FlanThemeVars.textHeightBehavior,
           child: descriptionSlot ?? Text(description),
         ),
-      );
-    }
-    return const SizedBox.shrink();
-  }
-
-  List<Widget> _buildOptions() {
-    if (actions.isNotEmpty) {
-      return List<Widget>.generate(
-          actions.length, (int index) => _buildOption(actions[index], index));
-    }
-    return <Widget>[];
-  }
-
-  void _updateShow(bool show) => onShowChange(show);
-
-  void _onCancel() {
-    _updateShow(false);
-
-    if (onCancel != null) {
-      onCancel!();
-    }
+      ),
+    );
   }
 
   @override
   void debugFillProperties(DiagnosticPropertiesBuilder properties) {
-    properties
-        .add(DiagnosticsProperty<bool>('show', show, defaultValue: false));
     properties.add(DiagnosticsProperty<List<FlanActionSheetAction>>(
         'actions', actions,
         defaultValue: const <FlanActionSheetAction>[]));
@@ -345,40 +392,17 @@ class FlanActionSheet extends StatelessWidget {
         defaultValue: ''));
     properties.add(DiagnosticsProperty<String>('description', description,
         defaultValue: ''));
-    properties.add(
-        DiagnosticsProperty<bool>('closeable', closeable, defaultValue: true));
-    properties.add(DiagnosticsProperty<IconData>('closeIconName', closeIconName,
-        defaultValue: FlanIcons.cross));
-    properties.add(DiagnosticsProperty<String>('closeIconUrl', closeIconUrl));
-    properties.add(DiagnosticsProperty<Duration>('duration', duration));
-    properties
-        .add(DiagnosticsProperty<bool>('round', round, defaultValue: true));
-    properties
-        .add(DiagnosticsProperty<bool>('overlay', overlay, defaultValue: true));
-    properties
-        .add(DiagnosticsProperty<BoxDecoration>('overlayStyle', overlayStyle));
-    // properties.add(DiagnosticsProperty<bool>('lockScroll', lockScroll,
-    //     defaultValue: true));
-    // properties.add(DiagnosticsProperty<bool>('lazyRender', lazyRender,
-    //     defaultValue: true));
-    properties.add(DiagnosticsProperty<bool>('closeOnPopstate', closeOnPopstate,
-        defaultValue: false));
+
     properties.add(DiagnosticsProperty<bool>(
         'closeOnClickAction', closeOnClickAction,
         defaultValue: false));
-    properties.add(DiagnosticsProperty<bool>(
-        'closeOnClickOverlay', closeOnClickOverlay,
-        defaultValue: true));
-    properties.add(DiagnosticsProperty<bool>(
-        'safeAreaInsetBottom', safeAreaInsetBottom,
-        defaultValue: true));
 
     super.debugFillProperties(properties);
   }
 }
 
-class _FlanActionSheetCancelButton extends StatefulWidget {
-  const _FlanActionSheetCancelButton({
+class _FlanActionSheetButton extends StatelessWidget {
+  const _FlanActionSheetButton({
     Key? key,
     this.text = '',
     this.disabled = false,
@@ -394,67 +418,45 @@ class _FlanActionSheetCancelButton extends StatefulWidget {
   final Widget child;
 
   @override
-  __FlanActionSheetCancelButtonState createState() =>
-      __FlanActionSheetCancelButtonState();
-}
-
-class __FlanActionSheetCancelButtonState
-    extends State<_FlanActionSheetCancelButton> {
-  bool isPressed = false;
-
-  void doActive() {
-    setState(() => isPressed = true);
-  }
-
-  void doDisActive() {
-    setState(() => isPressed = false);
-  }
-
-  Color get bgColor =>
-      isPressed ? ThemeVars.activeColor : ThemeVars.actionSheetItemBackground;
-
-  @override
   Widget build(BuildContext context) {
-    final bool disabled = widget.disabled || widget.loading;
-
+    final bool disabled = this.disabled || loading;
+    final FlanActionSheetThemeData themeData =
+        FlanTheme.of(context).actionSheetTheme;
     return Semantics(
       button: true,
-      child: IgnorePointer(
-        ignoring: disabled,
-        child: MouseRegion(
-          cursor: widget.disabled
-              ? SystemMouseCursors.forbidden
-              : widget.loading
-                  ? SystemMouseCursors.basic
-                  : SystemMouseCursors.click,
-          child: GestureDetector(
-            onTap: widget.onClick,
-            onTapDown: (TapDownDetails e) => doActive(),
-            onTapCancel: () => doDisActive(),
-            onTapUp: (TapUpDetails e) => doDisActive(),
-            child: Container(
-              width: double.infinity,
-              padding: const EdgeInsets.symmetric(
-                vertical: 14.0,
-                horizontal: ThemeVars.paddingMd,
-              ),
-              color: bgColor,
-              alignment: Alignment.center,
-              child: DefaultTextStyle(
-                maxLines: 1,
-                overflow: TextOverflow.ellipsis,
-                style: TextStyle(
-                  color: disabled
-                      ? ThemeVars.actionSheetItemDisabledTextColor
-                      : ThemeVars.actionSheetItemTextColor,
-                  fontSize: ThemeVars.actionSheetItemFontSize,
-                  height: ThemeVars.actionSheetItemLineHeight /
-                      ThemeVars.actionSheetItemFontSize,
-                ),
-                child: widget.child,
-              ),
+      enabled: !disabled,
+      child: FlanActiveResponse(
+        disabled: disabled,
+        enable: !loading,
+        cursorBuilder: (SystemMouseCursor cursor) {
+          return loading ? SystemMouseCursors.basic : cursor;
+        },
+        onClick: onClick,
+        builder: (BuildContext contenxt, bool active, Widget? child) {
+          return Container(
+            width: double.infinity,
+            padding: EdgeInsets.symmetric(
+              vertical: 14.0.rpx,
+              horizontal: FlanThemeVars.paddingMd.rpx,
             ),
+            color:
+                active ? FlanThemeVars.activeColor : themeData.itemBackground,
+            alignment: Alignment.center,
+            child: child,
+          );
+        },
+        child: DefaultTextStyle(
+          maxLines: 1,
+          overflow: TextOverflow.ellipsis,
+          style: TextStyle(
+            color: disabled
+                ? themeData.itemDisabledTextColor
+                : themeData.itemTextColor,
+            fontSize: themeData.itemFontSize,
+            height: themeData.itemLineHeight,
           ),
+          textHeightBehavior: FlanThemeVars.textHeightBehavior,
+          child: child,
         ),
       ),
     );
@@ -492,67 +494,4 @@ class FlanActionSheetAction {
 
   /// 为对应列添加额外的 class
   // final String className;
-}
-
-/// 弹窗关闭图标按钮
-class _FlanPopupCloseIcon extends StatefulWidget {
-  const _FlanPopupCloseIcon({
-    Key? key,
-    this.closeIconName,
-    this.closeIconUrl,
-    this.onPress,
-  }) : super(key: key);
-
-  /// 图标属性
-  final IconData? closeIconName;
-
-  /// 图标链接
-  final String? closeIconUrl;
-
-  /// 图标点击事件
-  final VoidCallback? onPress;
-
-  @override
-  __FlanPopupCloseIconState createState() => __FlanPopupCloseIconState();
-}
-
-class __FlanPopupCloseIconState extends State<_FlanPopupCloseIcon> {
-  bool active = false;
-
-  void activeText() {
-    setState(() => active = true);
-  }
-
-  void disactiveText() {
-    setState(() => active = false);
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return Semantics(
-      button: true,
-      enabled: widget.onPress != null,
-      child: GestureDetector(
-        onTap: widget.onPress,
-        onTapUp: (TapUpDetails details) => disactiveText(),
-        onTapDown: (TapDownDetails e) {
-          activeText();
-        },
-        onTapCancel: disactiveText,
-        child: Container(
-          height: ThemeVars.actionSheetHeaderHeight,
-          padding: ThemeVars.actionSheetCloseIconPadding,
-          alignment: Alignment.center,
-          child: FlanIcon(
-            iconName: widget.closeIconName,
-            iconUrl: widget.closeIconUrl,
-            size: ThemeVars.actionSheetCloseIconSize,
-            color: active
-                ? ThemeVars.actionSheetCloseIconActiveColor
-                : ThemeVars.actionSheetCloseIconColor,
-          ),
-        ),
-      ),
-    );
-  }
 }

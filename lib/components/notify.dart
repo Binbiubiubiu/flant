@@ -267,7 +267,11 @@ class FlanNotifyWidget extends StatelessWidget {
                     ),
                     child: child!,
                   )
-                : Text(message, textAlign: TextAlign.center),
+                : Text(
+                    message,
+                    textAlign: TextAlign.center,
+                    textHeightBehavior: FlanThemeVars.textHeightBehavior,
+                  ),
           ),
         ),
       ),

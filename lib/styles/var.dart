@@ -1045,6 +1045,8 @@ class FlanThemeVars {
       "-apple-system, BlinkMacSystemFont, 'Helvetica Neue',Helvetica, Segoe UI, Arial, Roboto, 'PingFang SC', 'miui', 'Hiragino Sans GB','Microsoft Yahei', sans-serif";
   static const String priceIntegerFontFamily =
       'Avenir-Heavy, PingFang SC, Helvetica Neue, Arial,sans-serif';
+  static const TextHeightBehavior textHeightBehavior =
+      TextHeightBehavior(leadingDistribution: TextLeadingDistribution.even);
 
   // Animation
   static const Duration animationDurationBase = Duration(milliseconds: 300);

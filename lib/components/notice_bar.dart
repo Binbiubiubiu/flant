@@ -9,6 +9,7 @@ import 'package:flutter/scheduler.dart';
 
 // 🌎 Project imports:
 import '../styles/theme.dart';
+import '../styles/var.dart';
 import '../utils/widget.dart';
 import 'icon.dart';
 
@@ -187,14 +188,12 @@ class _FlanNoticeBarState extends State<FlanNoticeBar>
     final Widget noticeBar = DefaultTextStyle(
       style: TextStyle(
         color: widget.color ?? themeData.textColor,
-        // height: themeData.lineHeight ,
+        height: themeData.lineHeight,
       ),
       child: Container(
         color: widget.background ?? themeData.backgroundColor,
-        // height: this.widget.wrapable ? null :FlanThemeVars.height,
         padding:
             widget.wrapable ? themeData.wrapablePadding : themeData.padding,
-
         constraints: BoxConstraints(
           maxHeight: widget.wrapable ? double.infinity : themeData.height,
           minHeight: widget.wrapable ? 0.0 : themeData.height,
@@ -233,6 +232,7 @@ class _FlanNoticeBarState extends State<FlanNoticeBar>
               softWrap: widget.wrapable,
               maxLines: widget.wrapable ? null : 1,
               overflow: ellipsis ? TextOverflow.ellipsis : TextOverflow.visible,
+              textHeightBehavior: FlanThemeVars.textHeightBehavior,
             );
       },
     );

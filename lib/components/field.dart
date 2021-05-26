@@ -1070,7 +1070,7 @@ class FlanFieldScope extends InheritedWidget {
     Key? key,
     required FlanFieldState fieldState,
     required Widget child,
-  })   : _state = fieldState,
+  })  : _state = fieldState,
         super(key: key, child: child);
 
   final FlanFieldState _state;

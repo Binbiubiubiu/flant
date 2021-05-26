@@ -80,9 +80,9 @@ class FlanActionBarButton extends FlanRouteStatelessWidget {
       throw 'ActionButton must be a child component of FlanActionBar';
     }
     final int index = parent.children.indexOf(this);
-    final bool isFirst = !(index != 0 &&
+    final bool isFirst = !(index > 0 &&
         parent.children.elementAt(index - 1) is FlanActionBarButton);
-    final bool isLast = !(index != parent.children.length - 1 &&
+    final bool isLast = !(index < parent.children.length - 1 &&
         parent.children.elementAt(index + 1) is FlanActionBarButton);
 
     final FlanActionBarThemeData themeData =

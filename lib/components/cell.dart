@@ -156,6 +156,7 @@ class FlanCell extends FlanRouteStatelessWidget {
             color: themeData.requiredColor,
             height: 1.2,
           ),
+          textHeightBehavior: FlanThemeVars.textHeightBehavior,
         ),
       ),
     );
@@ -224,7 +225,7 @@ class FlanCell extends FlanRouteStatelessWidget {
         style: TextStyle(
           color: themeData.textColor,
           fontSize: themeData.fontSize,
-          // height: themeData.lineHeight ,
+          height: themeData.lineHeight,
         ),
         child: cell,
       ),
@@ -275,7 +276,11 @@ class FlanCell extends FlanRouteStatelessWidget {
               : themeData.textColor,
           fontSize: _getTitleFontSize(themeData),
         ).merge(titleStyle),
-        child: titleSlot ?? Text(this.title!),
+        child: titleSlot ??
+            Text(
+              this.title!,
+              textHeightBehavior: FlanThemeVars.textHeightBehavior,
+            ),
       );
 
       final Widget content = Column(
@@ -309,11 +314,15 @@ class FlanCell extends FlanRouteStatelessWidget {
         style: TextStyle(
           color: themeData.labelColor,
           fontSize: fontSize,
-          // height: themeData.labelLineHeight,
+          height: themeData.labelLineHeight,
         ).merge(labelStyle),
         child: Padding(
           padding: EdgeInsets.only(top: themeData.labelMarginTop),
-          child: labelSlot ?? Text(label!),
+          child: labelSlot ??
+              Text(
+                label!,
+                textHeightBehavior: FlanThemeVars.textHeightBehavior,
+              ),
         ),
       );
     }
@@ -327,7 +336,11 @@ class FlanCell extends FlanRouteStatelessWidget {
       final bool hasTitle = titleSlot != null || title != null;
       final Widget value = Align(
         alignment: !hasTitle ? Alignment.centerLeft : Alignment.centerRight,
-        child: child ?? Text(this.value!),
+        child: child ??
+            Text(
+              this.value!,
+              textHeightBehavior: FlanThemeVars.textHeightBehavior,
+            ),
       );
 
       final TextStyle vStyle = TextStyle(
@@ -401,7 +414,7 @@ class FlanCell extends FlanRouteStatelessWidget {
     return Container(
       constraints: BoxConstraints(
         minWidth: ThemeVars.cellFontSize,
-        minHeight: themeData.fontSize * 1.34,
+        minHeight: themeData.fontSize * themeData.lineHeight,
       ),
       padding: padding,
       alignment: Alignment.center,

@@ -563,7 +563,10 @@ class _FlanToastBlock extends StatelessWidget {
 
   Widget _buildText() {
     if (message.isNotEmpty) {
-      return Text(message);
+      return Text(
+        message,
+        textHeightBehavior: FlanThemeVars.textHeightBehavior,
+      );
     }
     return const SizedBox.shrink();
   }

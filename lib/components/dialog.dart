@@ -6,17 +6,366 @@ import 'package:flutter/material.dart';
 
 // 🌎 Project imports:
 import '../locale/l10n.dart';
+import '../styles/components/dialog_theme.dart';
+import '../styles/theme.dart';
 import '../styles/var.dart';
+import '../utils/widget.dart';
 import 'action_bar.dart';
 import 'action_bar_button.dart';
 import 'button.dart';
 import 'popup.dart';
 import 'style.dart';
 
-Widget kDialogTransitions(
+typedef FlanDialogBeforeClose = Future<bool> Function(FlanDialogAction action);
+
+class FlanDialogOption {
+  const FlanDialogOption({
+    this.title = '',
+    this.width,
+    this.message = '',
+    this.messageAlign = TextAlign.left,
+    this.theme = FlanDialogTheme.normal,
+    this.showConfirmButton = true,
+    this.showCancelButton = false,
+    this.confirmButtonText = '',
+    this.confirmButtonColor,
+    this.cancelButtonText = '',
+    this.cancelButtonColor,
+    this.overlayColor,
+    this.closeOnClickOverlay = false,
+    this.beforeClose,
+    this.transitionBuilder = kFlanDialogBounceTransition,
+  });
+
+  final String title;
+  final double? width;
+  final String message;
+  final TextAlign messageAlign;
+  final FlanDialogTheme theme;
+  final bool showConfirmButton;
+  final bool showCancelButton;
+  final String confirmButtonText;
+  final Color? confirmButtonColor;
+  final String cancelButtonText;
+  final Color? cancelButtonColor;
+  final Color? overlayColor;
+  final bool closeOnClickOverlay;
+  final FlanDialogBeforeClose? beforeClose;
+  final FlanTransitionBuilder? transitionBuilder;
+
+  FlanDialogOption merge(FlanDialogOption? other) {
+    if (other == null) {
+      return this;
+    }
+    return copyWith(
+      title: other.title,
+      width: other.width,
+      message: message,
+      messageAlign: messageAlign,
+      theme: theme,
+      showConfirmButton: showConfirmButton,
+      showCancelButton: showCancelButton,
+      confirmButtonText: confirmButtonText,
+      confirmButtonColor: confirmButtonColor,
+      cancelButtonText: cancelButtonText,
+      cancelButtonColor: cancelButtonColor,
+      overlayColor: overlayColor,
+      closeOnClickOverlay: closeOnClickOverlay,
+      beforeClose: beforeClose,
+      transitionBuilder: transitionBuilder,
+    );
+  }
+
+  FlanDialogOption copyWith({
+    String? title,
+    double? width,
+    String? message,
+    TextAlign? messageAlign,
+    FlanDialogTheme? theme,
+    bool? showConfirmButton,
+    bool? showCancelButton,
+    String? confirmButtonText,
+    Color? confirmButtonColor,
+    String? cancelButtonText,
+    Color? cancelButtonColor,
+    Color? overlayColor,
+    bool? closeOnClickOverlay,
+    FlanDialogBeforeClose? beforeClose,
+    FlanTransitionBuilder? transitionBuilder,
+  }) {
+    return FlanDialogOption(
+      title: title ?? this.title,
+      width: width ?? this.width,
+      message: message ?? this.message,
+      messageAlign: messageAlign ?? this.messageAlign,
+      theme: theme ?? this.theme,
+      showConfirmButton: showConfirmButton ?? this.showConfirmButton,
+      showCancelButton: showCancelButton ?? this.showCancelButton,
+      confirmButtonText: confirmButtonText ?? this.confirmButtonText,
+      confirmButtonColor: confirmButtonColor ?? this.confirmButtonColor,
+      cancelButtonText: cancelButtonText ?? this.cancelButtonText,
+      cancelButtonColor: cancelButtonColor ?? this.cancelButtonColor,
+      overlayColor: overlayColor ?? this.overlayColor,
+      closeOnClickOverlay: closeOnClickOverlay ?? this.closeOnClickOverlay,
+      beforeClose: beforeClose ?? this.beforeClose,
+      transitionBuilder: transitionBuilder ?? this.transitionBuilder,
+    );
+  }
+}
+
+class FlanDialog {
+  const FlanDialog._();
+
+  static Future<FlanDialogAction?> alert(
+    BuildContext context, {
+
+    /// 标题
+    String? title,
+
+    /// 弹窗宽度
+    double? width,
+
+    /// 文本内容，支持通过 `\n` 换行
+    String? message,
+
+    /// 内容水平对齐方式，可选值为 `left` `right` `center`
+    TextAlign? messageAlign,
+
+    /// 式风格，可选值为 `roundButton` `normal`
+    FlanDialogTheme? theme,
+
+    /// 是否展示确认按钮
+    bool? showConfirmButton,
+
+    /// 是否展示取消按钮
+    bool? showCancelButton,
+
+    /// 确认按钮文案
+    String? confirmButtonText,
+
+    /// 确认按钮颜色
+    Color? confirmButtonColor,
+
+    /// 取消按钮文案
+    String? cancelButtonText,
+
+    /// 取消按钮颜色
+    Color? cancelButtonColor,
+
+    /// 自定义遮罩层样式
+    Color? overlayColor,
+
+    /// 是否在点击遮罩层后关闭
+    bool? closeOnClickOverlay,
+
+    /// 关闭前判断, `return false` 不关闭
+    FlanDialogBeforeClose? beforeClose,
+
+    /// 动画
+    FlanTransitionBuilder? transitionBuilder,
+
+    /// 点击确认按钮时触发
+    VoidCallback? onConfirm,
+
+    /// 点击取消按钮时触发
+    VoidCallback? onCancel,
+
+    /// 打开面板时触发
+    VoidCallback? onOpen,
+
+    /// 关闭面板时触发
+    VoidCallback? onClose,
+
+    /// 打开面板且动画结束后触发
+    VoidCallback? onOpened,
+
+    /// 关闭面板且动画结束后触发
+    VoidCallback? onClosed,
+
+    /// 自定义内容
+    WidgetBuilder? builder,
+
+    /// 自定义标题
+    WidgetBuilder? titleBuilder,
+
+    /// 自定义底部按钮区域
+    WidgetBuilder? footerBuilder,
+  }) async {
+    FlanDialog.isInstanceShow = true;
+    final FlanDialogThemeData themeData = FlanTheme.of(context).dialogTheme;
+    final FlanDialogOption _defaultOptions = FlanDialog.currentOptions;
+    final FlanDialogAction? action = await showFlanPopup<FlanDialogAction>(
+      context,
+      builder: (BuildContext context) {
+        return FlanDialogWidget(
+          title: title ?? _defaultOptions.title,
+          width: width ?? _defaultOptions.width,
+          message: message ?? _defaultOptions.message,
+          messageAlign: messageAlign ?? _defaultOptions.messageAlign,
+          theme: theme ?? _defaultOptions.theme,
+          showConfirmButton:
+              showConfirmButton ?? _defaultOptions.showConfirmButton,
+          showCancelButton:
+              showCancelButton ?? _defaultOptions.showCancelButton,
+          confirmButtonText:
+              confirmButtonText ?? _defaultOptions.confirmButtonText,
+          confirmButtonColor:
+              confirmButtonColor ?? _defaultOptions.confirmButtonColor,
+          cancelButtonText:
+              cancelButtonText ?? _defaultOptions.cancelButtonText,
+          cancelButtonColor:
+              cancelButtonColor ?? _defaultOptions.cancelButtonColor,
+          beforeClose: beforeClose ?? _defaultOptions.beforeClose,
+          onConfirm: onConfirm,
+          onCancel: onCancel,
+          child: builder?.call(context),
+          titleSlot: titleBuilder?.call(context),
+          footerSlot: footerBuilder?.call(context),
+        );
+      },
+      position: FlanPopupPosition.center,
+      overlayColor: overlayColor ?? _defaultOptions.overlayColor,
+      closeOnClickOverlay:
+          closeOnClickOverlay ?? _defaultOptions.closeOnClickOverlay,
+      transitionBuilder: transitionBuilder ?? _defaultOptions.transitionBuilder,
+      backgroundColor: themeData.backgroundColor,
+      borderRadius: BorderRadius.circular(themeData.borderRadius),
+      round: true,
+      onOpen: onOpen,
+      onClose: onClose,
+      onOpened: onOpened,
+      onClosed: onClosed,
+    );
+    FlanDialog.isInstanceShow = false;
+    return action;
+  }
+
+  static Future<FlanDialogAction?> confirm(
+    BuildContext context, {
+
+    /// 标题
+    String? title,
+
+    /// 弹窗宽度
+    double? width,
+
+    /// 文本内容，支持通过 `\n` 换行
+    String? message,
+
+    /// 内容水平对齐方式，可选值为 `left` `right` `center`
+    TextAlign? messageAlign,
+
+    /// 式风格，可选值为 `roundButton` `normal`
+    FlanDialogTheme? theme,
+
+    /// 是否展示确认按钮
+    bool? showConfirmButton,
+
+    /// 是否展示取消按钮
+    bool? showCancelButton,
+
+    /// 确认按钮文案
+    String? confirmButtonText,
+
+    /// 确认按钮颜色
+    Color? confirmButtonColor,
+
+    /// 取消按钮文案
+    String? cancelButtonText,
+
+    /// 取消按钮颜色
+    Color? cancelButtonColor,
+
+    /// 自定义遮罩层样式
+    Color? overlayColor,
+
+    /// 是否在点击遮罩层后关闭
+    bool? closeOnClickOverlay,
+
+    /// 关闭前判断, `return false` 不关闭
+    FlanDialogBeforeClose? beforeClose,
+
+    /// 动画
+    FlanTransitionBuilder? transitionBuilder,
+
+    /// 点击确认按钮时触发
+    VoidCallback? onConfirm,
+
+    /// 点击取消按钮时触发
+    VoidCallback? onCancel,
+
+    /// 打开面板时触发
+    VoidCallback? onOpen,
+
+    /// 关闭面板时触发
+    VoidCallback? onClose,
+
+    /// 打开面板且动画结束后触发
+    VoidCallback? onOpened,
+
+    /// 关闭面板且动画结束后触发
+    VoidCallback? onClosed,
+
+    /// 自定义内容
+    WidgetBuilder? builder,
+
+    /// 自定义标题
+    WidgetBuilder? titleBuilder,
+
+    /// 自定义底部按钮区域
+    WidgetBuilder? footerBuilder,
+  }) async {
+    return alert(
+      context,
+      title: title,
+      width: width,
+      message: message,
+      messageAlign: messageAlign,
+      theme: theme,
+      showConfirmButton: showConfirmButton,
+      showCancelButton: showCancelButton ?? true,
+      confirmButtonText: confirmButtonText,
+      confirmButtonColor: confirmButtonColor,
+      cancelButtonText: cancelButtonText,
+      cancelButtonColor: cancelButtonColor,
+      overlayColor: overlayColor,
+      closeOnClickOverlay: closeOnClickOverlay,
+      beforeClose: beforeClose,
+      transitionBuilder: transitionBuilder,
+      onConfirm: onConfirm,
+      onCancel: onCancel,
+      onOpen: onOpen,
+      onClose: onClose,
+      onOpened: onOpened,
+      onClosed: onClosed,
+      builder: builder,
+      titleBuilder: titleBuilder,
+      footerBuilder: footerBuilder,
+    );
+  }
+
+  static bool isInstanceShow = false;
+
+  static void close(BuildContext context) {
+    if (isInstanceShow) {
+      Navigator.of(context).maybePop();
+    }
+  }
+
+  static FlanDialogOption currentOptions = const FlanDialogOption();
+
+  static void setDefaultOptions(FlanDialogOption option) {
+    currentOptions = currentOptions.merge(option);
+  }
+
+  static void resetDefaultOptions(FlanDialogOption option) {
+    currentOptions = const FlanDialogOption();
+  }
+}
+
+Widget kFlanDialogBounceTransition(
   BuildContext context,
   Animation<double> animation,
-  Animation<double> secondaryAnimation,
   Widget child,
 ) {
   final Animation<double> curve = animation.drive(
@@ -32,10 +381,9 @@ Widget kDialogTransitions(
   );
 }
 
-class FlanDialog extends StatefulWidget {
-  const FlanDialog({
+class FlanDialogWidget extends StatefulWidget {
+  const FlanDialogWidget({
     Key? key,
-    required this.show,
     this.title = '',
     this.width,
     this.message = '',
@@ -47,193 +395,15 @@ class FlanDialog extends StatefulWidget {
     this.confirmButtonColor,
     this.cancelButtonText = '',
     this.cancelButtonColor,
-    this.overlay = true,
-    this.overlayStyle,
-    this.closeOnPopstate = true,
-    this.closeOnClickOverlay = false,
-    // this.lockScroll = true,
-    // this.allowHtml = false,
-    // this.lazyRender = true,
-    this.callback,
     this.beforeClose,
-    this.transitionBuilder,
-    required this.onChange,
     this.onConfirm,
     this.onCancel,
-    this.onOpen,
-    this.onClose,
-    this.onOpened,
-    this.onClosed,
     this.child,
     this.titleSlot,
     this.footerSlot,
   }) : super(key: key);
 
-  static void alert(
-    BuildContext context, {
-    GlobalKey? key,
-    String title = '',
-    double? width,
-    String message = '',
-    TextAlign messageAlign = TextAlign.left,
-    FlanDialogTheme theme = FlanDialogTheme.normal,
-    bool showConfirmButton = true,
-    bool showCancelButton = false,
-    String confirmButtonText = '',
-    Color? confirmButtonColor,
-    String cancelButtonText = '',
-    Color? cancelButtonColor,
-    bool overlay = true,
-    BoxDecoration? overlayStyle,
-    bool closeOnPopstate = true,
-    bool closeOnClickOverlay = false,
-    void Function(FlanDialogAction)? callback,
-    Future<bool> Function(FlanDialogAction)? beforeClose,
-    Widget Function(BuildContext, Animation<double>, Animation<double>, Widget)?
-        transitionBuilder,
-    VoidCallback? onConfirm,
-    VoidCallback? onCancel,
-    VoidCallback? onOpen,
-    VoidCallback? onClose,
-    VoidCallback? onOpened,
-    VoidCallback? onClosed,
-    Widget? child,
-    Widget? titleSlot,
-    Widget? footerSlot,
-  }) {
-    // FlanDialog.apiKey = GlobalKey();
-    OverlayEntry? o;
-    bool show = true;
-    o = OverlayEntry(
-      builder: (BuildContext context) {
-        return StatefulBuilder(
-          // key: FlanDialog.apiKey,
-          builder:
-              (BuildContext context, void Function(void Function()) setState) {
-            return FlanDialog(
-              show: show,
-              onChange: (bool value) {
-                setState(() {
-                  show = value;
-                });
-              },
-              title: title,
-              width: width,
-              message: message,
-              messageAlign: messageAlign,
-              theme: theme,
-              showConfirmButton: showConfirmButton,
-              showCancelButton: showCancelButton,
-              confirmButtonText: confirmButtonText,
-              confirmButtonColor: confirmButtonColor,
-              cancelButtonText: cancelButtonText,
-              cancelButtonColor: cancelButtonColor,
-              overlay: overlay,
-              overlayStyle: overlayStyle,
-              closeOnPopstate: closeOnPopstate,
-              closeOnClickOverlay: closeOnClickOverlay,
-              callback: callback,
-              beforeClose: beforeClose,
-              transitionBuilder: transitionBuilder,
-              onConfirm: onConfirm,
-              onCancel: onCancel,
-              onOpen: onOpen,
-              onClose: onClose,
-              onOpened: onOpened,
-              onClosed: () {
-                if (onClosed != null) {
-                  onClosed();
-                }
-                o?.remove();
-              },
-              child: child,
-              titleSlot: titleSlot,
-              footerSlot: footerSlot,
-            );
-          },
-        );
-      },
-    );
-
-    Overlay.of(context)?.insert(o);
-  }
-
-  static void confirm(
-    BuildContext context, {
-    GlobalKey? key,
-    String title = '',
-    double? width,
-    String message = '',
-    TextAlign messageAlign = TextAlign.left,
-    FlanDialogTheme theme = FlanDialogTheme.normal,
-    bool showConfirmButton = true,
-    bool showCancelButton = true,
-    String confirmButtonText = '',
-    Color? confirmButtonColor,
-    String cancelButtonText = '',
-    Color? cancelButtonColor,
-    bool overlay = true,
-    BoxDecoration? overlayStyle,
-    bool closeOnPopstate = true,
-    bool closeOnClickOverlay = false,
-    void Function(FlanDialogAction)? callback,
-    Future<bool> Function(FlanDialogAction)? beforeClose,
-    Widget Function(BuildContext, Animation<double>, Animation<double>, Widget)?
-        transitionBuilder,
-    VoidCallback? onConfirm,
-    VoidCallback? onCancel,
-    VoidCallback? onOpen,
-    VoidCallback? onClose,
-    VoidCallback? onOpened,
-    VoidCallback? onClosed,
-    Widget? child,
-    Widget? titleSlot,
-    Widget? footerSlot,
-  }) {
-    FlanDialog.alert(
-      context,
-      key: key,
-      title: title,
-      width: width,
-      message: message,
-      messageAlign: messageAlign,
-      theme: theme,
-      showConfirmButton: showConfirmButton,
-      showCancelButton: showCancelButton,
-      confirmButtonText: confirmButtonText,
-      confirmButtonColor: confirmButtonColor,
-      cancelButtonText: cancelButtonText,
-      cancelButtonColor: cancelButtonColor,
-      overlay: overlay,
-      overlayStyle: overlayStyle,
-      closeOnPopstate: closeOnPopstate,
-      closeOnClickOverlay: closeOnClickOverlay,
-      callback: callback,
-      beforeClose: beforeClose,
-      transitionBuilder: transitionBuilder,
-      onConfirm: onConfirm,
-      onCancel: onCancel,
-      onOpen: onOpen,
-      onClose: onClose,
-      onOpened: onOpened,
-      onClosed: onClosed,
-      child: child,
-      titleSlot: titleSlot,
-      footerSlot: footerSlot,
-    );
-  }
-
-  static void close() {
-    if (apiKey.currentState != null) {
-      (apiKey.currentState as _FlanDialogState?)?.close();
-    }
-  }
-
-  static GlobalKey apiKey = GlobalKey();
-
   // ****************** Props ******************
-  /// 是否显示弹窗
-  final bool show;
 
   /// 标题
   final String title;
@@ -268,57 +438,16 @@ class FlanDialog extends StatefulWidget {
   /// 取消按钮颜色
   final Color? cancelButtonColor;
 
-  /// 是否展示遮罩层
-  final bool overlay;
-
-  /// 自定义遮罩层样式
-  final BoxDecoration? overlayStyle;
-
-  /// 是否在页面回退时自动关闭
-  final bool closeOnPopstate;
-
-  /// 是否在点击遮罩层后关闭弹窗
-  final bool closeOnClickOverlay;
-
-  // /// 是否在显示弹层时才渲染节点
-  // final bool lazyRender;
-
-  // /// 	是否锁定背景滚动
-  // final bool lockScroll;
-
-  // /// 是否允许 message 内容中渲染 HTML
-  // final bool allowHtml;
-
   /// 关闭前的回调函数，返回 `false` 可阻止关闭
-  final Future<bool> Function(FlanDialogAction action)? beforeClose;
-
-  /// 关闭前的回调函数，
-  final void Function(FlanDialogAction action)? callback;
-
-  /// 动画类名
-  final RouteTransitionsBuilder? transitionBuilder;
+  final FlanDialogBeforeClose? beforeClose;
 
   // ****************** Events ******************
-  /// 弹窗变化回调
-  final ValueChanged<bool> onChange;
 
   /// 点击确认按钮时触发
   final VoidCallback? onConfirm;
 
   /// 点击取消按钮时触发
   final VoidCallback? onCancel;
-
-  /// 打开弹窗时触发
-  final VoidCallback? onOpen;
-
-  /// 关闭弹窗时触发
-  final VoidCallback? onClose;
-
-  /// 打开弹窗且动画结束后触发
-  final VoidCallback? onOpened;
-
-  /// 关闭弹窗且动画结束后触发
-  final VoidCallback? onClosed;
 
   // ****************** Slots ******************
   /// 自定义内容
@@ -331,207 +460,217 @@ class FlanDialog extends StatefulWidget {
   final Widget? footerSlot;
 
   @override
-  _FlanDialogState createState() => _FlanDialogState();
+  _FlanDialogWidgetState createState() => _FlanDialogWidgetState();
 }
 
-class _FlanDialogState extends State<FlanDialog> {
-  bool confirm = false;
-  bool cancel = false;
+class _FlanDialogWidgetState extends State<FlanDialogWidget> {
+  final ValueNotifier<bool> confirmLoading = ValueNotifier<bool>(false);
+  final ValueNotifier<bool> cancelLoading = ValueNotifier<bool>(false);
 
   @override
   Widget build(BuildContext context) {
+    final FlanDialogThemeData themeData = FlanTheme.of(context).dialogTheme;
     final double winWidth = MediaQuery.of(context).size.width;
 
-    return FlanPopup(
-      show: widget.show,
-      onChange: widget.onChange,
-      round: true,
-      backgroundColor: ThemeVars.dialogBackgroundColor,
-      borderRadius: BorderRadius.circular(ThemeVars.dialogBorderRadius),
-      child: SizedBox(
-        width: winWidth < 321.0
-            ? ThemeVars.dialogSmallScreenWidth * winWidth
-            : ThemeVars.dialogWidth,
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.stretch,
-          children: <Widget>[
-            _buildTitle(),
-            _buildContent(),
-            _buildFooter(),
-          ],
-        ),
+    return Container(
+      width: widget.width ??
+          (winWidth < 321.0
+              ? themeData.smallScreenWidthFactor * winWidth
+              : themeData.width),
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        crossAxisAlignment: CrossAxisAlignment.stretch,
+        children: <Widget>[
+          _buildTitle(themeData),
+          _buildContent(themeData),
+          _buildFooter(themeData),
+        ],
       ),
-      overlay: widget.overlay,
-      overlayStyle: widget.overlayStyle,
-      closeOnPopstate: widget.closeOnPopstate,
-      closeOnClickOverlay: widget.closeOnClickOverlay,
-      duration: ThemeVars.animationDurationBase,
-      transitionBuilder: widget.transitionBuilder ?? kDialogTransitions,
     );
   }
 
-  Widget _buildTitle() {
-    if (widget.titleSlot != null || widget.title.isNotEmpty) {
-      final bool isolated = widget.message.isEmpty && widget.child == null;
-      return Container(
+  bool get hasTitle => widget.titleSlot != null || widget.title.isNotEmpty;
+
+  Widget _buildTitle(FlanDialogThemeData themeData) {
+    final bool isolated = widget.message.isEmpty && widget.child == null;
+
+    return Visibility(
+      visible: hasTitle,
+      child: Container(
         padding: isolated
-            ? ThemeVars.dialogHeaderIsolatedPadding
-            : const EdgeInsets.only(top: ThemeVars.dialogHeaderPaddingTop),
+            ? themeData.headerIsolatedPadding
+            : EdgeInsets.only(top: themeData.headerPaddingTop),
         alignment: Alignment.center,
         child: DefaultTextStyle(
-          style: const TextStyle(
-            fontSize: ThemeVars.dialogFontSize,
-            color: ThemeVars.textColor,
-            fontWeight: ThemeVars.dialogHeaderFontWeight,
-            // height: ThemeVars.dialogHeaderLineHeight / ThemeVars.dialogFontSize,
+          style: TextStyle(
+            fontSize: themeData.fontSize,
+            color: FlanThemeVars.textColor,
+            fontWeight: themeData.headerFontWeight,
+            height: themeData.headerLineHeight,
           ),
           child: widget.titleSlot ?? Text(widget.title),
         ),
-      );
-    }
-    return const SizedBox.shrink();
+      ),
+    );
   }
 
-  Widget _buildContent() {
+  Widget _buildContent(FlanDialogThemeData themeData) {
     if (widget.child != null) {
       return widget.child!;
     }
     final double winHeight = MediaQuery.of(context).size.height;
-    final bool hasTitle = widget.title.isNotEmpty || widget.titleSlot != null;
-    if (widget.message.isNotEmpty) {
-      return Container(
+
+    return Visibility(
+      visible: widget.message.isNotEmpty,
+      child: Container(
         constraints: BoxConstraints(
-          maxHeight: ThemeVars.dialogMessageMaxHeight * winHeight,
+          maxHeight: themeData.messageMaxHeight * winHeight,
         ),
         padding: EdgeInsets.only(
-          top: hasTitle ? ThemeVars.dialogHasTitleMessagePaddingTop : 26.0,
-          bottom: isRoundTheme ? ThemeVars.paddingMd : 26.0,
-          left: ThemeVars.dialogMessagePadding,
-          right: ThemeVars.dialogMessagePadding,
+          top: hasTitle ? themeData.hasTitleMessagePaddingTop : 26.0.rpx,
+          bottom: isRoundTheme ? FlanThemeVars.paddingMd.rpx : 26.0.rpx,
+          left: themeData.messagePadding,
+          right: themeData.messagePadding,
         ),
         child: Text(
           widget.message,
           style: TextStyle(
-            fontSize: ThemeVars.dialogMessageFontSize,
-            height: ThemeVars.dialogMessageLineHeight /
-                ThemeVars.dialogMessageFontSize,
-            color: hasTitle ? ThemeVars.dialogHasTitleMessageTextColor : null,
+            fontSize: themeData.messageFontSize,
+            height: themeData.messageLineHeight,
+            color: hasTitle ? themeData.hasTitleMessageTextColor : null,
           ),
           textAlign: widget.messageAlign,
         ),
-      );
-    }
-    return const SizedBox.shrink();
+      ),
+    );
   }
 
   bool get isRoundTheme => widget.theme == FlanDialogTheme.roundButton;
 
-  Widget _buildButtons() {
+  Widget _buildButtons(FlanDialogThemeData themeData) {
     return Container(
       decoration: const BoxDecoration(
         border: Border(top: FlanHairLine()),
       ),
-      height: ThemeVars.dialogButtonHeight,
+      height: themeData.buttonHeight,
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: <Widget>[
-          if (widget.showCancelButton) ...<Widget>[
-            Expanded(
-              child: FlanButton(
-                border: false,
-                size: FlanButtonSize.large,
-                text: widget.cancelButtonText.isNotEmpty
-                    ? widget.cancelButtonText
-                    : FlanS.of(context).cancel,
-                textColor: widget.cancelButtonColor,
-                loading: cancel,
-                onClick: _onCancel,
+          Visibility(
+            visible: widget.showCancelButton,
+            child: Expanded(
+              child: ValueListenableBuilder<bool>(
+                valueListenable: cancelLoading,
+                builder: (BuildContext context, bool loading, Widget? child) {
+                  return FlanButton(
+                    border: false,
+                    size: FlanButtonSize.large,
+                    text: widget.cancelButtonText.isNotEmpty
+                        ? widget.cancelButtonText
+                        : FlanS.of(context).cancel,
+                    textColor: widget.cancelButtonColor,
+                    loading: loading,
+                    onClick: _onCancel,
+                  );
+                },
               ),
             ),
-            const VerticalDivider(
+          ),
+          Visibility(
+            visible: widget.showCancelButton,
+            child: const VerticalDivider(
               width: .5,
-              color: ThemeVars.borderColor,
+              color: FlanThemeVars.borderColor,
             ),
-          ] else
-            const SizedBox.shrink(),
-          if (widget.showConfirmButton)
-            Expanded(
-              child: FlanButton(
-                border: false,
-                size: FlanButtonSize.large,
-                text: widget.confirmButtonText.isNotEmpty
-                    ? widget.confirmButtonText
-                    : FlanS.of(context).confirm,
-                textColor: widget.confirmButtonColor ??
-                    ThemeVars.dialogConfirmButtonTextColor,
-                loading: confirm,
-                onClick: _onConfirm,
+          ),
+          Visibility(
+            visible: widget.showConfirmButton,
+            child: Expanded(
+              child: ValueListenableBuilder<bool>(
+                valueListenable: confirmLoading,
+                builder: (BuildContext context, bool loading, Widget? child) {
+                  return FlanButton(
+                    border: false,
+                    size: FlanButtonSize.large,
+                    text: widget.confirmButtonText.isNotEmpty
+                        ? widget.confirmButtonText
+                        : FlanS.of(context).confirm,
+                    textColor: widget.confirmButtonColor ??
+                        themeData.confirmButtonTextColor,
+                    loading: loading,
+                    onClick: _onConfirm,
+                  );
+                },
               ),
-            )
-          else
-            const SizedBox.shrink(),
+            ),
+          )
         ],
       ),
     );
   }
 
-  Widget _buildRoundButtons() {
+  Widget _buildRoundButtons(FlanDialogThemeData themeData) {
     return Container(
-      padding: const EdgeInsets.only(
-        top: ThemeVars.paddingXs,
-        left: ThemeVars.paddingLg,
-        right: ThemeVars.paddingLg,
-        bottom: ThemeVars.paddingMd,
+      padding: EdgeInsets.only(
+        top: FlanThemeVars.paddingXs.rpx,
+        left: FlanThemeVars.paddingLg.rpx,
+        right: FlanThemeVars.paddingLg.rpx,
+        bottom: FlanThemeVars.paddingMd.rpx,
       ),
       child: FlanActionBar(
         children: <Widget>[
-          if (widget.showCancelButton)
-            FlanActionBarButton(
-              type: FlanButtonType.warning,
-              text: widget.cancelButtonText.isNotEmpty
-                  ? widget.cancelButtonText
-                  : FlanS.of(context).cancel,
-              color: widget.cancelButtonColor,
-              loading: cancel,
-              onClick: _onCancel,
-              height: ThemeVars.dialogRoundButtonHeight,
-            )
-          else
-            const SizedBox.shrink(),
-          if (widget.showConfirmButton)
-            FlanActionBarButton(
-              type: FlanButtonType.danger,
-              text: widget.confirmButtonText.isNotEmpty
-                  ? widget.confirmButtonText
-                  : FlanS.of(context).confirm,
-              color: widget.confirmButtonColor,
-              loading: confirm,
-              onClick: _onConfirm,
-              height: ThemeVars.dialogRoundButtonHeight,
-            )
-          else
-            const SizedBox.shrink(),
+          Visibility(
+            visible: widget.showCancelButton,
+            child: ValueListenableBuilder<bool>(
+              valueListenable: cancelLoading,
+              builder: (BuildContext context, bool loading, Widget? child) {
+                return FlanActionBarButton(
+                  type: FlanButtonType.warning,
+                  text: widget.cancelButtonText.isNotEmpty
+                      ? widget.cancelButtonText
+                      : 'FlanS.of(context).cancel',
+                  color: widget.cancelButtonColor,
+                  loading: loading,
+                  onClick: _onCancel,
+                  height: themeData.roundButtonHeight,
+                );
+              },
+            ),
+          ),
+          Visibility(
+            visible: widget.showConfirmButton,
+            child: ValueListenableBuilder<bool>(
+              valueListenable: confirmLoading,
+              builder: (BuildContext context, bool loading, Widget? child) {
+                return FlanActionBarButton(
+                  type: FlanButtonType.danger,
+                  text: widget.confirmButtonText.isNotEmpty
+                      ? widget.confirmButtonText
+                      : FlanS.of(context).confirm,
+                  color: widget.confirmButtonColor,
+                  loading: loading,
+                  onClick: _onConfirm,
+                  height: themeData.roundButtonHeight,
+                );
+              },
+            ),
+          ),
         ],
       ),
     );
   }
 
-  Widget _buildFooter() {
+  Widget _buildFooter(FlanDialogThemeData themeData) {
     if (widget.footerSlot != null) {
       return widget.footerSlot!;
     }
     return widget.theme == FlanDialogTheme.roundButton
-        ? _buildRoundButtons()
-        : _buildButtons();
+        ? _buildRoundButtons(themeData)
+        : _buildButtons(themeData);
   }
 
-  void _updateShow(bool value) => widget.onChange(value);
-
   void _close(FlanDialogAction action) {
-    _updateShow(false);
-    if (widget.callback != null) {
-      widget.callback!(action);
-    }
+    Navigator.of(context).maybePop(action);
   }
 
   void _onConfirm() => _getActionHandler(FlanDialogAction.confirm);
@@ -539,20 +678,12 @@ class _FlanDialogState extends State<FlanDialog> {
   void _onCancel() => _getActionHandler(FlanDialogAction.cancel);
 
   Future<void> _getActionHandler(FlanDialogAction action) async {
-    if (!widget.show) {
-      return;
-    }
-
     switch (action) {
       case FlanDialogAction.confirm:
-        if (widget.onConfirm != null) {
-          widget.onConfirm!();
-        }
+        widget.onConfirm?.call();
         break;
       case FlanDialogAction.cancel:
-        if (widget.onCancel != null) {
-          widget.onCancel!();
-        }
+        widget.onCancel?.call();
         break;
     }
 
@@ -575,22 +706,16 @@ class _FlanDialogState extends State<FlanDialog> {
   void setLoading(FlanDialogAction action, bool loading) {
     switch (action) {
       case FlanDialogAction.confirm:
-        confirm = loading;
+        confirmLoading.value = loading;
         break;
       case FlanDialogAction.cancel:
-        cancel = loading;
+        cancelLoading.value = loading;
         break;
     }
-    setState(() {});
-  }
-
-  void close() {
-    Navigator.of(context).pop();
   }
 
   @override
   void debugFillProperties(DiagnosticPropertiesBuilder properties) {
-    properties.add(DiagnosticsProperty<bool>('show', widget.show));
     properties.add(
         DiagnosticsProperty<String>('title', widget.title, defaultValue: ''));
     properties.add(DiagnosticsProperty<double>('width', widget.width));
@@ -617,26 +742,8 @@ class _FlanDialogState extends State<FlanDialog> {
         defaultValue: ''));
     properties.add(DiagnosticsProperty<Color>(
         'cancelButtonColor', widget.cancelButtonColor));
-    properties.add(DiagnosticsProperty<bool>('overlay', widget.overlay,
-        defaultValue: true));
-    properties.add(DiagnosticsProperty<BoxDecoration>(
-        'overlayStyle', widget.overlayStyle));
-    properties.add(DiagnosticsProperty<bool>(
-        'closeOnPopstate', widget.closeOnPopstate,
-        defaultValue: true));
-    properties.add(DiagnosticsProperty<bool>(
-        'closeOnClickOverlay', widget.closeOnClickOverlay,
-        defaultValue: false));
-    //  properties
-    //       .add(DiagnosticsProperty<bool>('lockScroll', lockScroll,defaultValue: true));
-    // properties.add(
-    //     DiagnosticsProperty<bool>('allowHtml', allowHtml, defaultValue: false));
     properties.add(DiagnosticsProperty<Future<bool> Function(FlanDialogAction)>(
         'beforeClose', widget.beforeClose));
-    properties.add(DiagnosticsProperty<
-        Widget Function(BuildContext, Animation<double>, Animation<double>,
-            Widget)>('transitionBuilder', widget.transitionBuilder));
-
     super.debugFillProperties(properties);
   }
 }

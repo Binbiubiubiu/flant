@@ -2,8 +2,9 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
-import 'components/action_bar_theme.dart';
 // 🌎 Project imports:
+import 'components/action_bar_theme.dart';
+import 'components/action_sheet_theme.dart';
 import 'components/badge_theme.dart';
 import 'components/button_theme.dart';
 import 'components/card_theme.dart';
@@ -13,6 +14,7 @@ import 'components/circle_theme.dart';
 import 'components/collapse_theme.dart';
 import 'components/contact_card_theme.dart';
 import 'components/count_down_theme.dart';
+import 'components/dialog_theme.dart';
 import 'components/divider_theme.dart';
 import 'components/empty_theme.dart';
 import 'components/field_theme.dart';
@@ -22,7 +24,9 @@ import 'components/nav_bar_theme.dart';
 import 'components/notice_bar_theme.dart';
 import 'components/notify_theme.dart';
 import 'components/pagination_theme.dart';
+import 'components/popup_theme.dart';
 import 'components/progress_theme.dart';
+import 'components/share_sheet_theme.dart';
 import 'components/sidebar_theme.dart';
 import 'components/skeleton_theme.dart';
 import 'components/submit_bar_theme.dart';
@@ -88,6 +92,7 @@ class FlanThemeData with Diagnosticable {
   factory FlanThemeData({
     Color? overlayBackgroundColor,
     FlanActionBarThemeData? actionBarTheme,
+    FlanActionSheetThemeData? actionSheetTheme,
     FlanBadgeThemeData? badgeTheme,
     FlanButtonThemeData? buttonTheme,
     FlanCardThemeData? cardTheme,
@@ -97,6 +102,7 @@ class FlanThemeData with Diagnosticable {
     FlanCollapseThemeData? collapseTheme,
     FlanCountDownThemeData? countDownTheme,
     FlanContactCardThemeData? contactCardTheme,
+    FlanDialogThemeData? dialogTheme,
     FlanDividerThemeData? dividerTheme,
     FlanFieldThemeData? fieldTheme,
     FlanEmptyThemeData? emptyTheme,
@@ -104,9 +110,11 @@ class FlanThemeData with Diagnosticable {
     FlanNotifyThemeData? notifyTheme,
     FlanPaginationThemeData? paginationTheme,
     FlanProgressThemeData? progressTheme,
+    FlanPopupThemeData? popupTheme,
     FlanTagThemeData? tagTheme,
     FlanTabbarThemeData? tabbarTheme,
     FlanTreeSelectThemeData? treeSelectTheme,
+    FlanShareSheetThemeData? shareSheetTheme,
     FlanSidebarThemeData? sidebarTheme,
     FlanSkeletonThemeData? skeletonTheme,
     FlanSubmitBarThemeData? submitBarTheme,
@@ -121,6 +129,7 @@ class FlanThemeData with Diagnosticable {
       overlayBackgroundColor:
           overlayBackgroundColor ?? const Color.fromRGBO(0, 0, 0, .7),
       actionBarTheme: actionBarTheme ?? FlanActionBarThemeData(),
+      actionSheetTheme: actionSheetTheme ?? FlanActionSheetThemeData(),
       badgeTheme: badgeTheme ?? FlanBadgeThemeData(),
       buttonTheme: buttonTheme ?? FlanButtonThemeData(),
       cardTheme: cardTheme ?? FlanCardThemeData(),
@@ -130,15 +139,18 @@ class FlanThemeData with Diagnosticable {
       collapseTheme: collapseTheme ?? FlanCollapseThemeData(),
       countDownTheme: countDownTheme ?? FlanCountDownThemeData(),
       contactCardTheme: contactCardTheme ?? FlanContactCardThemeData(),
+      dialogTheme: dialogTheme ?? FlanDialogThemeData(),
       dividerTheme: dividerTheme ?? FlanDividerThemeData(),
       emptyTheme: emptyTheme ?? FlanEmptyThemeData(),
       fieldTheme: fieldTheme ?? FlanFieldThemeData(),
       imageTheme: imageTheme ?? FlanImageThemeData(),
       paginationTheme: paginationTheme ?? FlanPaginationThemeData(),
       progressTheme: progressTheme ?? FlanProgressThemeData(),
+      popupTheme: popupTheme ?? FlanPopupThemeData(),
       tagTheme: tagTheme ?? FlanTagThemeData(),
       tabbarTheme: tabbarTheme ?? FlanTabbarThemeData(),
       treeSelectTheme: treeSelectTheme ?? FlanTreeSelectThemeData(),
+      shareSheetTheme: shareSheetTheme ?? FlanShareSheetThemeData(),
       sidebarTheme: sidebarTheme ?? FlanSidebarThemeData(),
       skeletonTheme: skeletonTheme ?? FlanSkeletonThemeData(),
       swipeTheme: swipeTheme ?? FlanSwipeThemeData(),
@@ -155,6 +167,7 @@ class FlanThemeData with Diagnosticable {
   const FlanThemeData.raw({
     required this.overlayBackgroundColor,
     required this.actionBarTheme,
+    required this.actionSheetTheme,
     required this.badgeTheme,
     required this.buttonTheme,
     required this.cardTheme,
@@ -164,15 +177,18 @@ class FlanThemeData with Diagnosticable {
     required this.collapseTheme,
     required this.countDownTheme,
     required this.contactCardTheme,
+    required this.dialogTheme,
     required this.dividerTheme,
     required this.fieldTheme,
     required this.emptyTheme,
     required this.imageTheme,
     required this.paginationTheme,
     required this.progressTheme,
+    required this.popupTheme,
     required this.tagTheme,
     required this.tabbarTheme,
     required this.treeSelectTheme,
+    required this.shareSheetTheme,
     required this.sidebarTheme,
     required this.skeletonTheme,
     required this.swipeTheme,
@@ -191,6 +207,9 @@ class FlanThemeData with Diagnosticable {
 
   /// ActionBar 动作栏
   final FlanActionBarThemeData actionBarTheme;
+
+  /// ActionSheet 动作面板
+  final FlanActionSheetThemeData actionSheetTheme;
 
   /// Badge 徽标
   final FlanBadgeThemeData badgeTheme;
@@ -222,6 +241,9 @@ class FlanThemeData with Diagnosticable {
   /// Empty 空状态
   final FlanEmptyThemeData emptyTheme;
 
+  /// Dialog 弹出框
+  final FlanDialogThemeData dialogTheme;
+
   /// Divider 分割线
   final FlanDividerThemeData dividerTheme;
 
@@ -245,6 +267,12 @@ class FlanThemeData with Diagnosticable {
 
   /// Progress 进度条
   final FlanProgressThemeData progressTheme;
+
+  /// Popup 弹出层
+  final FlanPopupThemeData popupTheme;
+
+  /// ShareSheet 分享面板
+  final FlanShareSheetThemeData shareSheetTheme;
 
   /// Tabbar 标签栏
   final FlanSidebarThemeData sidebarTheme;
@@ -283,6 +311,8 @@ class FlanThemeData with Diagnosticable {
           Color.lerp(a.overlayBackgroundColor, b.overlayBackgroundColor, t)!,
       actionBarTheme:
           FlanActionBarThemeData.lerp(a.actionBarTheme, b.actionBarTheme, t),
+      actionSheetTheme: FlanActionSheetThemeData.lerp(
+          a.actionSheetTheme, b.actionSheetTheme, t),
       badgeTheme: FlanBadgeThemeData.lerp(a.badgeTheme, b.badgeTheme, t),
       buttonTheme: FlanButtonThemeData.lerp(a.buttonTheme, b.buttonTheme, t),
       cardTheme: FlanCardThemeData.lerp(a.cardTheme, b.cardTheme, t),
@@ -296,6 +326,7 @@ class FlanThemeData with Diagnosticable {
           a.contactCardTheme, b.contactCardTheme, t),
       countDownTheme:
           FlanCountDownThemeData.lerp(a.countDownTheme, b.countDownTheme, t),
+      dialogTheme: FlanDialogThemeData.lerp(a.dialogTheme, b.dialogTheme, t),
       dividerTheme:
           FlanDividerThemeData.lerp(a.dividerTheme, b.dividerTheme, t),
       fieldTheme: FlanFieldThemeData.lerp(a.fieldTheme, b.fieldTheme, t),
@@ -305,9 +336,12 @@ class FlanThemeData with Diagnosticable {
           FlanPaginationThemeData.lerp(a.paginationTheme, b.paginationTheme, t),
       progressTheme:
           FlanProgressThemeData.lerp(a.progressTheme, b.progressTheme, t),
+      popupTheme: FlanPopupThemeData.lerp(a.popupTheme, b.popupTheme, t),
       tagTheme: FlanTagThemeData.lerp(a.tagTheme, b.tagTheme, t),
       toastTheme: FlanToastThemeData.lerp(a.toastTheme, b.toastTheme, t),
       tabbarTheme: FlanTabbarThemeData.lerp(a.tabbarTheme, b.tabbarTheme, t),
+      shareSheetTheme:
+          FlanShareSheetThemeData.lerp(a.shareSheetTheme, b.shareSheetTheme, t),
       sidebarTheme:
           FlanSidebarThemeData.lerp(a.sidebarTheme, b.sidebarTheme, t),
       skeletonTheme:
