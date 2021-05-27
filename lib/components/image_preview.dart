@@ -146,9 +146,8 @@ class _FlanImagePreviewState extends State<FlanImagePreview> {
                 onPageChanged: (int value) {
                   final int _current = value % count;
                   current.value = _current;
-                  if (widget.onChange != null) {
-                    widget.onChange!(_current);
-                  }
+                  widget.onChange?.call(_current);
+
                   widget.onChange?.call(_current);
                 },
               ),
@@ -192,7 +191,7 @@ class _FlanImagePreviewState extends State<FlanImagePreview> {
       );
     }
 
-    if (widget.indicatorBuilder != null || widget.showIndicators && count > 1) {
+    if (widget.showIndicators && count > 1) {
       return _FlanSwipeIndicator(
         current: current,
         itemCount: count,

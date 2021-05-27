@@ -161,16 +161,12 @@ class _FlanStepperState extends State<FlanStepper> {
 
   void _handleFocus() {
     if (focusNode.hasFocus) {
-      if (widget.onFocus != null) {
-        widget.onFocus!();
-      }
+      widget.onFocus?.call();
     } else {
       final dynamic value = format(textEditingController.text);
       textEditingController.text = value.toString();
       current.value = value;
-      if (widget.onBlur != null) {
-        widget.onBlur!();
-      }
+      widget.onBlur?.call();
     }
   }
 
@@ -365,14 +361,12 @@ class _FlanStepperState extends State<FlanStepper> {
     FocusScope.of(context).unfocus();
     switch (actionType) {
       case FlanStepperActionType.plus:
-        if (widget.onPlus != null) {
-          widget.onPlus!();
-        }
+        widget.onPlus?.call();
+
         break;
       case FlanStepperActionType.minus:
-        if (widget.onMinus != null) {
-          widget.onMinus!();
-        }
+        widget.onMinus?.call();
+
         break;
       default:
         break;

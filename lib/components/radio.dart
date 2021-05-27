@@ -81,9 +81,7 @@ class FlanRadio<T extends dynamic> extends StatelessWidget {
       if (parent != null) {
         parent.updateValue(name!);
       } else {
-        if (onChange != null) {
-          onChange!(newValue);
-        }
+        onChange?.call(newValue);
       }
     }
 

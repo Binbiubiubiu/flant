@@ -347,16 +347,13 @@ class _FlanTransitionVisiableState extends State<FlanTransitionVisiable>
 
   void _transitionStatusChange(AnimationStatus status) {
     if (status == AnimationStatus.dismissed) {
-      if (widget.onDismissed != null) {
-        widget.onDismissed!();
-      }
+      widget.onDismissed?.call();
+
       setState(() {
         _visible = false;
       });
     } else if (status == AnimationStatus.completed) {
-      if (widget.onCompleted != null) {
-        widget.onCompleted!();
-      }
+      widget.onCompleted?.call();
     }
   }
 }

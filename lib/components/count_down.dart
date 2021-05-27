@@ -121,12 +121,11 @@ class FlanCountDownState extends State<FlanCountDown>
 
     return DefaultTextStyle(
       style: textStyle,
-      child: widget.builder != null
-          ? widget.builder!(current)
-          : Text(
-              timeText,
-              textHeightBehavior: FlanThemeVars.textHeightBehavior,
-            ),
+      child: widget.builder?.call(current) ??
+          Text(
+            timeText,
+            textHeightBehavior: FlanThemeVars.textHeightBehavior,
+          ),
     );
   }
 
@@ -151,15 +150,11 @@ class FlanCountDownState extends State<FlanCountDown>
 
   void setRemain(int value) {
     remain = value;
-    if (widget.onChange != null) {
-      widget.onChange!(current);
-    }
+    widget.onChange?.call(current);
 
     if (value == 0) {
       pause();
-      if (widget.onFinish != null) {
-        widget.onFinish!();
-      }
+      widget.onFinish?.call();
     }
     setState(() {});
   }

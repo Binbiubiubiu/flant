@@ -78,9 +78,8 @@ class FlanSidebarItem extends StatelessWidget {
         return;
       }
 
-      if (onClick != null) {
-        onClick!(index);
-      }
+      onClick?.call(index);
+
       parent.setActive(index);
     }
 

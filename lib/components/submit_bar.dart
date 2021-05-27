@@ -203,9 +203,7 @@ class FlanSubmitBar extends StatelessWidget {
             ? FlanThemeVars.gradientRed
             : null,
         onClick: () {
-          if (onSubmit != null) {
-            onSubmit!();
-          }
+          onSubmit?.call();
         },
       ),
     );

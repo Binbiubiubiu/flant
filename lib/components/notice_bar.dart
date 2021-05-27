@@ -110,9 +110,7 @@ class _FlanNoticeBarState extends State<FlanNoticeBar>
 
   void _handleAnimationStatusChange() {
     if (1.0 - controller.value < 0.001) {
-      if (widget.onReplay != null) {
-        widget.onReplay!();
-      }
+      widget.onReplay?.call();
     }
   }
 
@@ -324,9 +322,7 @@ class _FlanNoticeBarState extends State<FlanNoticeBar>
   void onClickRightIcon() {
     if (widget.mode == FlanNoticeBarMode.closeable) {
       setState(() => show = false);
-      if (widget.onClose != null) {
-        widget.onClose!();
-      }
+      widget.onClose?.call();
     }
   }
 

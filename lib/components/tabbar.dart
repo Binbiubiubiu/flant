@@ -80,8 +80,8 @@ class FlanTabbar extends StatelessWidget {
         canChange = beforeChange!(value);
       }
 
-      if (canChange && onChange != null) {
-        onChange!(value);
+      if (canChange) {
+        onChange?.call(value);
       }
     }
   }

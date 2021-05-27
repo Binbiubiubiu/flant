@@ -76,9 +76,7 @@ class FlanContactList extends StatelessWidget {
             type: FlanButtonType.danger,
             text: addText ?? FlanS.of(context).ContactList_addText,
             onClick: () {
-              if (onAdd != null) {
-                onAdd!();
-              }
+              onAdd?.call();
             },
           ),
         ),
@@ -89,9 +87,7 @@ class FlanContactList extends StatelessWidget {
   Widget _buildItem(FlanContactListItem item, int index) {
     void onClick() {
       onValueChange(item.id);
-      if (onSelect != null) {
-        onSelect!(item, index);
-      }
+      onSelect?.call(item, index);
     }
 
     return FlanCell(
@@ -100,9 +96,7 @@ class FlanContactList extends StatelessWidget {
         size: ThemeVars.contactListEditIconSize,
         iconName: FlanIcons.edit,
         onClick: () {
-          if (onEdit != null) {
-            onEdit!(item, index);
-          }
+          onEdit?.call(item, index);
         },
       ),
       child: Padding(

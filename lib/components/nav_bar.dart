@@ -92,11 +92,7 @@ class FlanNavBar extends StatelessWidget {
               ),
               child: _buildLeft(themeData),
             ),
-            onClick: () {
-              if (onClickLeft != null) {
-                onClickLeft!();
-              }
-            },
+            onClick: onClickLeft,
           ),
         ),
       );
@@ -138,11 +134,7 @@ class FlanNavBar extends StatelessWidget {
               ),
               child: _buildRight(themeData),
             ),
-            onClick: () {
-              if (onClickRight != null) {
-                onClickRight!();
-              }
-            },
+            onClick: onClickRight,
           ),
         ),
       );

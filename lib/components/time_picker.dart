@@ -257,22 +257,16 @@ class _FlanTimePickerState extends State<FlanTimePicker> {
   }
 
   void _onConfirm() {
-    if (widget.onConfirm != null) {
-      widget.onConfirm!(currentDate.value);
-    }
+    widget.onConfirm?.call(currentDate.value);
   }
 
   void _onCancel() {
-    if (widget.onCancel != null) {
-      widget.onCancel!();
-    }
+    widget.onCancel?.call();
   }
 
   void _onChange() {
     _updateInnerValue();
-    if (widget.onChange != null) {
-      widget.onChange!(currentDate.value);
-    }
+    widget.onChange?.call(currentDate.value);
   }
 
   String _formatValue({String value = ''}) {

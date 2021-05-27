@@ -98,9 +98,7 @@ class FlanGridItem extends FlanRouteStatelessWidget {
                 onTap: parent.clickable
                     ? () {
                         route(context);
-                        if (onClick != null) {
-                          onClick!();
-                        }
+                        onClick?.call();
                       }
                     : null,
                 child: Container(

@@ -103,9 +103,7 @@ class FlanPasswordInput extends StatelessWidget {
   }
 
   void _onTouchStart(TapDownDetails details) {
-    if (onFocus != null) {
-      onFocus!();
-    }
+    onFocus?.call();
   }
 
   List<Widget> _buildPoints() {

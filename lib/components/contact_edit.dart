@@ -160,17 +160,22 @@ class _FlanContactEditState extends State<FlanContactEdit> {
   }
 
   void _onDelete() {
-    // TODO(Simon-Bin): Dialog comfirm
-    widget.onDelete!(contact);
+    FlanDialog.confirm(
+      context,
+      title: FlanS.of(context).confirmDelete,
+    ).then((FlanDialogAction? action) {
+      if (action == FlanDialogAction.confirm) {
+        widget.onDelete?.call(contact);
+      }
+    });
   }
 
   Widget _buildSwitch() {
     return FlanSwitch<bool>(
       modalValue: isDefault,
       onChange: (bool checked) {
-        if (widget.onDefaultChange != null) {
-          widget.onDefaultChange!(checked);
-        }
+        widget.onDefaultChange?.call(checked);
+
         contact.isDefault = checked;
       },
       size: 24.0,

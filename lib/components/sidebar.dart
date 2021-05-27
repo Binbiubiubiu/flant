@@ -56,13 +56,8 @@ class FlanSidebar extends StatelessWidget {
 
   void setActive(int value) {
     if (getActive() != value) {
-      if (onValueChange != null) {
-        onValueChange!(value);
-      }
-
-      if (onChange != null) {
-        onChange!(value);
-      }
+      onValueChange?.call(value);
+      onChange?.call(value);
     }
   }
 

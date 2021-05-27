@@ -76,14 +76,10 @@ class FlanIcon extends StatelessWidget {
       child: _buildIcon(context),
     );
 
-    if (onClick != null) {
-      return GestureDetector(
-        onTap: onClick,
-        child: badge,
-      );
-    }
-
-    return badge;
+    return GestureDetector(
+      onTap: onClick,
+      child: badge,
+    );
   }
 
   // 构建图片图标

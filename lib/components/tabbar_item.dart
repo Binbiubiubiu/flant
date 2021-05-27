@@ -100,9 +100,8 @@ class FlanTabbarItem extends StatelessWidget {
       child: GestureDetector(
         onTap: () {
           parent.setActive(name ?? index.toString());
-          if (onClick != null) {
-            onClick!();
-          }
+
+          onClick?.call();
         },
         child: DefaultTextStyle(
           style: TextStyle(

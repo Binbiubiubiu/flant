@@ -82,20 +82,20 @@ class FlanSteps extends StatelessWidget {
           ? Container(
               padding: const EdgeInsets.only(bottom: 22.0),
               margin: const EdgeInsets.only(bottom: 10.0),
-              child: Stack(
-                children: <Widget>[
-                  FlanStepsScope(
-                    parent: this,
-                    child: Row(
+              child: FlanStepsScope(
+                parent: this,
+                child: Stack(
+                  children: <Widget>[
+                    Row(
                       children: content,
                     ),
-                  ),
-                  Positioned(
-                    top: 0.0,
-                    right: 0.0,
-                    child: children.last,
-                  ),
-                ],
+                    Positioned(
+                      top: 0.0,
+                      right: 0.0,
+                      child: children.last,
+                    ),
+                  ],
+                ),
               ),
             )
           : FlanStepsScope(
@@ -109,9 +109,7 @@ class FlanSteps extends StatelessWidget {
   }
 
   void onClickSubStep(int index) {
-    if (onClickStep != null) {
-      onClickStep!(index);
-    }
+    onClickStep?.call(index);
   }
 
   @override

@@ -87,9 +87,7 @@ class FlanActionBarIcon extends FlanRouteStatelessWidget {
                 },
                 onClick: () {
                   route(context);
-                  if (onClick != null) {
-                    onClick!();
-                  }
+                  onClick?.call();
                 },
               ),
             ),

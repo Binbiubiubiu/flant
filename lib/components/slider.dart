@@ -221,15 +221,11 @@ class _FlanSliderState<T> extends State<FlanSlider<T>> {
       value = format(value as double) as T;
     }
     if (!isSameValue(value, widget.value)) {
-      if (widget.onValueChange != null) {
-        widget.onValueChange!(value);
-      }
+      widget.onValueChange?.call(value);
     }
 
     if (end && !isSameValue(value, startValue)) {
-      if (widget.onChange != null) {
-        widget.onChange!(value);
-      }
+      widget.onChange?.call(value);
     }
   }
 
@@ -283,9 +279,7 @@ class _FlanSliderState<T> extends State<FlanSlider<T>> {
       return;
     }
     if (dragStatus == FlanSliderDragStatus.start) {
-      if (widget.onDragStart != null) {
-        widget.onDragStart!();
-      }
+      widget.onDragStart?.call();
     }
     final double delta = widget.vertical
         ? details.globalPosition.dy
@@ -309,9 +303,7 @@ class _FlanSliderState<T> extends State<FlanSlider<T>> {
     }
     if (dragStatus == FlanSliderDragStatus.draging) {
       updateValue(currentValue!, end: true);
-      if (widget.onDragEnd != null) {
-        widget.onDragEnd!();
-      }
+      widget.onDragEnd?.call();
     }
 
     dragStatus = FlanSliderDragStatus.none;

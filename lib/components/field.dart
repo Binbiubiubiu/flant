@@ -424,16 +424,13 @@ class FlanFieldState extends State<FlanField> {
   void onFouse() {
     focuesd = focusNode.hasFocus;
     if (focuesd) {
-      if (widget.onFocus != null) {
-        widget.onFocus!();
-      }
+      widget.onFocus?.call();
     } else {
       if (widget.formatTrigger == FlanFieldFormatTrigger.onBlur) {
         updateValueCorrect(modelvalue, FlanFieldFormatTrigger.onBlur);
       }
-      if (widget.onBlur != null) {
-        widget.onBlur!();
-      }
+      widget.onBlur?.call();
+
       validateWithTrigger(FlanFieldValidateTrigger.onBlur);
     }
     setState(() {});
@@ -590,9 +587,7 @@ class FlanFieldState extends State<FlanField> {
           onClick: () {
             editingController.clear();
 
-            if (widget.onClear != null) {
-              widget.onClear!();
-            }
+            widget.onClear?.call();
           },
         ),
       ),
@@ -709,9 +704,7 @@ class FlanFieldState extends State<FlanField> {
   }
 
   void onClickInput() {
-    if (widget.onClickInput != null) {
-      widget.onClickInput!();
-    }
+    widget.onClickInput?.call();
   }
 
   Widget _buildInput(BuildContext context, FlanFieldThemeData themeData) {
@@ -774,20 +767,15 @@ class FlanFieldState extends State<FlanField> {
         mouseCursor: disabled ? SystemMouseCursors.forbidden : null,
         enabled: !disabled,
         onSubmitted: (String value) {
-          if (widget.onSubmitted != null) {
-            widget.onSubmitted!(value);
-          }
+          widget.onSubmitted?.call(value);
         },
         autofocus: widget.autofocus,
         autocorrect: widget.autocomplete,
         onChanged: (String value) {
           validWhereValueChange();
-          if (widget.onKeypress != null) {
-            widget.onKeypress!();
-          }
-          if (widget.onInput != null) {
-            widget.onInput!(value);
-          }
+          widget.onKeypress?.call();
+
+          widget.onInput?.call(value);
         },
         readOnly: widget.readonly,
         controller: editingController,
@@ -824,9 +812,7 @@ class FlanFieldState extends State<FlanField> {
         widget.leftIconSlot != null) {
       return GestureDetector(
         onTap: () {
-          if (widget.onClickLeftIcon != null) {
-            widget.onClickLeftIcon!();
-          }
+          widget.onClickLeftIcon?.call();
         },
         child: Padding(
           padding: EdgeInsets.only(right: FlanThemeVars.paddingBase.rpx),
@@ -852,9 +838,7 @@ class FlanFieldState extends State<FlanField> {
         widget.rightIconSlot != null) {
       return GestureDetector(
         onTap: () {
-          if (widget.onClickRightIcon != null) {
-            widget.onClickRightIcon!();
-          }
+          widget.onClickRightIcon?.call();
         },
         child: IconTheme.merge(
           data: IconThemeData(

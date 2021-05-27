@@ -154,13 +154,9 @@ class _FlanNumberKeyboardState extends State<FlanNumberKeyboard>
 
   void onAnimationEnd() {
     if (widget.show) {
-      if (widget.onShow != null) {
-        widget.onShow!();
-      }
+      widget.onShow?.call();
     } else {
-      if (widget.onHide != null) {
-        widget.onHide!();
-      }
+      widget.onHide?.call();
     }
   }
 
@@ -347,16 +343,13 @@ class _FlanNumberKeyboardState extends State<FlanNumberKeyboard>
 
   void blur() {
     if (widget.show) {
-      if (widget.onBlur != null) {
-        widget.onBlur!();
-      }
+      widget.onBlur?.call();
     }
   }
 
   void close() {
-    if (widget.onClose != null) {
-      widget.onClose!();
-    }
+    widget.onClose?.call();
+
     if (widget.blurOnClose) {
       blur();
     }
@@ -370,21 +363,14 @@ class _FlanNumberKeyboardState extends State<FlanNumberKeyboard>
       return;
     }
     if (type == FlanKeyType.delete) {
-      if (widget.onDelete != null) {
-        widget.onDelete!();
-      }
-      if (widget.onChange != null) {
-        widget.onChange!(widget.value.substring(0, widget.value.length - 1));
-      }
+      widget.onDelete?.call();
+      widget.onChange?.call(widget.value.substring(0, widget.value.length - 1));
     } else if (type == FlanKeyType.close) {
       close();
     } else if (widget.value.length < (widget.maxlength ?? double.infinity)) {
-      if (widget.onInput != null) {
-        widget.onInput!(text);
-      }
-      if (widget.onChange != null) {
-        widget.onChange!(widget.value + text);
-      }
+      widget.onInput?.call(text);
+
+      widget.onChange?.call(widget.value + text);
     }
   }
 
@@ -525,9 +511,7 @@ class _FlanNumberKeyboardKeyState extends State<FlanNumberKeyboardKey> {
 
   void onTouchEnd() {
     setState(() => active = false);
-    if (widget.onPress != null) {
-      widget.onPress!(widget.text, widget.type);
-    }
+    widget.onPress?.call(widget.text, widget.type);
   }
 
   @override

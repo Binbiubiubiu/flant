@@ -286,9 +286,7 @@ class _FlanActionSheet extends StatelessWidget {
         ),
         _FlanActionSheetButton(
           onClick: () {
-            if (onCancel != null) {
-              onCancel!();
-            }
+            onCancel?.call();
             Navigator.of(context).maybePop();
           },
           child: DefaultTextStyle(
@@ -311,9 +309,7 @@ class _FlanActionSheet extends StatelessWidget {
           return;
         }
 
-        if (item.callback != null) {
-          item.callback!(item);
-        }
+        item.callback?.call(item);
 
         if (closeOnClickAction) {
           Navigator.of(context).maybePop(<String, dynamic>{
@@ -322,9 +318,7 @@ class _FlanActionSheet extends StatelessWidget {
           });
         }
 
-        if (onSelect != null) {
-          onSelect!(item, index);
-        }
+        onSelect?.call(item, index);
       },
       child: Visibility(
         visible: !item.loading,

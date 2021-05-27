@@ -172,20 +172,16 @@ class _FlanListState extends State<FlanList> {
 
     if (isReachEdge) {
       loading = true;
-      if (widget.onLoadingChange != null) {
-        widget.onLoadingChange!(true);
-      }
-      if (widget.onLoad != null) {
-        widget.onLoad!();
-      }
+      widget.onLoadingChange?.call(true);
+
+      widget.onLoad?.call();
     }
     return false;
   }
 
   void clickErrorText() {
-    if (widget.onErrorChange != null) {
-      widget.onErrorChange!(false);
-    }
+    widget.onErrorChange?.call(false);
+
     emitCheck();
   }
 

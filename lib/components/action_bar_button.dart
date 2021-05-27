@@ -119,11 +119,9 @@ class FlanActionBarButton extends FlanRouteStatelessWidget {
             disabled: disabled,
             onClick: () {
               route(context);
-              if (onClick != null) {
-                onClick!();
-              }
+              onClick?.call();
             },
-            child: DefaultTextStyle(
+            child: DefaultTextStyle.merge(
               style: TextStyle(
                 fontSize: FlanThemeVars.fontSizeMd.rpx,
                 fontWeight: FlanThemeVars.fontWeightBold,

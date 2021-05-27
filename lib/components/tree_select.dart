@@ -108,13 +108,9 @@ class FlanTreeSelect extends StatelessWidget {
   }
 
   void _onSidebarChange(int index) {
-    if (onMainActiveIndexChange != null) {
-      onMainActiveIndexChange!(index);
-    }
+    onMainActiveIndexChange?.call(index);
 
-    if (onClickNav != null) {
-      onClickNav!(index);
-    }
+    onClickNav?.call(index);
   }
 
   Widget _buildSidebar(FlanTreeSelectThemeData themeData) {
@@ -163,12 +159,9 @@ class FlanTreeSelect extends StatelessWidget {
               _activeId = <String>[item.id];
             }
 
-            if (onActiveIdChange != null) {
-              onActiveIdChange!(_activeId);
-            }
-            if (onClickItem != null) {
-              onClickItem!(item);
-            }
+            onActiveIdChange?.call(_activeId);
+
+            onClickItem?.call(item);
           }
 
           final bool active = _isActiveItem(item.id);

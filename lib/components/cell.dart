@@ -207,9 +207,8 @@ class FlanCell extends FlanRouteStatelessWidget {
             child: content,
           ),
           onClick: () {
-            if (onClick != null) {
-              onClick!();
-            }
+            onClick?.call();
+
             route(context);
           },
         ),

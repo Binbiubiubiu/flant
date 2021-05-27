@@ -58,9 +58,7 @@ class FlanRadioGroup<T extends dynamic> extends StatelessWidget {
   }
 
   void updateValue(T value) {
-    if (onChange != null) {
-      onChange!(value);
-    }
+    onChange?.call(value);
   }
 
   @override

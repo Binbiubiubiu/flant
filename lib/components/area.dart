@@ -385,10 +385,9 @@ class _FlanAreaState extends State<FlanArea> {
   void onConfirm(dynamic values, dynamic index) {
     setValues();
     // emit('confirm', parseValues(values), index);
-    if (widget.onConfirm != null) {
-      widget.onConfirm!(
-          parseValues(values as List<Map<String, String>>), index);
-    }
+
+    widget.onConfirm
+        ?.call(parseValues(values as List<Map<String, String>>), index);
   }
 
   bool Function(String code) get isOverseaCode =>

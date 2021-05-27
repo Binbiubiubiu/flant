@@ -149,9 +149,7 @@ class _FlanSwipeState extends State<FlanSwipe> {
                 onPageChanged: (int value) {
                   final int _current = value % count;
                   current.value = _current;
-                  if (widget.onChange != null) {
-                    widget.onChange!(_current);
-                  }
+                  widget.onChange?.call(_current);
                 },
               ),
             ),

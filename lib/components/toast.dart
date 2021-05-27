@@ -184,9 +184,8 @@ class FlanToast {
       }
       void watchToastOpen() {
         onOpened ??= _defaultOption.onOpened;
-        if (onOpened != null) {
-          onOpened!();
-        }
+        onOpened?.call();
+
         if (duration != Duration.zero) {
           entry?.timer = Timer(duration!, () {
             entry?.close();
@@ -202,9 +201,8 @@ class FlanToast {
         entry = null;
 
         onClose ??= _defaultOption.onClose;
-        if (onClose != null) {
-          onClose!();
-        }
+
+        onClose?.call();
       }
 
       final VoidCallback? onClickOverlay =

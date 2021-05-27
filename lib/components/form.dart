@@ -225,13 +225,9 @@ class FlanFormState extends State<FlanForm> {
 
     try {
       await validate<dynamic>();
-      if (widget.onSubmit != null) {
-        widget.onSubmit!(values);
-      }
+      widget.onSubmit?.call(values);
     } on List<FlanFieldValidateError> catch (errors) {
-      if (widget.onFailed != null) {
-        widget.onFailed!(FlanFormFailDetail(values: values, errors: errors));
-      }
+      widget.onFailed?.call(FlanFormFailDetail(values: values, errors: errors));
 
       if (widget.scrollToError && errors[0].name != null) {
         scrollToField(errors[0].name!);
@@ -270,7 +266,7 @@ class _FlanFormScope extends InheritedWidget {
     Key? key,
     required FlanFormState formState,
     required Widget child,
-  })   : _formState = formState,
+  })  : _formState = formState,
         super(key: key, child: child);
 
   final FlanFormState _formState;

@@ -126,9 +126,7 @@ class _FlanCircleState extends State<FlanCircle>
           lerpDouble(0, endRate - startRate, _animationController.value)! +
               startRate;
 
-      if (widget.onChange != null) {
-        widget.onChange!(_formatRate(rate).roundToDouble());
-      }
+      widget.onChange?.call(_formatRate(rate).roundToDouble());
 
       if (endRate > startRate ? rate >= endRate : rate <= endRate) {
         _animationController.removeListener(animate);
@@ -145,9 +143,7 @@ class _FlanCircleState extends State<FlanCircle>
         ..addListener(animate)
         ..forward();
     } else {
-      if (widget.onChange != null) {
-        widget.onChange!(endRate);
-      }
+      widget.onChange?.call(endRate);
     }
   }
 

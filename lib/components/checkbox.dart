@@ -83,9 +83,7 @@ class FlanCheckbox<T extends dynamic> extends StatelessWidget {
       if (parent != null && bindGroup) {
         setParentValue(newValue);
       } else {
-        if (onChange != null) {
-          onChange!(newValue);
-        }
+        onChange?.call(newValue);
       }
     }
 
@@ -275,13 +273,9 @@ class FlanChecker<T> extends StatelessWidget {
 
   void _onClick() {
     if (!disabled) {
-      if (onToggle != null) {
-        onToggle!();
-      }
+      onToggle?.call();
     }
-    if (onClick != null) {
-      onClick!();
-    }
+    onClick?.call();
   }
 
   FlanCheckerParentProps? get _parentProps =>

@@ -176,9 +176,8 @@ class FlanButton extends FlanRouteStatelessWidget {
                 cursorBuilder: (SystemMouseCursor cursor) =>
                     loading ? SystemMouseCursors.basic : cursor,
                 onClick: () {
-                  if (onClick != null) {
-                    onClick!();
-                  }
+                  onClick?.call();
+
                   route(context);
                 },
                 builder: (BuildContext contenxt, bool active, Widget? child) {

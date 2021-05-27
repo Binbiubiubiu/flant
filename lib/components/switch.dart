@@ -83,9 +83,8 @@ class _FlanSwitchState<T> extends State<FlanSwitch<T>> with FlanLinkFieldMixin {
   }
 
   void _onChange() {
-    if (widget.onChange != null) {
-      widget.onChange!(modalValue.value);
-    }
+    widget.onChange?.call(modalValue.value);
+
     validateChangedValue();
   }
 

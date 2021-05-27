@@ -72,9 +72,7 @@ class FlanCheckboxGroup<T extends dynamic> extends StatelessWidget {
   }
 
   void updateValue(List<T> value) {
-    if (onChange != null) {
-      onChange!(value);
-    }
+    onChange?.call(value);
   }
 
   @override

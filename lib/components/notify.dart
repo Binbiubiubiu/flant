@@ -121,9 +121,8 @@ class FlanNotify {
       }
       void watchToastOpen() {
         onOpened ??= _defaultOption.onOpened;
-        if (onOpened != null) {
-          onOpened!();
-        }
+        onOpened?.call();
+
         if (duration != Duration.zero) {
           _instance?.timer = Timer(duration!, () {
             _instance?.close();
@@ -138,9 +137,7 @@ class FlanNotify {
         _instance = null;
 
         onClose ??= _defaultOption.onClose;
-        if (onClose != null) {
-          onClose!();
-        }
+        onClose?.call();
       }
 
       _instance = CustomOverlayEntry(

@@ -231,9 +231,7 @@ class _FlanDatePickerState extends State<FlanDatePicker> {
   }
 
   void _onValueChange() {
-    if (widget.onValueChange != null) {
-      widget.onValueChange!(currentDate.value);
-    }
+    widget.onValueChange?.call(currentDate.value);
   }
 
   void _updateColumnValue() {
@@ -317,27 +315,22 @@ class _FlanDatePickerState extends State<FlanDatePicker> {
   }
 
   void _onConfirm() {
-    if (widget.onValueChange != null) {
-      widget.onValueChange!(currentDate.value);
-    }
-    if (widget.onConfirm != null) {
-      widget.onConfirm!(currentDate.value);
-    }
+    widget.onValueChange?.call(currentDate.value);
+
+    widget.onConfirm?.call(currentDate.value);
   }
 
   void _onCancel() {
-    if (widget.onCancel != null) {
-      widget.onCancel!();
-    }
+    widget.onCancel?.call();
   }
 
   void _onChange() {
     _updateInnerValue();
     // nextTick((Duration timestamp){
     //    nextTick((Duration timestamp){
-    if (widget.onChange != null) {
-      widget.onChange!(currentDate.value);
-    }
+
+    widget.onChange?.call(currentDate.value);
+
     // });
     // });
   }
