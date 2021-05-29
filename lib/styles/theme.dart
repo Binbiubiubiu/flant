@@ -18,6 +18,7 @@ import 'components/dialog_theme.dart';
 import 'components/divider_theme.dart';
 import 'components/empty_theme.dart';
 import 'components/field_theme.dart';
+import 'components/image_preview_theme.dart';
 import 'components/image_theme.dart';
 import 'components/loading_theme.dart';
 import 'components/nav_bar_theme.dart';
@@ -107,6 +108,7 @@ class FlanThemeData with Diagnosticable {
     FlanFieldThemeData? fieldTheme,
     FlanEmptyThemeData? emptyTheme,
     FlanImageThemeData? imageTheme,
+    FlanImagePreviewThemeData? imagePreviewTheme,
     FlanNotifyThemeData? notifyTheme,
     FlanPaginationThemeData? paginationTheme,
     FlanProgressThemeData? progressTheme,
@@ -144,6 +146,7 @@ class FlanThemeData with Diagnosticable {
       emptyTheme: emptyTheme ?? FlanEmptyThemeData(),
       fieldTheme: fieldTheme ?? FlanFieldThemeData(),
       imageTheme: imageTheme ?? FlanImageThemeData(),
+      imagePreviewTheme: imagePreviewTheme ?? FlanImagePreviewThemeData(),
       paginationTheme: paginationTheme ?? FlanPaginationThemeData(),
       progressTheme: progressTheme ?? FlanProgressThemeData(),
       popupTheme: popupTheme ?? FlanPopupThemeData(),
@@ -182,6 +185,7 @@ class FlanThemeData with Diagnosticable {
     required this.fieldTheme,
     required this.emptyTheme,
     required this.imageTheme,
+    required this.imagePreviewTheme,
     required this.paginationTheme,
     required this.progressTheme,
     required this.popupTheme,
@@ -252,6 +256,9 @@ class FlanThemeData with Diagnosticable {
 
   /// Image 图片
   final FlanImageThemeData imageTheme;
+
+  /// ImagePreview 图片预览
+  final FlanImagePreviewThemeData imagePreviewTheme;
 
   /// Loading 加载
   final FlanLoadingThemeData loadingTheme;
@@ -332,6 +339,8 @@ class FlanThemeData with Diagnosticable {
       fieldTheme: FlanFieldThemeData.lerp(a.fieldTheme, b.fieldTheme, t),
       emptyTheme: FlanEmptyThemeData.lerp(a.emptyTheme, b.emptyTheme, t),
       imageTheme: FlanImageThemeData.lerp(a.imageTheme, b.imageTheme, t),
+      imagePreviewTheme: FlanImagePreviewThemeData.lerp(
+          a.imagePreviewTheme, b.imagePreviewTheme, t),
       paginationTheme:
           FlanPaginationThemeData.lerp(a.paginationTheme, b.paginationTheme, t),
       progressTheme:

@@ -1,4 +1,4 @@
-## 0.0.1-alpha (2021-05-16)
+## 0.0.1-alpha (2021-05-29)
 
 
 ### ✨ Features
@@ -54,6 +54,7 @@
 * steps ([c19de22](https://github.com/Simon-Bin/flant/commit/c19de22))
 * style ([b9ecce1](https://github.com/Simon-Bin/flant/commit/b9ecce1))
 * SubmitBar ([66ed6fc](https://github.com/Simon-Bin/flant/commit/66ed6fc))
+* Swipe ([606ebfe](https://github.com/Simon-Bin/flant/commit/606ebfe))
 * switch ([7dc9a49](https://github.com/Simon-Bin/flant/commit/7dc9a49))
 * Tabbar ([4731f44](https://github.com/Simon-Bin/flant/commit/4731f44))
 * tag ([5a58b3d](https://github.com/Simon-Bin/flant/commit/5a58b3d))

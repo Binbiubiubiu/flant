@@ -2,15 +2,15 @@
 import 'dart:math' as math;
 
 // 🐦 Flutter imports:
-import 'package:flant/styles/components/loading_theme.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
 // 🌎 Project imports:
 import '../styles/components/loading_theme.dart';
 import '../styles/theme.dart';
-// import '../styles/var.dart';
 import '../utils/widget.dart';
+
+// import '../styles/var.dart';
 
 /// ### FlanImage 加载
 /// 加载图标，用于表示加载中的过渡状态。
@@ -213,7 +213,7 @@ class _FlanLoadingCirclarPainter extends CustomPainter {
     required this.color,
     required this.length,
     required this.offset,
-  })   : _paint = Paint()
+  })  : _paint = Paint()
           ..color = color
           ..style = PaintingStyle.stroke
           ..strokeWidth = 2.0
@@ -316,7 +316,7 @@ class __FlanLoadingSpinnerState extends State<_FlanLoadingSpinner>
 class _FlanLoadingSpinnerPainter extends CustomPainter {
   _FlanLoadingSpinnerPainter({
     required this.color,
-  })   : _paint = Paint()
+  })  : _paint = Paint()
           ..strokeWidth = 2.0
           ..strokeCap = StrokeCap.round
           ..style = PaintingStyle.stroke,

@@ -1,13 +1,14 @@
-// 🐦 Flutter imports:
+// 🎯 Dart imports:
 import 'dart:async';
 
-import 'package:flant/flant.dart';
+// 🐦 Flutter imports:
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
 // 🌎 Project imports:
 import '../styles/components/notify_theme.dart';
 import '../styles/theme.dart';
+import '../styles/var.dart';
 import 'common/custom_entry.dart';
 import 'style.dart';
 

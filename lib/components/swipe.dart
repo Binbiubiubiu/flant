@@ -1,11 +1,13 @@
-// 🐦 Flutter imports:
+// 🎯 Dart imports:
 import 'dart:async';
 
+// 🐦 Flutter imports:
 import 'package:flutter/foundation.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 
+// 🌎 Project imports:
 import '../styles/components/swipe_theme.dart';
 import '../styles/theme.dart';
 import '../styles/var.dart';
@@ -18,19 +20,17 @@ class FlanSwipe extends StatefulWidget {
     Key? key,
     this.autoplay = Duration.zero,
     this.duration = const Duration(milliseconds: 500),
-    this.initialSwipe = 0,
     this.controller,
-    // this.width,
-    required this.height,
-    // this.loop = true,
+    this.width,
+    this.height,
     this.showIndicators = true,
     this.vertical = false,
     this.touchable = true,
     this.stopPropagation = true,
-    // this.lazyRender = false,
     this.indicatorColor,
     this.onChange,
-    this.children = const <Widget>[],
+    required this.itemCount,
+    required this.itemBuilder,
     this.indicatorBuilder,
   }) : super(key: key);
 
@@ -41,20 +41,14 @@ class FlanSwipe extends StatefulWidget {
   /// 动画时长，单位为 ms
   final Duration duration;
 
-  /// 初始位置索引值
-  final int initialSwipe;
-
   /// 控制器
   final FlanSwipeController? controller;
 
-  // /// 滑块宽度
-  // final double? width;
+  /// 滑块宽度
+  final double? width;
 
   /// 滑块高度
-  final double height;
-
-  // /// 是否开启循环播放
-  // final bool loop;
+  final double? height;
 
   /// 是否显示指示器
   final bool showIndicators;
@@ -68,11 +62,11 @@ class FlanSwipe extends StatefulWidget {
   /// 是否阻止滑动事件冒泡
   final bool stopPropagation;
 
-  // /// 是否延迟渲染未展示的轮播
-  // final bool lazyRender;
-
   /// 指示器颜色
   final Color? indicatorColor;
+
+  /// 数量
+  final int itemCount;
 
   // ****************** Events ******************
 
@@ -82,7 +76,7 @@ class FlanSwipe extends StatefulWidget {
   // ****************** Slots ******************
 
   /// 轮播内容
-  final List<Widget> children;
+  final Widget Function(BuildContext context, int index) itemBuilder;
 
   /// 自定义指示器
   final FlanSwipeIndicatorBuilder? indicatorBuilder;
@@ -120,6 +114,7 @@ class _FlanSwipeState extends State<FlanSwipe> {
     final FlanSwipeThemeData themeData = FlanTheme.of(context).swipeTheme;
 
     return SizedBox(
+      width: widget.width,
       height: widget.height,
       child: Stack(
         children: <Widget>[
@@ -143,7 +138,7 @@ class _FlanSwipeState extends State<FlanSwipe> {
                 scrollDirection:
                     widget.vertical ? Axis.vertical : Axis.horizontal,
                 itemBuilder: (BuildContext context, int index) {
-                  return widget.children[index % count];
+                  return widget.itemBuilder(context, index % count);
                 },
                 itemCount: _controller.loop ? null : count,
                 onPageChanged: (int value) {
@@ -154,15 +149,7 @@ class _FlanSwipeState extends State<FlanSwipe> {
               ),
             ),
           ),
-          Positioned(
-            bottom: widget.vertical ? 0.0 : themeData.indicatorMargin,
-            left: widget.vertical ? themeData.indicatorMargin : 0.0,
-            right: widget.vertical ? null : 0.0,
-            top: widget.vertical ? 0.0 : null,
-            child: IgnorePointer(
-              child: _buildIndicator(),
-            ),
-          ),
+          _buildIndicator(themeData),
         ],
       ),
     );
@@ -173,6 +160,7 @@ class _FlanSwipeState extends State<FlanSwipe> {
       if (!_controller.loop && current.value == count - 1) {
         return;
       }
+      _loopTimer?.cancel();
       _loopTimer = Timer(widget.autoplay, () {
         _controller.nextPage(duration: widget.duration, curve: Curves.linear);
       });
@@ -186,9 +174,9 @@ class _FlanSwipeState extends State<FlanSwipe> {
     }
   }
 
-  int get count => widget.children.length;
+  int get count => widget.itemCount;
 
-  Widget _buildIndicator() {
+  Widget _buildIndicator(FlanSwipeThemeData themeData) {
     if (widget.indicatorBuilder != null) {
       return ValueListenableBuilder<int>(
         valueListenable: current,
@@ -199,11 +187,19 @@ class _FlanSwipeState extends State<FlanSwipe> {
     }
 
     if (widget.indicatorBuilder != null || widget.showIndicators && count > 1) {
-      return _FlanSwipeIndicator(
-        current: current,
-        itemCount: count,
-        vertical: widget.vertical,
-        activeColor: widget.indicatorColor,
+      return Positioned(
+        bottom: widget.vertical ? 0.0 : themeData.indicatorMargin,
+        left: widget.vertical ? themeData.indicatorMargin : 0.0,
+        right: widget.vertical ? null : 0.0,
+        top: widget.vertical ? 0.0 : null,
+        child: IgnorePointer(
+          child: _FlanSwipeIndicator(
+            current: current,
+            itemCount: count,
+            vertical: widget.vertical,
+            activeColor: widget.indicatorColor,
+          ),
+        ),
       );
     }
 
@@ -216,14 +212,9 @@ class _FlanSwipeState extends State<FlanSwipe> {
         defaultValue: Duration.zero));
     properties.add(DiagnosticsProperty<Duration>('duration', widget.duration,
         defaultValue: const Duration(milliseconds: 500)));
-    properties.add(DiagnosticsProperty<int>('initialSwipe', widget.initialSwipe,
-        defaultValue: 0));
     properties.add(
         DiagnosticsProperty<PageController>('controller', widget.controller));
-    // properties.add(DiagnosticsProperty<double>('width', widget.width));
     properties.add(DiagnosticsProperty<double>('height', widget.height));
-    // properties.add(
-    //     DiagnosticsProperty<bool>('loop', widget.loop, defaultValue: true));
     properties.add(DiagnosticsProperty<bool>(
         'showIndicators', widget.showIndicators,
         defaultValue: true));
@@ -234,8 +225,6 @@ class _FlanSwipeState extends State<FlanSwipe> {
     properties.add(DiagnosticsProperty<bool>(
         'stopPropagation', widget.stopPropagation,
         defaultValue: true));
-    // properties.add(DiagnosticsProperty<bool>('lazyRender', lazyRender,
-    //     defaultValue: false));
     properties.add(
         DiagnosticsProperty<Color>('indicatorColor', widget.indicatorColor));
 

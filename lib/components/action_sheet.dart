@@ -1,5 +1,4 @@
 // 🐦 Flutter imports:
-import 'package:flant/styles/theme.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
@@ -7,6 +6,7 @@ import 'package:flutter/services.dart';
 
 // 🌎 Project imports:
 import '../styles/components/action_sheet_theme.dart';
+import '../styles/theme.dart';
 import '../styles/var.dart';
 import '../utils/widget.dart';
 import 'common/active_response.dart';

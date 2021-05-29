@@ -2,12 +2,12 @@
 import 'dart:async';
 
 // 🐦 Flutter imports:
-import 'package:flant/styles/components/notice_bar_theme.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
 
 // 🌎 Project imports:
+import '../styles/components/notice_bar_theme.dart';
 import '../styles/theme.dart';
 import '../styles/var.dart';
 import '../utils/widget.dart';

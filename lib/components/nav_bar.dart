@@ -1,6 +1,6 @@
 // 🐦 Flutter imports:
 
-import 'package:flant/components/common/active_response.dart';
+// 🐦 Flutter imports:
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
@@ -9,6 +9,7 @@ import '../styles/components/nav_bar_theme.dart';
 import '../styles/theme.dart';
 import '../styles/var.dart';
 import '../utils/widget.dart';
+import 'common/active_response.dart';
 import 'icon.dart';
 import 'style.dart';
 

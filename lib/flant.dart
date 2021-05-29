@@ -29,6 +29,7 @@ export './components/grid.dart';
 export './components/grid_item.dart';
 export './components/icon.dart';
 export './components/image.dart';
+export './components/image_preview.dart';
 export './components/index_bar.dart';
 export './components/list.dart';
 export './components/loading.dart';

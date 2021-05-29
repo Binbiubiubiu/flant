@@ -2,7 +2,6 @@
 import 'dart:ui' as ui;
 
 // 🐦 Flutter imports:
-import 'package:flant/flant.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
@@ -14,6 +13,7 @@ import '../styles/theme.dart';
 import '../styles/var.dart';
 import './icon.dart' show FlanIcon, FlanIcons;
 import 'common/active_response.dart';
+import 'style.dart';
 
 /// ### FlanPopup 列布局
 /// 弹出层容器，用于展示弹窗、信息提示等内容，支持多个弹出层叠加展示。
@@ -34,6 +34,7 @@ Future<T?> showFlanPopup<T extends Object?>(
   FlanTransitionBuilder? transitionBuilder,
   bool safeAreaInsetBottom = false,
   VoidCallback? onClickCloseIcon,
+  VoidCallback? onClick,
   VoidCallback? onOpen,
   VoidCallback? onClose,
   VoidCallback? onOpened,
@@ -90,6 +91,7 @@ class _FlanPopupWrapper extends StatelessWidget {
     this.borderRadius,
     required this.round,
     required this.safeAreaInsetBottom,
+    this.onClick,
     this.child,
   }) : super(key: key);
 
@@ -112,6 +114,9 @@ class _FlanPopupWrapper extends StatelessWidget {
 
   // ****************** Events ******************
 
+  /// 点击事件
+  final VoidCallback? onClick;
+
   // ****************** Slots ******************
   /// 内容
   final Widget? child;
@@ -120,23 +125,31 @@ class _FlanPopupWrapper extends StatelessWidget {
   Widget build(BuildContext context) {
     final MediaQueryData win = MediaQuery.of(context);
     final FlanPopupThemeData themeData = FlanTheme.of(context).popupTheme;
+
+    Widget content = Material(
+      color: backgroundColor ?? themeData.backgroundColor,
+      borderRadius:
+          round ? _getRoundRadius(themeData, position) : BorderRadius.zero,
+      clipBehavior: Clip.hardEdge,
+      child: Container(
+        width: needWidthFilled ? win.size.width : null,
+        height: needHeightFilled ? win.size.height : null,
+        padding: safeAreaInsetBottom
+            ? EdgeInsets.only(bottom: win.padding.bottom)
+            : null,
+        child: child,
+      ),
+    );
+
+    if (onClick != null) {
+      content = GestureDetector(
+        onTap: onClick,
+        child: content,
+      );
+    }
     return Align(
       alignment: _popupAlign,
-      child: ClipRRect(
-        borderRadius:
-            round ? _getRoundRadius(themeData, position) : BorderRadius.zero,
-        child: Material(
-          color: backgroundColor ?? themeData.backgroundColor,
-          child: Container(
-            width: needWidthFilled ? win.size.width : null,
-            height: needHeightFilled ? win.size.height : null,
-            padding: safeAreaInsetBottom
-                ? EdgeInsets.only(bottom: win.padding.bottom)
-                : null,
-            child: child,
-          ),
-        ),
-      ),
+      child: content,
     );
   }
 

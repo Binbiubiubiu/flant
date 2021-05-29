@@ -24,7 +24,10 @@ void main() {
           body: FlanSwipe(
             controller: controller,
             height: 100.0,
-            children: children,
+            itemBuilder: (BuildContext context, int index) {
+              return children[index];
+            },
+            itemCount: children.length,
             onChange: (int value) {
               a++;
             },
@@ -52,7 +55,10 @@ void main() {
           body: FlanSwipe(
             controller: controller,
             height: 100.0,
-            children: children,
+            itemBuilder: (BuildContext context, int index) {
+              return children[index];
+            },
+            itemCount: children.length,
             onChange: (int value) {
               a++;
             },
@@ -79,7 +85,10 @@ void main() {
           body: FlanSwipe(
             controller: controller,
             height: 100.0,
-            children: children,
+            itemBuilder: (BuildContext context, int index) {
+              return children[index];
+            },
+            itemCount: children.length,
             onChange: (int value) {
               a++;
             },
@@ -109,7 +118,10 @@ void main() {
           body: FlanSwipe(
             controller: controller,
             height: 100.0,
-            children: children,
+            itemBuilder: (BuildContext context, int index) {
+              return children[index];
+            },
+            itemCount: children.length,
           ),
         ),
       ),
@@ -132,7 +144,10 @@ void main() {
             controller: controller,
             height: 100.0,
             vertical: true,
-            children: children,
+            itemBuilder: (BuildContext context, int index) {
+              return children[index];
+            },
+            itemCount: children.length,
           ),
         ),
       ),
@@ -158,7 +173,10 @@ void main() {
             height: 100.0,
             vertical: true,
             touchable: false,
-            children: children,
+            itemBuilder: (BuildContext context, int index) {
+              return children[index];
+            },
+            itemCount: children.length,
           ),
         ),
       ),
@@ -183,7 +201,10 @@ void main() {
             controller: controller,
             height: 100.0,
             vertical: true,
-            children: children,
+            itemBuilder: (BuildContext context, int index) {
+              return children[index];
+            },
+            itemCount: children.length,
           ),
         ),
       ),

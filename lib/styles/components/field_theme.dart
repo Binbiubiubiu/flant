@@ -1,8 +1,11 @@
+// 🎯 Dart imports:
 import 'dart:ui';
 
+// 🐦 Flutter imports:
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
+// 🌎 Project imports:
 import '../../utils/widget.dart';
 import '../theme.dart';
 import '../var.dart';

@@ -1,12 +1,13 @@
 // 🐦 Flutter imports:
 
-import 'package:flant/styles/components/cell_theme.dart';
+// 🐦 Flutter imports:
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter/services.dart';
 
 // 🌎 Project imports:
+import '../../styles/components/cell_theme.dart';
 import '../styles/components/field_theme.dart';
 import '../styles/theme.dart';
 import '../styles/var.dart';

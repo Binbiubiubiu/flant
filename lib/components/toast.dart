@@ -1,7 +1,7 @@
-// 🐦 Flutter imports:
+// 🎯 Dart imports:
 import 'dart:async';
 
-import 'package:flant/flant.dart';
+// 🐦 Flutter imports:
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
@@ -13,6 +13,7 @@ import '../utils/widget.dart';
 import 'common/custom_entry.dart';
 import 'icon.dart';
 import 'loading.dart';
+import 'overlay.dart';
 import 'style.dart';
 
 List<CustomOverlayEntry> _queue = <CustomOverlayEntry>[];

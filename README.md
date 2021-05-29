@@ -54,7 +54,7 @@
 - [x] CountDown 倒计时
 - [x] Divider 分割线
 - [x] Empty 空状态
-- [ ] ImagePreview 图片预览
+- [x] ImagePreview 图片预览
 - [ ] ~~Lazyload 懒加载~~
 - [x] List 列表
 - [x] NoticeBar 通知栏

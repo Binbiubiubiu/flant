@@ -1,5 +1,4 @@
 // 🐦 Flutter imports:
-import 'package:flant/components/common/active_response.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
@@ -10,6 +9,7 @@ import '../styles/components/share_sheet_theme.dart';
 import '../styles/theme.dart';
 import '../styles/var.dart';
 import '../utils/widget.dart';
+import 'common/active_response.dart';
 import 'popup.dart';
 
 typedef FlanShareSheetSelectCallback = void Function(
