@@ -217,7 +217,7 @@ class __FlanImagePreviewState extends State<_FlanImagePreview>
   Animation<Matrix4>? _scaleAnimation;
 
   late ValueNotifier<int> _current;
-  final ValueNotifier<bool> _swipeEnable = ValueNotifier<bool>(false);
+  final ValueNotifier<bool> _swipeEnable = ValueNotifier<bool>(true);
 
   int get current => _current.value;
   bool get swipeEnable => _swipeEnable.value;
@@ -384,7 +384,7 @@ class __FlanImagePreviewState extends State<_FlanImagePreview>
           _scaleAnimation = Matrix4Tween(
             begin: Matrix4.identity(),
             end: Matrix4.identity()
-              ..scale(2.0, 2.0)
+              ..scale(2.0, 2.0, 1.0)
               ..translate(-size.width / 4.0, -size.height / 4.0),
           ).animate(_scaleAnimationController);
         } else {

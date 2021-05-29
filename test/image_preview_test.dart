@@ -196,7 +196,7 @@ void main() {
       await tester.tapAt(const Offset(200, 200));
       await tester.pumpAndSettle(const Duration(seconds: 1));
       expect(find.byType(Image), findsWidgets);
-      await tester.pumpAndSettle(const Duration(seconds: 1));
+      await tester.pumpAndSettle(const Duration(seconds: 2));
       expect(find.byType(Image), findsNothing);
     },
   );
@@ -225,7 +225,8 @@ void main() {
       );
       await tester.pumpAndSettle(const Duration(seconds: 1));
       await tester.dragFrom(
-          const Offset(150.0, 0.0), const Offset(-600.0, 0.0));
+          const Offset(50.0, 100.0), const Offset(-800.0, 0.0));
+      await tester.pumpAndSettle(const Duration(seconds: 1));
       expect(a, equals(1));
     },
   );
@@ -248,12 +249,14 @@ void main() {
           ),
         ),
       );
-      final Finder image = find.byType(Image);
+
       await tester.pumpAndSettle(const Duration(seconds: 1));
+      final Finder image = find.byType(Image);
+      print(image);
       await tester.tap(image);
       await tester.pump(kDoubleTapMinTime); // <- Add this
       await tester.tap(image);
-      await tester.pumpAndSettle(const Duration(seconds: 1));
+      await tester.pumpAndSettle(const Duration(seconds: 2));
       final InteractiveViewer view =
           tester.firstWidget<InteractiveViewer>(find.byType(InteractiveViewer));
 

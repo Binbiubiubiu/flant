@@ -137,17 +137,21 @@ void main() {
 
   testWidgets('should allow to disable clicakble when using is-link prop',
       (WidgetTester tester) async {
+    int a = 0;
     await tester.pumpWidget(
-      const MaterialApp(
+      MaterialApp(
         home: Material(
           child: FlanCell(
             isLink: true,
             clickable: false,
+            onClick: () {
+              a++;
+            },
           ),
         ),
       ),
     );
     expect(find.byIcon(FlanIcons.arrow), findsOneWidget);
-    expect(find.byType(GestureDetector), findsOneWidget);
+    expect(a, equals(0));
   });
 }

@@ -185,7 +185,7 @@ void main() {
       );
       await tester.pumpAndSettle(const Duration(seconds: 1));
       expect(
-        tester.firstWidget<ClipRRect>(find.byType(ClipRRect)).borderRadius,
+        tester.firstWidget<Material>(find.byType(Material)).borderRadius,
         isNot(equals(BorderRadius.zero)),
       );
     },
