@@ -331,13 +331,16 @@ void main() {
       );
       final Finder image = find.byType(Image);
       await tester.pumpAndSettle(const Duration(seconds: 1));
-      await tester
-          .startGesture(tester.getCenter(image) - const Offset(120, 120));
-      final TestGesture pointer2 = await tester
-          .startGesture(tester.getCenter(image) + const Offset(30, 30));
-      await pointer2.moveTo(tester.getCenter(image) + const Offset(120, 120));
+      final TestGesture pointer1 =
+          await tester.startGesture(tester.getCenter(image));
+
+      final TestGesture pointer2 =
+          await tester.startGesture(tester.getCenter(image));
+
+      await pointer1.moveTo(tester.getCenter(image) - const Offset(10, 120));
+      await pointer2.moveTo(tester.getCenter(image) + const Offset(10, 120));
       await tester.pumpAndSettle(const Duration(seconds: 1));
-      expect(a, isNot(equals(0)));
+      expect(a, isNot(equals(0.0)));
     },
   );
 }
