@@ -4,7 +4,6 @@ import 'package:flutter/material.dart';
 
 // 🌎 Project imports:
 import '../styles/components/tag_theme.dart';
-import '../styles/theme.dart';
 import '../styles/var.dart';
 import 'icon.dart';
 
@@ -66,7 +65,7 @@ class FlanTag extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final FlanTagThemeData themeData = FlanTheme.of(context).tagTheme;
+    final FlanTagThemeData themeData = FlanTagTheme.of(context);
 
     return AnimatedOpacity(
       opacity: show ? 1.0 : 0.0,
@@ -166,7 +165,7 @@ class FlanTag extends StatelessWidget {
         style: TextStyle(
           color: textColor,
           fontSize: fontSize,
-          height: themeData.lineHeight ,
+          height: themeData.lineHeight,
         ),
         child: Wrap(
           alignment: WrapAlignment.center,

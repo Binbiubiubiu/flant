@@ -6,7 +6,6 @@ import 'package:flutter/services.dart';
 
 // 🌎 Project imports:
 import '../styles/components/action_sheet_theme.dart';
-import '../styles/theme.dart';
 import '../styles/var.dart';
 import '../utils/widget.dart';
 import 'common/active_response.dart';
@@ -186,8 +185,7 @@ class _FlanActionSheet extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final Size size = MediaQuery.of(context).size;
-    final FlanActionSheetThemeData themeData =
-        FlanTheme.of(context).actionSheetTheme;
+    final FlanActionSheetThemeData themeData = FlanActionSheetTheme.of(context);
 
     return DefaultTextStyle(
       style: TextStyle(
@@ -414,8 +412,7 @@ class _FlanActionSheetButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final bool disabled = this.disabled || loading;
-    final FlanActionSheetThemeData themeData =
-        FlanTheme.of(context).actionSheetTheme;
+    final FlanActionSheetThemeData themeData = FlanActionSheetTheme.of(context);
     return Semantics(
       button: true,
       enabled: !disabled,

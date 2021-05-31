@@ -4,7 +4,6 @@ import 'package:flutter/material.dart';
 
 // 🌎 Project imports:
 import '../styles/components/badge_theme.dart';
-import '../styles/theme.dart';
 import '../styles/var.dart';
 
 /// ### FlanImage 图片
@@ -52,7 +51,7 @@ class FlanBadge extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final FlanBadgeThemeData themeData = FlanTheme.of(context).badgeTheme;
+    final FlanBadgeThemeData themeData = FlanBadgeTheme.of(context);
 
     if (child != null) {
       return Stack(

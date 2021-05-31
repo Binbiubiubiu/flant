@@ -8,7 +8,6 @@ import 'package:flutter/material.dart';
 import 'package:flant/utils/widget.dart';
 import '../styles/components/cell_theme.dart';
 import '../styles/components/collapse_theme.dart';
-import '../styles/theme.dart';
 import '../styles/var.dart';
 import 'cell.dart';
 import 'collapse.dart';
@@ -180,7 +179,7 @@ class FlanCollapseItemState extends State<FlanCollapseItem>
     with TickerProviderStateMixin {
   @override
   Widget build(BuildContext context) {
-    final FlanCollapseThemeData themeData = FlanTheme.of(context).collapseTheme;
+    final FlanCollapseThemeData themeData = FlanCollapseTheme.of(context);
     final Color? iconColor =
         widget.disabled ? themeData.itemTitleDisabledColor : null;
     final bool _expanded = this._expanded;
@@ -490,7 +489,7 @@ class __CollapseRightIconState extends State<_CollapseRightIcon>
 
   @override
   Widget build(BuildContext context) {
-    final FlanCellThemeData themeData = FlanTheme.of(context).cellTheme;
+    final FlanCellThemeData themeData = FlanCellTheme.of(context);
 
     return RotationTransition(
       turns: _animation,

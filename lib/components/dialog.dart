@@ -7,7 +7,6 @@ import 'package:flutter/material.dart';
 // 🌎 Project imports:
 import '../locale/l10n.dart';
 import '../styles/components/dialog_theme.dart';
-import '../styles/theme.dart';
 import '../styles/var.dart';
 import '../utils/widget.dart';
 import 'action_bar.dart';
@@ -24,7 +23,7 @@ class FlanDialogOption {
     this.width,
     this.message = '',
     this.messageAlign = TextAlign.left,
-    this.theme = FlanDialogTheme.normal,
+    this.theme = FlanDialogThemeType.normal,
     this.showConfirmButton = true,
     this.showCancelButton = false,
     this.confirmButtonText = '',
@@ -41,7 +40,7 @@ class FlanDialogOption {
   final double? width;
   final String message;
   final TextAlign messageAlign;
-  final FlanDialogTheme theme;
+  final FlanDialogThemeType theme;
   final bool showConfirmButton;
   final bool showCancelButton;
   final String confirmButtonText;
@@ -81,7 +80,7 @@ class FlanDialogOption {
     double? width,
     String? message,
     TextAlign? messageAlign,
-    FlanDialogTheme? theme,
+    FlanDialogThemeType? theme,
     bool? showConfirmButton,
     bool? showCancelButton,
     String? confirmButtonText,
@@ -132,7 +131,7 @@ class FlanDialog {
     TextAlign? messageAlign,
 
     /// 式风格，可选值为 `roundButton` `normal`
-    FlanDialogTheme? theme,
+    FlanDialogThemeType? theme,
 
     /// 是否展示确认按钮
     bool? showConfirmButton,
@@ -192,7 +191,7 @@ class FlanDialog {
     WidgetBuilder? footerBuilder,
   }) async {
     FlanDialog.isInstanceShow = true;
-    final FlanDialogThemeData themeData = FlanTheme.of(context).dialogTheme;
+    final FlanDialogThemeData themeData = FlanDialogTheme.of(context);
     final FlanDialogOption _defaultOptions = FlanDialog.currentOptions;
     final FlanDialogAction? action = await showFlanPopup<FlanDialogAction>(
       context,
@@ -256,7 +255,7 @@ class FlanDialog {
     TextAlign? messageAlign,
 
     /// 式风格，可选值为 `roundButton` `normal`
-    FlanDialogTheme? theme,
+    FlanDialogThemeType? theme,
 
     /// 是否展示确认按钮
     bool? showConfirmButton,
@@ -388,7 +387,7 @@ class FlanDialogWidget extends StatefulWidget {
     this.width,
     this.message = '',
     this.messageAlign = TextAlign.left,
-    this.theme = FlanDialogTheme.normal,
+    this.theme = FlanDialogThemeType.normal,
     this.showConfirmButton = true,
     this.showCancelButton = false,
     this.confirmButtonText = '',
@@ -418,7 +417,7 @@ class FlanDialogWidget extends StatefulWidget {
   final TextAlign messageAlign;
 
   /// 式风格，可选值为 `roundButton` `normal`
-  final FlanDialogTheme theme;
+  final FlanDialogThemeType theme;
 
   /// 是否展示确认按钮
   final bool showConfirmButton;
@@ -469,7 +468,7 @@ class _FlanDialogWidgetState extends State<FlanDialogWidget> {
 
   @override
   Widget build(BuildContext context) {
-    final FlanDialogThemeData themeData = FlanTheme.of(context).dialogTheme;
+    final FlanDialogThemeData themeData = FlanDialogTheme.of(context);
     final double winWidth = MediaQuery.of(context).size.width;
 
     return Container(
@@ -545,7 +544,7 @@ class _FlanDialogWidgetState extends State<FlanDialogWidget> {
     );
   }
 
-  bool get isRoundTheme => widget.theme == FlanDialogTheme.roundButton;
+  bool get isRoundTheme => widget.theme == FlanDialogThemeType.roundButton;
 
   Widget _buildButtons(FlanDialogThemeData themeData) {
     return Container(
@@ -579,7 +578,7 @@ class _FlanDialogWidgetState extends State<FlanDialogWidget> {
           Visibility(
             visible: widget.showCancelButton,
             child: const VerticalDivider(
-              width: .5,
+              width: 1.0,
               color: FlanThemeVars.borderColor,
             ),
           ),
@@ -664,7 +663,7 @@ class _FlanDialogWidgetState extends State<FlanDialogWidget> {
     if (widget.footerSlot != null) {
       return widget.footerSlot!;
     }
-    return widget.theme == FlanDialogTheme.roundButton
+    return widget.theme == FlanDialogThemeType.roundButton
         ? _buildRoundButtons(themeData)
         : _buildButtons(themeData);
   }
@@ -724,8 +723,9 @@ class _FlanDialogWidgetState extends State<FlanDialogWidget> {
     properties.add(DiagnosticsProperty<TextAlign>(
         'messageAlign', widget.messageAlign,
         defaultValue: TextAlign.left));
-    properties.add(DiagnosticsProperty<FlanDialogTheme>('theme', widget.theme,
-        defaultValue: FlanDialogTheme.normal));
+    properties.add(DiagnosticsProperty<FlanDialogThemeType>(
+        'theme', widget.theme,
+        defaultValue: FlanDialogThemeType.normal));
     properties.add(DiagnosticsProperty<bool>(
         'showConfirmButton', widget.showConfirmButton,
         defaultValue: true));
@@ -748,7 +748,7 @@ class _FlanDialogWidgetState extends State<FlanDialogWidget> {
   }
 }
 
-enum FlanDialogTheme {
+enum FlanDialogThemeType {
   normal,
   roundButton,
 }

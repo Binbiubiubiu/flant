@@ -5,7 +5,6 @@ import 'package:flutter/material.dart';
 // 🌎 Project imports:
 import '../mixins/route_mixins.dart';
 import '../styles/components/action_bar_theme.dart';
-import '../styles/theme.dart';
 import '../styles/var.dart';
 import '../utils/widget.dart';
 import 'action_bar.dart';
@@ -85,8 +84,7 @@ class FlanActionBarButton extends FlanRouteStatelessWidget {
     final bool isLast = !(index < parent.children.length - 1 &&
         parent.children.elementAt(index + 1) is FlanActionBarButton);
 
-    final FlanActionBarThemeData themeData =
-        FlanTheme.of(context).actionBarTheme;
+    final FlanActionBarThemeData themeData = FlanActionBarTheme.of(context);
 
     return Expanded(
       child: Padding(

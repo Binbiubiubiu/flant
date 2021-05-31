@@ -7,7 +7,6 @@ import 'package:flutter/material.dart';
 
 // 🌎 Project imports:
 import '../styles/components/loading_theme.dart';
-import '../styles/theme.dart';
 import '../utils/widget.dart';
 
 // import '../styles/var.dart';
@@ -53,7 +52,7 @@ class FlanLoading extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final FlanLoadingThemeData themeData = FlanTheme.of(context).loadingTheme;
+    final FlanLoadingThemeData themeData = FlanLoadingTheme.of(context);
 
     final Widget icon = RepaintBoundary(
       child: SizedBox(
@@ -191,7 +190,7 @@ class __FlanLoadingCirclarState extends State<_FlanLoadingCirclar>
 
   @override
   Widget build(BuildContext context) {
-    final FlanLoadingThemeData themeData = FlanTheme.of(context).loadingTheme;
+    final FlanLoadingThemeData themeData = FlanLoadingTheme.of(context);
 
     return AnimatedBuilder(
       animation: controller,

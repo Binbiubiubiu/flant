@@ -4,7 +4,6 @@ import 'package:flutter/material.dart';
 
 // 🌎 Project imports:
 import '../styles/components/tabbar_theme.dart';
-import '../styles/theme.dart';
 import '../styles/var.dart';
 import '../utils/widget.dart';
 import 'badge.dart';
@@ -58,7 +57,7 @@ class FlanTabbarItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final FlanTabbarThemeData themeData = FlanTheme.of(context).tabbarTheme;
+    final FlanTabbarThemeData themeData = FlanTabbarTheme.of(context);
     final FlanTabbar? parent = FlanTabbarScope.of(context)?.parent;
 
     if (parent == null) {

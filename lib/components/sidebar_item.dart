@@ -5,7 +5,6 @@ import 'package:flutter/rendering.dart';
 
 // 🌎 Project imports:
 import '../styles/components/sidebar_theme.dart';
-import '../styles/theme.dart';
 import '../styles/var.dart';
 import 'badge.dart';
 import 'common/active_response.dart';
@@ -57,7 +56,7 @@ class FlanSidebarItem extends StatelessWidget {
     final int index = parent.children.indexOf(this);
     final bool selected = index == parent.getActive();
 
-    final FlanSidebarThemeData themeData = FlanTheme.of(context).sidebarTheme;
+    final FlanSidebarThemeData themeData = FlanSidebarTheme.of(context);
 
     final Widget borderRight = Positioned.fill(
       child: Align(

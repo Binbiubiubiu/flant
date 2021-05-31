@@ -8,7 +8,6 @@ import 'package:flutter/services.dart';
 import '../mixins/route_mixins.dart';
 import '../styles/components/cell_theme.dart';
 import '../styles/components/collapse_theme.dart';
-import '../styles/theme.dart';
 import '../styles/var.dart';
 import '../utils/widget.dart';
 import 'common/active_response.dart';
@@ -133,9 +132,9 @@ class FlanCell extends FlanRouteStatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final FlanCellThemeData themeData = FlanTheme.of(context).cellTheme;
+    final FlanCellThemeData themeData = FlanCellTheme.of(context);
     final FlanCollapseThemeData collapseThemeData =
-        FlanTheme.of(context).collapseTheme;
+        FlanCollapseTheme.of(context);
     final double paddingVertical = _getPaddingVertical(themeData);
 
     final EdgeInsets cellPadding = padding ??

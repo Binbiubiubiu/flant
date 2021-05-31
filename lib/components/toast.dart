@@ -7,7 +7,6 @@ import 'package:flutter/material.dart';
 
 // 🌎 Project imports:
 import '../styles/components/toast_theme.dart';
-import '../styles/theme.dart';
 import '../styles/var.dart';
 import '../utils/widget.dart';
 import 'common/custom_entry.dart';
@@ -482,7 +481,7 @@ class _FlanToastBlock extends StatelessWidget {
     final bool isText =
         type == FlanToastType.text && iconName == null && iconUrl == null;
 
-    final FlanToastThemeData themeData = FlanTheme.of(context).toastTheme;
+    final FlanToastThemeData themeData = FlanToastTheme.of(context);
 
     return DefaultTextStyle(
       style: TextStyle(

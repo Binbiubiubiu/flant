@@ -9,7 +9,6 @@ import 'package:flutter/rendering.dart';
 
 // 🌎 Project imports:
 import '../styles/components/swipe_theme.dart';
-import '../styles/theme.dart';
 import '../styles/var.dart';
 
 typedef FlanSwipeIndicatorBuilder = Widget Function(int active);
@@ -111,7 +110,7 @@ class _FlanSwipeState extends State<FlanSwipe> {
 
   @override
   Widget build(BuildContext context) {
-    final FlanSwipeThemeData themeData = FlanTheme.of(context).swipeTheme;
+    final FlanSwipeThemeData themeData = FlanSwipeTheme.of(context);
 
     return SizedBox(
       width: widget.width,
@@ -269,7 +268,7 @@ class _FlanSwipeIndicator extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final FlanSwipeThemeData themeData = FlanTheme.of(context).swipeTheme;
+    final FlanSwipeThemeData themeData = FlanSwipeTheme.of(context);
 
     return ValueListenableBuilder<int>(
       valueListenable: current,

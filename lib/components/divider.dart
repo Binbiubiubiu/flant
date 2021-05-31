@@ -7,7 +7,6 @@ import 'package:flutter/material.dart';
 
 // 🌎 Project imports:
 import '../styles/components/divider_theme.dart';
-import '../styles/theme.dart';
 import '../styles/var.dart';
 
 /// ### FlanImage 图片
@@ -42,7 +41,7 @@ class FlanDivider extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final FlanDividerThemeData themeData = FlanTheme.of(context).dividerTheme;
+    final FlanDividerThemeData themeData = FlanDividerTheme.of(context);
 
     return Container(
       margin: themeData.margin,

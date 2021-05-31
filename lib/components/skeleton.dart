@@ -4,7 +4,6 @@ import 'package:flutter/material.dart';
 
 // 🌎 Project imports:
 import '../styles/components/skeleton_theme.dart';
-import '../styles/theme.dart';
 import '../styles/var.dart';
 import '../utils/widget.dart';
 
@@ -85,7 +84,7 @@ class FlanSkeleton extends StatelessWidget {
     if (!loading) {
       return child ?? const SizedBox.shrink();
     }
-    final FlanSkeletonThemeData themeData = FlanTheme.of(context).skeletonTheme;
+    final FlanSkeletonThemeData themeData = FlanSkeletonTheme.of(context);
     final Padding skeleton = Padding(
       padding: EdgeInsets.symmetric(horizontal: FlanThemeVars.paddingMd.rpx),
       child: Row(

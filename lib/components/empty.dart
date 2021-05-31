@@ -9,7 +9,6 @@ import 'package:flutter_svg/flutter_svg.dart';
 
 // 🌎 Project imports:
 import '../styles/components/empty_theme.dart';
-import '../styles/theme.dart';
 
 /// ### FlanEmpty 空状态
 /// 空状态时的占位提示
@@ -52,7 +51,7 @@ class FlanEmpty extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final FlanEmptyThemeData themeData = FlanTheme.of(context).emptyTheme;
+    final FlanEmptyThemeData themeData = FlanEmptyTheme.of(context);
     return SizedBox(
       width: double.infinity,
       child: Padding(

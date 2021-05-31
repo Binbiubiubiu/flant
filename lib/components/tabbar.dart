@@ -4,7 +4,6 @@ import 'package:flutter/material.dart';
 
 // 🌎 Project imports:
 import '../styles/components/tabbar_theme.dart';
-import '../styles/theme.dart';
 import 'tabbar_item.dart';
 
 /// ### Tabbar 标签栏
@@ -52,7 +51,7 @@ class FlanTabbar extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final FlanTabbarThemeData themeData = FlanTheme.of(context).tabbarTheme;
+    final FlanTabbarThemeData themeData = FlanTabbarTheme.of(context);
     final Container tabbar = Container(
       width: double.infinity,
       height: themeData.height,

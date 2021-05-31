@@ -5,7 +5,6 @@ import 'package:flutter/material.dart';
 // 🌎 Project imports:
 import '../mixins/route_mixins.dart';
 import '../styles/components/action_bar_theme.dart';
-import '../styles/theme.dart';
 import '../styles/var.dart';
 import '../utils/widget.dart';
 import 'badge.dart';
@@ -67,8 +66,7 @@ class FlanActionBarIcon extends FlanRouteStatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final FlanActionBarThemeData themeData =
-        FlanTheme.of(context).actionBarTheme;
+    final FlanActionBarThemeData themeData = FlanActionBarTheme.of(context);
 
     return Semantics(
       button: true,

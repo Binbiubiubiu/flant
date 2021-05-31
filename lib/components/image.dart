@@ -4,7 +4,6 @@ import 'package:flutter/material.dart';
 
 // 🌎 Project imports:
 import '../styles/components/image_theme.dart';
-import '../styles/theme.dart';
 import 'icon.dart';
 
 /// ### FlanImage 图片
@@ -103,7 +102,7 @@ class FlanImage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final FlanImageThemeData themeData = FlanTheme.of(context).imageTheme;
+    final FlanImageThemeData themeData = FlanImageTheme.of(context);
 
     Widget image = Column(
       mainAxisSize: MainAxisSize.min,
@@ -256,7 +255,7 @@ class _FlanImagePlaceHolder extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final FlanImageThemeData themeData = FlanTheme.of(context).imageTheme;
+    final FlanImageThemeData themeData = FlanImageTheme.of(context);
 
     return DefaultTextStyle(
       style: TextStyle(

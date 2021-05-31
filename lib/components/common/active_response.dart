@@ -36,11 +36,12 @@ class _FlanActiveResponseState extends State<FlanActiveResponse> {
 
   @override
   Widget build(BuildContext context) {
-    return MouseRegion(
-      cursor: widget.cursorBuilder?.call(_cursor) ?? _cursor,
-      child: IgnorePointer(
-        ignoring: widget.disabled,
+    return AbsorbPointer(
+      absorbing: widget.disabled,
+      child: MouseRegion(
+        cursor: widget.cursorBuilder?.call(_cursor) ?? _cursor,
         child: GestureDetector(
+          behavior: HitTestBehavior.translucent,
           onTap: widget.enable ? widget.onClick : null,
           onTapDown:
               widget.enable ? (TapDownDetails e) => setActive(true) : null,

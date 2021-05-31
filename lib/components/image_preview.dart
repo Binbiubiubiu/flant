@@ -8,7 +8,6 @@ import 'package:flutter/rendering.dart';
 
 // 🌎 Project imports:
 import '../styles/components/image_preview_theme.dart';
-import '../styles/theme.dart';
 import '../styles/var.dart';
 import '../utils/widget.dart';
 import 'common/active_response.dart';
@@ -90,8 +89,7 @@ Future<T?> showFlanImagePreview<T extends Object?>(
   /// 自定义覆盖在图片预览上方的内容
   WidgetBuilder? coverBuilder,
 }) {
-  final FlanImagePreviewThemeData themeData =
-      FlanTheme.of(context).imagePreviewTheme;
+  final FlanImagePreviewThemeData themeData = FlanImagePreviewTheme.of(context);
   return showFlanPopup(
     context,
     builder: (BuildContext context) {
@@ -265,7 +263,7 @@ class __FlanImagePreviewState extends State<_FlanImagePreview>
   @override
   Widget build(BuildContext context) {
     final FlanImagePreviewThemeData themeData =
-        FlanTheme.of(context).imagePreviewTheme;
+        FlanImagePreviewTheme.of(context);
     return SafeArea(
       child: Stack(
         children: <Widget>[

@@ -6,7 +6,6 @@ import 'package:flutter/material.dart';
 
 // 🌎 Project imports:
 import '../styles/components/nav_bar_theme.dart';
-import '../styles/theme.dart';
 import '../styles/var.dart';
 import '../utils/widget.dart';
 import 'common/active_response.dart';
@@ -70,7 +69,7 @@ class FlanNavBar extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final FlanNavBarThemeData themeData = FlanTheme.of(context).navBarTheme;
+    final FlanNavBarThemeData themeData = FlanNavBarTheme.of(context);
 
     final List<Widget> content = <Widget>[];
     final bool hasLeft = leftArrow || leftText.isNotEmpty || leftSlot != null;
@@ -215,7 +214,7 @@ class _NavBarSlot extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final FlanNavBarThemeData themeData = FlanTheme.of(context).navBarTheme;
+    final FlanNavBarThemeData themeData = FlanNavBarTheme.of(context);
     return IconTheme(
       data: IconThemeData(
         color: themeData.iconColor,

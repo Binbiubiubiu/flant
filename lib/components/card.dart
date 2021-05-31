@@ -4,7 +4,6 @@ import 'package:flutter/material.dart';
 
 // 🌎 Project imports:
 import '../styles/components/card_theme.dart';
-import '../styles/theme.dart';
 import '../styles/var.dart';
 import '../utils/widget.dart';
 import 'image.dart';
@@ -113,7 +112,7 @@ class FlanCard extends StatelessWidget {
   final List<Widget>? footerSlot;
   @override
   Widget build(BuildContext context) {
-    final FlanCardThemeData themeData = FlanTheme.of(context).cardTheme;
+    final FlanCardThemeData themeData = FlanCardTheme.of(context);
     return Container(
       padding: themeData.padding,
       color: themeData.backgroundColor,

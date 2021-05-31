@@ -6,7 +6,6 @@ import 'package:flutter/rendering.dart';
 // 🌎 Project imports:
 import '../locale/l10n.dart';
 import '../styles/components/share_sheet_theme.dart';
-import '../styles/theme.dart';
 import '../styles/var.dart';
 import '../utils/widget.dart';
 import 'common/active_response.dart';
@@ -153,8 +152,7 @@ class _FlanShareSheet<T extends dynamic> extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final FlanShareSheetThemeData themeData =
-        FlanTheme.of(context).shareSheetTheme;
+    final FlanShareSheetThemeData themeData = FlanShareSheetTheme.of(context);
 
     final bool hasCancel = cancelSlot != null || cancelText.isNotEmpty;
 
@@ -334,8 +332,7 @@ class _FlanShareSheetCancelButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final FlanShareSheetThemeData themeData =
-        FlanTheme.of(context).shareSheetTheme;
+    final FlanShareSheetThemeData themeData = FlanShareSheetTheme.of(context);
     return Semantics(
       button: true,
       child: FlanActiveResponse(
@@ -379,8 +376,7 @@ class _FlanShareSheetOption extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final FlanShareSheetThemeData themeData =
-        FlanTheme.of(context).shareSheetTheme;
+    final FlanShareSheetThemeData themeData = FlanShareSheetTheme.of(context);
 
     final Widget name = Visibility(
       visible: option.name.isNotEmpty,

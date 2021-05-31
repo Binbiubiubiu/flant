@@ -41,9 +41,9 @@ Future<T?> showFlanPopup<T extends Object?>(
   VoidCallback? onClosed,
   required WidgetBuilder builder,
 }) {
-  final FlanThemeData themeData = FlanTheme.of(context);
-  final FlanPopupThemeData popupThemeData = themeData.popupTheme;
-  final Color overlayThemeBackgroundColor = themeData.overlayBackgroundColor;
+  final FlanPopupThemeData popupThemeData = FlanPopupTheme.of(context);
+  final Color overlayThemeBackgroundColor =
+      FlanTheme.of(context).overlayBackgroundColor;
 
   return Navigator.of(context, rootNavigator: true).push<T>(
     _FlanPopupRoute<T>(
@@ -124,7 +124,7 @@ class _FlanPopupWrapper extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final MediaQueryData win = MediaQuery.of(context);
-    final FlanPopupThemeData themeData = FlanTheme.of(context).popupTheme;
+    final FlanPopupThemeData themeData = FlanPopupTheme.of(context);
 
     Widget content = Material(
       color: backgroundColor ?? themeData.backgroundColor,
@@ -228,7 +228,7 @@ class _FlanCloseableScope extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final FlanPopupThemeData themeData = FlanTheme.of(context).popupTheme;
+    final FlanPopupThemeData themeData = FlanPopupTheme.of(context);
     return Stack(
       children: <Widget>[
         child ?? const SizedBox.shrink(),

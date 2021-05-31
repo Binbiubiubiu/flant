@@ -7,7 +7,6 @@ import 'package:flutter/services.dart';
 // 🌎 Project imports:
 import '../mixins/link_field_mixins.dart';
 import '../styles/components/switch_theme.dart';
-import '../styles/theme.dart';
 import 'loading.dart';
 
 /// ### FlanSwitch
@@ -91,7 +90,7 @@ class _FlanSwitchState<T> extends State<FlanSwitch<T>> with FlanLinkFieldMixin {
   @override
   Widget build(BuildContext context) {
     linkField(modalValue);
-    final FlanSwitchThemeData themeData = FlanTheme.of(context).switchTheme;
+    final FlanSwitchThemeData themeData = FlanSwitchTheme.of(context);
     final double em = widget.size ?? themeData.size;
 
     final Container node = Container(

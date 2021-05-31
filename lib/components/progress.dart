@@ -4,7 +4,6 @@ import 'package:flutter/material.dart';
 
 // 🌎 Project imports:
 import '../styles/components/progress_theme.dart';
-import '../styles/theme.dart';
 
 /// ### FlanEmpty 空状态
 /// 空状态时的占位提示
@@ -65,7 +64,7 @@ class FlanProgress extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final FlanProgressThemeData themeData = FlanTheme.of(context).progressTheme;
+    final FlanProgressThemeData themeData = FlanProgressTheme.of(context);
 
     return SizedBox(
       height: strokeWidth ?? themeData.height,

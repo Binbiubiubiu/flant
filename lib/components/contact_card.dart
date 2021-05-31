@@ -8,7 +8,6 @@ import 'package:flutter/material.dart';
 // 🌎 Project imports:
 import '../locale/l10n.dart';
 import '../styles/components/contact_card_theme.dart';
-import '../styles/theme.dart';
 import '../styles/var.dart';
 import '../utils/widget.dart';
 import 'cell.dart';
@@ -51,8 +50,7 @@ class FlanContactCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final FlanContactCardThemeData themeData =
-        FlanTheme.of(context).contactCardTheme;
+    final FlanContactCardThemeData themeData = FlanContactCardTheme.of(context);
     return Stack(
       children: <Widget>[
         FlanCell(

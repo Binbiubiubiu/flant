@@ -4,7 +4,6 @@ import 'package:flutter/material.dart';
 
 // 🌎 Project imports:
 import '../styles/components/action_bar_theme.dart';
-import '../styles/theme.dart';
 
 /// ### ActionBar 动作栏
 class FlanActionBar extends StatelessWidget {
@@ -26,8 +25,7 @@ class FlanActionBar extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final FlanActionBarThemeData themeData =
-        FlanTheme.of(context).actionBarTheme;
+    final FlanActionBarThemeData themeData = FlanActionBarTheme.of(context);
 
     return Container(
       height: themeData.height,

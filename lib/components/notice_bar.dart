@@ -8,7 +8,6 @@ import 'package:flutter/scheduler.dart';
 
 // 🌎 Project imports:
 import '../styles/components/notice_bar_theme.dart';
-import '../styles/theme.dart';
 import '../styles/var.dart';
 import '../utils/widget.dart';
 import 'icon.dart';
@@ -180,8 +179,7 @@ class _FlanNoticeBarState extends State<FlanNoticeBar>
 
   @override
   Widget build(BuildContext context) {
-    final FlanNoticeBarThemeData themeData =
-        FlanTheme.of(context).noticeBarTheme;
+    final FlanNoticeBarThemeData themeData = FlanNoticeBarTheme.of(context);
 
     final Widget noticeBar = DefaultTextStyle(
       style: TextStyle(

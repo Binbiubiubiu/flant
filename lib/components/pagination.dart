@@ -9,7 +9,6 @@ import 'package:flutter/rendering.dart';
 // 🌎 Project imports:
 import '../locale/l10n.dart';
 import '../styles/components/pagination_theme.dart';
-import '../styles/theme.dart';
 import '../styles/var.dart';
 import '../utils/widget.dart';
 import 'common/active_response.dart';
@@ -95,8 +94,7 @@ class _FlanPaginationState extends State<FlanPagination> {
 
   @override
   Widget build(BuildContext context) {
-    final FlanPaginationThemeData themeData =
-        FlanTheme.of(context).paginationTheme;
+    final FlanPaginationThemeData themeData = FlanPaginationTheme.of(context);
 
     return DefaultTextStyle(
       style: TextStyle(
@@ -281,8 +279,7 @@ class _PaginationItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final FlanPaginationThemeData themeData =
-        FlanTheme.of(context).paginationTheme;
+    final FlanPaginationThemeData themeData = FlanPaginationTheme.of(context);
 
     const BorderSide borderSide = FlanHairLine();
 

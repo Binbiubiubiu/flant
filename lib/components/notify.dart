@@ -7,7 +7,6 @@ import 'package:flutter/material.dart';
 
 // 🌎 Project imports:
 import '../styles/components/notify_theme.dart';
-import '../styles/theme.dart';
 import '../styles/var.dart';
 import 'common/custom_entry.dart';
 import 'style.dart';
@@ -232,7 +231,7 @@ class FlanNotifyWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final FlanNotifyThemeData themeData = FlanTheme.of(context).notifyTheme;
+    final FlanNotifyThemeData themeData = FlanNotifyTheme.of(context);
     final double maxWidth = MediaQuery.of(context).size.width;
     final Color textColor = color ?? themeData.textColor;
 

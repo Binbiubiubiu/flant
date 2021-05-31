@@ -4,7 +4,6 @@ import 'package:flutter/material.dart';
 
 // 🌎 Project imports:
 import '../styles/components/sidebar_theme.dart';
-import '../styles/theme.dart';
 
 /// ### Sidebar 侧边导航
 /// 垂直展示的导航栏，用于在不同的内容区域之间进行切换。
@@ -38,7 +37,7 @@ class FlanSidebar extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final FlanSidebarThemeData themeData = FlanTheme.of(context).sidebarTheme;
+    final FlanSidebarThemeData themeData = FlanSidebarTheme.of(context);
     return Container(
       width: themeData.width,
       color: backgroundColor,

@@ -9,7 +9,6 @@ import 'package:flutter/material.dart';
 // 🌎 Project imports:
 import 'package:flant/utils/widget.dart';
 import '../styles/components/circle_theme.dart';
-import '../styles/theme.dart';
 import '../styles/var.dart';
 
 /// 格式化百分比
@@ -149,7 +148,7 @@ class _FlanCircleState extends State<FlanCircle>
 
   @override
   Widget build(BuildContext context) {
-    final FlanCircleThemeData themeData = FlanTheme.of(context).circleTheme;
+    final FlanCircleThemeData themeData = FlanCircleTheme.of(context);
     final double _strokeWidth = widget.strokeWidth ?? 4.0.rpx;
     return Stack(
       children: <Widget>[

@@ -7,7 +7,6 @@ import 'package:flutter/services.dart';
 // 🌎 Project imports:
 import '../mixins/route_mixins.dart';
 import '../styles/components/button_theme.dart';
-import '../styles/theme.dart';
 import '../styles/var.dart';
 import '../utils/widget.dart';
 import './common/active_response.dart';
@@ -130,7 +129,7 @@ class FlanButton extends FlanRouteStatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final FlanButtonThemeData themeData = FlanTheme.of(context).buttonTheme;
+    final FlanButtonThemeData themeData = FlanButtonTheme.of(context);
 
     final _FlanButtonSize _btnSize = _getBtnSize(themeData);
     final _FlanButtonTheme _themeType = _getThemeType(themeData);

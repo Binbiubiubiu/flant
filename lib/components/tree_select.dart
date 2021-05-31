@@ -5,7 +5,6 @@ import 'package:flutter/rendering.dart';
 
 // 🌎 Project imports:
 import '../styles/components/tree_select_theme.dart';
-import '../styles/theme.dart';
 import '../styles/var.dart';
 import '../utils/widget.dart';
 import 'common/active_response.dart';
@@ -78,8 +77,7 @@ class FlanTreeSelect extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final FlanTreeSelectThemeData themeData =
-        FlanTheme.of(context).treeSelectTheme;
+    final FlanTreeSelectThemeData themeData = FlanTreeSelectTheme.of(context);
 
     return SizedBox(
       height: height ?? 300.0.rpx,

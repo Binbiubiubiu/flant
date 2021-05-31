@@ -9,7 +9,6 @@ import 'package:flutter/services.dart';
 // 🌎 Project imports:
 import '../../styles/components/cell_theme.dart';
 import '../styles/components/field_theme.dart';
-import '../styles/theme.dart';
 import '../styles/var.dart';
 import '../utils/format/number.dart' show customFormat, formatNumber;
 import '../utils/widget.dart';
@@ -474,7 +473,7 @@ class FlanFieldState extends State<FlanField> {
 
   @override
   Widget build(BuildContext context) {
-    final FlanFieldThemeData themeData = FlanTheme.of(context).fieldTheme;
+    final FlanFieldThemeData themeData = FlanFieldTheme.of(context);
 
     final FlanFormState? formState = FlanForm.of(context);
     form = formState?.widget;
@@ -709,7 +708,7 @@ class FlanFieldState extends State<FlanField> {
   }
 
   Widget _buildInput(BuildContext context, FlanFieldThemeData themeData) {
-    final FlanCellThemeData cellThemeData = FlanTheme.of(context).cellTheme;
+    final FlanCellThemeData cellThemeData = FlanCellTheme.of(context);
     final TextAlign inputAlign =
         widget.inputAlign ?? form?.inputAlign ?? TextAlign.left;
     if (widget.inputSlot != null) {

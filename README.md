@@ -44,7 +44,7 @@
 - [x] Overlay 遮罩层
 - [ ] PullRefresh 下拉刷新
 - [x] ShareSheet 分享面板
-- [ ] SwipeCell 滑动单元格
+- [x] SwipeCell 滑动单元格
 
 ##### 展示组件
 

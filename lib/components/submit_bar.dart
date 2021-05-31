@@ -5,7 +5,6 @@ import 'package:flutter/material.dart';
 // 🌎 Project imports:
 import '../locale/l10n.dart';
 import '../styles/components/submit_bar_theme.dart';
-import '../styles/theme.dart';
 import '../styles/var.dart';
 import '../utils/widget.dart';
 import 'button.dart';
@@ -104,8 +103,7 @@ class FlanSubmitBar extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final FlanSubmitBarThemeData themeData =
-        FlanTheme.of(context).submitBarTheme;
+    final FlanSubmitBarThemeData themeData = FlanSubmitBarTheme.of(context);
 
     return Container(
       color: themeData.backgroundColor,
