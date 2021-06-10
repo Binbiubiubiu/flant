@@ -7,6 +7,7 @@ export './components/action_sheet.dart';
 export './components/address_list.dart';
 export './components/badge.dart';
 export './components/button.dart';
+export './components/calendar.dart';
 export './components/card.dart';
 export './components/cell.dart';
 export './components/cell_group.dart';

@@ -186,9 +186,10 @@ class ThemeVars {
   static const String calendarPopupHeight = '80%';
   static const List<BoxShadow> calendarHeaderBoxShadow = <BoxShadow>[
     BoxShadow(
-        offset: Offset(0.0, 2.0),
-        blurRadius: 10.0,
-        color: Color.fromRGBO(125, 126, 128, 0.16))
+      offset: Offset(0.0, 2.0),
+      blurRadius: 10.0,
+      color: Color.fromRGBO(125, 126, 128, 0.16),
+    ),
   ];
   static const double calendarHeaderTitleHeight = 44.0;
   static const double calendarHeaderTitleFontSize = fontSizeLg;
@@ -196,7 +197,7 @@ class ThemeVars {
   static const double calendarWeekdaysHeight = 30.0;
   static const double calendarWeekdaysFontSize = fontSizeSm;
   static const double calendarMonthTitleFontSize = fontSizeMd;
-  static const String calendarMonthMarkColor = 'fade(gray2, 80%)';
+  static final Color calendarMonthMarkColor = gray2.withOpacity(0.8);
   static const double calendarMonthMarkFontSize = 160.0;
   static const double calendarDayHeight = 64.0;
   static const double calendarDayFontSize = fontSizeLg;

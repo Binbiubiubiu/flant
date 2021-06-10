@@ -197,8 +197,6 @@ class FlanSwipeCellState extends State<FlanSwipeCell>
     if (_moveController.isCompleted) {
       if (_openPosition != position) {
         _moveController.reverse().then((_) => doAction());
-      } else {
-        doAction();
       }
     }
     if (_moveController.isDismissed) {
