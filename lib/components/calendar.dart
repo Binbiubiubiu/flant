@@ -52,6 +52,7 @@ class FlanCalendar extends StatefulWidget {
     this.onConfirm,
     this.onUnSelect,
     this.onOverRange,
+    this.onMonthShow,
     this.titleSlot,
     this.footerSlot,
     this.topInfoBuilder,
@@ -87,6 +88,7 @@ class FlanCalendar extends StatefulWidget {
   final ValueChanged<List<DateTime>>? onSelect;
   final ValueChanged<List<DateTime>>? onConfirm;
   final ValueChanged<List<DateTime>>? onUnSelect;
+  final ValueChanged<FlanCalendarMonthDetail>? onMonthShow;
   final VoidCallback? onOverRange;
 
   // ****************** Slots ******************
@@ -95,23 +97,67 @@ class FlanCalendar extends StatefulWidget {
   final FlanCalendarDayBuilder? topInfoBuilder;
   final FlanCalendarDayBuilder? bottomInfoBuilder;
 
+  static _FlanCalendarState? of(BuildContext context) {
+    return context
+        .dependOnInheritedWidgetOfExactType<_FlanCalendarScope>()
+        ?.state;
+  }
+
   @override
   _FlanCalendarState createState() => _FlanCalendarState();
 }
 
 class _FlanCalendarState extends State<FlanCalendar> {
   String subtitle = '';
+  late List<DateTime> months;
   late List<DateTime> currentDate;
+  String Function(Object year, Object month)? titleFormatter;
+
+  List<double> monthHeights = <double>[];
+  ScrollController controller = ScrollController();
 
   @override
   void initState() {
     currentDate = getInitialDate();
+    months = getMonths();
+    monthHeights = List<double>.generate(months.length, (_) => 0.0);
+
     super.initState();
+    nextTick(() {
+      titleFormatter = FlanS.of(context).Calendar_monthTitle;
+      controller.jumpTo(0.01);
+    });
+  }
+
+  @override
+  void dispose() {
+    controller.dispose();
+    super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
     return _buildCalendar();
+  }
+
+  void registerMonth(_FlanCalendarMonthState monthState, int index) {
+    final double height = monthState.context.size?.height ?? 0.0;
+
+    if (index < monthHeights.length) {
+      monthHeights[index] = height;
+      widget.onMonthShow?.call(FlanCalendarMonthDetail(
+        date: monthState.widget.date,
+        title: monthState.title,
+      ));
+    } else {
+      // monthHeights.add(height);
+    }
+  }
+
+  void unRegisterMonth(BuildContext context, int index) {
+    if (index >= 0 && index < monthHeights.length) {
+      monthHeights.removeAt(index);
+    }
   }
 
   DateTime limitDateRange(
@@ -150,14 +196,15 @@ class _FlanCalendarState extends State<FlanCalendar> {
       return <DateTime>[start, end];
     }
 
-    // if (type == FlanCalendarType.multiple) {
+    // if (widget.type == FlanCalendarType.multiple) {
     return defaultDate.map((DateTime date) => limitDateRange(date)).toList();
     // }
   }
 
-  int get dayOffset => widget.firstDayOfWeek % 7;
+  int get dayOffset =>
+      widget.firstDayOfWeek != 0 ? widget.firstDayOfWeek % 7 : 0;
 
-  List<DateTime> get months {
+  List<DateTime> getMonths() {
     final List<DateTime> _months = <DateTime>[];
     DateTime cursor = DateTime(widget.minDate.year, widget.minDate.month, 1);
 
@@ -172,10 +219,10 @@ class _FlanCalendarState extends State<FlanCalendar> {
   bool get buttonDisabled {
     if (currentDate.isNotEmpty) {
       if (widget.type == FlanCalendarType.range) {
-        return currentDate.length == 2;
+        return currentDate.length != 2;
       }
       if (widget.type == FlanCalendarType.multiple) {
-        return true;
+        return currentDate.isEmpty;
       }
     }
 
@@ -207,6 +254,7 @@ class _FlanCalendarState extends State<FlanCalendar> {
     void setCurrentDate(List<DateTime> date) {
       currentDate = date;
       widget.onSelect?.call(cloneDates(currentDate));
+      setState(() {});
     }
 
     if (complete && widget.type == FlanCalendarType.range) {
@@ -256,18 +304,28 @@ class _FlanCalendarState extends State<FlanCalendar> {
         select(<DateTime>[date]);
       }
     } else if (widget.type == FlanCalendarType.multiple) {
-      if (currentDate.isEmpty) {
-        select(<DateTime>[date]);
-        return;
+      // if (currentDate.isEmpty) {
+      //   select(<DateTime>[date]);
+      //   return;
+      // }
+
+      int selectedIndex = 0;
+      bool selected = false;
+
+      for (int i = 0; i < currentDate.length; i++) {
+        final DateTime dateItem = currentDate[i];
+        final bool equal = compareDay(dateItem, date) == 0;
+        if (equal) {
+          selectedIndex = i;
+          selected = true;
+        }
       }
-
-      final int selectedIndex = currentDate
-          .indexWhere((DateTime dateItem) => compareDay(dateItem, date) == 0);
-
-      if (selectedIndex != -1) {
-        final List<DateTime> unselectedDate =
-            currentDate.sublist(selectedIndex, 1);
+      if (selected) {
+        final List<DateTime> unselectedDate = <DateTime>[
+          currentDate.removeAt(selectedIndex)
+        ];
         widget.onUnSelect?.call(cloneDates(unselectedDate));
+        setState(() {});
       } else if (widget.maxRange != 0 &&
           currentDate.length >= widget.maxRange) {
         FlanToast(
@@ -285,6 +343,7 @@ class _FlanCalendarState extends State<FlanCalendar> {
   Widget _buildMonth(DateTime date, int index) {
     final bool showMonthTitle = index != 0 || !widget.showSubtitle;
     return FlanCalendarMonth(
+      index: index,
       topInfoBuilder: widget.topInfoBuilder,
       bottomInfoBuilder: widget.bottomInfoBuilder,
       date: date,
@@ -348,13 +407,44 @@ class _FlanCalendarState extends State<FlanCalendar> {
           showSubTitles: widget.showSubtitle,
           firstDayOfWeek: dayOffset,
         ),
-        // _buildMonth(months[0], 0),
         Expanded(
-          child: ListView(
-            physics: const ClampingScrollPhysics(),
-            children: List<Widget>.generate(months.length, (int index) {
-              return _buildMonth(months[index], index);
-            }).toList(),
+          child: _FlanCalendarScope(
+            state: this,
+            child: NotificationListener<ScrollUpdateNotification>(
+              onNotification: (ScrollUpdateNotification notification) {
+                double position = notification.metrics.pixels.ceilToDouble();
+                DateTime month = months[0];
+                for (int i = 0; i < monthHeights.length; i++) {
+                  position -= monthHeights[i];
+                  if (position <= 0) {
+                    month = months[i];
+                    break;
+                  }
+                }
+                final String title =
+                    titleFormatter!.call(month.year, month.month);
+                if (subtitle != title) {
+                  setState(() {
+                    subtitle = title;
+                  });
+                }
+                return false;
+              },
+              child: CustomScrollView(
+                physics: const ClampingScrollPhysics(),
+                controller: controller,
+                slivers: <Widget>[
+                  SliverList(
+                    delegate: SliverChildBuilderDelegate(
+                      (BuildContext context, int index) {
+                        return _buildMonth(months[index], index);
+                      },
+                      childCount: months.length,
+                    ),
+                  ),
+                ],
+              ),
+            ),
           ),
         ),
         _buildFooter(),
@@ -363,10 +453,30 @@ class _FlanCalendarState extends State<FlanCalendar> {
   }
 }
 
+class _FlanCalendarScope extends InheritedWidget {
+  const _FlanCalendarScope({
+    Key? key,
+    required this.state,
+    required Widget child,
+  }) : super(key: key, child: child);
+
+  final _FlanCalendarState state;
+
+  static _FlanCalendarScope? of(BuildContext context) {
+    return context.dependOnInheritedWidgetOfExactType<_FlanCalendarScope>();
+  }
+
+  @override
+  bool updateShouldNotify(_FlanCalendarScope oldWidget) {
+    return state != oldWidget.state;
+  }
+}
+
 class FlanCalendarMonth extends StatefulWidget {
   const FlanCalendarMonth({
     Key? key,
     required this.type,
+    required this.index,
     this.color,
     this.showMark = false,
     this.rowHeight,
@@ -375,7 +485,7 @@ class FlanCalendarMonth extends StatefulWidget {
     this.allowSameDay = false,
     this.showSubtitle = false,
     this.showMonthTitle = false,
-    this.firstDayOfWeek,
+    required this.firstDayOfWeek,
     required this.date,
     required this.minDate,
     required this.maxDate,
@@ -387,6 +497,7 @@ class FlanCalendarMonth extends StatefulWidget {
 
   // ****************** Props ******************
   final FlanCalendarType type;
+  final int index;
   final Color? color;
   final bool showMark;
   final double? rowHeight;
@@ -395,7 +506,7 @@ class FlanCalendarMonth extends StatefulWidget {
   final bool allowSameDay;
   final bool showSubtitle;
   final bool showMonthTitle;
-  final int? firstDayOfWeek;
+  final int firstDayOfWeek;
   final DateTime date;
   final DateTime minDate;
   final DateTime maxDate;
@@ -414,6 +525,24 @@ class FlanCalendarMonth extends StatefulWidget {
 
 class _FlanCalendarMonthState extends State<FlanCalendarMonth> {
   @override
+  void initState() {
+    syncMonth();
+    super.initState();
+  }
+
+  @override
+  void didUpdateWidget(covariant FlanCalendarMonth oldWidget) {
+    syncMonth();
+    super.didUpdateWidget(oldWidget);
+  }
+
+  void syncMonth() {
+    nextTick(() {
+      FlanCalendar.of(context)?.registerMonth(this, widget.index);
+    });
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Column(
       mainAxisSize: MainAxisSize.min,
@@ -429,13 +558,14 @@ class _FlanCalendarMonthState extends State<FlanCalendarMonth> {
 
   FlanCalendarDayType getMultipleDayType(DateTime day) {
     bool isSelected(DateTime date) =>
-        widget.currentDate.any((DateTime item) => compareDay(item, day) == 0);
+        widget.currentDate.any((DateTime item) => compareDay(item, date) == 0);
 
     if (isSelected(day)) {
       final DateTime preDay = getPreDay(day);
       final DateTime nextDay = getNextDay(day);
       final bool prevSelected = isSelected(preDay);
       final bool nextSelected = isSelected(nextDay);
+      print(preDay);
 
       if (prevSelected && nextSelected) {
         return FlanCalendarDayType.multipleMiddle;
@@ -499,7 +629,7 @@ class _FlanCalendarMonthState extends State<FlanCalendarMonth> {
       return FlanCalendarDayType.normal;
     }
 
-    if (widget.currentDate.length > 1) {
+    if (widget.currentDate.isNotEmpty) {
       if (widget.type == FlanCalendarType.multiple) {
         return getMultipleDayType(day);
       }
@@ -530,6 +660,10 @@ class _FlanCalendarMonthState extends State<FlanCalendarMonth> {
     return '';
   }
 
+  void scrollIntoView() {
+    Scrollable.ensureVisible(context);
+  }
+
   Widget _buildTitle() {
     return Visibility(
       visible: widget.showMonthTitle,
@@ -550,24 +684,22 @@ class _FlanCalendarMonthState extends State<FlanCalendarMonth> {
   Widget _buildMark() {
     return Visibility(
       visible: widget.showMark,
-      child: Center(
-        child: Text(
-          '${widget.date.month}',
-          style: TextStyle(
-            fontSize: ThemeVars.calendarMonthMarkFontSize,
-            color: ThemeVars.calendarMonthMarkColor,
-          ),
-          textAlign: TextAlign.center,
-          textHeightBehavior: FlanThemeVars.textHeightBehavior,
+      child: Text(
+        '${widget.date.month}',
+        style: TextStyle(
+          fontSize: ThemeVars.calendarMonthMarkFontSize,
+          color: ThemeVars.calendarMonthMarkColor,
         ),
+        textAlign: TextAlign.center,
+        textHeightBehavior: FlanThemeVars.textHeightBehavior,
       ),
     );
   }
 
   int get offset {
-    final int realDay = widget.date.day;
-    if (widget.firstDayOfWeek != null) {
-      return (realDay + 7 - widget.firstDayOfWeek!) % 7;
+    final int realDay = widget.date.weekday;
+    if (widget.firstDayOfWeek != 0) {
+      return (realDay + 7 - widget.firstDayOfWeek) % 7;
     }
     return realDay;
   }
@@ -586,7 +718,7 @@ class _FlanCalendarMonthState extends State<FlanCalendarMonth> {
     final int year = widget.date.year;
     final int month = widget.date.month;
 
-    for (int day = 0; day <= totalDay; day++) {
+    for (int day = 1; day <= totalDay; day++) {
       final DateTime date = DateTime(year, month, day);
       final FlanCalendarDayType type = getDayType(date);
       FlanCalendarDayItem config = FlanCalendarDayItem(
@@ -603,31 +735,28 @@ class _FlanCalendarMonthState extends State<FlanCalendarMonth> {
     return days;
   }
 
-  Widget _buildDay(FlanCalendarDayItem item, int index) {
-    return FlanCalendarDay(
-      topInfoBuilder: widget.topInfoBuilder,
-      bottomInfoBuilder: widget.bottomInfoBuilder,
-      item: item,
-      index: index,
-      color: widget.color,
-      offset: offset,
-      // rowHeight: widget.rowHeight,
-      onClick: widget.onClick,
-    );
-  }
-
   Widget _buildDays() {
     return Stack(
+      alignment: Alignment.center,
       children: <Widget>[
         _buildMark(),
         LayoutBuilder(
           builder: (BuildContext context, BoxConstraints constraints) {
             return Wrap(
               children: List<Widget>.generate(days.length, (int index) {
-                return SizedBox(
-                  width: constraints.maxWidth / 7,
-                  height: widget.rowHeight ?? ThemeVars.calendarDayHeight,
-                  child: _buildDay(days[index], index),
+                final double width =
+                    (constraints.maxWidth / 7 * 10.0).floor() / 10.0;
+
+                return FlanCalendarDay(
+                  topInfoBuilder: widget.topInfoBuilder,
+                  bottomInfoBuilder: widget.bottomInfoBuilder,
+                  item: days[index],
+                  index: index,
+                  color: widget.color,
+                  offset: offset,
+                  rowWidth: width,
+                  rowHeight: widget.rowHeight,
+                  onClick: widget.onClick,
                 );
               }).toList(),
             );
@@ -765,7 +894,8 @@ class FlanCalendarDay extends StatelessWidget {
     Key? key,
     this.color,
     this.index,
-    // this.rowHeight,
+    this.rowHeight,
+    required this.rowWidth,
     this.offset = 0,
     required this.item,
     this.onClick,
@@ -776,7 +906,8 @@ class FlanCalendarDay extends StatelessWidget {
   // ****************** Props ******************
   final Color? color;
   final int? index;
-  // final double? rowHeight;
+  final double? rowHeight;
+  final double rowWidth;
   final int offset;
   final FlanCalendarDayItem item;
 
@@ -792,22 +923,58 @@ class FlanCalendarDay extends StatelessWidget {
   Widget build(BuildContext context) {
     final bool isSmallSize = MediaQuery.of(context).size.width <= 350.0;
 
-    return MouseRegion(
-      cursor: SystemMouseCursors.click,
+    final double selectedSize = rowHeight ?? ThemeVars.calendarSelectedDaySize;
+
+    final Widget dayItem = MouseRegion(
+      cursor: cursor,
       child: GestureDetector(
         onTap: _onClick,
-        child: Stack(
-          alignment: Alignment.center,
-          children: <Widget>[
-            Center(
-              child: Text(item.text),
+        behavior: HitTestBehavior.opaque,
+        child: DefaultTextStyle.merge(
+          style: TextStyle(
+            color: textColor,
+          ),
+          textAlign: TextAlign.center,
+          child: Container(
+            width: rowWidth,
+            height: ThemeVars.calendarDayHeight,
+            decoration: BoxDecoration(
+              color: backgroundColor,
+              borderRadius: borderRadius,
             ),
-            _buildTopInfo(isSmallSize),
-            _buildBottomInfo(isSmallSize),
-          ],
+            child: Stack(
+              alignment: Alignment.center,
+              children: <Widget>[
+                Visibility(
+                  visible: isSelected,
+                  child: Container(
+                    width: selectedSize,
+                    height: selectedSize,
+                    decoration: BoxDecoration(
+                      color: ThemeVars.calendarSelectedDayBackgroundColor,
+                      borderRadius:
+                          BorderRadius.circular(ThemeVars.borderRadiusMd),
+                    ),
+                  ),
+                ),
+                Text(item.text),
+                _buildTopInfo(isSmallSize),
+                _buildBottomInfo(isSmallSize),
+              ],
+            ),
+          ),
         ),
       ),
     );
+
+    if (index == 0) {
+      return Padding(
+        padding: EdgeInsets.only(left: rowWidth * offset),
+        child: dayItem,
+      );
+    }
+
+    return dayItem;
   }
 
   Widget _buildTopInfo(bool isSmallSize) {
@@ -838,31 +1005,37 @@ class FlanCalendarDay extends StatelessWidget {
               fontSize: isSmallSize ? 9.0.rpx : ThemeVars.calendarInfoFontSize,
               // height: ThemeVars.calendarInfoLineHeight,
             ),
+            textAlign: TextAlign.center,
             child: bottomInfoBuilder?.call(item) ?? Text(item.bottomInfo),
           ));
     }
     return const SizedBox.shrink();
   }
 
-  // double get height {
-  //   switch (item.type) {
-  //     case FlanCalendarDayType.selected:
-  //       return rowHeight ?? ThemeVars.calendarSelectedDaySize;
-  //     default:
-  //       return ThemeVars.calendarSelectedDaySize;
-  //   }
-  // }
-
-  // double? get width {
-  //   switch (item.type) {
-  //     case FlanCalendarDayType.placeholder:
-  //       return double.infinity;
-  //     case FlanCalendarDayType.selected:
-  //       return rowHeight ?? ThemeVars.calendarSelectedDaySize;
-  //     default:
-  //       return double.infinity;
-  //   }
-  // }
+  BorderRadius? get borderRadius {
+    switch (item.type) {
+      case FlanCalendarDayType.start:
+        return const BorderRadius.only(
+          topLeft: Radius.circular(ThemeVars.borderRadiusMd),
+          bottomLeft: Radius.circular(ThemeVars.borderRadiusMd),
+        );
+      case FlanCalendarDayType.end:
+        return const BorderRadius.only(
+          topRight: Radius.circular(ThemeVars.borderRadiusMd),
+          bottomRight: Radius.circular(ThemeVars.borderRadiusMd),
+        );
+      case FlanCalendarDayType.startEnd:
+      case FlanCalendarDayType.multipleSelected:
+        return BorderRadius.circular(ThemeVars.borderRadiusMd);
+      case FlanCalendarDayType.multipleMiddle:
+      case FlanCalendarDayType.middle:
+      case FlanCalendarDayType.selected:
+      case FlanCalendarDayType.disabled:
+      case FlanCalendarDayType.placeholder:
+      case FlanCalendarDayType.normal:
+        break;
+    }
+  }
 
   Color? get backgroundColor {
     switch (item.type) {
@@ -877,7 +1050,8 @@ class FlanCalendarDay extends StatelessWidget {
         return ThemeVars.calendarRangeMiddleColor
             .withOpacity(ThemeVars.calendarRangeMiddleBackgroundOpacity);
       case FlanCalendarDayType.selected:
-        return ThemeVars.calendarSelectedDayBackgroundColor;
+        break;
+      // return ThemeVars.calendarSelectedDayBackgroundColor;
       case FlanCalendarDayType.disabled:
         break;
       case FlanCalendarDayType.placeholder:
@@ -906,6 +1080,17 @@ class FlanCalendarDay extends StatelessWidget {
         break;
       case FlanCalendarDayType.normal:
         break;
+    }
+  }
+
+  bool get isSelected => item.type == FlanCalendarDayType.selected;
+
+  MouseCursor get cursor {
+    switch (item.type) {
+      case FlanCalendarDayType.disabled:
+        return SystemMouseCursors.basic;
+      default:
+        return SystemMouseCursors.click;
     }
   }
 
@@ -990,12 +1175,14 @@ List<DateTime> cloneDates(List<DateTime> dates) =>
     dates.map(cloneDate).toList();
 
 DateTime getDayByOffset(DateTime date, int offset) {
-  final DateTime cloned = date.add(Duration(days: offset));
-  return cloned;
+  if (offset.sign < 0) {
+    return date.subtract(Duration(days: offset.abs()));
+  }
+  return date.add(Duration(days: offset));
 }
 
 DateTime getPreDay(DateTime date) => getDayByOffset(date, -1);
-DateTime getNextDay(DateTime date) => getDayByOffset(date, -1);
+DateTime getNextDay(DateTime date) => getDayByOffset(date, 1);
 DateTime getToday() {
   final DateTime now = DateTime.now();
   return DateTime(now.year, now.month, now.day);
@@ -1003,4 +1190,13 @@ DateTime getToday() {
 
 int calcDateNum(List<DateTime> date) {
   return date[1].difference(date[0]).inDays;
+}
+
+class FlanCalendarMonthDetail {
+  FlanCalendarMonthDetail({
+    required this.date,
+    required this.title,
+  });
+  final DateTime date;
+  final String title;
 }
