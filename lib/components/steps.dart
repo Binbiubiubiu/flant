@@ -1,9 +1,7 @@
-// 🐦 Flutter imports:
+import 'package:flant/components/step.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
-// 🌎 Project imports:
-import 'package:flant/components/step.dart';
 import '../styles/var.dart';
 
 /// ### Steps 步骤条

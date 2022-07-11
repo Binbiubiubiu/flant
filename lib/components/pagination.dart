@@ -1,12 +1,9 @@
-// 🎯 Dart imports:
 import 'dart:math' as math;
 
-// 🐦 Flutter imports:
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 
-// 🌎 Project imports:
 import '../locale/l10n.dart';
 import '../styles/components/pagination_theme.dart';
 import '../styles/var.dart';

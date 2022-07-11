@@ -1,8 +1,6 @@
-// 🐦 Flutter imports:
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
-// 🌎 Project imports:
 import '../styles/components/action_bar_theme.dart';
 
 /// ### ActionBar 动作栏

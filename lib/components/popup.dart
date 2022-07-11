@@ -1,17 +1,11 @@
-// 🎯 Dart imports:
 import 'dart:ui' as ui;
 
-// 🐦 Flutter imports:
-import 'package:flutter/foundation.dart';
-import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/rendering.dart';
 
-// 🌎 Project imports:
+import './icon.dart' show FlanIcon, FlanIcons;
 import '../styles/components/popup_theme.dart';
 import '../styles/theme.dart';
 import '../styles/var.dart';
-import './icon.dart' show FlanIcon, FlanIcons;
 import 'common/active_response.dart';
 import 'style.dart';
 
@@ -91,6 +85,7 @@ class _FlanPopupWrapper extends StatelessWidget {
     this.borderRadius,
     required this.round,
     required this.safeAreaInsetBottom,
+    // ignore: unused_element
     this.onClick,
     this.child,
   }) : super(key: key);
@@ -409,6 +404,7 @@ FlanTransitionBuilder _getPopupTransition(FlanPopupPosition position) {
   }
 }
 
+// ignore: avoid_classes_with_only_static_members
 class FlanPopupTransition {
   static Widget slideToBottom(
     BuildContext context,

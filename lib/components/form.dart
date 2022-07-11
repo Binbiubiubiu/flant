@@ -1,9 +1,6 @@
-// 🐦 Flutter imports:
+import 'package:flant/components/field.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-
-// 🌎 Project imports:
-import 'package:flant/components/field.dart';
 
 class FlanForm extends StatefulWidget {
   const FlanForm({
@@ -197,7 +194,7 @@ class FlanFormState extends State<FlanForm> {
 
   Future<dynamic> validate<T>({T? name}) {
     if (name is String) {
-      return _validateField(name as String);
+      return _validateField(name);
     }
     return widget.validateFirst
         ? _validateSeq(names: name as List<String>?)
@@ -206,7 +203,7 @@ class FlanFormState extends State<FlanForm> {
 
   void resetValidation<T>({T? name}) {
     final List<FlanFieldState> fields = _getFieldsByNames(
-      names: name is String ? <String>[name as String] : name as List<String>,
+      names: name is String ? <String>[name] : name as List<String>,
     );
 
     for (final FlanFieldState field in fields) {

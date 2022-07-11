@@ -1,13 +1,10 @@
-// 🎯 Dart imports:
 import 'dart:math' as math;
 import 'dart:ui';
 
-// 🐦 Flutter imports:
+import 'package:flant/utils/widget.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
-// 🌎 Project imports:
-import 'package:flant/utils/widget.dart';
 import '../styles/components/circle_theme.dart';
 import '../styles/var.dart';
 
@@ -244,6 +241,7 @@ class _FlanDividerCirclePainter extends CustomPainter {
     this.strokeLineCap = StrokeCap.round,
   })  : assert(rate >= 0.0 && rate <= 100.0),
         assert(strokeWidth > 0.0),
+        // ignore: unnecessary_type_check
         assert(strokeLineCap is StrokeCap),
         _paint = Paint()
           ..strokeWidth = strokeWidth

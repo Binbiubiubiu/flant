@@ -1,12 +1,8 @@
-// 🎯 Dart imports:
 import 'dart:async';
 
-// 🐦 Flutter imports:
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/scheduler.dart';
 
-// 🌎 Project imports:
 import '../styles/components/notice_bar_theme.dart';
 import '../styles/var.dart';
 import '../utils/widget.dart';
@@ -332,6 +328,7 @@ class _FlanNoticeBarState extends State<FlanNoticeBar>
     if (widget.mode == FlanNoticeBarMode.link) {
       return FlanIcons.arrow;
     }
+    return null;
   }
 
   @override

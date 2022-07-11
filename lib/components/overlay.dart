@@ -1,9 +1,6 @@
-// 🐦 Flutter imports:
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/scheduler.dart';
 
-// 🌎 Project imports:
 import '../styles/theme.dart';
 import 'style.dart';
 
@@ -66,6 +63,7 @@ class FlanOverlay extends StatelessWidget {
         child: child,
       );
     }
+    return null;
   }
 
   @override

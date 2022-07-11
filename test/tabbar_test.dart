@@ -1,12 +1,7 @@
-// 🐦 Flutter imports:
+import 'package:flant/flant.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
-
-// 📦 Package imports:
 import 'package:flutter_test/flutter_test.dart';
-
-// 🌎 Project imports:
-import 'package:flant/flant.dart';
 
 const Color activeColor = FlanThemeVars.blue;
 

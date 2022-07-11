@@ -1,12 +1,8 @@
-// 🐦 Flutter imports:
+import 'package:flant/flant.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
-// 🌎 Project imports:
-import 'package:flant/flant.dart';
-import '../styles/var.dart';
 import '../utils/widget.dart';
-import 'icon.dart';
 
 typedef FlanAddressChangeCallback = void Function(
     FlanAddressListAddress address, int index);

@@ -1,13 +1,9 @@
-// 🐦 Flutter imports:
-import 'package:flutter/foundation.dart';
-import 'package:flutter/material.dart';
-
-// 🌎 Project imports:
-import 'package:flant/components/cell.dart';
 import 'package:flant/components/form.dart';
 import 'package:flant/flant.dart';
 import 'package:flant/utils/format/validate.dart';
-import '../styles/var.dart';
+import 'package:flutter/foundation.dart';
+import 'package:flutter/material.dart';
+
 
 FlanContactEditInfo kDefaultContact = FlanContactEditInfo(
   name: '',

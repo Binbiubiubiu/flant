@@ -1,10 +1,8 @@
-// 🐦 Flutter imports:
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter/services.dart';
 
-// 🌎 Project imports:
 import '../mixins/link_field_mixins.dart';
 import '../styles/components/switch_theme.dart';
 import 'loading.dart';
@@ -182,6 +180,7 @@ class _FlanSwitchState<T> extends State<FlanSwitch<T>> with FlanLinkFieldMixin {
         child: FlanLoading(color: color),
       );
     }
+    return null;
   }
 
   @override

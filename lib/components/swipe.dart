@@ -1,13 +1,12 @@
-// 🎯 Dart imports:
+// ignore_for_file: unused_element
+
 import 'dart:async';
 
-// 🐦 Flutter imports:
 import 'package:flutter/foundation.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 
-// 🌎 Project imports:
 import '../styles/components/swipe_theme.dart';
 import '../styles/var.dart';
 
@@ -530,7 +529,6 @@ class _PageView extends StatefulWidget {
   /// {@end-tool}
   ///
   /// {@macro flutter.widgets.PageView.allowImplicitScrolling}
-  // ignore: unused_element
   _PageView.custom({
     Key? key,
     this.scrollDirection = Axis.horizontal,

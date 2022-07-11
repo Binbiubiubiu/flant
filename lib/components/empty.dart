@@ -1,13 +1,10 @@
 // 🐦 Flutter imports:
 
-// 🐦 Flutter imports:
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
-// 📦 Package imports:
 import 'package:flutter_svg/flutter_svg.dart';
 
-// 🌎 Project imports:
 import '../styles/components/empty_theme.dart';
 
 /// ### FlanEmpty 空状态

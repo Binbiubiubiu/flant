@@ -1,8 +1,6 @@
-// 🐦 Flutter imports:
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
-// 🌎 Project imports:
 import '../styles/components/badge_theme.dart';
 import '../styles/var.dart';
 
@@ -108,6 +106,7 @@ class FlanBadge extends StatelessWidget {
         textAlign: TextAlign.center,
       );
     }
+    return null;
   }
 
   /// 构建点样式徽标
@@ -170,6 +169,7 @@ class FlanBadge extends StatelessWidget {
         ),
       );
     }
+    return null;
   }
 
   @override

@@ -1,12 +1,10 @@
 // 🐦 Flutter imports:
 
-// 🐦 Flutter imports:
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter/services.dart';
 
-// 🌎 Project imports:
 import '../../styles/components/cell_theme.dart';
 import '../styles/components/field_theme.dart';
 import '../styles/var.dart';
@@ -466,6 +464,7 @@ class FlanFieldState extends State<FlanField> {
         return FlanFieldValidateError(validateMessage, name: widget.name);
       }
     }
+    return null;
   }
 
   void focus() => focusNode.requestFocus();
@@ -935,6 +934,7 @@ class FlanFieldState extends State<FlanField> {
         ),
       );
     }
+    return null;
   }
 
   void scrollToVisiable({

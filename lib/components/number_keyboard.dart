@@ -1,14 +1,10 @@
-// 🐦 Flutter imports:
+import 'package:flant/components/loading.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
-
-// 📦 Package imports:
 import 'package:flutter_svg/flutter_svg.dart';
 
-// 🌎 Project imports:
-import 'package:flant/components/loading.dart';
 import '../styles/var.dart';
 
 /// ### FlanNumberKeyboard 数字键盘
@@ -461,6 +457,7 @@ class _KeyConfig {
   const _KeyConfig({
     required this.text,
     this.type = FlanKeyType.normal,
+    // ignore: unused_element
     this.color = _ColorTheme.normal,
     this.wider = false,
   });

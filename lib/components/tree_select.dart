@@ -1,9 +1,7 @@
-// 🐦 Flutter imports:
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 
-// 🌎 Project imports:
 import '../styles/components/tree_select_theme.dart';
 import '../styles/var.dart';
 import '../utils/widget.dart';
@@ -226,6 +224,7 @@ class FlanTreeSelect extends StatelessWidget {
         }).toList(),
       );
     }
+    return null;
   }
 
   bool _isActiveItem(String id) => activeId.contains(id);

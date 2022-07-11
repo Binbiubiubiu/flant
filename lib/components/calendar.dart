@@ -1,7 +1,5 @@
-// 🐦 Flutter imports:
 import 'package:flutter/material.dart';
 
-// 🌎 Project imports:
 import '../locale/l10n.dart';
 import '../styles/var.dart';
 import '../utils/widget.dart';
@@ -463,6 +461,7 @@ class _FlanCalendarScope extends InheritedWidget {
 
   final _FlanCalendarState state;
 
+  // ignore: unused_element
   static _FlanCalendarScope? of(BuildContext context) {
     return context.dependOnInheritedWidgetOfExactType<_FlanCalendarScope>();
   }
@@ -1036,6 +1035,7 @@ class FlanCalendarDay extends StatelessWidget {
       case FlanCalendarDayType.normal:
         break;
     }
+    return null;
   }
 
   Color? get backgroundColor {
@@ -1060,6 +1060,7 @@ class FlanCalendarDay extends StatelessWidget {
       case FlanCalendarDayType.normal:
         break;
     }
+    return null;
   }
 
   Color? get textColor {
@@ -1082,6 +1083,7 @@ class FlanCalendarDay extends StatelessWidget {
       case FlanCalendarDayType.normal:
         break;
     }
+    return null;
   }
 
   bool get isSelected => item.type == FlanCalendarDayType.selected;

@@ -1,8 +1,6 @@
-// 🐦 Flutter imports:
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
-// 🌎 Project imports:
 import 'badge.dart';
 
 export '../styles/icons.dart';
@@ -116,6 +114,7 @@ class FlanIcon extends StatelessWidget {
         fit: BoxFit.scaleDown,
       );
     }
+    return null;
   }
 
   @override

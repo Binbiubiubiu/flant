@@ -1,9 +1,6 @@
-// 🐦 Flutter imports:
+import 'package:flant/components/row.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-
-// 🌎 Project imports:
-import 'package:flant/components/row.dart';
 
 /// ### FlanCol 列布局
 class FlanCol extends StatelessWidget {

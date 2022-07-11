@@ -1,9 +1,7 @@
-// 🐦 Flutter imports:
+import 'package:flant/utils/widget.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
-// 🌎 Project imports:
-import 'package:flant/utils/widget.dart';
 import 'picker.dart';
 
 const String kEmptyCode = '000000';

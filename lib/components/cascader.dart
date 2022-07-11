@@ -1,8 +1,6 @@
-// 🐦 Flutter imports:
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
-// 🌎 Project imports:
 import 'icon.dart';
 
 /// ### Cascader 级联选择

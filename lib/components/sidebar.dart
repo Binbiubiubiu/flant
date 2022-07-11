@@ -1,8 +1,6 @@
-// 🐦 Flutter imports:
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
-// 🌎 Project imports:
 import '../styles/components/sidebar_theme.dart';
 
 /// ### Sidebar 侧边导航

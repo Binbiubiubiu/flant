@@ -1,8 +1,6 @@
-// 🐦 Flutter imports:
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
-// 🌎 Project imports:
 import '../styles/components/cell_group_theme.dart';
 import '../styles/var.dart';
 import 'cell.dart';

@@ -1,7 +1,5 @@
-// 🎯 Dart imports:
 import 'dart:math' as math;
 
-// 🐦 Flutter imports:
 import 'package:flutter/material.dart';
 
 num range(num number, num min, num max) {

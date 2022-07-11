@@ -1,9 +1,7 @@
-// 🐦 Flutter imports:
+import 'package:flant/components/checkbox.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
-// 🌎 Project imports:
-import 'package:flant/components/checkbox.dart';
 import 'checkbox.dart';
 
 @optionalTypeArgs
@@ -53,6 +51,7 @@ class FlanCheckboxGroup<T extends dynamic> extends StatelessWidget {
         .whereType<FlanCheckbox<T>>()
         .toList()
         .where((FlanCheckbox<T> item) {
+      // ignore: unnecessary_type_check
       if (item is! FlanCheckbox<T>) {
         return false;
       }

@@ -1,15 +1,9 @@
-// 🎯 Dart imports:
 import 'dart:io';
 
-// 🐦 Flutter imports:
+import 'package:flant/flant.dart';
 import 'package:flutter/material.dart';
-
-// 📦 Package imports:
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:flutter_test/flutter_test.dart';
-
-// 🌎 Project imports:
-import 'package:flant/flant.dart';
 
 void main() {
   setUp(() {

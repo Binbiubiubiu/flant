@@ -1,7 +1,5 @@
-// 🐦 Flutter imports:
 import 'package:flutter/material.dart';
 
-// 🌎 Project imports:
 import '../styles/theme.dart';
 
 void nextTick(VoidCallback callback) {

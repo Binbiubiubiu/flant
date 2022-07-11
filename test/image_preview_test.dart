@@ -1,12 +1,7 @@
-// 🐦 Flutter imports:
+import 'package:flant/flant.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
-
-// 📦 Package imports:
 import 'package:flutter_test/flutter_test.dart';
-
-// 🌎 Project imports:
-import 'package:flant/flant.dart';
 
 final List<String> images = <String>[
   'https://img.yzcdn.cn/1.png',

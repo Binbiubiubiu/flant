@@ -1,8 +1,6 @@
-// 🐦 Flutter imports:
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
-// 🌎 Project imports:
 import '../utils/format/number.dart';
 import '../utils/format/string.dart';
 import '../utils/widget.dart';

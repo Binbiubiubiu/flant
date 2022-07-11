@@ -1,12 +1,8 @@
-// 🐦 Flutter imports:
+import 'package:flant/flant.dart';
+import 'package:flant/utils/widget.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
-
-// 🌎 Project imports:
-import 'package:flant/flant.dart';
-import 'package:flant/utils/widget.dart';
-import 'tab.dart';
 
 typedef FlanTabsBeforeChange = Future<bool> Function(String name);
 
@@ -405,6 +401,7 @@ class FlanTabsState extends State<FlanTabs> {
       }
       index += diff;
     }
+    return null;
   }
 
   bool get scrollable =>
@@ -469,6 +466,7 @@ class _FlanTabsScope extends InheritedWidget {
 
   final FlanTabsState state;
 
+  // ignore: unused_element
   static _FlanTabsScope? of(BuildContext context) {
     return context.dependOnInheritedWidgetOfExactType<_FlanTabsScope>();
   }
@@ -619,6 +617,7 @@ class _FlanTabsTitleState extends State<FlanTabsTitle> {
     if (widget.isActive) {
       return ThemeVars.fontWeightBold;
     }
+    return null;
   }
 
   Color get textColor {

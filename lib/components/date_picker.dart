@@ -1,13 +1,11 @@
 // 🐦 Flutter imports:
 
-// 🐦 Flutter imports:
-import 'package:flutter/foundation.dart';
-import 'package:flutter/material.dart';
-
-// 🌎 Project imports:
 import 'package:flant/utils/format/number.dart';
 import 'package:flant/utils/format/string.dart';
 import 'package:flant/utils/widget.dart';
+import 'package:flutter/foundation.dart';
+import 'package:flutter/material.dart';
+
 import 'picker.dart';
 
 String kDefaultDateTimeFormate(
@@ -344,6 +342,7 @@ class _FlanDatePickerState extends State<FlanDatePicker> {
       ) as int;
       return DateTime.fromMillisecondsSinceEpoch(timestamp);
     }
+    return null;
   }
 
   List<int> getBoundary(String type, DateTime value) {

@@ -1,11 +1,9 @@
 // 🐦 Flutter imports:
 
-// 🐦 Flutter imports:
+import 'package:flant/utils/widget.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
-// 🌎 Project imports:
-import 'package:flant/utils/widget.dart';
 import '../styles/components/cell_theme.dart';
 import '../styles/components/collapse_theme.dart';
 import '../styles/var.dart';

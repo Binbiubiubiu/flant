@@ -19,8 +19,7 @@ dependencies:
 dev_dependencies:
   flutter_test:
     sdk: flutter
-  import_sorter: ^4.5.0
-  intl_utils: ^2.0.0
+  intl_utils: ^2.7.0
 
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec
@@ -60,9 +59,3 @@ flutter_intl:
   arb_dir: l10n # Optional. Sets the directory of your ARB resource files. Provided value should be a valid path on your system. Default: lib/l10n
   output_dir: lib/locale # Optional. Sets the directory of generated localization files. Provided value should be a valid path on your system. Default: lib/generated
   use_deferred_loading: false
-
-import_sorter:
-  emojis: true # Optional, defaults to false
-  comments: true # Optional, defaults to true
-  ignored_files: # Optional, defaults to []
-    - locale\/*

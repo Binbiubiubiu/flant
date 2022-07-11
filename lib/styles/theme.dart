@@ -1,8 +1,6 @@
-// 🐦 Flutter imports:
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
-// 🌎 Project imports:
 import 'components/action_bar_theme.dart';
 import 'components/action_sheet_theme.dart';
 import 'components/badge_theme.dart';

@@ -1,12 +1,9 @@
-// 🎯 Dart imports:
 import 'dart:math' as math;
 
-// 🐦 Flutter imports:
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
 
-// 🌎 Project imports:
 import '../styles/components/count_down_theme.dart';
 import '../styles/var.dart';
 import '../utils/format/string.dart';

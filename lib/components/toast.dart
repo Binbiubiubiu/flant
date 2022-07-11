@@ -1,11 +1,7 @@
-// 🎯 Dart imports:
 import 'dart:async';
 
-// 🐦 Flutter imports:
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
-// 🌎 Project imports:
 import '../styles/components/toast_theme.dart';
 import '../styles/var.dart';
 import '../utils/widget.dart';
@@ -444,6 +440,7 @@ class _FlanToastBlock extends StatelessWidget {
     required this.loadingType,
     this.customStyle,
     this.onClick,
+    // ignore: unnecessary_type_check
   })  : assert(type is FlanToastType),
         super(key: key);
 

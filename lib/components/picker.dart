@@ -1,14 +1,9 @@
-// 🎯 Dart imports:
 import 'dart:convert';
 
-// 🐦 Flutter imports:
 import 'package:flutter/foundation.dart';
-import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/physics.dart';
 import 'package:flutter/rendering.dart';
 
-// 🌎 Project imports:
 import '../locale/l10n.dart';
 import '../styles/var.dart';
 import '../utils/format/number.dart';
@@ -549,6 +544,7 @@ class FlanPickerState extends State<FlanPicker> {
     if (column != null) {
       return column.index;
     }
+    return null;
   }
 
   // set column option index by column index

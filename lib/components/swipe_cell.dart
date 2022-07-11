@@ -1,10 +1,6 @@
-// 🐦 Flutter imports:
-import 'package:flutter/foundation.dart';
-import 'package:flutter/gestures.dart';
-import 'package:flutter/material.dart';
-
-// 🌎 Project imports:
 import 'package:flant/utils/widget.dart';
+import 'package:flutter/foundation.dart';
+import 'package:flutter/material.dart';
 
 const double _kDismissThreshold = 0.5;
 const Duration _kDismissDuration = Duration(milliseconds: 600);

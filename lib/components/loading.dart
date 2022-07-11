@@ -1,11 +1,8 @@
-// 🎯 Dart imports:
 import 'dart:math' as math;
 
-// 🐦 Flutter imports:
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
-// 🌎 Project imports:
 import '../styles/components/loading_theme.dart';
 import '../utils/widget.dart';
 

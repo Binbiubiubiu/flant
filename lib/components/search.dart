@@ -1,9 +1,7 @@
-// 🐦 Flutter imports:
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 
-// 🌎 Project imports:
 import '../locale/l10n.dart';
 import '../styles/var.dart';
 import 'field.dart';

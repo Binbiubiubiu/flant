@@ -1,10 +1,8 @@
-// 🐦 Flutter imports:
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter/services.dart';
 
-// 🌎 Project imports:
 import '../styles/components/action_sheet_theme.dart';
 import '../styles/var.dart';
 import '../utils/widget.dart';
@@ -396,6 +394,7 @@ class _FlanActionSheet extends StatelessWidget {
 class _FlanActionSheetButton extends StatelessWidget {
   const _FlanActionSheetButton({
     Key? key,
+    // ignore: unused_element
     this.text = '',
     this.disabled = false,
     this.loading = false,
