@@ -677,7 +677,7 @@ class _FlanPickerColumnState extends State<FlanPickerColumn> {
     options = widget.initialOptions.toList();
     index = adjustIndex(widget.defaultIndex);
     scrollController = ScrollController();
-    WidgetsBinding.instance?.addPostFrameCallback((Duration timeStamp) {
+    WidgetsBinding.instance.addPostFrameCallback((Duration timeStamp) {
       _jumpToIndex(index);
     });
     super.initState();

@@ -186,7 +186,7 @@ class _FlanListState extends State<FlanList> {
   }
 
   void emitCheck() {
-    WidgetsBinding.instance?.addPostFrameCallback((Duration timeStamp) {
+    WidgetsBinding.instance.addPostFrameCallback((Duration timeStamp) {
       final double offset =
           widget.direction == FlanListDirection.up ? -1.0 : 1.0;
       scrollController.jumpTo(scrollController.offset.toDouble() + offset);

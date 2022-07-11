@@ -61,7 +61,7 @@ class FlanCountDownState extends State<FlanCountDown>
 
   @override
   void initState() {
-    WidgetsBinding.instance?.addObserver(this);
+    WidgetsBinding.instance.addObserver(this);
     resetTime();
     super.initState();
   }
@@ -77,7 +77,7 @@ class FlanCountDownState extends State<FlanCountDown>
   @override
   void dispose() {
     pause();
-    WidgetsBinding.instance?.removeObserver(this);
+    WidgetsBinding.instance.removeObserver(this);
     super.dispose();
   }
 

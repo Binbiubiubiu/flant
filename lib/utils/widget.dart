@@ -5,7 +5,7 @@ import 'package:flutter/material.dart';
 import '../styles/theme.dart';
 
 void nextTick(VoidCallback callback) {
-  WidgetsBinding.instance?.addPostFrameCallback((Duration timestamp) {
+  WidgetsBinding.instance.addPostFrameCallback((Duration timestamp) {
     callback();
   });
 }

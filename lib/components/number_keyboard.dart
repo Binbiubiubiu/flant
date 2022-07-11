@@ -161,7 +161,7 @@ class _FlanNumberKeyboardState extends State<FlanNumberKeyboard>
   }
 
   void openPopup() {
-    WidgetsBinding.instance?.addPostFrameCallback((Duration timeStamp) {
+    WidgetsBinding.instance.addPostFrameCallback((Duration timeStamp) {
       showModalBottomSheet<dynamic>(
         context: context,
         builder: _buildContent,
