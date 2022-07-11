@@ -16,7 +16,7 @@ class FlanCollapse extends StatelessWidget {
     this.accordion = false,
     this.border = true,
     required this.children,
-  })   : assert(value is String || value is List<String>),
+  })  : assert(value is String || value is List<String>),
         super(key: key);
 
   // ****************** Props ******************

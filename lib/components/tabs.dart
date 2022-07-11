@@ -1,11 +1,11 @@
 // 🐦 Flutter imports:
-import 'package:flant/flant.dart';
-import 'package:flant/utils/widget.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 
 // 🌎 Project imports:
+import 'package:flant/flant.dart';
+import 'package:flant/utils/widget.dart';
 import 'tab.dart';
 
 typedef FlanTabsBeforeChange = Future<bool> Function(String name);

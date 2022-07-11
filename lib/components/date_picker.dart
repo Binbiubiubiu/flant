@@ -432,7 +432,7 @@ class _FlanDatePickerState extends State<FlanDatePicker> {
       final List<FlanDateTimePickerColumnType> columnsOrder = result
           .map((FlanDateTimePickerRange column) => column.type)
           .toList()
-            ..insertAll(0, widget.columnsOrder!);
+        ..insertAll(0, widget.columnsOrder!);
 
       result.sort(
         (FlanDateTimePickerRange a, FlanDateTimePickerRange b) =>

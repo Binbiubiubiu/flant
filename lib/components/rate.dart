@@ -30,7 +30,7 @@ class FlanRate extends StatefulWidget {
     this.disabled = false,
     this.touchable = true,
     required this.onChange,
-  })   : assert(value > 0.0),
+  })  : assert(value > 0.0),
         super(key: key);
 
   // ****************** Props ******************

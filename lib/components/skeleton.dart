@@ -195,7 +195,9 @@ class FlanSkeleton extends StatelessWidget {
           child: row,
         );
       }
-      rows..add(SizedBox(height: themeData.rowMarginTop))..add(row);
+      rows
+        ..add(SizedBox(height: themeData.rowMarginTop))
+        ..add(row);
     }
 
     return rows;
