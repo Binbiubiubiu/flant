@@ -107,7 +107,8 @@ void main() {
         ),
       ),
     );
-    final Transform dot = tester.firstWidget(find.byType(Transform));
+    final Transform dot =
+        tester.widgetList<Transform>(find.byType(Transform)).toList().last;
 
     expect(dot.transform, equals(Matrix4.translationValues(2.0, 4.0, 0.0)));
   });
