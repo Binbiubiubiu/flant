@@ -1,8 +1,8 @@
-import 'package:flant/components/checkbox_group.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 
+import '../components//checkbox_group.dart';
 import '../styles/var.dart';
 import 'icon.dart';
 

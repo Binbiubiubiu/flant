@@ -238,7 +238,7 @@ class FlanToast {
         child: toast,
       );
       entry!.addListener(watchToastOpen);
-      Overlay.of(context, rootOverlay: true).insert(entry!);
+      Overlay.maybeOf(context, rootOverlay: true)?.insert(entry!);
       _queue.add(entry!);
     }
 

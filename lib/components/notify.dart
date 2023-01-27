@@ -157,7 +157,7 @@ class FlanNotify {
         child: notify,
       );
       _instance!.addListener(watchToastOpen);
-      Overlay.of(context, rootOverlay: true).insert(_instance!);
+      Overlay.maybeOf(context, rootOverlay: true)?.insert(_instance!);
     }
 
     open();
