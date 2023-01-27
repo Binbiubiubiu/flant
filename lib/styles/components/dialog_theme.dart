@@ -281,7 +281,7 @@ class FlanDialogThemeData with Diagnosticable {
       confirmButtonTextColor,
     ];
 
-    return hashList(values);
+    return Object.hashAll(values);
   }
 
   @override

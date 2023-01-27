@@ -243,7 +243,7 @@ class FlanTagThemeData with Diagnosticable {
       plainBackgroundColor,
     ];
 
-    return hashList(values);
+    return Object.hashAll(values);
   }
 
   @override

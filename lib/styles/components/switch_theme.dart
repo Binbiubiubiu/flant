@@ -218,7 +218,7 @@ class FlanSwitchThemeData with Diagnosticable {
       border,
     ];
 
-    return hashList(values);
+    return Object.hashAll(values);
   }
 
   @override

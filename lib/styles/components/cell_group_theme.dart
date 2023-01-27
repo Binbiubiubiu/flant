@@ -142,7 +142,7 @@ class FlanCellGroupThemeData with Diagnosticable {
       titleLineHeight,
     ];
 
-    return hashList(values);
+    return Object.hashAll(values);
   }
 
   @override

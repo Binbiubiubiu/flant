@@ -158,7 +158,7 @@ class FlanSkeletonThemeData with Diagnosticable {
       animationDuration,
     ];
 
-    return hashList(values);
+    return Object.hashAll(values);
   }
 
   @override

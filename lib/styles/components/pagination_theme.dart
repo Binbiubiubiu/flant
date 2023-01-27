@@ -175,7 +175,7 @@ class FlanPaginationThemeData with Diagnosticable {
       disabledOpacity,
     ];
 
-    return hashList(values);
+    return Object.hashAll(values);
   }
 
   @override

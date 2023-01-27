@@ -1,4 +1,3 @@
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter/services.dart';
@@ -19,7 +18,6 @@ typedef FlanActionSheetSelectCallback = void Function(
 /// 底部弹起的模态面板，包含与当前情境相关的多个选项。
 Future<T?> showFlanActionSheet<T extends Object?>(
   BuildContext context, {
-
   /// 面板选项列表
   List<FlanActionSheetAction> actions = const <FlanActionSheetAction>[],
 

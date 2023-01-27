@@ -184,7 +184,7 @@ class FlanImagePreviewThemeData with Diagnosticable {
       closeIconMargin,
     ];
 
-    return hashList(values);
+    return Object.hashAll(values);
   }
 
   @override

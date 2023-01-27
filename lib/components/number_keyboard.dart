@@ -133,11 +133,6 @@ class _FlanNumberKeyboardState extends State<FlanNumberKeyboard>
   }
 
   @override
-  void dispose() {
-    super.dispose();
-  }
-
-  @override
   void didUpdateWidget(covariant FlanNumberKeyboard oldWidget) {
     if (widget.show != oldWidget.show) {
       if (widget.show) {

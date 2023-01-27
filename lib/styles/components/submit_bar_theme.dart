@@ -262,7 +262,7 @@ class FlanSubmitBarThemeData with Diagnosticable {
       priceFontFamily,
     ];
 
-    return hashList(values);
+    return Object.hashAll(values);
   }
 
   @override

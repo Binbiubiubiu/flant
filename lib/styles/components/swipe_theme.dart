@@ -157,7 +157,7 @@ class FlanSwipeThemeData with Diagnosticable {
       indicatorInactiveBackgroundColor,
     ];
 
-    return hashList(values);
+    return Object.hashAll(values);
   }
 
   @override

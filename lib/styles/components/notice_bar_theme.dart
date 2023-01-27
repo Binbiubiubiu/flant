@@ -178,7 +178,7 @@ class FlanNoticeBarThemeData with Diagnosticable {
       iconMinWidth,
     ];
 
-    return hashList(values);
+    return Object.hashAll(values);
   }
 
   @override

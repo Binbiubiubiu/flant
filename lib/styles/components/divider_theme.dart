@@ -168,7 +168,7 @@ class FlanDividerThemeData with Diagnosticable {
       contentRightWidthPercent,
     ];
 
-    return hashList(values);
+    return Object.hashAll(values);
   }
 
   @override

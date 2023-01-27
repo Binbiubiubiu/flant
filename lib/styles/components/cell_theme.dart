@@ -267,7 +267,7 @@ class FlanCellThemeData with Diagnosticable {
       largeLabelFontSize,
     ];
 
-    return hashList(values);
+    return Object.hashAll(values);
   }
 
   @override

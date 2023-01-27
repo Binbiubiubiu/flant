@@ -154,7 +154,7 @@ class FlanCircleThemeData with Diagnosticable {
       textLineHeight,
     ];
 
-    return hashList(values);
+    return Object.hashAll(values);
   }
 
   @override

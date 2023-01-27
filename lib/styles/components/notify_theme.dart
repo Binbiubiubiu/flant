@@ -173,7 +173,7 @@ class FlanNotifyThemeData with Diagnosticable {
       warningBackgroundColor,
     ];
 
-    return hashList(values);
+    return Object.hashAll(values);
   }
 
   @override

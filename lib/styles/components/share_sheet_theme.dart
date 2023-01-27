@@ -252,7 +252,7 @@ class FlanShareSheetThemeData with Diagnosticable {
       cancelButtonBackground,
     ];
 
-    return hashList(values);
+    return Object.hashAll(values);
   }
 
   @override

@@ -173,7 +173,7 @@ class FlanTabbarThemeData with Diagnosticable {
       itemMarginBottom,
     ];
 
-    return hashList(values);
+    return Object.hashAll(values);
   }
 
   @override

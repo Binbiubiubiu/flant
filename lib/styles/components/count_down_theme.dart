@@ -118,7 +118,7 @@ class FlanCountDownThemeData with Diagnosticable {
       lineHeight,
     ];
 
-    return hashList(values);
+    return Object.hashAll(values);
   }
 
   @override

@@ -156,7 +156,7 @@ class FlanPopupThemeData with Diagnosticable {
       closeIconMargin,
     ];
 
-    return hashList(values);
+    return Object.hashAll(values);
   }
 
   @override

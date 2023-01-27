@@ -416,7 +416,7 @@ class FlanButtonThemeData with Diagnosticable {
       loadingIconSize,
     ];
 
-    return hashList(values);
+    return Object.hashAll(values);
   }
 
   @override

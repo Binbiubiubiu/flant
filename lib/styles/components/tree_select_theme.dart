@@ -168,7 +168,7 @@ class FlanTreeSelectThemeData with Diagnosticable {
       itemSelectedSize,
     ];
 
-    return hashList(values);
+    return Object.hashAll(values);
   }
 
   @override

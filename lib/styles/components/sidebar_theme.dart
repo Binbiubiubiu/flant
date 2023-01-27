@@ -226,7 +226,7 @@ class FlanSidebarThemeData with Diagnosticable {
       selectedBackgroundColor,
     ];
 
-    return hashList(values);
+    return Object.hashAll(values);
   }
 
   @override

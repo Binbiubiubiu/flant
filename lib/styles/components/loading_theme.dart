@@ -140,7 +140,7 @@ class FlanLoadingThemeData with Diagnosticable {
       spinnerAnimationDuration,
     ];
 
-    return hashList(values);
+    return Object.hashAll(values);
   }
 
   @override

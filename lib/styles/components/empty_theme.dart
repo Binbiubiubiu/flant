@@ -172,7 +172,7 @@ class FlanEmptyThemeData with Diagnosticable {
       bottomMarginTop,
     ];
 
-    return hashList(values);
+    return Object.hashAll(values);
   }
 
   @override

@@ -232,7 +232,7 @@ class FlanToastThemeData with Diagnosticable {
       positionBottomDistance,
     ];
 
-    return hashList(values);
+    return Object.hashAll(values);
   }
 
   @override

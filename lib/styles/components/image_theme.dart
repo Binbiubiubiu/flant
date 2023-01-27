@@ -157,7 +157,7 @@ class FlanImageThemeData with Diagnosticable {
       errorIconColor,
     ];
 
-    return hashList(values);
+    return Object.hashAll(values);
   }
 
   @override

@@ -371,7 +371,7 @@ class FlanThemeData with Diagnosticable {
   @override
   int get hashCode {
     final List<Object?> values = <Object?>[];
-    return hashList(values);
+    return Object.hashAll(values);
   }
 
   @override
