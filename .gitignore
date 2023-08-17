@@ -29,6 +29,7 @@
 .pub-cache/
 .pub/
 package-lock.json
+pubspec.lock
 /build/
 /exmaple/
 /coverage/
