@@ -35,6 +35,7 @@ void main() {
         ),
       ),
     );
+    await tester.pumpAndSettle(const Duration(seconds: 1));
     expect(find.byType(FlanEmpty), findsOneWidget);
     expect(find.text('Custom description'), findsOneWidget);
   });

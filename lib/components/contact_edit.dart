@@ -4,7 +4,6 @@ import 'package:flant/utils/format/validate.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
-
 FlanContactEditInfo kDefaultContact = FlanContactEditInfo(
   name: '',
   tel: '',
@@ -46,7 +45,7 @@ class FlanContactEdit extends StatefulWidget {
   final String? setDefaultLabel;
 
   /// 手机号格式校验函数
-  final FlanFieldValidator? telValidator;
+  final FlanFieldValidator<dynamic, dynamic>? telValidator;
 
   // ****************** Events ******************
   /// 点击保存按钮时触发
@@ -242,7 +241,7 @@ class _FlanContactEditState extends State<FlanContactEdit> {
         defaultValue: false));
     properties.add(
         DiagnosticsProperty<String>('setDefaultLabel', widget.setDefaultLabel));
-    properties.add(DiagnosticsProperty<FlanFieldValidator>(
+    properties.add(DiagnosticsProperty<FlanFieldValidator<dynamic, dynamic>>(
         'telValidator', widget.telValidator));
 
     super.debugFillProperties(properties);

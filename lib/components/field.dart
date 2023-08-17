@@ -1086,7 +1086,7 @@ class FlanFieldRule {
   final String? message;
   final String Function(dynamic, FlanFieldRule)? messageBuilder;
   final bool required;
-  final FlanFieldValidator? validator;
+  final FlanFieldValidator<dynamic, dynamic>? validator;
   final String Function(dynamic, FlanFieldRule)? formatter;
 }
 

@@ -113,7 +113,7 @@ void main() {
   testWidgets('should change inactive color when using inactive-color prop',
       (WidgetTester tester) async {
     await tester.pumpWidget(
-      const MaterialApp(
+      MaterialApp(
         home: Scaffold(
           body: FlanSwitch<dynamic>(
             inActiveColor: Colors.black,
@@ -170,7 +170,7 @@ void main() {
   testWidgets('should change size when using size prop',
       (WidgetTester tester) async {
     await tester.pumpWidget(
-      const MaterialApp(
+      MaterialApp(
         home: Scaffold(
           body: FlanSwitch<dynamic>(
             size: 20,

@@ -26,6 +26,8 @@ void main() {
       ),
     ));
 
+    await tester.pumpAndSettle(const Duration(seconds: 1));
+
     final Finder icon = find.byType(Image);
     expect(icon, findsOneWidget);
     final NetworkImage image =
