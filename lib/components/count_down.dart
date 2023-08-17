@@ -100,6 +100,8 @@ class FlanCountDownState extends State<FlanCountDown>
         break;
       case AppLifecycleState.detached:
         break;
+      default:
+        break;
     }
 
     super.didChangeAppLifecycleState(state);
